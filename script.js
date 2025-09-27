@@ -10,8 +10,23 @@ const games = [
       const wrapper = document.createElement("div");
       wrapper.className = "guess-game";
 
+      const ranges = [
+        10,
+        50,
+        100,
+        500,
+        1000,
+        5000,
+        10000,
+        50000,
+        100000,
+        500000,
+        1000000,
+      ];
+
       const state = {
-        secret: getSecret(),
+        maxRange: 100,
+        secret: 0,
         attempts: [],
         finished: false,
         bestScore: null,
@@ -20,10 +35,28 @@ const games = [
       const controls = document.createElement("div");
       controls.className = "controls";
 
+      const rangeLabel = document.createElement("label");
+      rangeLabel.className = "range-select";
+      const rangeLabelText = document.createElement("span");
+      rangeLabelText.textContent = "Range";
+
+      const rangeSelect = document.createElement("select");
+      rangeSelect.name = "range";
+      rangeSelect.setAttribute("aria-label", "Guessing range");
+      ranges.forEach((max) => {
+        const option = document.createElement("option");
+        option.value = String(max);
+        option.textContent = `1 – ${formatNumber(max)}`;
+        if (max === state.maxRange) {
+          option.selected = true;
+        }
+        rangeSelect.appendChild(option);
+      });
+      rangeLabel.append(rangeLabelText, rangeSelect);
+
       const input = document.createElement("input");
       input.type = "number";
       input.min = "1";
-      input.max = "100";
       input.placeholder = "Enter a number";
       input.setAttribute("inputmode", "numeric");
 
@@ -32,7 +65,7 @@ const games = [
       actionBtn.className = "primary-btn";
       actionBtn.textContent = "Take a guess";
 
-      controls.append(input, actionBtn);
+      controls.append(rangeLabel, input, actionBtn);
 
       const feedback = document.createElement("div");
       feedback.className = "feedback";
@@ -46,10 +79,12 @@ const games = [
 
       const info = document.createElement("p");
       info.className = "help-text";
-      info.textContent = "Tip: Use the arrow keys or enter key to make quick adjustments.";
+      info.textContent = getRangeHelpText();
 
       wrapper.append(controls, feedback, historyTitle, historyList, info);
       root.appendChild(wrapper);
+
+      resetGame({ message: "Ready? Type a number to get started." });
 
       input.addEventListener("keydown", (event) => {
         if (event.key === "Enter") {
@@ -58,14 +93,33 @@ const games = [
         }
       });
 
+      rangeSelect.addEventListener("change", () => {
+        const newRange = Number.parseInt(rangeSelect.value, 10);
+        if (!Number.isNaN(newRange)) {
+          state.maxRange = newRange;
+          resetGame({
+            message: `Range set to 1 – ${formatNumber(state.maxRange)}.`,
+            clearBest: true,
+          });
+        }
+      });
+
       actionBtn.addEventListener("click", () => {
         if (state.finished) {
-          reset();
+          resetGame();
           return;
         }
         const value = Number.parseInt(input.value, 10);
-        if (Number.isNaN(value) || value < 1 || value > 100) {
-          renderFeedback("Try a valid number between 1 and 100.", "status-bad");
+        if (
+          Number.isNaN(value) ||
+          value < 1 ||
+          value > state.maxRange ||
+          !Number.isFinite(value)
+        ) {
+          renderFeedback(
+            `Try a valid number between 1 and ${formatNumber(state.maxRange)}.`,
+            "status-bad"
+          );
           return;
         }
         if (state.attempts.includes(value)) {
@@ -88,35 +142,74 @@ const games = [
             `Solved in ${attempts} ${attempts === 1 ? "try" : "tries"}.` +
               (state.bestScore === attempts
                 ? " New personal best!"
-                : ` Best so far: ${state.bestScore} tries.`)
+                : state.bestScore
+                ? ` Best so far: ${state.bestScore} tries.`
+                : "")
           );
           actionBtn.textContent = "Play again";
           input.disabled = true;
         } else {
           const diff = Math.abs(value - state.secret);
-          let tone = "Chilly";
-          if (diff <= 2) tone = "Scorching";
-          else if (diff <= 5) tone = "Hot";
-          else if (diff <= 10) tone = "Warm";
-          else if (diff <= 20) tone = "Cool";
-
-          const direction = value > state.secret ? "Too high" : "Too low";
+          const { toneLabel, toneClass } = getTone(diff);
+          const isHigh = value > state.secret;
+          const directionText = isHigh ? "Too high" : "Too low";
+          const directionIcon = isHigh ? "↓" : "↑";
           renderFeedback(
-            `${tone}! ${direction}.`,
+            `${toneLabel}!`,
             diff <= 10 ? "status-good" : "status-bad",
-            `Attempt #${state.attempts.length}. Keep going!`
+            `Attempt #${state.attempts.length}. Keep going!`,
+            {
+              direction: {
+                text: directionText,
+                type: isHigh ? "high" : "low",
+                icon: directionIcon,
+              },
+              tone: {
+                text: `${toneLabel} zone` + (diff <= 2 ? " (within ±2)" : ""),
+                className: toneClass,
+              },
+            }
           );
           input.value = "";
           input.focus();
         }
       });
 
-      function renderFeedback(message, statusClass, detail) {
-        const lines = [`<strong class="${statusClass}">${message}</strong>`];
-        if (detail) {
-          lines.push(`<span>${detail}</span>`);
+      function renderFeedback(message, statusClass, detail, extras = {}) {
+        feedback.textContent = "";
+
+        const heading = document.createElement("strong");
+        heading.className = statusClass;
+        heading.textContent = message;
+        feedback.appendChild(heading);
+
+        if (extras.direction) {
+          const direction = document.createElement("span");
+          direction.className = `feedback-direction direction-${extras.direction.type}`;
+
+          const icon = document.createElement("span");
+          icon.className = "direction-icon";
+          icon.textContent = extras.direction.icon;
+
+          const label = document.createElement("span");
+          label.textContent = extras.direction.text;
+
+          direction.append(icon, label);
+          feedback.appendChild(direction);
         }
-        feedback.innerHTML = lines.join("");
+
+        if (extras.tone) {
+          const tone = document.createElement("span");
+          tone.className = `feedback-tone ${extras.tone.className}`;
+          tone.textContent = extras.tone.text;
+          feedback.appendChild(tone);
+        }
+
+        if (detail) {
+          const detailLine = document.createElement("span");
+          detailLine.textContent = detail;
+          feedback.appendChild(detailLine);
+        }
       }
 
       function renderHistory() {
@@ -129,20 +222,47 @@ const games = [
         });
       }
 
-      function reset() {
+      function resetGame({ message, clearBest = false } = {}) {
+        if (clearBest) {
+          state.bestScore = null;
+        }
         state.secret = getSecret();
         state.attempts = [];
         state.finished = false;
         renderHistory();
-        renderFeedback("New number ready. Fire away!", "status-good");
         actionBtn.textContent = "Take a guess";
         input.disabled = false;
         input.value = "";
+        input.max = String(state.maxRange);
+        input.placeholder = `Guess between 1 and ${formatNumber(state.maxRange)}`;
+        info.textContent = getRangeHelpText();
+        if (message) {
+          renderFeedback(message, "status-good");
+        } else {
+          renderFeedback("New number ready. Fire away!", "status-good");
+        }
         input.focus();
+        rangeSelect.value = String(state.maxRange);
       }
 
       function getSecret() {
-        return Math.floor(Math.random() * 100) + 1;
+        return Math.floor(Math.random() * state.maxRange) + 1;
+      }
+
+      function getTone(diff) {
+        if (diff <= 2) return { toneLabel: "Scorching", toneClass: "tone-scorching" };
+        if (diff <= 5) return { toneLabel: "Hot", toneClass: "tone-hot" };
+        if (diff <= 10) return { toneLabel: "Warm", toneClass: "tone-warm" };
+        if (diff <= 20) return { toneLabel: "Cool", toneClass: "tone-cool" };
+        return { toneLabel: "Chilly", toneClass: "tone-chilly" };
+      }
+
+      function formatNumber(value) {
+        return value.toLocaleString("en-US");
+      }
+
+      function getRangeHelpText() {
+        return `Range: 1 – ${formatNumber(state.maxRange)}. Tip: Use the arrow keys or enter key to make quick adjustments.`;
       }
 
       return () => {

@@ -210,6 +210,7 @@ textarea {
 
 input[type="number"],
 input[type="text"],
+select,
 button {
   border-radius: var(--radius-md);
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -254,6 +255,52 @@ button:hover {
   font-weight: 600;
 }
 
+.feedback-direction {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.direction-icon {
+  font-size: 1.2rem;
+}
+
+.direction-high {
+  color: var(--danger);
+}
+
+.direction-low {
+  color: var(--accent);
+}
+
+.feedback-tone {
+  display: inline-block;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+}
+
+.tone-scorching {
+  color: var(--danger);
+}
+
+.tone-hot {
+  color: var(--accent-strong);
+}
+
+.tone-warm {
+  color: var(--accent);
+}
+
+.tone-cool {
+  color: #80a4ff;
+}
+
+.tone-chilly {
+  color: var(--text-muted);
+}
+
 .status-good {
   color: var(--success);
 }
@@ -285,6 +332,33 @@ button:hover {
   margin: 0;
   color: var(--text-muted);
   font-size: 0.95rem;
+}
+
+.guess-game .controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.guess-game .controls input {
+  flex: 1 1 160px;
+  min-width: 160px;
+}
+
+.guess-game select {
+  min-width: 150px;
+}
+
+.range-select {
+  display: grid;
+  gap: 0.35rem;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.range-select select {
+  color: inherit;
 }
 
 .reaction-panel {
