@@ -415,6 +415,18 @@ button:hover {
   justify-content: center;
 }
 
+.lights-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.lights-controls select {
+  min-width: 130px;
+}
+
 .light-cell {
   width: clamp(54px, 10vw, 66px);
   aspect-ratio: 1 / 1;

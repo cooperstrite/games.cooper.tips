@@ -393,9 +393,30 @@ const games = [
       "Tap the tiles to toggle them and their neighbors. Turn every tile off in as few moves as possible.",
     logo: "assets/lights-down.svg",
     init(root) {
-      const size = 5;
       const wrapper = document.createElement("div");
       wrapper.className = "lights-out";
+
+      const sizes = [3, 4, 5, 6, 7];
+
+      const controls = document.createElement("div");
+      controls.className = "lights-controls";
+
+      const sizeLabel = document.createElement("label");
+      sizeLabel.className = "range-select";
+      const sizeLabelText = document.createElement("span");
+      sizeLabelText.textContent = "Grid";
+
+      const sizeSelect = document.createElement("select");
+      sizeSelect.setAttribute("aria-label", "Lights grid size");
+      sizes.forEach((dimension) => {
+        const option = document.createElement("option");
+        option.value = String(dimension);
+        option.textContent = `${dimension} × ${dimension}`;
+        if (dimension === 5) option.selected = true;
+        sizeSelect.appendChild(option);
+      });
+      sizeLabel.append(sizeLabelText, sizeSelect);
+      controls.append(sizeLabel);
 
       const meta = document.createElement("div");
       meta.className = "lights-meta";
@@ -411,20 +432,21 @@ const games = [
 
       const grid = document.createElement("div");
       grid.className = "lights-grid";
-      grid.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
 
       const note = document.createElement("p");
       note.className = "help-text";
-      note.textContent = "Each tap flips the tile plus its neighbors. Can you zero the board?";
 
-      wrapper.append(meta, grid, note);
+      wrapper.append(controls, meta, grid, note);
       root.appendChild(wrapper);
 
-      const toggleMatrix = buildToggleMatrix(size);
+      const state = {
+        size: 5,
+        board: [],
+        moves: 0,
+        toggleMatrix: buildToggleMatrix(5),
+      };
 
-      let board = createBoard();
-      let moves = 0;
-      render();
+      initializeBoard();
 
       grid.addEventListener("click", (event) => {
         const target = event.target.closest("button.light-cell");
@@ -433,44 +455,52 @@ const games = [
         const row = Number(target.dataset.row);
         const col = Number(target.dataset.col);
         toggle(row, col);
-        moves += 1;
+        state.moves += 1;
         render();
         if (isSolved()) {
-          note.textContent = `Lights out! Cleared in ${moves} ${moves === 1 ? "move" : "moves"}.`;
+          note.textContent = `Lights out! Cleared the ${state.size} × ${state.size} grid in ${state.moves} ${
+            state.moves === 1 ? "move" : "moves"
+          }.`;
           note.classList.add("status-good");
         }
       });
 
       resetBtn.addEventListener("click", () => {
-        board = createBoard();
-        moves = 0;
-        note.textContent = "Each tap flips the tile plus its neighbors. Can you zero the board?";
-        note.classList.remove("status-good");
-        render();
+        initializeBoard();
+      });
+
+      sizeSelect.addEventListener("change", () => {
+        const dimension = Number.parseInt(sizeSelect.value, 10);
+        if (!Number.isNaN(dimension) && sizes.includes(dimension)) {
+          state.size = dimension;
+          state.toggleMatrix = buildToggleMatrix(state.size);
+          initializeBoard();
+        }
       });
 
       function createBoard() {
         let newBoard;
         do {
-          newBoard = randomBoard();
-        } while (!isSolvableBoard(newBoard));
+          newBoard = randomBoard(state.size);
+        } while (!isSolvableBoard(newBoard, state.toggleMatrix, state.size));
         return newBoard;
       }
 
-      function randomBoard() {
+      function randomBoard(dimension) {
         let candidate;
         do {
-          candidate = Array.from({ length: size }, () =>
-            Array.from({ length: size }, () => Math.random() < 0.5)
+          candidate = Array.from({ length: dimension }, () =>
+            Array.from({ length: dimension }, () => Math.random() < 0.5)
           );
         } while (candidate.every((row) => row.every((cell) => cell === false)));
         return candidate;
       }
 
       function render() {
-        moveCounter.textContent = `Moves: ${moves}`;
+        moveCounter.textContent = `Moves: ${state.moves}`;
         grid.textContent = "";
-        board.forEach((row, rowIndex) => {
+        grid.style.gridTemplateColumns = `repeat(${state.size}, 1fr)`;
+        state.board.forEach((row, rowIndex) => {
           row.forEach((cell, colIndex) => {
             const button = document.createElement("button");
             button.className = "light-cell";
@@ -491,20 +521,20 @@ const games = [
           [row, col + 1],
         ];
         positions.forEach(([r, c]) => {
-          if (r >= 0 && r < size && c >= 0 && c < size) {
-            board[r][c] = !board[r][c];
+          if (r >= 0 && r < state.size && c >= 0 && c < state.size) {
+            state.board[r][c] = !state.board[r][c];
           }
         });
       }
 
       function isSolved() {
-        return board.every((row) => row.every((cell) => cell === false));
+        return state.board.every((row) => row.every((cell) => cell === false));
       }
 
-      function isSolvableBoard(state) {
-        const matrix = toggleMatrix.map((row) => row.slice());
-        const vector = boardToVector(state);
-        const total = size * size;
+      function isSolvableBoard(boardState, matrixSource, dimension) {
+        const matrix = matrixSource.map((row) => row.slice());
+        const vector = boardToVector(boardState);
+        const total = dimension * dimension;
         let pivotRow = 0;
 
         for (let col = 0; col < total && pivotRow < total; col += 1) {
@@ -578,6 +608,21 @@ const games = [
         }
 
         return matrix;
+      }
+
+      function initializeBoard() {
+        state.toggleMatrix = buildToggleMatrix(state.size);
+        state.board = createBoard();
+        state.moves = 0;
+        note.classList.remove("status-good");
+        note.textContent = getHelpText();
+        moveCounter.textContent = "Moves: 0";
+        grid.setAttribute("data-dimension", String(state.size));
+        render();
+      }
+
+      function getHelpText() {
+        return `Each tap flips the tile plus its neighbors. Can you zero the ${state.size} × ${state.size} grid?`;
       }
 
       return () => {
