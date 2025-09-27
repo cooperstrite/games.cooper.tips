@@ -335,7 +335,7 @@ const games = [
         timeoutId = window.setTimeout(() => {
           phase = "go";
           startTime = performance.now();
-          timer.textContent = "GO!";
+          timer.textContent = "";
           status.textContent = "Tap now!";
           button.textContent = "Tap!";
           display.classList.remove("ready");
