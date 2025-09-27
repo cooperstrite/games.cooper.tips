@@ -478,6 +478,17 @@ button:hover {
   border-color: rgba(114, 246, 255, 0.65);
   background: linear-gradient(135deg, rgba(114, 246, 255, 0.28), rgba(255, 217, 114, 0.42));
   box-shadow: 0 0 28px rgba(114, 246, 255, 0.45);
+  animation: hintGlow 1.3s ease-in-out infinite;
+}
+
+.light-cell.light-hint::before {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: inherit;
+  border: 2px solid rgba(114, 246, 255, 0.45);
+  opacity: 0;
+  pointer-events: none;
 }
 
 .light-cell.light-hint::after {
@@ -492,6 +503,15 @@ button:hover {
   padding: 0.2rem 0.45rem;
   border-radius: 999px;
   box-shadow: 0 6px 12px rgba(14, 16, 28, 0.45);
+}
+
+.light-cell.light-hint-primary {
+  animation: hintGlow 0.95s ease-in-out infinite;
+}
+
+.light-cell.light-hint-primary::before {
+  opacity: 1;
+  animation: hintPulseRing 1.4s ease-out infinite;
 }
 
 .lights-meta {
@@ -510,6 +530,33 @@ button:hover {
 .site-footer a {
   color: var(--accent);
   text-decoration: none;
+}
+
+@keyframes hintGlow {
+  0%,
+  100% {
+    box-shadow: 0 0 24px rgba(114, 246, 255, 0.35);
+    filter: brightness(1);
+  }
+  50% {
+    box-shadow: 0 0 36px rgba(114, 246, 255, 0.6);
+    filter: brightness(1.25);
+  }
+}
+
+@keyframes hintPulseRing {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.85;
+  }
+  70% {
+    transform: scale(1.25);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.25);
+    opacity: 0;
+  }
 }
 
 @media (max-width: 720px) {

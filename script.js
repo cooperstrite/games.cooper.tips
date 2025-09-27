@@ -558,7 +558,11 @@ const games = [
             const key = `${rowIndex}:${colIndex}`;
             if (state.hintActive && state.hintLookup.has(key)) {
               button.classList.add("light-hint");
-              button.dataset.hintStep = String(state.hintLookup.get(key) + 1);
+              const stepIndex = state.hintLookup.get(key);
+              button.dataset.hintStep = String(stepIndex + 1);
+              if (stepIndex === 0) {
+                button.classList.add("light-hint-primary");
+              }
             }
             grid.appendChild(button);
           });
