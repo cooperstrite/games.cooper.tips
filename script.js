@@ -469,6 +469,7 @@ const games = [
         hintActive: false,
         hintLookup: new Map(),
         hintMoves: [],
+        hintUsed: false,
       };
 
       initializeBoard();
@@ -554,10 +555,11 @@ const games = [
             button.dataset.col = String(colIndex);
             const key = `${rowIndex}:${colIndex}`;
             if (state.hintActive && state.hintLookup.has(key)) {
-              button.classList.add("light-hint");
               const stepIndex = state.hintLookup.get(key);
               if (stepIndex === 0) {
                 button.classList.add("light-hint-primary");
+              } else {
+                button.classList.add("light-hint-queued");
               }
             }
             grid.appendChild(button);
@@ -692,6 +694,7 @@ const games = [
         state.hintMoves = hintMoves;
         state.hintLookup = hintLookup;
         state.hintActive = hintMoves.length > 0;
+        state.hintUsed = state.hintUsed || hintMoves.length > 0;
 
         if (announce) {
           note.classList.remove("status-good", "status-bad");
@@ -773,6 +776,7 @@ const games = [
         state.toggleMatrix = buildToggleMatrix(state.size);
         state.board = createBoard();
         state.moves = 0;
+        state.hintUsed = false;
         clearHints();
         confirmBar.hidden = true;
         note.classList.remove("status-good", "status-bad");
@@ -789,9 +793,10 @@ const games = [
       function showVictory() {
         note.classList.remove("status-bad");
         note.classList.add("status-good");
-        note.textContent = `Victory! Cleared the ${state.size} × ${state.size} grid in ${state.moves} ${
-          state.moves === 1 ? "move" : "moves"
-        }. Tap Shuffle for a new challenge.`;
+        const moveWord = state.moves === 1 ? "move" : "moves";
+        note.textContent = state.hintUsed
+          ? `Victory! Cleared the ${state.size} × ${state.size} grid in ${state.moves} ${moveWord} with a hint assist. Tap Shuffle for a new challenge.`
+          : `Victory! Cleared the ${state.size} × ${state.size} grid in ${state.moves} ${moveWord}. Tap Shuffle for a new challenge.`;
         clearHints();
       }
 

@@ -491,8 +491,6 @@ button:hover {
   pointer-events: none;
 }
 
-
-
 .light-cell.light-hint-primary {
   animation: hintGlow 0.95s ease-in-out infinite;
 }
@@ -500,6 +498,13 @@ button:hover {
 .light-cell.light-hint-primary::before {
   opacity: 1;
   animation: hintPulseRing 1.4s ease-out infinite;
+}
+
+.light-cell.light-hint-queued {
+  opacity: 0.35;
+  filter: saturate(0.5);
+  animation: none;
+  box-shadow: none;
 }
 
 .lights-meta {
