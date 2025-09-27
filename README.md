@@ -8,6 +8,7 @@ A playful single-page playground inspired by [neal.fun](https://neal.fun), bundl
 - **Flash Reflex** — Train your reaction speed by tapping the moment the panel lights up.
 - **Lights Down** — A compact Lights Out puzzle; toggle tiles (and their neighbors) to dim the board.
 - **Submerged Explorer** — Glide through ocean zones, collect samples, and finish mission objectives in a retro submarine.
+- **Spotlight** — Compare two vibrant scenes and spot every subtle difference against the clock.
 
 ## Getting Started
 
