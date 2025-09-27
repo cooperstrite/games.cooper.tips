@@ -805,6 +805,31 @@ const games = [
       };
     },
   },
+  {
+    id: "submerged",
+    name: "Submerged Explorer",
+    summary: "Glide through ocean zones and complete underwater missions.",
+    description:
+      "Pilot a retro sub through five ocean zones, gather samples, and complete mission objectives while dodging hazards.",
+    logo: "assets/submerged.svg",
+    init(root) {
+      const wrapper = document.createElement("div");
+      wrapper.className = "submerged-frame";
+
+      const iframe = document.createElement("iframe");
+      iframe.src = "submerged.html";
+      iframe.title = "Submerged Explorer game";
+      iframe.loading = "lazy";
+      iframe.referrerPolicy = "no-referrer";
+
+      wrapper.appendChild(iframe);
+      root.appendChild(wrapper);
+
+      return () => {
+        wrapper.remove();
+      };
+    },
+  },
 ];
 
 const appRoot = document.getElementById("app");

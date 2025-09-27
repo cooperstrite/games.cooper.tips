@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
+  <defs>
+    <linearGradient id="sub-bg" x1="30%" y1="0%" x2="70%" y2="100%">
+      <stop offset="0" stop-color="#63d5ff" />
+      <stop offset="0.55" stop-color="#2b5dff" />
+      <stop offset="1" stop-color="#001a33" />
+    </linearGradient>
+    <linearGradient id="sub-body" x1="0%" y1="50%" x2="100%" y2="50%">
+      <stop offset="0" stop-color="#ffd972" />
+      <stop offset="1" stop-color="#ff8c42" />
+    </linearGradient>
+    <radialGradient id="sub-light" cx="70%" cy="70%" r="65%">
+      <stop offset="0" stop-color="#72f6ff" stop-opacity="0.55" />
+      <stop offset="1" stop-color="#72f6ff" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+  <rect width="160" height="160" rx="36" fill="url(#sub-bg)" />
+  <rect width="144" height="144" x="8" y="8" rx="28" fill="rgba(4, 13, 30, 0.55)" />
+  <circle cx="72" cy="104" r="60" fill="url(#sub-light)" />
+  <g transform="translate(32 52)">
+    <ellipse cx="52" cy="38" rx="52" ry="30" fill="url(#sub-body)" />
+    <ellipse cx="70" cy="38" rx="22" ry="16" fill="#ffe5b4" opacity="0.65" />
+    <path d="M10 36h88" stroke="rgba(4,13,30,0.4)" stroke-width="6" stroke-linecap="round" />
+    <circle cx="38" cy="28" r="10" fill="#2b59ff" />
+    <circle cx="38" cy="28" r="6" fill="#b4d6ff" />
+    <path d="M8 38c-6 0-10 5-10 10s4 10 10 10" fill="none" stroke="#ffd972" stroke-width="6" stroke-linecap="round" />
+    <path d="M96 34c8 2 14 10 14 18s-6 16-14 18" fill="none" stroke="#ffd972" stroke-width="6" stroke-linecap="round" />
+  </g>
+  <g transform="translate(16 20)" stroke="rgba(255,255,255,0.25)" stroke-width="2" stroke-linecap="round">
+    <path d="M0 30c12-6 24-6 36 0" />
+    <path d="M30 10c8-4 16-4 24 0" />
+    <path d="M100 14c10-5 20-5 30 0" />
+  </g>
+</svg>
