@@ -14,18 +14,25 @@
     />
   </head>
   <body>
-    <div id="app">
+    <div id="app" data-state="home">
       <header class="site-header">
         <div class="title-group">
           <span class="dot"></span>
           <h1>games.cooper.tips</h1>
         </div>
         <p class="tagline">Small games, big vibes.</p>
-        <nav class="game-nav" aria-label="Game selector"></nav>
       </header>
 
       <main class="site-main">
-        <article class="game-card" aria-live="polite">
+        <section class="home-view" aria-label="Mini game selection">
+          <ul class="game-list"></ul>
+        </section>
+
+        <article class="game-card" data-view="game" aria-live="polite">
+          <button class="back-button" type="button" aria-label="Back to games">
+            <span aria-hidden="true">←</span>
+            Games
+          </button>
           <header class="game-header">
             <h2 id="game-title"></h2>
             <p id="game-description"></p>
@@ -42,8 +49,13 @@
       </footer>
     </div>
 
-    <template id="nav-button-template">
-      <button class="nav-button" type="button"></button>
+    <template id="game-list-item-template">
+      <li class="game-list-item">
+        <a class="game-tile" href="#" role="button">
+          <strong class="game-name"></strong>
+          <span class="game-blurb"></span>
+        </a>
+      </li>
     </template>
 
     <script src="script.js" type="module"></script>

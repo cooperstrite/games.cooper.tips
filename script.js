@@ -2,6 +2,7 @@ const games = [
   {
     id: "guess",
     name: "Hot & Cold",
+    summary: "Guess the number with hot/cold hints.",
     description:
       "Guess the hidden number between 1 and 100. Each attempt gives you warmer or colder hints as you zero in.",
     init(root) {
@@ -151,6 +152,7 @@ const games = [
   {
     id: "reaction",
     name: "Flash Reflex",
+    summary: "Click as soon as the panel glows.",
     description:
       "Test how fast you can click when the screen flashes. Wait for the glow, then tap as quickly as possible.",
     init(root) {
@@ -251,6 +253,7 @@ const games = [
   {
     id: "lights",
     name: "Lights Down",
+    summary: "Toggle tiles to switch off the board.",
     description:
       "Tap the tiles to toggle them and their neighbors. Turn every tile off in as few moves as possible.",
     init(root) {
@@ -359,55 +362,103 @@ const games = [
   },
 ];
 
-const nav = document.querySelector(".game-nav");
+const appRoot = document.getElementById("app");
+const homeList = document.querySelector(".game-list");
+const gameCard = document.querySelector(".game-card");
 const titleEl = document.getElementById("game-title");
 const descEl = document.getElementById("game-description");
 const rootEl = document.getElementById("game-root");
-const buttonTemplate = document.getElementById("nav-button-template");
+const listTemplate = document.getElementById("game-list-item-template");
+const backButton = document.querySelector(".back-button");
 
 let activeId = null;
 let cleanup = null;
 
-if (nav && titleEl && descEl && rootEl && buttonTemplate) {
-  buildNavigation();
-  setActiveGame(games[0].id);
+if (appRoot) {
+  appRoot.dataset.state = "home";
 }
 
-function buildNavigation() {
-  games.forEach((game) => {
-    const button = buttonTemplate.content.firstElementChild.cloneNode(true);
-    button.textContent = game.name;
-    button.setAttribute("data-game", game.id);
-    button.addEventListener("click", () => {
-      if (game.id !== activeId) {
-        setActiveGame(game.id);
-      }
-    });
-    nav.appendChild(button);
+if (homeList && listTemplate) {
+  buildGameList();
+  window.addEventListener("hashchange", renderRoute);
+  renderRoute();
+}
+
+if (backButton) {
+  backButton.addEventListener("click", () => {
+    window.location.hash = "";
   });
 }
 
-function setActiveGame(id) {
-  const game = games.find((item) => item.id === id);
-  if (!game) return;
+function buildGameList() {
+  games.forEach((game) => {
+    const item = listTemplate.content.firstElementChild.cloneNode(true);
+    const link = item.querySelector(".game-tile");
+    const name = item.querySelector(".game-name");
+    const blurb = item.querySelector(".game-blurb");
+    if (!link || !name || !blurb) return;
+    name.textContent = game.name;
+    blurb.textContent = game.summary ?? game.description;
+    link.href = `#${game.id}`;
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
+      if (window.location.hash === `#${game.id}`) {
+        renderRoute();
+      } else {
+        window.location.hash = game.id;
+      }
+    });
+    homeList.appendChild(item);
+  });
+}
 
+function renderRoute() {
+  const hash = window.location.hash.replace(/^#/, "");
+  if (!hash) {
+    showHome();
+    return;
+  }
+  const game = games.find((entry) => entry.id === hash);
+  if (!game) {
+    showHome(true);
+    return;
+  }
+  showGame(game);
+}
+
+function showHome(replaceHash = false) {
   if (typeof cleanup === "function") {
     cleanup();
     cleanup = null;
   }
-  rootEl.innerHTML = "";
-
-  titleEl.textContent = game.name;
-  descEl.textContent = game.description;
-  cleanup = game.init(rootEl);
-  activeId = id;
-  refreshNav();
+  if (rootEl) rootEl.innerHTML = "";
+  if (titleEl) titleEl.textContent = "";
+  if (descEl) descEl.textContent = "";
+  activeId = null;
+  if (appRoot) appRoot.dataset.state = "home";
+  if (replaceHash) {
+    replaceUrl(window.location.pathname + window.location.search);
+  }
 }
 
-function refreshNav() {
-  const buttons = nav.querySelectorAll(".nav-button");
-  buttons.forEach((button) => {
-    const isActive = button.getAttribute("data-game") === activeId;
-    button.setAttribute("aria-pressed", isActive ? "true" : "false");
-  });
+function showGame(game) {
+  if (typeof cleanup === "function") {
+    cleanup();
+    cleanup = null;
+  }
+  if (!rootEl || !titleEl || !descEl) return;
+  titleEl.textContent = game.name;
+  descEl.textContent = game.description;
+  rootEl.innerHTML = "";
+  cleanup = game.init(rootEl);
+  activeId = game.id;
+  if (appRoot) appRoot.dataset.state = "game";
+}
+
+function replaceUrl(url) {
+  try {
+    history.replaceState(null, "", url);
+  } catch (error) {
+    window.location.hash = "";
+  }
 }
