@@ -416,7 +416,29 @@ const games = [
         sizeSelect.appendChild(option);
       });
       sizeLabel.append(sizeLabelText, sizeSelect);
-      controls.append(sizeLabel);
+
+      const hintButton = document.createElement("button");
+      hintButton.type = "button";
+      hintButton.textContent = "Get answer";
+
+      const confirmBar = document.createElement("div");
+      confirmBar.className = "hint-confirm";
+      confirmBar.hidden = true;
+
+      const confirmText = document.createElement("span");
+      confirmText.textContent = "Show solution tiles?";
+
+      const confirmYes = document.createElement("button");
+      confirmYes.type = "button";
+      confirmYes.className = "hint-confirm-yes";
+      confirmYes.textContent = "Yes";
+
+      const confirmNo = document.createElement("button");
+      confirmNo.type = "button";
+      confirmNo.textContent = "Cancel";
+
+      confirmBar.append(confirmText, confirmYes, confirmNo);
+      controls.append(sizeLabel, hintButton, confirmBar);
 
       const meta = document.createElement("div");
       meta.className = "lights-meta";
@@ -444,6 +466,9 @@ const games = [
         board: [],
         moves: 0,
         toggleMatrix: buildToggleMatrix(5),
+        hintActive: false,
+        hintLookup: new Map(),
+        hintMoves: [],
       };
 
       initializeBoard();
@@ -478,6 +503,25 @@ const games = [
         }
       });
 
+      hintButton.addEventListener("click", () => {
+        confirmBar.hidden = false;
+        confirmYes.focus();
+      });
+
+      confirmNo.addEventListener("click", () => {
+        confirmBar.hidden = true;
+      });
+
+      confirmYes.addEventListener("click", () => {
+        confirmBar.hidden = true;
+        const success = refreshHints({ announce: true });
+        render();
+        if (!success) {
+          note.classList.remove("status-good", "status-bad");
+          note.textContent = "Couldn't compute a solution for this board state.";
+        }
+      });
+
       function createBoard() {
         let newBoard;
         do {
@@ -500,6 +544,10 @@ const games = [
         moveCounter.textContent = `Moves: ${state.moves}`;
         grid.textContent = "";
         grid.style.gridTemplateColumns = `repeat(${state.size}, 1fr)`;
+        grid.classList.toggle(
+          "has-hints",
+          state.hintActive && state.hintLookup.size > 0
+        );
         state.board.forEach((row, rowIndex) => {
           row.forEach((cell, colIndex) => {
             const button = document.createElement("button");
@@ -507,6 +555,11 @@ const games = [
             if (cell) button.classList.add("on");
             button.dataset.row = String(rowIndex);
             button.dataset.col = String(colIndex);
+            const key = `${rowIndex}:${colIndex}`;
+            if (state.hintActive && state.hintLookup.has(key)) {
+              button.classList.add("light-hint");
+              button.dataset.hintStep = String(state.hintLookup.get(key) + 1);
+            }
             grid.appendChild(button);
           });
         });
@@ -525,6 +578,9 @@ const games = [
             state.board[r][c] = !state.board[r][c];
           }
         });
+        if (state.hintActive) {
+          refreshHints();
+        }
       }
 
       function isSolved() {
@@ -610,11 +666,116 @@ const games = [
         return matrix;
       }
 
+      function refreshHints({ announce = false } = {}) {
+        const solutionVector = solveBoard(state.board, state.toggleMatrix, state.size);
+        if (!solutionVector) {
+          clearHints();
+          if (announce) {
+            note.classList.remove("status-good", "status-bad");
+            note.textContent = "Solution unavailable for this configuration.";
+          }
+          return false;
+        }
+
+        const hintLookup = new Map();
+        const hintMoves = [];
+        solutionVector.forEach((value, index) => {
+          if (value === 1) {
+            const row = Math.floor(index / state.size);
+            const col = index % state.size;
+            const step = hintMoves.length;
+            hintMoves.push({ row, col });
+            hintLookup.set(`${row}:${col}`, step);
+          }
+        });
+
+        state.hintMoves = hintMoves;
+        state.hintLookup = hintLookup;
+        state.hintActive = hintMoves.length > 0;
+
+        if (announce) {
+          note.classList.remove("status-good", "status-bad");
+          if (hintMoves.length === 0) {
+            note.classList.add("status-good");
+            note.textContent = "Already solved! Tap Shuffle to play again.";
+          } else {
+            note.classList.add("status-good");
+            note.textContent = `Highlighted tiles show one solution in ${hintMoves.length} ${
+              hintMoves.length === 1 ? "move" : "moves"
+            }.`;
+          }
+        }
+
+        return true;
+      }
+
+      function clearHints() {
+        state.hintActive = false;
+        state.hintMoves = [];
+        state.hintLookup = new Map();
+      }
+
+      function solveBoard(boardState, matrixSource, dimension) {
+        const total = dimension * dimension;
+        const vector = boardToVector(boardState);
+        const augmented = matrixSource.map((row, rowIndex) => {
+          const extended = row.slice();
+          extended.push(vector[rowIndex]);
+          return extended;
+        });
+
+        const pivotCols = new Array(total).fill(-1);
+        let pivotRow = 0;
+
+        for (let col = 0; col < total && pivotRow < total; col += 1) {
+          let row = pivotRow;
+          while (row < total && augmented[row][col] === 0) {
+            row += 1;
+          }
+          if (row === total) continue;
+
+          if (row !== pivotRow) {
+            [augmented[pivotRow], augmented[row]] = [augmented[row], augmented[pivotRow]];
+          }
+
+          pivotCols[pivotRow] = col;
+
+          for (let r = 0; r < total; r += 1) {
+            if (r !== pivotRow && augmented[r][col] === 1) {
+              for (let c = col; c <= total; c += 1) {
+                augmented[r][c] ^= augmented[pivotRow][c];
+              }
+            }
+          }
+
+          pivotRow += 1;
+        }
+
+        for (let r = pivotRow; r < total; r += 1) {
+          const hasCoefficient = augmented[r].slice(0, total).some((value) => value === 1);
+          if (!hasCoefficient && augmented[r][total] === 1) {
+            return null;
+          }
+        }
+
+        const solution = new Array(total).fill(0);
+        for (let r = 0; r < pivotRow; r += 1) {
+          const pivotCol = pivotCols[r];
+          if (pivotCol !== -1) {
+            solution[pivotCol] = augmented[r][total];
+          }
+        }
+
+        return solution;
+      }
+
       function initializeBoard() {
         state.toggleMatrix = buildToggleMatrix(state.size);
         state.board = createBoard();
         state.moves = 0;
-        note.classList.remove("status-good");
+        clearHints();
+        confirmBar.hidden = true;
+        note.classList.remove("status-good", "status-bad");
         note.textContent = getHelpText();
         moveCounter.textContent = "Moves: 0";
         grid.setAttribute("data-dimension", String(state.size));

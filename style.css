@@ -427,6 +427,35 @@ button:hover {
   min-width: 130px;
 }
 
+.hint-confirm {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-md);
+  padding: 0.5rem 0.75rem;
+}
+
+.hint-confirm[hidden] {
+  display: none;
+}
+
+.hint-confirm button {
+  padding: 0.4rem 0.9rem;
+}
+
+.hint-confirm-yes {
+  background: linear-gradient(135deg, rgba(114, 246, 255, 0.3), rgba(255, 217, 114, 0.45));
+  border-color: rgba(114, 246, 255, 0.35);
+  color: var(--accent-strong);
+  font-weight: 600;
+}
+
+.hint-confirm-yes:hover {
+  background: linear-gradient(135deg, rgba(114, 246, 255, 0.5), rgba(255, 217, 114, 0.65));
+}
+
 .light-cell {
   width: clamp(54px, 10vw, 66px);
   aspect-ratio: 1 / 1;
@@ -437,11 +466,32 @@ button:hover {
   place-items: center;
   cursor: pointer;
   transition: background var(--transition), box-shadow var(--transition);
+  position: relative;
 }
 
 .light-cell.on {
   background: linear-gradient(135deg, rgba(114, 246, 255, 0.55), rgba(255, 217, 114, 0.65));
   box-shadow: 0 10px 25px rgba(114, 246, 255, 0.45);
+}
+
+.light-cell.light-hint {
+  border-color: rgba(114, 246, 255, 0.65);
+  background: linear-gradient(135deg, rgba(114, 246, 255, 0.28), rgba(255, 217, 114, 0.42));
+  box-shadow: 0 0 28px rgba(114, 246, 255, 0.45);
+}
+
+.light-cell.light-hint::after {
+  content: attr(data-hint-step);
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: rgba(14, 16, 28, 0.65);
+  color: #ffffff;
+  padding: 0.2rem 0.45rem;
+  border-radius: 999px;
+  box-shadow: 0 6px 12px rgba(14, 16, 28, 0.45);
 }
 
 .lights-meta {
