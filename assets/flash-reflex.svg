@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
+  <defs>
+    <linearGradient id="bg" x1="15%" y1="10%" x2="85%" y2="90%">
+      <stop offset="0" stop-color="#ffd972" />
+      <stop offset="1" stop-color="#72f6ff" />
+    </linearGradient>
+    <radialGradient id="pulse" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.9" />
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0" />
+    </radialGradient>
+    <linearGradient id="bolt" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0" stop-color="#fff8c6" />
+      <stop offset="1" stop-color="#ffe05a" />
+    </linearGradient>
+  </defs>
+  <rect width="160" height="160" rx="36" fill="url(#bg)" />
+  <rect width="144" height="144" x="8" y="8" rx="28" fill="rgba(14,16,28,0.35)" />
+  <circle cx="80" cy="80" r="58" fill="url(#pulse)" />
+  <circle cx="80" cy="80" r="34" fill="rgba(255,255,255,0.16)" />
+  <circle cx="80" cy="80" r="18" fill="rgba(255,255,255,0.22)" />
+  <path d="M90 28 52 94h20l-6 38 44-70H90z" fill="#0e101c" fill-opacity="0.3" />
+  <path d="M88 32 54 92h21l-5 36 40-64H88z" fill="url(#bolt)" />
+</svg>

@@ -5,6 +5,7 @@ const games = [
     summary: "Guess the number with hot/cold hints.",
     description:
       "Guess the hidden number between 1 and 100. Each attempt gives you warmer or colder hints as you zero in.",
+    logo: "assets/hot-and-cold.svg",
     init(root) {
       const wrapper = document.createElement("div");
       wrapper.className = "guess-game";
@@ -155,6 +156,7 @@ const games = [
     summary: "Click as soon as the panel glows.",
     description:
       "Test how fast you can click when the screen flashes. Wait for the glow, then tap as quickly as possible.",
+    logo: "assets/flash-reflex.svg",
     init(root) {
       const wrapper = document.createElement("div");
       wrapper.className = "reaction-panel";
@@ -256,6 +258,7 @@ const games = [
     summary: "Toggle tiles to switch off the board.",
     description:
       "Tap the tiles to toggle them and their neighbors. Turn every tile off in as few moves as possible.",
+    logo: "assets/lights-down.svg",
     init(root) {
       const size = 5;
       const wrapper = document.createElement("div");
@@ -396,9 +399,17 @@ function buildGameList() {
     const link = item.querySelector(".game-tile");
     const name = item.querySelector(".game-name");
     const blurb = item.querySelector(".game-blurb");
-    if (!link || !name || !blurb) return;
+    const icon = item.querySelector(".game-icon");
+    if (!link || !name || !blurb || !icon) return;
     name.textContent = game.name;
     blurb.textContent = game.summary ?? game.description;
+    if (game.logo) {
+      icon.src = game.logo;
+      icon.alt = "";
+      icon.setAttribute("aria-hidden", "true");
+    } else {
+      icon.remove();
+    }
     link.href = `#${game.id}`;
     link.addEventListener("click", (event) => {
       event.preventDefault();

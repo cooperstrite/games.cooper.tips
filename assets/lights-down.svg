@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
+  <defs>
+    <linearGradient id="bg" x1="20%" y1="0%" x2="80%" y2="100%">
+      <stop offset="0" stop-color="#2b59ff" />
+      <stop offset="1" stop-color="#72f6ff" />
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="45%" r="60%">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.9" />
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0" />
+    </radialGradient>
+    <linearGradient id="tile-on" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0" stop-color="#72f6ff" />
+      <stop offset="1" stop-color="#ffd972" />
+    </linearGradient>
+  </defs>
+  <rect width="160" height="160" rx="36" fill="url(#bg)" />
+  <rect width="144" height="144" x="8" y="8" rx="28" fill="rgba(14,16,28,0.45)" />
+  <circle cx="80" cy="72" r="56" fill="url(#glow)" />
+  <g transform="translate(36 44)">
+    <rect x="0" y="0" width="28" height="28" rx="8" fill="rgba(255,255,255,0.08)" />
+    <rect x="36" y="0" width="28" height="28" rx="8" fill="url(#tile-on)" />
+    <rect x="72" y="0" width="28" height="28" rx="8" fill="rgba(255,255,255,0.08)" />
+    <rect x="0" y="36" width="28" height="28" rx="8" fill="url(#tile-on)" />
+    <rect x="36" y="36" width="28" height="28" rx="8" fill="rgba(255,255,255,0.08)" />
+    <rect x="72" y="36" width="28" height="28" rx="8" fill="url(#tile-on)" />
+    <rect x="0" y="72" width="28" height="28" rx="8" fill="rgba(255,255,255,0.08)" />
+    <rect x="36" y="72" width="28" height="28" rx="8" fill="url(#tile-on)" />
+    <rect x="72" y="72" width="28" height="28" rx="8" fill="rgba(255,255,255,0.08)" />
+  </g>
+</svg>
