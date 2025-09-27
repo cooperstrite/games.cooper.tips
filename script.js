@@ -287,6 +287,8 @@ const games = [
       wrapper.append(meta, grid, note);
       root.appendChild(wrapper);
 
+      const toggleMatrix = buildToggleMatrix(size);
+
       let board = createBoard();
       let moves = 0;
       render();
@@ -317,11 +319,19 @@ const games = [
       function createBoard() {
         let newBoard;
         do {
-          newBoard = Array.from({ length: size }, () =>
+          newBoard = randomBoard();
+        } while (!isSolvableBoard(newBoard));
+        return newBoard;
+      }
+
+      function randomBoard() {
+        let candidate;
+        do {
+          candidate = Array.from({ length: size }, () =>
             Array.from({ length: size }, () => Math.random() < 0.5)
           );
-        } while (newBoard.every((row) => row.every((cell) => cell === false)));
-        return newBoard;
+        } while (candidate.every((row) => row.every((cell) => cell === false)));
+        return candidate;
       }
 
       function render() {
@@ -356,6 +366,85 @@ const games = [
 
       function isSolved() {
         return board.every((row) => row.every((cell) => cell === false));
+      }
+
+      function isSolvableBoard(state) {
+        const matrix = toggleMatrix.map((row) => row.slice());
+        const vector = boardToVector(state);
+        const total = size * size;
+        let pivotRow = 0;
+
+        for (let col = 0; col < total && pivotRow < total; col += 1) {
+          let swapRow = pivotRow;
+          while (swapRow < total && matrix[swapRow][col] === 0) {
+            swapRow += 1;
+          }
+          if (swapRow === total) continue;
+
+          if (swapRow !== pivotRow) {
+            [matrix[pivotRow], matrix[swapRow]] = [matrix[swapRow], matrix[pivotRow]];
+            [vector[pivotRow], vector[swapRow]] = [vector[swapRow], vector[pivotRow]];
+          }
+
+          for (let r = 0; r < total; r += 1) {
+            if (r !== pivotRow && matrix[r][col] === 1) {
+              for (let c = col; c < total; c += 1) {
+                matrix[r][c] ^= matrix[pivotRow][c];
+              }
+              vector[r] ^= vector[pivotRow];
+            }
+          }
+
+          pivotRow += 1;
+        }
+
+        for (let r = pivotRow; r < total; r += 1) {
+          const hasCoefficient = matrix[r].some((value) => value === 1);
+          if (!hasCoefficient && vector[r] === 1) {
+            return false;
+          }
+        }
+
+        return true;
+      }
+
+      function boardToVector(state) {
+        const vector = [];
+        state.forEach((row) => {
+          row.forEach((cell) => {
+            vector.push(cell ? 1 : 0);
+          });
+        });
+        return vector;
+      }
+
+      function buildToggleMatrix(dimension) {
+        const total = dimension * dimension;
+        const matrix = Array.from({ length: total }, () =>
+          Array.from({ length: total }, () => 0)
+        );
+
+        for (let row = 0; row < dimension; row += 1) {
+          for (let col = 0; col < dimension; col += 1) {
+            const index = row * dimension + col;
+            const positions = [
+              [row, col],
+              [row - 1, col],
+              [row + 1, col],
+              [row, col - 1],
+              [row, col + 1],
+            ];
+
+            positions.forEach(([r, c]) => {
+              if (r >= 0 && r < dimension && c >= 0 && c < dimension) {
+                const toggledIndex = r * dimension + c;
+                matrix[index][toggledIndex] = 1;
+              }
+            });
+          }
+        }
+
+        return matrix;
       }
 
       return () => {
