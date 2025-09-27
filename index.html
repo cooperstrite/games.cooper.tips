@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="A playful collection of web mini-games by Cooper" />
+    <title>games.cooper.tips</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div id="app">
+      <header class="site-header">
+        <div class="title-group">
+          <span class="dot"></span>
+          <h1>games.cooper.tips</h1>
+        </div>
+        <p class="tagline">Small games, big vibes.</p>
+        <nav class="game-nav" aria-label="Game selector"></nav>
+      </header>
+
+      <main class="site-main">
+        <article class="game-card" aria-live="polite">
+          <header class="game-header">
+            <h2 id="game-title"></h2>
+            <p id="game-description"></p>
+          </header>
+          <section id="game-root" class="game-root"></section>
+        </article>
+      </main>
+
+      <footer class="site-footer">
+        <p>
+          Built with curiosity, inspired by
+          <a href="https://neal.fun" target="_blank" rel="noreferrer">neal.fun</a>.
+        </p>
+      </footer>
+    </div>
+
+    <template id="nav-button-template">
+      <button class="nav-button" type="button"></button>
+    </template>
+
+    <script src="script.js" type="module"></script>
+  </body>
+</html>
