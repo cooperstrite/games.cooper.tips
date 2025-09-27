@@ -344,7 +344,7 @@ const games = [
         button.textContent = "Stop";
         display.classList.remove("go", "too-soon");
         display.classList.add("ready");
-        const delay = Math.random() * 2200 + 1200;
+        const delay = Math.random() * (10000 - 100) + 100;
         timeoutId = window.setTimeout(() => {
           phase = "go";
           startTime = performance.now();
