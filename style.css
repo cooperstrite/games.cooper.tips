@@ -491,19 +491,7 @@ button:hover {
   pointer-events: none;
 }
 
-.light-cell.light-hint::after {
-  content: attr(data-hint-step);
-  position: absolute;
-  top: 6px;
-  right: 6px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  background: rgba(14, 16, 28, 0.65);
-  color: #ffffff;
-  padding: 0.2rem 0.45rem;
-  border-radius: 999px;
-  box-shadow: 0 6px 12px rgba(14, 16, 28, 0.45);
-}
+
 
 .light-cell.light-hint-primary {
   animation: hintGlow 0.95s ease-in-out infinite;

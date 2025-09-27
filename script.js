@@ -483,10 +483,7 @@ const games = [
         state.moves += 1;
         render();
         if (isSolved()) {
-          note.textContent = `Lights out! Cleared the ${state.size} × ${state.size} grid in ${state.moves} ${
-            state.moves === 1 ? "move" : "moves"
-          }.`;
-          note.classList.add("status-good");
+          showVictory();
         }
       });
 
@@ -559,7 +556,6 @@ const games = [
             if (state.hintActive && state.hintLookup.has(key)) {
               button.classList.add("light-hint");
               const stepIndex = state.hintLookup.get(key);
-              button.dataset.hintStep = String(stepIndex + 1);
               if (stepIndex === 0) {
                 button.classList.add("light-hint-primary");
               }
@@ -788,6 +784,15 @@ const games = [
 
       function getHelpText() {
         return `Each tap flips the tile plus its neighbors. Can you zero the ${state.size} × ${state.size} grid?`;
+      }
+
+      function showVictory() {
+        note.classList.remove("status-bad");
+        note.classList.add("status-good");
+        note.textContent = `Victory! Cleared the ${state.size} × ${state.size} grid in ${state.moves} ${
+          state.moves === 1 ? "move" : "moves"
+        }. Tap Shuffle for a new challenge.`;
+        clearHints();
       }
 
       return () => {
