@@ -236,6 +236,7 @@ const games = [
         input.max = String(state.maxRange);
         input.placeholder = `Guess between 1 and ${formatNumber(state.maxRange)}`;
         info.textContent = getRangeHelpText();
+        updateDescription();
         if (message) {
           renderFeedback(message, "status-good");
         } else {
@@ -263,6 +264,18 @@ const games = [
 
       function getRangeHelpText() {
         return `Range: 1 – ${formatNumber(state.maxRange)}. Tip: Use the arrow keys or enter key to make quick adjustments.`;
+      }
+
+      function getDescriptionText() {
+        return `Guess the hidden number between 1 and ${formatNumber(
+          state.maxRange
+        )}. Each attempt gives you warmer or colder hints as you zero in.`;
+      }
+
+      function updateDescription() {
+        if (typeof descEl !== "undefined" && descEl && activeId === "guess") {
+          descEl.textContent = getDescriptionText();
+        }
       }
 
       return () => {
