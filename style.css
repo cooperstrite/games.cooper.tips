@@ -374,6 +374,34 @@ button:hover {
   align-items: center;
 }
 
+.spotdiff-mode-buttons {
+  display: inline-flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.spotdiff-mode-btn {
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.05);
+  padding: 0.45rem 1rem;
+  cursor: pointer;
+  transition: transform var(--transition), border var(--transition), background var(--transition);
+  color: inherit;
+  font-size: 0.9rem;
+}
+
+.spotdiff-mode-btn[aria-pressed="true"] {
+  background: linear-gradient(135deg, rgba(114, 246, 255, 0.22), rgba(255, 217, 114, 0.32));
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.spotdiff-mode-btn:hover,
+.spotdiff-mode-btn:focus-visible {
+  transform: translateY(-1px);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
 .spotdiff-score {
   display: flex;
   gap: 1rem;
@@ -460,6 +488,16 @@ button:hover {
   align-items: center;
 }
 
+.spotdiff-extend {
+  display: inline-flex;
+  gap: 0.35rem;
+  align-items: center;
+}
+
+.spotdiff-extend select {
+  min-width: 70px;
+}
+
 .spotdiff-message {
   color: var(--text-muted);
   font-size: 0.95rem;
@@ -486,6 +524,43 @@ button:hover {
   75% {
     transform: translateX(6px);
   }
+}
+
+.spotdiff-custom {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.spotdiff-custom summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.spotdiff-custom input[type="text"],
+.spotdiff-custom input[type="file"],
+.spotdiff-custom textarea,
+.spotdiff-custom select {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-md);
+  padding: 0.6rem 0.75rem;
+  color: inherit;
+  font: inherit;
+}
+
+.spotdiff-custom textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.spotdiff-custom small {
+  color: var(--text-muted);
 }
 
 .submerged-frame {

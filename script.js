@@ -841,6 +841,14 @@ const games = [
       const encodeSvg = (svg) =>
         `data:image/svg+xml,${encodeURIComponent(svg.replace(/\s+/g, " ").trim())}`;
 
+      const modes = {
+        easy: { label: "Easy", timeLimit: 240, radiusScale: 1.35, extension: 60 },
+        mild: { label: "Mild", timeLimit: 210, radiusScale: 1.2, extension: 45 },
+        medium: { label: "Medium", timeLimit: 180, radiusScale: 1, extension: 30 },
+        hard: { label: "Hard", timeLimit: 150, radiusScale: 0.85, extension: 25 },
+        expert: { label: "Expert", timeLimit: 120, radiusScale: 0.7, extension: 20 },
+      };
+
       const puzzles = [
         {
           id: "reef",
@@ -993,6 +1001,11 @@ const games = [
         startTime: null,
         timerId: null,
         bestTimes: new Map(),
+        mode: "medium",
+        timeRemaining: modes.medium.timeLimit,
+        timerRunning: false,
+        failed: false,
+        lastTick: 0,
       };
 
       const container = document.createElement("div");
@@ -1008,9 +1021,10 @@ const games = [
         <div>Time: <span id="spotdiffTimer">00:00</span></div>
       `;
 
-      const puzzleList = document.createElement("div");
-      puzzleList.className = "spotdiff-puzzle-list";
-      puzzles.forEach((puzzle, index) => {
+      const modeBar = document.createElement("div");
+      modeBar.className = "spotdiff-mode-buttons";
+
+      const addPuzzleButton = (puzzle, index) => {
         const button = document.createElement("button");
         button.type = "button";
         button.className = "spotdiff-puzzle-btn";
@@ -1018,9 +1032,24 @@ const games = [
         button.setAttribute("aria-pressed", index === state.puzzleIndex ? "true" : "false");
         button.addEventListener("click", () => selectPuzzle(index));
         puzzleList.appendChild(button);
+      };
+
+      const puzzleList = document.createElement("div");
+      puzzleList.className = "spotdiff-puzzle-list";
+      puzzles.forEach((puzzle, index) => addPuzzleButton(puzzle, index));
+
+      Object.entries(modes).forEach(([key, info]) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "spotdiff-mode-btn";
+        button.textContent = info.label;
+        button.dataset.mode = key;
+        button.setAttribute("aria-pressed", key === state.mode ? "true" : "false");
+        button.addEventListener("click", () => changeMode(key));
+        modeBar.appendChild(button);
       });
 
-      header.append(score, puzzleList);
+      header.append(score, modeBar, puzzleList);
 
       const board = document.createElement("div");
       board.className = "spotdiff-board";
@@ -1048,18 +1077,94 @@ const games = [
       resetBtn.textContent = "Restart puzzle";
       resetBtn.addEventListener("click", () => selectPuzzle(state.puzzleIndex, true));
 
+      const extendWrap = document.createElement("div");
+      extendWrap.className = "spotdiff-extend";
+
+      const extendLabel = document.createElement("span");
+      extendLabel.textContent = "Extend timer:";
+
+      const extendSelect = document.createElement("select");
+      [15, 30, 45, 60].forEach((seconds) => {
+        const option = document.createElement("option");
+        option.value = String(seconds);
+        option.textContent = `${seconds}s`;
+        if (seconds === modes[state.mode].extension) option.selected = true;
+        extendSelect.appendChild(option);
+      });
+
+      const extendBtn = document.createElement("button");
+      extendBtn.type = "button";
+      extendBtn.className = "spotdiff-puzzle-btn";
+      extendBtn.textContent = "Add time";
+      extendBtn.addEventListener("click", () => {
+        const amount = Number.parseInt(extendSelect.value, 10);
+        state.timeRemaining += amount;
+        updateTimerDisplay();
+        message.textContent = `Added ${amount} seconds to the clock.`;
+      });
+
+      extendWrap.append(extendLabel, extendSelect, extendBtn);
+
       const message = document.createElement("div");
       message.className = "spotdiff-message";
       message.textContent = "Pick a difference to begin.";
 
-      controls.append(resetBtn, message);
+      controls.append(resetBtn, extendWrap, message);
 
-      container.append(header, board, controls);
+      const customSection = document.createElement("details");
+      customSection.className = "spotdiff-custom";
+      const summary = document.createElement("summary");
+      summary.textContent = "Create custom puzzle";
+      customSection.appendChild(summary);
+
+      const customTitle = document.createElement("input");
+      customTitle.type = "text";
+      customTitle.placeholder = "Puzzle title";
+
+      const customLeft = document.createElement("input");
+      customLeft.type = "file";
+      customLeft.accept = "image/*";
+
+      const customRight = document.createElement("input");
+      customRight.type = "file";
+      customRight.accept = "image/*";
+
+      const differencesLabel = document.createElement("small");
+      differencesLabel.textContent = "Differences (one per line, format: xPercent,yPercent,radiusPercent).";
+
+      const customDiffs = document.createElement("textarea");
+      customDiffs.placeholder = "Example:\n50,40,8\n72,65,6";
+
+      const customModeNote = document.createElement("small");
+      customModeNote.textContent = "AI automation isn't available in this build — upload two scenes with your own differences and outline them.";
+
+      const customActions = document.createElement("div");
+      customActions.className = "spotdiff-controls";
+
+      const saveCustomBtn = document.createElement("button");
+      saveCustomBtn.type = "button";
+      saveCustomBtn.className = "spotdiff-puzzle-btn";
+      saveCustomBtn.textContent = "Load puzzle";
+
+      const clearCustomBtn = document.createElement("button");
+      clearCustomBtn.type = "button";
+      clearCustomBtn.className = "spotdiff-puzzle-btn";
+      clearCustomBtn.textContent = "Clear";
+
+      customActions.append(saveCustomBtn, clearCustomBtn);
+
+      customSection.append(customTitle, customLeft, customRight, differencesLabel, customDiffs, customModeNote, customActions);
+
+      container.append(header, board, controls, customSection);
       root.appendChild(container);
 
       const foundEl = score.querySelector("#spotdiffFound");
       const totalEl = score.querySelector("#spotdiffTotal");
       const timerEl = score.querySelector("#spotdiffTimer");
+
+      function getMode() {
+        return modes[state.mode];
+      }
 
       function selectPuzzle(index, forceRestart = false) {
         if (!forceRestart && index === state.puzzleIndex && state.startTime) return;
@@ -1067,6 +1172,9 @@ const games = [
         state.puzzleIndex = index;
         state.found = new Set();
         state.startTime = null;
+        state.failed = false;
+        state.timeRemaining = getMode().timeLimit;
+        state.timerRunning = false;
         updateButtons();
         const puzzle = puzzles[index];
         leftImg.src = puzzle.left;
@@ -1074,13 +1182,16 @@ const games = [
         removeMarkers();
         totalEl.textContent = String(puzzle.differences.length);
         foundEl.textContent = "0";
-        timerEl.textContent = "00:00";
+        updateTimerDisplay();
         message.textContent = "Can you spot all the differences?";
       }
 
       function updateButtons() {
         puzzleList.querySelectorAll(".spotdiff-puzzle-btn").forEach((button, idx) => {
           button.setAttribute("aria-pressed", idx === state.puzzleIndex ? "true" : "false");
+        });
+        modeBar.querySelectorAll(".spotdiff-mode-btn").forEach((button) => {
+          button.setAttribute("aria-pressed", button.dataset.mode === state.mode ? "true" : "false");
         });
       }
 
@@ -1091,9 +1202,12 @@ const games = [
       }
 
       function ensureTimer() {
-        if (state.startTime) return;
+        if (state.timerRunning || state.failed) return;
         state.startTime = performance.now();
-        state.timerId = window.setInterval(updateTimer, 250);
+        state.lastTick = state.startTime;
+        state.timerRunning = true;
+        state.timerId = window.setInterval(tickTimer, 250);
+        updateTimerDisplay();
       }
 
       function cleanupTimer() {
@@ -1101,15 +1215,30 @@ const games = [
           window.clearInterval(state.timerId);
           state.timerId = null;
         }
+        state.timerRunning = false;
       }
 
-      function updateTimer() {
-        if (!state.startTime) return;
-        const elapsed = Math.floor((performance.now() - state.startTime) / 1000);
-        timerEl.textContent = formatTime(elapsed);
+      function tickTimer() {
+        if (!state.timerRunning) return;
+        const now = performance.now();
+        const delta = (now - state.lastTick) / 1000;
+        state.lastTick = now;
+        state.timeRemaining = Math.max(0, state.timeRemaining - delta);
+        updateTimerDisplay();
+        if (state.timeRemaining <= 0) {
+          failPuzzle();
+        }
+      }
+
+      function updateTimerDisplay() {
+        timerEl.textContent = formatTime(Math.max(0, Math.ceil(state.timeRemaining)));
       }
 
       function handlePanelClick(event, panel) {
+        if (state.failed) {
+          message.textContent = "Time's up. Restart the puzzle to try again.";
+          return;
+        }
         const puzzle = puzzles[state.puzzleIndex];
         ensureTimer();
         const rect = panel.getBoundingClientRect();
@@ -1118,8 +1247,9 @@ const games = [
 
         const hitIndex = puzzle.differences.findIndex((diff, idx) => {
           if (state.found.has(idx)) return false;
+          const radius = diff.radius * getMode().radiusScale;
           const distance = Math.hypot(diff.x - xPercent, diff.y - yPercent);
-          return distance <= diff.radius;
+          return distance <= radius;
         });
 
         if (hitIndex !== -1) {
@@ -1127,7 +1257,7 @@ const games = [
           foundEl.textContent = String(state.found.size);
           renderMarker(hitIndex);
           message.textContent = ["Nice spot!", "Great eye!", "You found one!"][state.found.size % 3];
-          if (state.found.size === puzzle.differences.length) {
+          if (state.found.size === puzzles[state.puzzleIndex].differences.length) {
             finishPuzzle();
           }
         } else {
@@ -1154,12 +1284,13 @@ const games = [
       function finishPuzzle() {
         cleanupTimer();
         const elapsed = Math.floor((performance.now() - state.startTime) / 1000);
-        const best = state.bestTimes.get(state.puzzleIndex);
+        const key = `${state.mode}:${state.puzzleIndex}`;
+        const best = state.bestTimes.get(key);
         if (!best || elapsed < best) {
-          state.bestTimes.set(state.puzzleIndex, elapsed);
+          state.bestTimes.set(key, elapsed);
         }
         message.textContent = `All differences found in ${formatTime(elapsed)}!${
-          best && elapsed >= best ? " (Try to beat your best time.)" : " New record!"
+          best && elapsed >= best ? " (Try to beat your best time.)" : " New record for this mode!"
         }`;
       }
 
@@ -1169,8 +1300,94 @@ const games = [
         return `${m}:${s}`;
       }
 
+      function failPuzzle() {
+        cleanupTimer();
+        state.failed = true;
+        state.timeRemaining = 0;
+        updateTimerDisplay();
+        message.textContent = "Time expired! Hit Restart puzzle to try again.";
+      }
+
       leftPanel.addEventListener("click", (event) => handlePanelClick(event, leftPanel));
       rightPanel.addEventListener("click", (event) => handlePanelClick(event, rightPanel));
+
+      function changeMode(modeKey) {
+        if (!modes[modeKey] || state.mode === modeKey) return;
+        state.mode = modeKey;
+        extendSelect.value = String(modes[modeKey].extension);
+        updateButtons();
+        selectPuzzle(state.puzzleIndex, true);
+      }
+
+      async function readFileAsDataURL(file) {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = () => reject(reader.error);
+          reader.readAsDataURL(file);
+        });
+      }
+
+      function parseDifferences(text) {
+        return text
+          .split(/\n+/)
+          .map((line) => line.trim())
+          .filter(Boolean)
+          .map((line) => {
+            const [xVal, yVal, rVal] = line.split(/[, ]+/);
+            const x = Number.parseFloat(xVal);
+            const y = Number.parseFloat(yVal);
+            const radius = Number.parseFloat(rVal);
+            if (Number.isNaN(x) || Number.isNaN(y)) return null;
+            return { x, y, radius: Number.isNaN(radius) ? 8 : radius };
+          })
+          .filter(Boolean);
+      }
+
+      saveCustomBtn.addEventListener("click", async () => {
+        if (!customLeft.files?.[0] || !customRight.files?.[0]) {
+          message.textContent = "Choose both left and right images to build a custom puzzle.";
+          return;
+        }
+        const diffs = parseDifferences(customDiffs.value);
+        if (!diffs.length) {
+          message.textContent = "Add at least one difference (format: x,y,radius).";
+          return;
+        }
+        try {
+          const [leftData, rightData] = await Promise.all([
+            readFileAsDataURL(customLeft.files[0]),
+            readFileAsDataURL(customRight.files[0]),
+          ]);
+          const title = customTitle.value.trim() || `Custom Scene ${puzzles.length + 1}`;
+          const newPuzzle = {
+            id: `custom-${Date.now()}`,
+            title,
+            left: leftData,
+            right: rightData,
+            differences: diffs,
+          };
+          puzzles.push(newPuzzle);
+          addPuzzleButton(newPuzzle, puzzles.length - 1);
+          customLeft.value = "";
+          customRight.value = "";
+          customTitle.value = "";
+          customDiffs.value = "";
+          message.textContent = `Custom puzzle "${title}" loaded. Good luck!`;
+          customSection.open = false;
+          selectPuzzle(puzzles.length - 1, true);
+        } catch (error) {
+          message.textContent = "Unable to load images. Try smaller files or a different format.";
+        }
+      });
+
+      clearCustomBtn.addEventListener("click", () => {
+        customLeft.value = "";
+        customRight.value = "";
+        customTitle.value = "";
+        customDiffs.value = "";
+        message.textContent = "Cleared custom puzzle form.";
+      });
 
       selectPuzzle(0, true);
 
