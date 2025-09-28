@@ -842,11 +842,11 @@ const games = [
         `data:image/svg+xml,${encodeURIComponent(svg.replace(/\s+/g, " ").trim())}`;
 
       const modes = {
-        easy: { label: "Easy", timeLimit: 240, radiusScale: 1.35, extension: 60 },
-        mild: { label: "Mild", timeLimit: 210, radiusScale: 1.2, extension: 45 },
-        medium: { label: "Medium", timeLimit: 180, radiusScale: 1, extension: 30 },
-        hard: { label: "Hard", timeLimit: 150, radiusScale: 0.85, extension: 25 },
-        expert: { label: "Expert", timeLimit: 120, radiusScale: 0.7, extension: 20 },
+        easy: { label: "Easy", timeLimit: 240, radiusScale: 1.35, extension: 60, differences: 3 },
+        mild: { label: "Mild", timeLimit: 210, radiusScale: 1.2, extension: 45, differences: 4 },
+        medium: { label: "Medium", timeLimit: 180, radiusScale: 1, extension: 30, differences: 5 },
+        hard: { label: "Hard", timeLimit: 150, radiusScale: 0.85, extension: 25, differences: 6 },
+        expert: { label: "Expert", timeLimit: 120, radiusScale: 0.7, extension: 20, differences: 6 },
       };
 
       const puzzles = [
@@ -890,9 +890,12 @@ const games = [
             </svg>
           `),
           differences: [
-            { x: 17.5, y: 23, radius: 9 },
-            { x: 70, y: 53, radius: 8 },
+            { x: 18, y: 23, radius: 9 },
+            { x: 70, y: 35, radius: 8 },
             { x: 37, y: 79, radius: 8 },
+            { x: 52, y: 58, radius: 7 },
+            { x: 82, y: 64, radius: 7 },
+            { x: 58, y: 14, radius: 7 },
           ],
         },
         {
@@ -943,8 +946,11 @@ const games = [
           `),
           differences: [
             { x: 80, y: 23, radius: 8 },
-            { x: 40.5, y: 51, radius: 7 },
-            { x: 89, y: 71, radius: 7 },
+            { x: 39, y: 56, radius: 7 },
+            { x: 88, y: 63, radius: 7 },
+            { x: 62, y: 74, radius: 7 },
+            { x: 50, y: 46, radius: 7 },
+            { x: 20, y: 72, radius: 7 },
           ],
         },
         {
@@ -989,8 +995,101 @@ const games = [
           `),
           differences: [
             { x: 30, y: 20, radius: 8 },
+            { x: 75, y: 24, radius: 7 },
             { x: 80, y: 75, radius: 7 },
             { x: 65, y: 40, radius: 7 },
+            { x: 50, y: 60, radius: 7 },
+            { x: 70, y: 68, radius: 7 },
+          ],
+        },
+        {
+          id: "panel",
+          title: "Pixel Panels",
+          left: encodeSvg(`
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+              <linearGradient id="panel-bg" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0" stop-color="#0f1a32" />
+                <stop offset="1" stop-color="#050915" />
+              </linearGradient>
+              <rect width="400" height="300" fill="url(#panel-bg)" />
+              <rect x="40" y="60" width="80" height="80" rx="12" fill="#ffd972" />
+              <rect x="160" y="60" width="80" height="80" rx="12" fill="#72f6ff" />
+              <rect x="280" y="60" width="80" height="80" rx="12" fill="#8c6ff8" />
+              <rect x="40" y="170" width="80" height="80" rx="12" fill="#ff9d72" />
+              <rect x="160" y="170" width="80" height="80" rx="12" fill="#2bd9ff" />
+              <rect x="280" y="170" width="80" height="80" rx="12" fill="#f36f98" />
+            </svg>
+          `),
+          right: encodeSvg(`
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+              <linearGradient id="panel-bg" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0" stop-color="#0f1a32" />
+                <stop offset="1" stop-color="#050915" />
+              </linearGradient>
+              <rect width="400" height="300" fill="url(#panel-bg)" />
+              <rect x="40" y="60" width="80" height="80" rx="12" fill="#ffe7b3" />
+              <rect x="160" y="60" width="80" height="80" rx="12" fill="#ff9d72" />
+              <rect x="280" y="60" width="80" height="80" rx="12" fill="#ffd972" />
+              <rect x="40" y="170" width="80" height="80" rx="12" fill="#2bd9ff" />
+              <rect x="160" y="170" width="80" height="80" rx="12" fill="#8c6ff8" />
+              <rect x="280" y="170" width="80" height="80" rx="12" fill="#72f6ff" />
+            </svg>
+          `),
+          differences: [
+            { x: 20, y: 33, radius: 9 },
+            { x: 50, y: 33, radius: 9 },
+            { x: 80, y: 33, radius: 9 },
+            { x: 20, y: 70, radius: 9 },
+            { x: 50, y: 70, radius: 9 },
+            { x: 80, y: 70, radius: 9 },
+          ],
+        },
+        {
+          id: "arcade",
+          title: "Retro Arcade",
+          left: encodeSvg(`
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+              <linearGradient id="arcade-bg" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0" stop-color="#15072b" />
+                <stop offset="1" stop-color="#02111f" />
+              </linearGradient>
+              <rect width="400" height="300" fill="url(#arcade-bg)" />
+              <rect x="70" y="200" width="260" height="60" rx="20" fill="#141f3c" />
+              <rect x="110" y="210" width="30" height="60" rx="10" fill="#ffd972" />
+              <circle cx="125" cy="180" r="18" fill="#ffd972" />
+              <circle cx="120" cy="110" r="30" fill="#ff9d72" />
+              <rect x="200" y="90" width="60" height="40" rx="8" fill="#72f6ff" />
+              <circle cx="290" cy="120" r="14" fill="#ffd972" />
+              <circle cx="220" cy="220" r="14" fill="#8c6ff8" />
+              <circle cx="260" cy="220" r="14" fill="#2bd9ff" />
+              <circle cx="300" cy="220" r="14" fill="#f36f98" />
+            </svg>
+          `),
+          right: encodeSvg(`
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+              <linearGradient id="arcade-bg" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0" stop-color="#15072b" />
+                <stop offset="1" stop-color="#02111f" />
+              </linearGradient>
+              <rect width="400" height="300" fill="url(#arcade-bg)" />
+              <rect x="70" y="200" width="260" height="60" rx="20" fill="#141f3c" />
+              <rect x="110" y="210" width="30" height="60" rx="10" fill="#8c6ff8" />
+              <circle cx="125" cy="180" r="18" fill="#8c6ff8" />
+              <circle cx="120" cy="110" r="30" fill="#72f6ff" />
+              <rect x="200" y="90" width="60" height="40" rx="8" fill="#ffd972" />
+              <circle cx="290" cy="120" r="14" fill="#f36f98" />
+              <circle cx="220" cy="220" r="14" fill="#ffd972" />
+              <circle cx="260" cy="220" r="14" fill="#f36f98" />
+              <circle cx="300" cy="220" r="14" fill="#2bd9ff" />
+            </svg>
+          `),
+          differences: [
+            { x: 30, y: 36, radius: 8 },
+            { x: 57, y: 36, radius: 8 },
+            { x: 73, y: 40, radius: 8 },
+            { x: 31, y: 60, radius: 8 },
+            { x: 55, y: 73, radius: 8 },
+            { x: 65, y: 73, radius: 8 },
           ],
         },
       ];
@@ -1006,6 +1105,7 @@ const games = [
         timerRunning: false,
         failed: false,
         lastTick: 0,
+        activeDiffs: [],
       };
 
       const container = document.createElement("div");
@@ -1166,21 +1266,52 @@ const games = [
         return modes[state.mode];
       }
 
+      function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i -= 1) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+      }
+
+      function pickActiveDifferences(puzzle) {
+        const target = Math.min(getMode().differences, puzzle.differences.length);
+        const pool = shuffle(puzzle.differences.slice());
+        return pool.slice(0, target);
+      }
+
+      function renderOverlays() {
+        rightPanel.querySelectorAll(".spotdiff-overlay").forEach((overlay) => overlay.remove());
+        state.activeDiffs.forEach((diff, idx) => {
+          const overlay = document.createElement("div");
+          overlay.className = "spotdiff-overlay";
+          overlay.dataset.index = String(idx);
+          overlay.style.left = `${diff.x}%`;
+          overlay.style.top = `${diff.y}%`;
+          overlay.style.width = `${diff.radius * 2}%`;
+          overlay.style.height = `${diff.radius * 2}%`;
+          rightPanel.appendChild(overlay);
+        });
+      }
+
       function selectPuzzle(index, forceRestart = false) {
-        if (!forceRestart && index === state.puzzleIndex && state.startTime) return;
+        if (!forceRestart && index === state.puzzleIndex && state.timerRunning) return;
         cleanupTimer();
         state.puzzleIndex = index;
         state.found = new Set();
         state.startTime = null;
         state.failed = false;
+        state.activeDiffs = pickActiveDifferences(puzzles[index]);
         state.timeRemaining = getMode().timeLimit;
         state.timerRunning = false;
         updateButtons();
         const puzzle = puzzles[index];
         leftImg.src = puzzle.left;
         rightImg.src = puzzle.right;
+        extendSelect.value = String(getMode().extension);
         removeMarkers();
-        totalEl.textContent = String(puzzle.differences.length);
+        renderOverlays();
+        totalEl.textContent = String(state.activeDiffs.length);
         foundEl.textContent = "0";
         updateTimerDisplay();
         message.textContent = "Can you spot all the differences?";
@@ -1196,8 +1327,8 @@ const games = [
       }
 
       function removeMarkers() {
-        [...leftPanel.querySelectorAll(".spotdiff-marker"), ...rightPanel.querySelectorAll(".spotdiff-marker")].forEach((marker) =>
-          marker.remove()
+        [...leftPanel.querySelectorAll(".spotdiff-marker"), ...rightPanel.querySelectorAll(".spotdiff-marker"), ...rightPanel.querySelectorAll(".spotdiff-overlay")].forEach((el) =>
+          el.remove()
         );
       }
 
@@ -1239,13 +1370,12 @@ const games = [
           message.textContent = "Time's up. Restart the puzzle to try again.";
           return;
         }
-        const puzzle = puzzles[state.puzzleIndex];
         ensureTimer();
         const rect = panel.getBoundingClientRect();
         const xPercent = ((event.clientX - rect.left) / rect.width) * 100;
         const yPercent = ((event.clientY - rect.top) / rect.height) * 100;
 
-        const hitIndex = puzzle.differences.findIndex((diff, idx) => {
+        const hitIndex = state.activeDiffs.findIndex((diff, idx) => {
           if (state.found.has(idx)) return false;
           const radius = diff.radius * getMode().radiusScale;
           const distance = Math.hypot(diff.x - xPercent, diff.y - yPercent);
@@ -1257,7 +1387,7 @@ const games = [
           foundEl.textContent = String(state.found.size);
           renderMarker(hitIndex);
           message.textContent = ["Nice spot!", "Great eye!", "You found one!"][state.found.size % 3];
-          if (state.found.size === puzzles[state.puzzleIndex].differences.length) {
+          if (state.found.size === state.activeDiffs.length) {
             finishPuzzle();
           }
         } else {
@@ -1268,8 +1398,7 @@ const games = [
       }
 
       function renderMarker(index) {
-        const puzzle = puzzles[state.puzzleIndex];
-        const diff = puzzle.differences[index];
+        const diff = state.activeDiffs[index];
         [leftPanel, rightPanel].forEach((panel) => {
           const marker = document.createElement("div");
           marker.className = "spotdiff-marker";
@@ -1279,12 +1408,15 @@ const games = [
           marker.style.height = `${diff.radius * 2}%`;
           panel.appendChild(marker);
         });
+        const overlay = rightPanel.querySelector(`.spotdiff-overlay[data-index="${index}"]`);
+        if (overlay) overlay.remove();
       }
 
       function finishPuzzle() {
         cleanupTimer();
         const elapsed = Math.floor((performance.now() - state.startTime) / 1000);
-        const key = `${state.mode}:${state.puzzleIndex}`;
+        const puzzle = puzzles[state.puzzleIndex];
+        const key = `${state.mode}:${puzzle.id}`;
         const best = state.bestTimes.get(key);
         if (!best || elapsed < best) {
           state.bestTimes.set(key, elapsed);
