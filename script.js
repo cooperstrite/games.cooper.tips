@@ -1197,6 +1197,10 @@ const games = [
       extendBtn.className = "spotdiff-puzzle-btn";
       extendBtn.textContent = "Add time";
       extendBtn.addEventListener("click", () => {
+        if (state.failed) {
+          message.textContent = "Timer already expired—restart the puzzle to try again.";
+          return;
+        }
         const amount = Number.parseInt(extendSelect.value, 10);
         state.timeRemaining += amount;
         updateTimerDisplay();
@@ -1280,20 +1284,6 @@ const games = [
         return pool.slice(0, target);
       }
 
-      function renderOverlays() {
-        rightPanel.querySelectorAll(".spotdiff-overlay").forEach((overlay) => overlay.remove());
-        state.activeDiffs.forEach((diff, idx) => {
-          const overlay = document.createElement("div");
-          overlay.className = "spotdiff-overlay";
-          overlay.dataset.index = String(idx);
-          overlay.style.left = `${diff.x}%`;
-          overlay.style.top = `${diff.y}%`;
-          overlay.style.width = `${diff.radius * 2}%`;
-          overlay.style.height = `${diff.radius * 2}%`;
-          rightPanel.appendChild(overlay);
-        });
-      }
-
       function selectPuzzle(index, forceRestart = false) {
         if (!forceRestart && index === state.puzzleIndex && state.timerRunning) return;
         cleanupTimer();
@@ -1310,7 +1300,6 @@ const games = [
         rightImg.src = puzzle.right;
         extendSelect.value = String(getMode().extension);
         removeMarkers();
-        renderOverlays();
         totalEl.textContent = String(state.activeDiffs.length);
         foundEl.textContent = "0";
         updateTimerDisplay();
@@ -1327,7 +1316,7 @@ const games = [
       }
 
       function removeMarkers() {
-        [...leftPanel.querySelectorAll(".spotdiff-marker"), ...rightPanel.querySelectorAll(".spotdiff-marker"), ...rightPanel.querySelectorAll(".spotdiff-overlay")].forEach((el) =>
+        [...leftPanel.querySelectorAll(".spotdiff-marker"), ...rightPanel.querySelectorAll(".spotdiff-marker")].forEach((el) =>
           el.remove()
         );
       }
@@ -1408,8 +1397,6 @@ const games = [
           marker.style.height = `${diff.radius * 2}%`;
           panel.appendChild(marker);
         });
-        const overlay = rightPanel.querySelector(`.spotdiff-overlay[data-index="${index}"]`);
-        if (overlay) overlay.remove();
       }
 
       function finishPuzzle() {

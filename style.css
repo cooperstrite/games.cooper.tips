@@ -461,16 +461,6 @@ button:hover {
   animation: spotdiffShake 0.26s linear;
 }
 
-.spotdiff-overlay {
-  position: absolute;
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
-  pointer-events: none;
-  background: radial-gradient(circle, rgba(255, 217, 114, 0.55) 0%, rgba(255, 217, 114, 0.1) 70%, transparent 100%);
-  opacity: 0.85;
-  transition: opacity 180ms ease;
-}
-
 .spotdiff-panel img {
   display: block;
   width: 100%;
