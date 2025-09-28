@@ -851,6 +851,50 @@ const games = [
 
       const puzzles = [
         {
+          id: "reef-photo",
+          title: "Reef Snapshot",
+          left: "assets/reef-original.jpg",
+          right: "assets/reef-original.jpg",
+          differences: [
+            {
+              x: 32,
+              y: 44,
+              radius: 6,
+              overlay: { color: "rgba(247, 116, 116, 0.35)", size: 12 },
+            },
+            {
+              x: 62,
+              y: 42,
+              radius: 6,
+              overlay: { color: "rgba(114, 246, 255, 0.35)", size: 12 },
+            },
+            {
+              x: 48,
+              y: 25,
+              radius: 5,
+              overlay: { color: "rgba(255, 217, 114, 0.38)", size: 10 },
+            },
+            {
+              x: 23,
+              y: 63,
+              radius: 5,
+              overlay: { color: "rgba(140, 111, 248, 0.4)", size: 10 },
+            },
+            {
+              x: 76,
+              y: 60,
+              radius: 5,
+              overlay: { color: "rgba(45, 217, 255, 0.35)", size: 10 },
+            },
+            {
+              x: 57,
+              y: 72,
+              radius: 5,
+              overlay: { color: "rgba(255, 157, 114, 0.38)", size: 10 },
+            },
+          ],
+        },
+        {
           id: "reef",
           title: "Kelp Reef",
           left: encodeSvg(`
@@ -1106,6 +1150,7 @@ const games = [
         failed: false,
         lastTick: 0,
         activeDiffs: [],
+        targetCount: 0,
       };
 
       const container = document.createElement("div");
@@ -1270,6 +1315,20 @@ const games = [
         return modes[state.mode];
       }
 
+      function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i -= 1) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+      }
+
+      function selectActiveDiffs(puzzle) {
+        const target = Math.min(getMode().differences, puzzle.differences.length);
+        const pool = shuffle(puzzle.differences.slice());
+        return pool.slice(0, target);
+      }
+
       function selectPuzzle(index, forceRestart = false) {
         if (!forceRestart && index === state.puzzleIndex && state.timerRunning) return;
         cleanupTimer();
@@ -1277,8 +1336,8 @@ const games = [
         state.found = new Set();
         state.startTime = null;
         state.failed = false;
-        state.activeDiffs = puzzles[index].differences.slice();
-        state.targetCount = Math.min(getMode().differences, state.activeDiffs.length);
+        state.activeDiffs = selectActiveDiffs(puzzles[index]);
+        state.targetCount = state.activeDiffs.length;
         state.timeRemaining = getMode().timeLimit;
         state.timerRunning = false;
         updateButtons();
@@ -1287,6 +1346,7 @@ const games = [
         rightImg.src = puzzle.right;
         extendSelect.value = String(getMode().extension);
         removeMarkers();
+        renderOverlays();
         totalEl.textContent = String(state.targetCount);
         foundEl.textContent = "0";
         updateTimerDisplay();
@@ -1303,9 +1363,26 @@ const games = [
       }
 
       function removeMarkers() {
-        [...leftPanel.querySelectorAll(".spotdiff-marker"), ...rightPanel.querySelectorAll(".spotdiff-marker")].forEach((el) =>
+        [...leftPanel.querySelectorAll(".spotdiff-marker"), ...rightPanel.querySelectorAll(".spotdiff-marker"), ...rightPanel.querySelectorAll(".spotdiff-overlay")].forEach((el) =>
           el.remove()
         );
+      }
+
+      function renderOverlays() {
+        rightPanel.querySelectorAll(".spotdiff-overlay").forEach((overlay) => overlay.remove());
+        state.activeDiffs.forEach((diff, idx) => {
+          if (!diff.overlay) return;
+          const overlay = document.createElement("div");
+          overlay.className = "spotdiff-overlay";
+          overlay.dataset.index = String(idx);
+          overlay.style.left = `${diff.x}%`;
+          overlay.style.top = `${diff.y}%`;
+          const size = diff.overlay.size ?? diff.radius * 2;
+          overlay.style.width = `${size}%`;
+          overlay.style.height = `${size}%`;
+          overlay.style.background = diff.overlay.color ?? "rgba(255, 217, 114, 0.35)";
+          rightPanel.appendChild(overlay);
+        });
       }
 
       function ensureTimer() {
@@ -1385,6 +1462,8 @@ const games = [
           marker.style.height = `${diff.radius * 2}%`;
           panel.appendChild(marker);
         });
+        const overlay = rightPanel.querySelector(`.spotdiff-overlay[data-index="${index}"]`);
+        if (overlay) overlay.remove();
       }
 
       function finishPuzzle() {
