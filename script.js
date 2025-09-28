@@ -1270,20 +1270,6 @@ const games = [
         return modes[state.mode];
       }
 
-      function shuffle(array) {
-        for (let i = array.length - 1; i > 0; i -= 1) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [array[i], array[j]] = [array[j], array[i]];
-        }
-        return array;
-      }
-
-      function pickActiveDifferences(puzzle) {
-        const target = Math.min(getMode().differences, puzzle.differences.length);
-        const pool = shuffle(puzzle.differences.slice());
-        return pool.slice(0, target);
-      }
-
       function selectPuzzle(index, forceRestart = false) {
         if (!forceRestart && index === state.puzzleIndex && state.timerRunning) return;
         cleanupTimer();
@@ -1291,7 +1277,8 @@ const games = [
         state.found = new Set();
         state.startTime = null;
         state.failed = false;
-        state.activeDiffs = pickActiveDifferences(puzzles[index]);
+        state.activeDiffs = puzzles[index].differences.slice();
+        state.targetCount = Math.min(getMode().differences, state.activeDiffs.length);
         state.timeRemaining = getMode().timeLimit;
         state.timerRunning = false;
         updateButtons();
@@ -1300,7 +1287,7 @@ const games = [
         rightImg.src = puzzle.right;
         extendSelect.value = String(getMode().extension);
         removeMarkers();
-        totalEl.textContent = String(state.activeDiffs.length);
+        totalEl.textContent = String(state.targetCount);
         foundEl.textContent = "0";
         updateTimerDisplay();
         message.textContent = "Can you spot all the differences?";
@@ -1373,10 +1360,11 @@ const games = [
 
         if (hitIndex !== -1) {
           state.found.add(hitIndex);
-          foundEl.textContent = String(state.found.size);
+          const foundCount = Math.min(state.found.size, state.targetCount);
+          foundEl.textContent = String(foundCount);
           renderMarker(hitIndex);
-          message.textContent = ["Nice spot!", "Great eye!", "You found one!"][state.found.size % 3];
-          if (state.found.size === state.activeDiffs.length) {
+          message.textContent = ["Nice spot!", "Great eye!", "You found one!"][foundCount % 3];
+          if (foundCount === state.targetCount) {
             finishPuzzle();
           }
         } else {
