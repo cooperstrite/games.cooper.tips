@@ -475,18 +475,10 @@ button:hover {
   height: auto;
 }
 
-.spotdiff-marker {
-  position: absolute;
-  border: 2px solid rgba(114, 246, 255, 0.85);
-  border-radius: 50%;
-  pointer-events: none;
-  transform: translate(-50%, -50%);
-  box-shadow: 0 0 18px rgba(114, 246, 255, 0.55);
-  animation: pulseMarker 1.5s ease-in-out infinite;
-}
-
-.spotdiff-panel.found .spotdiff-marker {
-  animation: none;
+.spotdiff-overlay.found {
+  filter: blur(0px) saturate(1.3);
+  opacity: 0.8;
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.55);
 }
 
 .spotdiff-controls {
@@ -509,16 +501,6 @@ button:hover {
 .spotdiff-message {
   color: var(--text-muted);
   font-size: 0.95rem;
-}
-
-@keyframes pulseMarker {
-  0%,
-  100% {
-    box-shadow: 0 0 18px rgba(114, 246, 255, 0.3);
-  }
-  50% {
-    box-shadow: 0 0 28px rgba(114, 246, 255, 0.65);
-  }
 }
 
 @keyframes spotdiffShake {

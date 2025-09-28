@@ -849,201 +849,55 @@ const games = [
         expert: { label: "Expert", timeLimit: 120, radiusScale: 0.7, extension: 20, differences: 6 },
       };
 
+      const modeStyles = {
+        easy: { sizeScale: 1.35, opacity: 0.55, blur: 8 },
+        mild: { sizeScale: 1.2, opacity: 0.45, blur: 7 },
+        medium: { sizeScale: 1, opacity: 0.38, blur: 6 },
+        hard: { sizeScale: 0.85, opacity: 0.32, blur: 5 },
+        expert: { sizeScale: 0.75, opacity: 0.28, blur: 4 },
+      };
+
       const puzzles = [
         {
-          id: "reef-photo",
-          title: "Reef Snapshot",
-          left: "assets/reef-original.jpg",
-          right: "assets/reef-original.jpg",
-          differences: [
-            {
-              x: 32,
-              y: 44,
-              radius: 6,
-              overlay: { color: "rgba(247, 116, 116, 0.35)", size: 12 },
-            },
-            {
-              x: 62,
-              y: 42,
-              radius: 6,
-              overlay: { color: "rgba(114, 246, 255, 0.35)", size: 12 },
-            },
-            {
-              x: 48,
-              y: 25,
-              radius: 5,
-              overlay: { color: "rgba(255, 217, 114, 0.38)", size: 10 },
-            },
-            {
-              x: 23,
-              y: 63,
-              radius: 5,
-              overlay: { color: "rgba(140, 111, 248, 0.4)", size: 10 },
-            },
-            {
-              x: 76,
-              y: 60,
-              radius: 5,
-              overlay: { color: "rgba(45, 217, 255, 0.35)", size: 10 },
-            },
-            {
-              x: 57,
-              y: 72,
-              radius: 5,
-              overlay: { color: "rgba(255, 157, 114, 0.38)", size: 10 },
-            },
-          ],
-        },
-        {
           id: "reef",
-          title: "Kelp Reef",
-          left: encodeSvg(`
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
-              <defs>
-                <linearGradient id="bg" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0" stop-color="#7fe3ff" />
-                  <stop offset="1" stop-color="#003a66" />
-                </linearGradient>
-              </defs>
-              <rect width="400" height="300" fill="url(#bg)" />
-              <circle cx="70" cy="70" r="30" fill="#ffd972" />
-              <path d="M40 280c0-60 30-90 30-140 10 30 40 60 40 140" fill="none" stroke="#38c172" stroke-width="14" stroke-linecap="round" />
-              <path d="M320 260c0-70-25-90-25-140-16 32-44 64-44 140" fill="none" stroke="#f36f98" stroke-width="14" stroke-linecap="round" />
-              <ellipse cx="280" cy="160" rx="26" ry="18" fill="#8c6ff8" />
-              <ellipse cx="280" cy="160" rx="12" ry="9" fill="#fff3ff" />
-              <polygon points="150,210 170,250 130,250" fill="#ff9d72" />
-              <circle cx="210" cy="110" r="12" fill="#ffffff" opacity="0.4" />
-              <circle cx="230" cy="95" r="8" fill="#ffffff" opacity="0.35" />
-            </svg>
-          `),
-          right: encodeSvg(`
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
-              <defs>
-                <linearGradient id="bg" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0" stop-color="#7fe3ff" />
-                  <stop offset="1" stop-color="#003a66" />
-                </linearGradient>
-              </defs>
-              <rect width="400" height="300" fill="url(#bg)" />
-              <path d="M40 280c0-60 30-90 30-140 10 30 40 60 40 140" fill="none" stroke="#38c172" stroke-width="14" stroke-linecap="round" />
-              <path d="M320 260c0-70-25-90-25-140-16 32-44 64-44 140" fill="none" stroke="#f36f98" stroke-width="14" stroke-linecap="round" />
-              <ellipse cx="280" cy="160" rx="26" ry="18" fill="#2bd9ff" />
-              <ellipse cx="280" cy="160" rx="12" ry="9" fill="#ffffff" opacity="0.55" />
-              <polygon points="150,210 170,250 130,250" fill="#6242ff" />
-              <circle cx="210" cy="110" r="12" fill="#ffffff" opacity="0.4" />
-            </svg>
-          `),
+          title: "Reef Snapshot",
+          left: "assets/reef-kelp.png",
+          right: "assets/reef-kelp.png",
           differences: [
-            { x: 18, y: 23, radius: 9 },
-            { x: 70, y: 35, radius: 8 },
-            { x: 37, y: 79, radius: 8 },
-            { x: 52, y: 58, radius: 7 },
-            { x: 82, y: 64, radius: 7 },
-            { x: 58, y: 14, radius: 7 },
+            { x: 16, y: 52, radius: 7, overlay: { color: "rgba(255, 217, 114, 0.4)", size: 14 } },
+            { x: 37, y: 41, radius: 6, overlay: { color: "rgba(114, 246, 255, 0.38)", size: 12 } },
+            { x: 48, y: 27, radius: 5, overlay: { color: "rgba(140, 111, 248, 0.35)", size: 10 } },
+            { x: 24, y: 66, radius: 5, overlay: { color: "rgba(247, 116, 116, 0.38)", size: 11 } },
+            { x: 63, y: 74, radius: 5, overlay: { color: "rgba(45, 217, 255, 0.36)", size: 11 } },
+            { x: 82, y: 62, radius: 5, overlay: { color: "rgba(255, 157, 114, 0.38)", size: 11 } },
           ],
         },
         {
           id: "city",
           title: "Neon Skyline",
-          left: encodeSvg(`
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
-              <linearGradient id="sky" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0" stop-color="#0b1a38" />
-                <stop offset="1" stop-color="#031126" />
-              </linearGradient>
-              <rect width="400" height="300" fill="url(#sky)" />
-              <circle cx="320" cy="70" r="26" fill="#ffd1f7" />
-              <g fill="#141f3c">
-                <rect x="40" y="140" width="80" height="160" />
-                <rect x="140" y="110" width="70" height="190" />
-                <rect x="230" y="130" width="90" height="170" />
-                <rect x="330" y="150" width="40" height="150" />
-              </g>
-              <rect x="60" y="170" width="12" height="18" fill="#72f6ff" />
-              <rect x="90" y="200" width="12" height="18" fill="#72f6ff" />
-              <rect x="155" y="140" width="14" height="24" fill="#ffd972" />
-              <rect x="255" y="170" width="16" height="40" fill="#ff9d72" />
-              <circle cx="110" cy="80" r="12" fill="#f36f98" />
-            </svg>
-          `),
-          right: encodeSvg(`
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
-              <linearGradient id="sky" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0" stop-color="#0b1a38" />
-                <stop offset="1" stop-color="#031126" />
-              </linearGradient>
-              <rect width="400" height="300" fill="url(#sky)" />
-              <circle cx="320" cy="70" r="26" fill="#ffd972" />
-              <g fill="#141f3c">
-                <rect x="40" y="140" width="80" height="160" />
-                <rect x="140" y="110" width="70" height="190" />
-                <rect x="230" y="130" width="90" height="170" />
-                <rect x="330" y="150" width="40" height="150" />
-              </g>
-              <rect x="60" y="170" width="12" height="18" fill="#72f6ff" />
-              <rect x="90" y="200" width="12" height="18" fill="#72f6ff" />
-              <rect x="155" y="140" width="14" height="24" fill="#8c6ff8" />
-              <rect x="255" y="170" width="16" height="40" fill="#ff9d72" />
-              <circle cx="110" cy="80" r="12" fill="#f36f98" />
-              <rect x="350" y="200" width="12" height="28" fill="#72f6ff" />
-            </svg>
-          `),
+          left: "assets/city-original.png",
+          right: "assets/city-original.png",
           differences: [
-            { x: 80, y: 23, radius: 8 },
-            { x: 39, y: 56, radius: 7 },
-            { x: 88, y: 63, radius: 7 },
-            { x: 62, y: 74, radius: 7 },
-            { x: 50, y: 46, radius: 7 },
-            { x: 20, y: 72, radius: 7 },
+            { x: 14, y: 66, radius: 6, overlay: { color: "rgba(247, 116, 116, 0.4)", size: 13 } },
+            { x: 31, y: 43, radius: 5, overlay: { color: "rgba(114, 246, 255, 0.36)", size: 11 } },
+            { x: 48, y: 28, radius: 5, overlay: { color: "rgba(140, 111, 248, 0.33)", size: 9 } },
+            { x: 63, y: 63, radius: 5, overlay: { color: "rgba(255, 217, 114, 0.34)", size: 10 } },
+            { x: 78, y: 44, radius: 5, overlay: { color: "rgba(45, 217, 255, 0.33)", size: 10 } },
+            { x: 91, y: 55, radius: 5, overlay: { color: "rgba(255, 157, 114, 0.34)", size: 10 } },
           ],
         },
         {
           id: "lab",
           title: "Stellar Lab",
-          left: encodeSvg(`
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
-              <rect width="400" height="300" fill="#101728" />
-              <circle cx="320" cy="60" r="16" fill="#ffd972" />
-              <circle cx="60" cy="70" r="6" fill="#72f6ff" />
-              <circle cx="120" cy="40" r="4" fill="#72f6ff" />
-              <g fill="#18253b">
-                <rect x="40" y="140" width="120" height="120" rx="16" />
-                <rect x="190" y="160" width="170" height="100" rx="20" />
-              </g>
-              <rect x="60" y="160" width="80" height="60" rx="10" fill="#2bd9ff" />
-              <circle cx="220" cy="200" r="30" fill="#8c6ff8" />
-              <circle cx="220" cy="200" r="16" fill="#ffffff" opacity="0.6" />
-              <rect x="300" y="190" width="40" height="24" rx="6" fill="#f36f98" />
-              <rect x="300" y="220" width="40" height="12" rx="6" fill="#ffd972" />
-              <circle cx="90" cy="220" r="8" fill="#ffffff" opacity="0.5" />
-            </svg>
-          `),
-          right: encodeSvg(`
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
-              <rect width="400" height="300" fill="#101728" />
-              <circle cx="320" cy="60" r="16" fill="#ffd972" />
-              <circle cx="60" cy="70" r="6" fill="#72f6ff" />
-              <circle cx="120" cy="40" r="4" fill="#ffd972" />
-              <g fill="#18253b">
-                <rect x="40" y="140" width="120" height="120" rx="16" />
-                <rect x="190" y="160" width="170" height="100" rx="20" />
-              </g>
-              <rect x="60" y="160" width="80" height="60" rx="10" fill="#2bd9ff" />
-              <circle cx="220" cy="200" r="30" fill="#8c6ff8" />
-              <circle cx="220" cy="200" r="16" fill="#ffffff" opacity="0.6" />
-              <rect x="300" y="190" width="40" height="24" rx="6" fill="#f36f98" />
-              <rect x="300" y="220" width="40" height="12" rx="6" fill="#72f6ff" />
-              <circle cx="90" cy="220" r="8" fill="#ffffff" opacity="0.5" />
-              <circle cx="260" cy="120" r="10" fill="#ff9d72" />
-            </svg>
-          `),
+          left: "assets/lab-original.png",
+          right: "assets/lab-original.png",
           differences: [
-            { x: 30, y: 20, radius: 8 },
-            { x: 75, y: 24, radius: 7 },
-            { x: 80, y: 75, radius: 7 },
-            { x: 65, y: 40, radius: 7 },
-            { x: 50, y: 60, radius: 7 },
-            { x: 70, y: 68, radius: 7 },
+            { x: 20, y: 56, radius: 6, overlay: { color: "rgba(114, 246, 255, 0.34)", size: 12 } },
+            { x: 38, y: 33, radius: 5, overlay: { color: "rgba(255, 217, 114, 0.34)", size: 11 } },
+            { x: 56, y: 48, radius: 5, overlay: { color: "rgba(140, 111, 248, 0.34)", size: 10 } },
+            { x: 71, y: 41, radius: 5, overlay: { color: "rgba(247, 116, 116, 0.34)", size: 10 } },
+            { x: 80, y: 64, radius: 5, overlay: { color: "rgba(45, 217, 255, 0.32)", size: 10 } },
+            { x: 52, y: 72, radius: 5, overlay: { color: "rgba(255, 157, 114, 0.34)", size: 10 } },
           ],
         },
         {
@@ -1091,53 +945,18 @@ const games = [
         {
           id: "arcade",
           title: "Retro Arcade",
-          left: encodeSvg(`
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
-              <linearGradient id="arcade-bg" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0" stop-color="#15072b" />
-                <stop offset="1" stop-color="#02111f" />
-              </linearGradient>
-              <rect width="400" height="300" fill="url(#arcade-bg)" />
-              <rect x="70" y="200" width="260" height="60" rx="20" fill="#141f3c" />
-              <rect x="110" y="210" width="30" height="60" rx="10" fill="#ffd972" />
-              <circle cx="125" cy="180" r="18" fill="#ffd972" />
-              <circle cx="120" cy="110" r="30" fill="#ff9d72" />
-              <rect x="200" y="90" width="60" height="40" rx="8" fill="#72f6ff" />
-              <circle cx="290" cy="120" r="14" fill="#ffd972" />
-              <circle cx="220" cy="220" r="14" fill="#8c6ff8" />
-              <circle cx="260" cy="220" r="14" fill="#2bd9ff" />
-              <circle cx="300" cy="220" r="14" fill="#f36f98" />
-            </svg>
-          `),
-          right: encodeSvg(`
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
-              <linearGradient id="arcade-bg" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0" stop-color="#15072b" />
-                <stop offset="1" stop-color="#02111f" />
-              </linearGradient>
-              <rect width="400" height="300" fill="url(#arcade-bg)" />
-              <rect x="70" y="200" width="260" height="60" rx="20" fill="#141f3c" />
-              <rect x="110" y="210" width="30" height="60" rx="10" fill="#8c6ff8" />
-              <circle cx="125" cy="180" r="18" fill="#8c6ff8" />
-              <circle cx="120" cy="110" r="30" fill="#72f6ff" />
-              <rect x="200" y="90" width="60" height="40" rx="8" fill="#ffd972" />
-              <circle cx="290" cy="120" r="14" fill="#f36f98" />
-              <circle cx="220" cy="220" r="14" fill="#ffd972" />
-              <circle cx="260" cy="220" r="14" fill="#f36f98" />
-              <circle cx="300" cy="220" r="14" fill="#2bd9ff" />
-            </svg>
-          `),
+          left: "assets/arcade-original.png",
+          right: "assets/arcade-original.png",
           differences: [
-            { x: 30, y: 36, radius: 8 },
-            { x: 57, y: 36, radius: 8 },
-            { x: 73, y: 40, radius: 8 },
-            { x: 31, y: 60, radius: 8 },
-            { x: 55, y: 73, radius: 8 },
-            { x: 65, y: 73, radius: 8 },
+            { x: 28, y: 62, radius: 6, overlay: { color: "rgba(255, 217, 114, 0.4)", size: 12 } },
+            { x: 44, y: 30, radius: 6, overlay: { color: "rgba(114, 246, 255, 0.32)", size: 11 } },
+            { x: 61, y: 36, radius: 6, overlay: { color: "rgba(140, 111, 248, 0.34)", size: 10 } },
+            { x: 74, y: 31, radius: 6, overlay: { color: "rgba(247, 116, 116, 0.34)", size: 11 } },
+            { x: 84, y: 60, radius: 6, overlay: { color: "rgba(45, 217, 255, 0.32)", size: 11 } },
+            { x: 52, y: 54, radius: 6, overlay: { color: "rgba(255, 157, 114, 0.34)", size: 11 } },
           ],
         },
       ];
-
       const state = {
         puzzleIndex: 0,
         found: new Set(),
@@ -1369,6 +1188,7 @@ const games = [
       }
 
       function renderOverlays() {
+        const style = modeStyles[state.mode] ?? modeStyles.medium;
         rightPanel.querySelectorAll(".spotdiff-overlay").forEach((overlay) => overlay.remove());
         state.activeDiffs.forEach((diff, idx) => {
           if (!diff.overlay) return;
@@ -1377,10 +1197,13 @@ const games = [
           overlay.dataset.index = String(idx);
           overlay.style.left = `${diff.x}%`;
           overlay.style.top = `${diff.y}%`;
-          const size = diff.overlay.size ?? diff.radius * 2;
+          const baseSize = diff.overlay.size ?? diff.radius * 2;
+          const size = baseSize * style.sizeScale;
           overlay.style.width = `${size}%`;
           overlay.style.height = `${size}%`;
           overlay.style.background = diff.overlay.color ?? "rgba(255, 217, 114, 0.35)";
+          overlay.style.opacity = String(style.opacity);
+          overlay.style.filter = `blur(${style.blur}px)`;
           rightPanel.appendChild(overlay);
         });
       }
@@ -1452,18 +1275,8 @@ const games = [
       }
 
       function renderMarker(index) {
-        const diff = state.activeDiffs[index];
-        [leftPanel, rightPanel].forEach((panel) => {
-          const marker = document.createElement("div");
-          marker.className = "spotdiff-marker";
-          marker.style.left = `${diff.x}%`;
-          marker.style.top = `${diff.y}%`;
-          marker.style.width = `${diff.radius * 2}%`;
-          marker.style.height = `${diff.radius * 2}%`;
-          panel.appendChild(marker);
-        });
         const overlay = rightPanel.querySelector(`.spotdiff-overlay[data-index="${index}"]`);
-        if (overlay) overlay.remove();
+        if (overlay) overlay.classList.add("found");
       }
 
       function finishPuzzle() {
