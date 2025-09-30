@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
+  <defs>
+    <linearGradient id="tower-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0" stop-color="#251f3e" />
+      <stop offset="1" stop-color="#090915" />
+    </linearGradient>
+  </defs>
+  <rect width="160" height="160" rx="36" fill="url(#tower-bg)" />
+  <rect width="144" height="144" x="8" y="8" rx="28" fill="rgba(11,12,25,0.85)" />
+  <g transform="translate(40 40)">
+    <rect x="4" y="72" width="72" height="20" ry="6" fill="#72f6ff" />
+    <rect x="8" y="48" width="64" height="18" ry="6" fill="#ffd85b" />
+    <rect x="16" y="26" width="48" height="16" ry="6" fill="#ff9d72" />
+    <rect x="26" y="8" width="28" height="14" ry="6" fill="#8c6ff8" />
+  </g>
+  <path d="M60 116h40" stroke="rgba(114,246,255,0.5)" stroke-width="6" stroke-linecap="round" />
+</svg>

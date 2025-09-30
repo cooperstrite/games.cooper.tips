@@ -1,0 +1,21 @@
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="120" height="120" rx="24" fill="#0D1122"/>
+  <circle cx="60" cy="60" r="42" stroke="#72F6FF" stroke-width="4" stroke-dasharray="6 10" opacity="0.7"/>
+  <circle cx="60" cy="60" r="18" fill="url(#orb)"/>
+  <g filter="url(#highlight)">
+    <path d="M92 60C92 77.6731 77.6731 92 60 92C42.3269 92 28 77.6731 28 60" stroke="#FFD972" stroke-width="6" stroke-linecap="round" stroke-dasharray="14 16"/>
+  </g>
+  <circle cx="42" cy="36" r="7" fill="#72F6FF"/>
+  <circle cx="82" cy="44" r="6" fill="#FFD972"/>
+  <defs>
+    <radialGradient id="orb" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(60 60) rotate(45) scale(22)">
+      <stop stop-color="#FFFFFF" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#72F6FF" stop-opacity="0.35"/>
+    </radialGradient>
+    <filter id="highlight" x="16" y="48" width="88" height="56" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+      <feGaussianBlur stdDeviation="3" result="effect1_foregroundBlur"/>
+    </filter>
+  </defs>
+</svg>

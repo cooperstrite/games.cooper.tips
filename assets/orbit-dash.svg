@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
+  <defs>
+    <linearGradient id="orbit-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0" stop-color="#1d2145" />
+      <stop offset="1" stop-color="#060912" />
+    </linearGradient>
+  </defs>
+  <rect width="160" height="160" rx="36" fill="url(#orbit-bg)" />
+  <rect width="144" height="144" x="8" y="8" rx="28" fill="rgba(10,13,29,0.85)" />
+  <circle cx="80" cy="80" r="48" fill="none" stroke="rgba(114,246,255,0.3)" stroke-width="8" stroke-dasharray="12 10" />
+  <circle cx="80" cy="80" r="36" fill="none" stroke="rgba(255,217,114,0.4)" stroke-width="6" stroke-dasharray="8 12" />
+  <circle cx="80" cy="80" r="20" fill="rgba(247,116,116,0.2)" stroke="rgba(247,116,116,0.6)" stroke-width="4" />
+  <circle cx="120" cy="60" r="9" fill="#72f6ff" />
+  <circle cx="46" cy="104" r="10" fill="#ff9d72" />
+  <circle cx="64" cy="44" r="7" fill="#ffd85b" />
+  <circle cx="102" cy="116" r="7" fill="#8c6ff8" />
+</svg>

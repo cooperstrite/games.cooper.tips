@@ -7,7 +7,7 @@
 
 ## Local Workflow
 1. Use `npx serve .` or `python3 -m http.server 4173` from the repo root for local preview.
-2. After changes, manually exercise each mini-game (Hot & Cold, Flash Reflex, Lights Down).
+2. After changes, manually exercise each mini-game (Hot & Cold, Flash Reflex, Red Light Green Light, Memory Loop, Tower Stack, Orbit Dash, Pop Dash, Nim Duel, Bubble Rally, Skyport Command, Harmonic Echo, Spot Clash, Cats vs Dogs, Lights Down, Submerged Explorer, Spotlight).
 3. Inspect responsive behavior with browser devtools; layout supports narrow viewports.
 
 ## Deployment Notes

@@ -1,0 +1,10 @@
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="120" height="120" rx="24" fill="#0E1324"/>
+  <circle cx="40" cy="40" r="20" fill="#72F6FF" opacity="0.35"/>
+  <circle cx="78" cy="78" r="22" fill="#FFD972" opacity="0.4"/>
+  <circle cx="76" cy="42" r="12" fill="#FF708D"/>
+  <circle cx="44" cy="80" r="10" fill="#A07FFF"/>
+  <text x="38" y="45" font-size="18" text-anchor="middle" fill="#0E1324">★</text>
+  <text x="80" y="85" font-size="20" text-anchor="middle" fill="#0E1324">◆</text>
+  <text x="30" y="82" font-size="16" text-anchor="middle" fill="#0E1324">☂</text>
+</svg>

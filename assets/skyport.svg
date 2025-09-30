@@ -1,0 +1,14 @@
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="120" height="120" rx="24" fill="#0C1228"/>
+  <circle cx="60" cy="44" r="26" stroke="#72F6FF" stroke-width="6" opacity="0.65"/>
+  <circle cx="60" cy="44" r="12" fill="url(#orb)"/>
+  <path d="M30 82C44 72 76 72 90 82" stroke="#FFD972" stroke-width="5" stroke-linecap="round" opacity="0.85"/>
+  <path d="M24 92C40 80 80 80 96 92" stroke="#72F6FF" stroke-width="4" stroke-linecap="round" opacity="0.5"/>
+  <rect x="46" y="54" width="28" height="10" rx="5" fill="#72F6FF" opacity="0.35"/>
+  <defs>
+    <radialGradient id="orb" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(60 44) scale(14)">
+      <stop stop-color="#FFFFFF" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#72F6FF" stop-opacity="0.3"/>
+    </radialGradient>
+  </defs>
+</svg>

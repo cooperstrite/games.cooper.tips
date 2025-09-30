@@ -6,6 +6,17 @@ A playful single-page playground inspired by [neal.fun](https://neal.fun), bundl
 
 - **Hot & Cold** — Hunt down a mystery number with warmer/colder hints on every guess.
 - **Flash Reflex** — Train your reaction speed by tapping the moment the panel lights up.
+- **Red Light Green Light** — Hold to sprint toward the finish while freezing the instant the signal turns red.
+- **Memory Loop** — Flip cards to match every pair, tuning the tile count to dial up the difficulty.
+- **Tower Stack** — Drop moving blocks with precise timing to grow the tallest, straightest tower.
+- **Orbit Dash** — Hold Dash/space to burst outward through the glowing gate, release to reset your orbit, and chain flawless passes for a faster streak.
+- **Pop Dash** — Click bubbles the instant they appear to keep the streak alive before they burst.
+- **Nim Duel** — Choose a pile, remove 1–3 matches, and outthink the flawless AI so it’s forced to take the final stick.
+- **Bubble Rally** — Pop the orb to sprint around the neon loop, riding boosts and dodging slowdowns to win the race.
+- **Skyport Command** — Pick a contract, ensure you have the energy, dispatch a drone, and reinvest the cargo/credits before the 3-minute day ends.
+- **Harmonic Echo** — Master a growing instrument sequence across dynamic difficulty modes.
+- **Spot Clash** — Race an AI rival to find the shared symbol across dueling glyph cards.
+- **Cats vs Dogs** — Lead the feline squad in a tile-by-tile tug-of-war to control Meadow Park.
 - **Lights Down** — A compact Lights Out puzzle; toggle tiles (and their neighbors) to dim the board.
 - **Submerged Explorer** — Glide through ocean zones, collect samples, and finish mission objectives in a retro submarine.
 - **Spotlight** — Compare two vibrant scenes and spot every subtle difference against the clock.

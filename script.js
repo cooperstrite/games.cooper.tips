@@ -2589,7 +2589,7 @@ const games = [
   {
     id: "skyport",
     name: "Skyport Command",
-    summary: "Run a floating cargo port with smart drones.",
+    summary: "Dispatch drones. Reinvest fast before the day ends.",
     description:
       "Balance energy, cargo, and credits while dispatching drones to fulfill contracts. Upgrade your fleet, chain missions, and keep the skyport thriving before time runs out.",
     logo: "assets/skyport.svg",
@@ -3108,13 +3108,13 @@ const games = [
       root.appendChild(wrapper);
 
       const instrumentPool = [
-        { id: "kick", name: "Kick", frequency: 180, className: "pad-kick" },
-        { id: "snare", name: "Snare", frequency: 260, className: "pad-snare" },
-        { id: "hat", name: "Hi-Hat", frequency: 320, className: "pad-hat" },
-        { id: "chime", name: "Chime", frequency: 420, className: "pad-chime" },
-        { id: "synth", name: "Synth", frequency: 510, className: "pad-synth" },
-        { id: "bell", name: "Bell", frequency: 580, className: "pad-bell" },
-        { id: "clap", name: "Clap", frequency: 640, className: "pad-clap" },
+        { id: "kick", name: "Bing", frequency: 180, className: "pad-kick" },
+        { id: "snare", name: "Bang", frequency: 260, className: "pad-snare" },
+        { id: "hat", name: "Boom", frequency: 320, className: "pad-hat" },
+        { id: "chime", name: "Bop", frequency: 420, className: "pad-chime" },
+        { id: "synth", name: "Bleep", frequency: 510, className: "pad-synth" },
+        { id: "bell", name: "Blip", frequency: 580, className: "pad-bell" },
+        { id: "clap", name: "Buzz", frequency: 640, className: "pad-clap" },
       ];
 
       const state = {
@@ -4944,12 +4944,27 @@ const games = [
 
 const appRoot = document.getElementById("app");
 const homeList = document.querySelector(".game-list");
+const homeView = document.querySelector(".home-view");
 const gameCard = document.querySelector(".game-card");
 const titleEl = document.getElementById("game-title");
 const descEl = document.getElementById("game-description");
 const rootEl = document.getElementById("game-root");
 const listTemplate = document.getElementById("game-list-item-template");
 const backButton = document.querySelector(".back-button");
+
+const LOCK_PASSWORD = "1108";
+const LOCKED_GAME_IDS = new Set(["memory", "skyport", "orbit", "catsdogs"]);
+let lockedUnlocked = false;
+try {
+  lockedUnlocked = window.sessionStorage?.getItem("gamesUnlocked") === "true";
+} catch (error) {
+  lockedUnlocked = false;
+}
+
+let comingList = null;
+let lockedHint = null;
+let lockedInput = null;
+let passButton = null;
 
 let activeId = null;
 let cleanup = null;
@@ -4958,19 +4973,80 @@ if (appRoot) {
   appRoot.dataset.state = "home";
 }
 
+if (homeView) {
+  const comingSection = document.createElement("section");
+  comingSection.className = "coming-strip";
+
+  const heading = document.createElement("h2");
+  heading.textContent = "Coming Soon";
+
+  const infoRow = document.createElement("div");
+  infoRow.className = "coming-info";
+
+  lockedHint = document.createElement("p");
+  lockedHint.className = "coming-text";
+  lockedHint.textContent = lockedUnlocked
+    ? "Access granted. Enjoy these prototypes!"
+    : "Enter your access key to preview upcoming games.";
+
+  const passForm = document.createElement("form");
+  passForm.className = "coming-pass";
+  lockedInput = document.createElement("input");
+  lockedInput.type = "password";
+  lockedInput.placeholder = "Access key";
+  lockedInput.autocomplete = "off";
+  passButton = document.createElement("button");
+  passButton.type = "submit";
+  passButton.textContent = lockedUnlocked ? "Unlocked" : "Unlock";
+  if (lockedUnlocked) passButton.disabled = true;
+  passForm.append(lockedInput, passButton);
+
+  passForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    if (lockedUnlocked) return;
+    if (lockedInput.value.trim() === LOCK_PASSWORD) {
+      lockedUnlocked = true;
+      lockedHint.textContent = "Access granted. Enjoy these prototypes!";
+      passButton.textContent = "Unlocked";
+      passButton.disabled = true;
+      try {
+        window.sessionStorage?.setItem("gamesUnlocked", "true");
+      } catch (error) {}
+      buildGameLists();
+    } else {
+      lockedHint.textContent = "Incorrect key. Try again.";
+      lockedInput.value = "";
+      lockedInput.focus();
+    }
+  });
+
+  infoRow.append(lockedHint, passForm);
+
+  comingList = document.createElement("ul");
+  comingList.className = "coming-strip-list";
+
+  comingSection.append(heading, infoRow, comingList);
+  homeView.appendChild(comingSection);
+}
+
 if (homeList && listTemplate) {
-  buildGameList();
+  buildGameLists();
   window.addEventListener("hashchange", renderRoute);
   renderRoute();
 }
 
 if (backButton) {
-  backButton.addEventListener("click", () => {
+  backButton.addEventListener("click", (event) => {
+    event.preventDefault();
     window.location.hash = "";
+    showHome();
   });
 }
 
-function buildGameList() {
+function buildGameLists() {
+  if (homeList) homeList.textContent = "";
+  if (comingList) comingList.textContent = "";
+
   games.forEach((game) => {
     const item = listTemplate.content.firstElementChild.cloneNode(true);
     const link = item.querySelector(".game-tile");
@@ -4978,6 +5054,7 @@ function buildGameList() {
     const blurb = item.querySelector(".game-blurb");
     const icon = item.querySelector(".game-icon");
     if (!link || !name || !blurb || !icon) return;
+
     name.textContent = game.name;
     blurb.textContent = game.summary ?? game.description;
     if (game.logo) {
@@ -4987,16 +5064,42 @@ function buildGameList() {
     } else {
       icon.remove();
     }
-    link.href = `#${game.id}`;
-    link.addEventListener("click", (event) => {
-      event.preventDefault();
-      if (window.location.hash === `#${game.id}`) {
-        renderRoute();
+
+    if (LOCKED_GAME_IDS.has(game.id)) {
+      if (lockedUnlocked) {
+        link.href = `#${game.id}`;
+        link.classList.remove("tile-locked");
+        link.removeAttribute("aria-disabled");
+        link.addEventListener("click", (event) => {
+          event.preventDefault();
+          if (window.location.hash === `#${game.id}`) {
+            renderRoute();
+          } else {
+            window.location.hash = game.id;
+          }
+        });
       } else {
-        window.location.hash = game.id;
+        link.href = "#";
+        link.classList.add("tile-locked");
+        link.setAttribute("aria-disabled", "true");
+        link.addEventListener("click", (event) => {
+          event.preventDefault();
+          handleLockedAttempt();
+        });
       }
-    });
-    homeList.appendChild(item);
+      comingList?.appendChild(item);
+    } else {
+      link.href = `#${game.id}`;
+      link.addEventListener("click", (event) => {
+        event.preventDefault();
+        if (window.location.hash === `#${game.id}`) {
+          renderRoute();
+        } else {
+          window.location.hash = game.id;
+        }
+      });
+      homeList?.appendChild(item);
+    }
   });
 }
 
@@ -5008,6 +5111,11 @@ function renderRoute() {
   }
   const game = games.find((entry) => entry.id === hash);
   if (!game) {
+    showHome(true);
+    return;
+  }
+  if (LOCKED_GAME_IDS.has(game.id) && !lockedUnlocked) {
+    handleLockedAttempt();
     showHome(true);
     return;
   }
@@ -5049,4 +5157,10 @@ function replaceUrl(url) {
   } catch (error) {
     window.location.hash = "";
   }
+}
+
+function handleLockedAttempt() {
+  if (lockedUnlocked) return;
+  if (lockedHint) lockedHint.textContent = "These games are still baking. Enter your access key above to peek behind the curtain.";
+  lockedInput?.focus();
 }
