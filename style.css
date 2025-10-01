@@ -1052,8 +1052,115 @@ button:hover {
     align-items: stretch;
   }
 
-  .foodchain-controls button,
+.foodchain-controls button,
   .foodchain-controls .primary-btn {
+    width: 100%;
+  }
+}
+
+.neondrift {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.neondrift-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.neondrift-status {
+  margin: 0;
+  font-weight: 600;
+  color: var(--accent);
+  flex: 1 1 220px;
+}
+
+.neondrift-metrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+
+.neondrift-distance {
+  color: var(--accent);
+}
+
+.neondrift-speed {
+  color: var(--accent-strong);
+}
+
+.neondrift-best {
+  color: var(--success);
+}
+
+.neondrift-viewport {
+  position: relative;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: radial-gradient(circle at 30% 20%, rgba(114, 246, 255, 0.2), transparent 55%),
+    radial-gradient(circle at 70% 20%, rgba(255, 217, 114, 0.22), transparent 65%),
+    rgba(6, 10, 22, 0.9);
+  box-shadow: 0 24px 45px rgba(5, 7, 20, 0.55);
+  overflow: hidden;
+}
+
+.neondrift-canvas {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+}
+
+.neondrift-pad {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.neondrift-pad-btn {
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(114, 246, 255, 0.35);
+  background: rgba(114, 246, 255, 0.12);
+  color: var(--accent);
+  font-weight: 600;
+  padding: 0.6rem 1.05rem;
+  min-width: 72px;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  transition: transform var(--transition), border var(--transition), background var(--transition),
+    color var(--transition);
+}
+
+.neondrift-pad-btn:hover,
+.neondrift-pad-btn:focus-visible {
+  transform: translateY(-2px);
+  border-color: rgba(114, 246, 255, 0.6);
+}
+
+.neondrift-pad-btn:active {
+  transform: translateY(1px) scale(0.97);
+}
+
+.neondrift-pad-boost {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.neondrift-hint {
+  text-align: center;
+  color: var(--text-muted);
+}
+
+@media (max-width: 640px) {
+  .neondrift-pad {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .neondrift-pad-btn {
     width: 100%;
   }
 }

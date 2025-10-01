@@ -1677,6 +1677,408 @@ const games = [
     },
   },
   {
+    id: "neondrift",
+    name: "Neon Drift",
+    summary: "Race neon lanes and dodge pylons in first-person.",
+    description:
+      "Steer your hover car between three glowing lanes, boost to build distance, and weave around incoming pylons. Reach the finish before you take a hit!",
+    logo: "assets/neon-drift.svg",
+    init(root) {
+      const VIEWPORT_WIDTH = 640;
+      const VIEWPORT_HEIGHT = 360;
+      const BASE_SPEED = 36;
+      const BOOST_SPEED = 54;
+      const FINISH_DISTANCE = 1800;
+      const LANE_X = [-1, 0, 1];
+      const MAX_DEPTH = 42;
+
+      const state = {
+        running: false,
+        rafId: null,
+        lane: 1,
+        visualLane: 1,
+        speed: BASE_SPEED,
+        targetSpeed: BASE_SPEED,
+        distance: 0,
+        bestDistance: 0,
+        startTime: 0,
+        obstacles: [],
+        lastFrame: 0,
+        lastSpawn: 0,
+        spawnInterval: 1100,
+        accelerating: false,
+      };
+
+      const wrapper = document.createElement("div");
+      wrapper.className = "neondrift";
+
+      const topRow = document.createElement("div");
+      topRow.className = "neondrift-top";
+
+      const startBtn = document.createElement("button");
+      startBtn.type = "button";
+      startBtn.className = "primary-btn";
+      startBtn.textContent = "Start run";
+
+      const status = document.createElement("p");
+      status.className = "neondrift-status";
+      status.textContent = "Strafe between lanes and avoid the pylons.";
+      status.setAttribute("role", "status");
+
+      topRow.append(startBtn, status);
+
+      const metrics = document.createElement("div");
+      metrics.className = "neondrift-metrics";
+
+      const distanceBadge = document.createElement("span");
+      distanceBadge.className = "badge neondrift-distance";
+      distanceBadge.textContent = "Distance: 0 m";
+
+      const speedBadge = document.createElement("span");
+      speedBadge.className = "badge neondrift-speed";
+      speedBadge.textContent = "Speed: 0 km/h";
+
+      const bestBadge = document.createElement("span");
+      bestBadge.className = "badge neondrift-best";
+      bestBadge.textContent = "Best: 0";
+
+      metrics.append(distanceBadge, speedBadge, bestBadge);
+
+      const viewport = document.createElement("div");
+      viewport.className = "neondrift-viewport";
+
+      const canvas = document.createElement("canvas");
+      canvas.className = "neondrift-canvas";
+      viewport.appendChild(canvas);
+
+      const pad = document.createElement("div");
+      pad.className = "neondrift-pad";
+
+      const leftBtn = document.createElement("button");
+      leftBtn.type = "button";
+      leftBtn.className = "neondrift-pad-btn";
+      leftBtn.textContent = "⟵";
+      leftBtn.setAttribute("aria-label", "Move left");
+
+      const boostBtn = document.createElement("button");
+      boostBtn.type = "button";
+      boostBtn.className = "neondrift-pad-btn neondrift-pad-boost";
+      boostBtn.textContent = "Boost";
+      boostBtn.setAttribute("aria-label", "Boost");
+
+      const rightBtn = document.createElement("button");
+      rightBtn.type = "button";
+      rightBtn.className = "neondrift-pad-btn";
+      rightBtn.textContent = "⟶";
+      rightBtn.setAttribute("aria-label", "Move right");
+
+      pad.append(leftBtn, boostBtn, rightBtn);
+
+      const hint = document.createElement("p");
+      hint.className = "help-text neondrift-hint";
+      hint.textContent = "Controls: A/← and D/→ to steer, hold Space (or Boost) to accelerate.";
+
+      wrapper.append(topRow, metrics, viewport, pad, hint);
+      root.appendChild(wrapper);
+
+      const ctx = canvas.getContext("2d");
+      const dpr = Math.min(window.devicePixelRatio ?? 1, 2);
+      canvas.width = VIEWPORT_WIDTH * dpr;
+      canvas.height = VIEWPORT_HEIGHT * dpr;
+      canvas.style.width = "100%";
+      canvas.style.aspectRatio = "16 / 9";
+      ctx.scale(dpr, dpr);
+
+      const width = VIEWPORT_WIDTH;
+      const height = VIEWPORT_HEIGHT;
+      const horizon = 68;
+      const roadHalfNear = width * 0.42;
+      const roadHalfFar = width * 0.13;
+
+      function formatDistance(meters) {
+        if (meters >= 1000) return `${(meters / 1000).toFixed(2)} km`;
+        return `${Math.round(meters)} m`;
+      }
+
+      function updateHUD() {
+        distanceBadge.textContent = `Distance: ${formatDistance(state.distance)}`;
+        const speedKmh = state.running ? Math.round(state.speed * 3.6) : 0;
+        speedBadge.textContent = `Speed: ${speedKmh} km/h`;
+        bestBadge.textContent = `Best: ${formatDistance(state.bestDistance)}`;
+      }
+
+      function drawScene() {
+        ctx.clearRect(0, 0, width, height);
+
+        const sky = ctx.createLinearGradient(0, 0, 0, height);
+        sky.addColorStop(0, "#040c1e");
+        sky.addColorStop(0.5, "#07122d");
+        sky.addColorStop(1, "#02040a");
+        ctx.fillStyle = sky;
+        ctx.fillRect(0, 0, width, height);
+
+        ctx.beginPath();
+        ctx.moveTo(width / 2 - roadHalfFar, horizon);
+        ctx.lineTo(width / 2 + roadHalfFar, horizon);
+        ctx.lineTo(width / 2 + roadHalfNear, height);
+        ctx.lineTo(width / 2 - roadHalfNear, height);
+        ctx.closePath();
+        const road = ctx.createLinearGradient(0, horizon, 0, height);
+        road.addColorStop(0, "#10162a");
+        road.addColorStop(1, "#050912");
+        ctx.fillStyle = road;
+        ctx.fill();
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = "rgba(114, 246, 255, 0.35)";
+        ctx.stroke();
+
+        ctx.setLineDash([14, 18]);
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.45)";
+        ctx.beginPath();
+        ctx.moveTo(width / 2, horizon);
+        ctx.lineTo(width / 2, height);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        const sorted = [...state.obstacles].sort((a, b) => b.z - a.z);
+        sorted.forEach((obstacle) => {
+          if (obstacle.z > MAX_DEPTH) return;
+          const progress = 1 - obstacle.z / MAX_DEPTH;
+          const roadHalf = roadHalfFar + (roadHalfNear - roadHalfFar) * progress;
+          const x = width / 2 + LANE_X[obstacle.lane] * roadHalf * 0.6;
+          const y = horizon + (height - horizon) * progress;
+          const scale = Math.max(progress, 0.2);
+          const obsWidth = 48 * scale;
+          const obsHeight = 110 * scale;
+          const radius = Math.min(14 * scale, obsWidth / 2);
+          ctx.fillStyle = "rgba(255, 217, 114, 0.8)";
+          ctx.strokeStyle = "rgba(14, 16, 28, 0.4)";
+          ctx.lineWidth = Math.max(1.2, 2.4 * scale);
+          ctx.beginPath();
+          ctx.moveTo(x - obsWidth / 2 + radius, y - obsHeight);
+          ctx.lineTo(x + obsWidth / 2 - radius, y - obsHeight);
+          ctx.quadraticCurveTo(x + obsWidth / 2, y - obsHeight, x + obsWidth / 2, y - obsHeight + radius);
+          ctx.lineTo(x + obsWidth / 2, y - radius);
+          ctx.quadraticCurveTo(x + obsWidth / 2, y, x + obsWidth / 2 - radius, y);
+          ctx.lineTo(x - obsWidth / 2 + radius, y);
+          ctx.quadraticCurveTo(x - obsWidth / 2, y, x - obsWidth / 2, y - radius);
+          ctx.lineTo(x - obsWidth / 2, y - obsHeight + radius);
+          ctx.quadraticCurveTo(x - obsWidth / 2, y - obsHeight, x - obsWidth / 2 + radius, y - obsHeight);
+          ctx.fill();
+          ctx.stroke();
+        });
+
+        const carLaneOffset = state.visualLane - 1;
+        const carPos = {
+          progress: 0.05,
+          roadHalf: roadHalfFar + (roadHalfNear - roadHalfFar) * 0.95,
+        };
+        const carX = width / 2 + carLaneOffset * carPos.roadHalf * 0.6;
+        const carY = horizon + (height - horizon) * 0.95;
+        const carScale = 0.9;
+        const carWidth = 48 * carScale;
+        const carHeight = 120 * carScale;
+
+        ctx.save();
+        ctx.translate(carX, carY);
+        ctx.fillStyle = "rgba(114, 246, 255, 0.92)";
+        ctx.beginPath();
+        ctx.moveTo(0, -carHeight);
+        ctx.lineTo(carWidth / 2, -carHeight * 0.4);
+        ctx.lineTo(carWidth * 0.45, 0);
+        ctx.lineTo(-carWidth * 0.45, 0);
+        ctx.lineTo(-carWidth / 2, -carHeight * 0.4);
+        ctx.closePath();
+        ctx.fill();
+        ctx.strokeStyle = "rgba(14, 16, 28, 0.45)";
+        ctx.lineWidth = 3;
+        ctx.stroke();
+
+        ctx.fillStyle = "rgba(14, 16, 28, 0.65)";
+        ctx.beginPath();
+        ctx.moveTo(0, -carHeight * 0.85);
+        ctx.lineTo(carWidth * 0.24, -carHeight * 0.45);
+        ctx.lineTo(-carWidth * 0.24, -carHeight * 0.45);
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+      }
+
+      function shiftLane(delta) {
+        const next = Math.min(Math.max(state.lane + delta, 0), LANE_X.length - 1);
+        state.lane = next;
+      }
+
+      function spawnObstacle(now) {
+        let lane = Math.floor(Math.random() * LANE_X.length);
+        if (state.obstacles.length) {
+          const lastLane = state.obstacles[state.obstacles.length - 1].lane;
+          if (lane === lastLane) {
+            lane = (lane + (Math.random() < 0.5 ? 1 : -1) + LANE_X.length) % LANE_X.length;
+          }
+        }
+        state.obstacles.push({
+          lane,
+          z: MAX_DEPTH,
+        });
+        state.lastSpawn = now;
+        state.spawnInterval = Math.max(420, 1100 - state.distance / 3);
+      }
+
+      function updateObstacles(delta, now) {
+        if (now - state.lastSpawn > state.spawnInterval) {
+          spawnObstacle(now);
+        }
+        const speedFactor = state.speed * delta * 0.09;
+        let crashed = false;
+        state.obstacles.forEach((obstacle) => {
+          obstacle.z -= speedFactor;
+          if (!crashed && obstacle.z <= 2 && obstacle.lane === state.lane) {
+            crashed = true;
+          }
+        });
+        state.obstacles = state.obstacles.filter((obstacle) => obstacle.z > 0.6);
+        if (crashed) {
+          endRun("Impact! You clipped a pylon.", true);
+          return true;
+        }
+        return false;
+      }
+
+      function tick(now) {
+        if (!state.running) return;
+        const delta = Math.min((now - state.lastFrame) / 1000, 0.12);
+        state.lastFrame = now;
+
+        state.speed += (state.targetSpeed - state.speed) * Math.min(delta * 4, 1);
+        state.distance += state.speed * delta;
+        state.visualLane += (state.lane - state.visualLane) * Math.min(delta * 12, 1);
+
+        if (state.distance >= FINISH_DISTANCE) {
+          state.distance = FINISH_DISTANCE;
+          drawScene();
+          updateHUD();
+          const elapsed = ((now - state.startTime) / 1000).toFixed(2);
+          endRun(`Finish line reached! Time: ${elapsed}s`, false);
+          return;
+        }
+
+        const crashed = updateObstacles(delta, now);
+        drawScene();
+        updateHUD();
+
+        if (!crashed) {
+          state.rafId = window.requestAnimationFrame(tick);
+        }
+      }
+
+      function startRun() {
+        if (state.running) {
+          endRun("Run reset.");
+        }
+        state.running = true;
+        state.lane = 1;
+        state.visualLane = 1;
+        state.speed = BASE_SPEED;
+        state.targetSpeed = BASE_SPEED;
+        state.distance = 0;
+        state.obstacles = [];
+        state.lastSpawn = performance.now();
+        state.lastFrame = state.lastSpawn;
+        state.startTime = state.lastSpawn;
+        startBtn.textContent = "Reset run";
+        status.textContent = "Boost with Space and weave through the pylons!";
+        drawScene();
+        updateHUD();
+        state.rafId = window.requestAnimationFrame(tick);
+      }
+
+      function endRun(message, crashed = false) {
+        if (!state.running) return;
+        state.running = false;
+        if (state.rafId !== null) {
+          window.cancelAnimationFrame(state.rafId);
+          state.rafId = null;
+        }
+        if (!crashed && state.distance > state.bestDistance) {
+          state.bestDistance = state.distance;
+        }
+        startBtn.textContent = "Start run";
+        status.textContent = message;
+        updateHUD();
+      }
+
+      function setBoost(active) {
+        state.accelerating = active;
+        state.targetSpeed = active ? BOOST_SPEED : BASE_SPEED;
+      }
+
+      const onKeyDown = (event) => {
+        if (event.repeat) return;
+        const key = event.key.toLowerCase();
+        if (key === "a" || key === "arrowleft") {
+          event.preventDefault();
+          shiftLane(-1);
+        } else if (key === "d" || key === "arrowright") {
+          event.preventDefault();
+          shiftLane(1);
+        } else if (key === " " || key === "w" || key === "arrowup") {
+          event.preventDefault();
+          setBoost(true);
+        } else if (key === "enter" && !state.running) {
+          event.preventDefault();
+          startRun();
+        }
+      };
+
+      const onKeyUp = (event) => {
+        const key = event.key.toLowerCase();
+        if (key === " " || key === "w" || key === "arrowup") {
+          event.preventDefault();
+          setBoost(false);
+        }
+      };
+
+      startBtn.addEventListener("click", startRun);
+
+      const handleLeft = (event) => {
+        if (event) event.preventDefault();
+        shiftLane(-1);
+      };
+      const handleRight = (event) => {
+        if (event) event.preventDefault();
+        shiftLane(1);
+      };
+      leftBtn.addEventListener("pointerdown", handleLeft);
+      rightBtn.addEventListener("pointerdown", handleRight);
+
+      boostBtn.addEventListener("pointerdown", () => setBoost(true));
+      boostBtn.addEventListener("pointerup", () => setBoost(false));
+      boostBtn.addEventListener("pointerleave", () => setBoost(false));
+      boostBtn.addEventListener("click", (event) => {
+        event.preventDefault();
+        setBoost(true);
+        window.setTimeout(() => setBoost(false), 150);
+      });
+
+      window.addEventListener("keydown", onKeyDown);
+      window.addEventListener("keyup", onKeyUp);
+
+      drawScene();
+      updateHUD();
+
+      return () => {
+        if (state.rafId !== null) {
+          window.cancelAnimationFrame(state.rafId);
+        }
+        window.removeEventListener("keydown", onKeyDown);
+        window.removeEventListener("keyup", onKeyUp);
+        wrapper.remove();
+      };
+    },
+  },
+  {
     id: "orbit",
     name: "Orbit Dash",
     summary: "Dash through gates while orbiting the core.",
@@ -5238,13 +5640,9 @@ const listTemplate = document.getElementById("game-list-item-template");
 const backButton = document.querySelector(".back-button");
 
 const LOCK_PASSWORD = "1108";
-const LOCKED_GAME_IDS = new Set(["memory", "skyport", "orbit", "catsdogs"]);
+const LOCKED_GAME_IDS = new Set(["memory", "skyport", "orbit", "catsdogs", "spotdiff"]);
 let lockedUnlocked = false;
-try {
-  lockedUnlocked = window.sessionStorage?.getItem("gamesUnlocked") === "true";
-} catch (error) {
-  lockedUnlocked = false;
-}
+lockedUnlocked = false;
 
 let comingList = null;
 let lockedHint = null;
@@ -5294,9 +5692,6 @@ if (homeView) {
       lockedHint.textContent = "Access granted. Enjoy these prototypes!";
       passButton.textContent = "Unlocked";
       passButton.disabled = true;
-      try {
-        window.sessionStorage?.setItem("gamesUnlocked", "true");
-      } catch (error) {}
       buildGameLists();
     } else {
       lockedHint.textContent = "Incorrect key. Try again.";
