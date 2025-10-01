@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
+  <defs>
+    <linearGradient id="neon-bg" x1="18%" y1="12%" x2="82%" y2="88%">
+      <stop offset="0" stop-color="#72f6ff" />
+      <stop offset="1" stop-color="#ffd972" />
+    </linearGradient>
+    <linearGradient id="neon-road" x1="50%" y1="20%" x2="50%" y2="100%">
+      <stop offset="0" stop-color="#152043" />
+      <stop offset="1" stop-color="#060b18" />
+    </linearGradient>
+    <linearGradient id="neon-car" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0" stop-color="#72f6ff" />
+      <stop offset="1" stop-color="#ffd972" />
+    </linearGradient>
+    <radialGradient id="neon-glow" cx="50%" cy="40%" r="52%">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.28" />
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+  <rect width="160" height="160" rx="36" fill="url(#neon-bg)" />
+  <rect width="144" height="144" x="8" y="8" rx="28" fill="rgba(14,16,28,0.45)" />
+  <rect width="144" height="144" x="8" y="8" rx="28" fill="url(#neon-glow)" />
+  <path
+    d="M80 42c-18 0-34 4-46 10v12l46-8 46 8v-12c-12-6-28-10-46-10Z"
+    fill="rgba(114,246,255,0.35)"
+  />
+  <path
+    d="M48 54 80 140 112 54"
+    fill="url(#neon-road)"
+    stroke="rgba(114,246,255,0.35)"
+    stroke-width="4"
+    stroke-linejoin="round"
+  />
+  <path
+    d="m80 66 18 56H62z"
+    fill="rgba(255,255,255,0.18)"
+  />
+  <path
+    d="M80 34 58 74l14-2v28h16V72l14 2Z"
+    fill="rgba(14,16,28,0.5)"
+  />
+  <path
+    d="M80 26 48 82l20-3v36h24V79l20 3Z"
+    fill="url(#neon-car)"
+    stroke="rgba(14,16,28,0.4)"
+    stroke-width="3"
+    stroke-linejoin="round"
+  />
+  <circle cx="80" cy="52" r="10" fill="rgba(14,16,28,0.45)" />
+  <path
+    d="M63 125h34l-4 12H67z"
+    fill="rgba(114,246,255,0.6)"
+    stroke="rgba(14,16,28,0.4)"
+    stroke-width="2"
+    stroke-linejoin="round"
+  />
+</svg>

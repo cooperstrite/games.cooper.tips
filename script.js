@@ -1392,6 +1392,291 @@ const games = [
     },
   },
   {
+    id: "foodchain",
+    name: "Food Chain Relay",
+    summary: "Sort each food chain from producer to apex predator.",
+    description:
+      "Reorder the shuffled organisms so energy flows from the producer up to the apex predator. Watch your streak climb as you master different habitats!",
+    logo: "assets/food-chain.svg",
+    init(root) {
+      const chains = [
+        {
+          id: "prairie",
+          title: "Prairie Loop",
+          prompt: "Arrange this grassland food chain from bottom to top.",
+          energyFlow: [
+            { id: "grass", name: "Big Bluestem Grass", role: "Producer" },
+            { id: "hopper", name: "Grasshopper", role: "Primary consumer" },
+            { id: "lark", name: "Western Meadowlark", role: "Secondary consumer" },
+            { id: "fox", name: "Red Fox", role: "Tertiary consumer" },
+          ],
+        },
+        {
+          id: "pond",
+          title: "Pond Ripple",
+          prompt: "Who eats whom in this freshwater chain?",
+          energyFlow: [
+            { id: "algae", name: "Duckweed", role: "Producer" },
+            { id: "mayfly", name: "Mayfly Nymph", role: "Primary consumer" },
+            { id: "sunfish", name: "Bluegill Sunfish", role: "Secondary consumer" },
+            { id: "heron", name: "Great Blue Heron", role: "Tertiary consumer" },
+          ],
+        },
+        {
+          id: "ocean",
+          title: "Open Ocean",
+          prompt: "Stack this marine chain in the right order.",
+          energyFlow: [
+            { id: "phyto", name: "Phytoplankton", role: "Producer" },
+            { id: "krill", name: "Krill", role: "Primary consumer" },
+            { id: "mackerel", name: "Atlantic Mackerel", role: "Secondary consumer" },
+            { id: "shark", name: "Blue Shark", role: "Apex predator" },
+          ],
+        },
+        {
+          id: "forest",
+          title: "Forest Flight",
+          prompt: "Line up this woodland chain from producer to hunter.",
+          energyFlow: [
+            { id: "oak", name: "Oak Leaves", role: "Producer" },
+            { id: "caterpillar", name: "Caterpillar", role: "Primary consumer" },
+            { id: "robin", name: "American Robin", role: "Secondary consumer" },
+            { id: "hawk", name: "Red-tailed Hawk", role: "Apex predator" },
+          ],
+        },
+        {
+          id: "arctic",
+          title: "Arctic Chill",
+          prompt: "Can you keep this polar chain in order?",
+          energyFlow: [
+            { id: "icephyto", name: "Sea Ice Phytoplankton", role: "Producer" },
+            { id: "cod", name: "Arctic Cod", role: "Primary consumer" },
+            { id: "seal", name: "Ringed Seal", role: "Secondary consumer" },
+            { id: "bear", name: "Polar Bear", role: "Apex predator" },
+          ],
+        },
+      ];
+
+      const state = {
+        chain: null,
+        order: [],
+        solved: false,
+        solvedCount: 0,
+        streak: 0,
+        bestStreak: 0,
+      };
+
+      const wrapper = document.createElement("div");
+      wrapper.className = "foodchain";
+
+      const header = document.createElement("div");
+      header.className = "foodchain-header";
+
+      const title = document.createElement("h3");
+      title.className = "foodchain-title";
+
+      const prompt = document.createElement("p");
+      prompt.className = "foodchain-prompt";
+
+      header.append(title, prompt);
+
+      const stats = document.createElement("div");
+      stats.className = "foodchain-stats";
+
+      const solvedBadge = document.createElement("span");
+      solvedBadge.className = "badge foodchain-solved";
+      solvedBadge.textContent = "Solved: 0";
+
+      const streakBadge = document.createElement("span");
+      streakBadge.className = "badge foodchain-streak";
+      streakBadge.textContent = "Streak: 0";
+
+      const bestBadge = document.createElement("span");
+      bestBadge.className = "badge foodchain-best";
+      bestBadge.textContent = "Best streak: 0";
+
+      stats.append(solvedBadge, streakBadge, bestBadge);
+
+      const list = document.createElement("ul");
+      list.className = "foodchain-list";
+
+      const controls = document.createElement("div");
+      controls.className = "foodchain-controls";
+
+      const submitBtn = document.createElement("button");
+      submitBtn.type = "button";
+      submitBtn.className = "primary-btn foodchain-submit";
+      submitBtn.textContent = "Check order";
+
+      const shuffleBtn = document.createElement("button");
+      shuffleBtn.type = "button";
+      shuffleBtn.className = "foodchain-ghost";
+      shuffleBtn.textContent = "Shuffle";
+
+      const nextBtn = document.createElement("button");
+      nextBtn.type = "button";
+      nextBtn.className = "foodchain-ghost";
+      nextBtn.textContent = "New chain";
+
+      controls.append(submitBtn, shuffleBtn, nextBtn);
+
+      const status = document.createElement("p");
+      status.className = "foodchain-status";
+      status.textContent = "Reorder the cards so energy flows from producer (bottom) to apex predator (top).";
+
+      wrapper.append(header, stats, list, controls, status);
+      root.appendChild(wrapper);
+
+      submitBtn.addEventListener("click", () => {
+        if (state.solved) {
+          loadChain();
+          return;
+        }
+        checkOrder();
+      });
+
+      shuffleBtn.addEventListener("click", () => {
+        if (state.solved) return;
+        state.order = shuffle(state.order);
+        renderChain();
+        status.textContent = "Cards reshuffled. Rebuild the chain from producer upward.";
+      });
+
+      nextBtn.addEventListener("click", () => {
+        loadChain(true);
+      });
+
+      function shuffle(array) {
+        const copy = array.slice();
+        for (let i = copy.length - 1; i > 0; i -= 1) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [copy[i], copy[j]] = [copy[j], copy[i]];
+        }
+        return copy;
+      }
+
+      function loadChain(forceNew = false) {
+        const pool = chains.filter((chain) => chain.id !== state.chain?.id);
+        if (!state.chain || forceNew) {
+          const choices = pool.length ? pool : chains;
+          state.chain = choices[Math.floor(Math.random() * choices.length)];
+        }
+        state.order = shuffle(state.chain.energyFlow);
+        state.solved = false;
+        submitBtn.textContent = "Check order";
+        submitBtn.disabled = false;
+        shuffleBtn.disabled = false;
+        renderChain();
+        status.textContent = state.chain.prompt;
+      }
+
+      function renderChain() {
+        title.textContent = state.chain.title;
+        prompt.textContent = state.chain.prompt;
+        list.textContent = "";
+        state.order.forEach((item, index) => {
+          const li = document.createElement("li");
+          li.className = "foodchain-item";
+          li.dataset.role = item.role;
+          li.dataset.index = String(index);
+
+          const card = document.createElement("div");
+          card.className = "foodchain-card";
+
+          const label = document.createElement("strong");
+          label.textContent = item.name;
+
+          const role = document.createElement("span");
+          role.className = "foodchain-role";
+          role.textContent = item.role;
+
+          const movers = document.createElement("div");
+          movers.className = "foodchain-movers";
+
+          const upBtn = document.createElement("button");
+          upBtn.type = "button";
+          upBtn.className = "foodchain-move";
+          upBtn.textContent = "↑";
+          upBtn.setAttribute("aria-label", `Move ${item.name} up`);
+          upBtn.disabled = state.solved || index === 0;
+          upBtn.addEventListener("click", () => moveItem(index, -1));
+
+          const downBtn = document.createElement("button");
+          downBtn.type = "button";
+          downBtn.className = "foodchain-move";
+          downBtn.textContent = "↓";
+          downBtn.setAttribute("aria-label", `Move ${item.name} down`);
+          downBtn.disabled = state.solved || index === state.order.length - 1;
+          downBtn.addEventListener("click", () => moveItem(index, 1));
+
+          movers.append(upBtn, downBtn);
+          card.append(label, role);
+          li.append(card, movers);
+          list.appendChild(li);
+        });
+        updateStats();
+      }
+
+      function moveItem(index, delta) {
+        if (state.solved) return;
+        const target = index + delta;
+        if (target < 0 || target >= state.order.length) return;
+        const items = state.order.slice();
+        const [moved] = items.splice(index, 1);
+        items.splice(target, 0, moved);
+        state.order = items;
+        renderChain();
+      }
+
+      function checkOrder() {
+        clearFeedback();
+        let correct = true;
+        state.order.forEach((item, idx) => {
+          const li = list.children[idx];
+          if (item.id === state.chain.energyFlow[idx].id) {
+            li.classList.add("is-correct");
+          } else {
+            li.classList.add("is-wrong");
+            correct = false;
+          }
+        });
+        if (correct) {
+          state.solved = true;
+          state.solvedCount += 1;
+          state.streak += 1;
+          if (state.streak > state.bestStreak) {
+            state.bestStreak = state.streak;
+          }
+          submitBtn.textContent = "Play again";
+          shuffleBtn.disabled = true;
+          status.textContent = "Perfect flow! Producers power every bite above them.";
+        } else {
+          state.streak = 0;
+          status.textContent = "Not quite. Producers belong at the bottom—adjust and try again.";
+        }
+        updateStats();
+      }
+
+      function clearFeedback() {
+        Array.from(list.children).forEach((child) => {
+          child.classList.remove("is-correct", "is-wrong");
+        });
+      }
+
+      function updateStats() {
+        solvedBadge.textContent = `Solved: ${state.solvedCount}`;
+        streakBadge.textContent = `Streak: ${state.streak}`;
+        bestBadge.textContent = `Best streak: ${state.bestStreak}`;
+      }
+
+      loadChain();
+
+      return () => {
+        wrapper.remove();
+      };
+    },
+  },
+  {
     id: "orbit",
     name: "Orbit Dash",
     summary: "Dash through gates while orbiting the core.",

@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
+  <defs>
+    <linearGradient id="signalBg" x1="12%" y1="10%" x2="88%" y2="90%">
+      <stop offset="0" stop-color="#72f6ff" />
+      <stop offset="1" stop-color="#ffd972" />
+    </linearGradient>
+    <radialGradient id="signalGlow" cx="50%" cy="50%" r="60%">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.55" />
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0" />
+    </radialGradient>
+    <linearGradient id="signalTrack" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0" stop-color="#72f6ff" stop-opacity="0.9" />
+      <stop offset="1" stop-color="#ffd972" stop-opacity="0.95" />
+    </linearGradient>
+    <linearGradient id="signalArrow" x1="35%" y1="15%" x2="65%" y2="85%">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.92" />
+      <stop offset="1" stop-color="#dbe9ff" stop-opacity="0.85" />
+    </linearGradient>
+    <path id="signalPointer" d="M80 28 104 60 92 60 92 98 68 98 68 60 56 60Z" />
+  </defs>
+  <rect width="160" height="160" rx="36" fill="url(#signalBg)" />
+  <rect width="144" height="144" x="8" y="8" rx="28" fill="rgba(14,16,28,0.35)" />
+  <circle cx="80" cy="80" r="62" fill="url(#signalGlow)" />
+  <circle cx="80" cy="80" r="52" fill="rgba(255,255,255,0.06)" />
+  <path
+    d="M116 80c0-19.882-16.118-36-36-36-12.33 0-23.21 6.372-30.016 16.036"
+    fill="none"
+    stroke="url(#signalTrack)"
+    stroke-width="9"
+    stroke-linecap="round"
+    stroke-dasharray="46 22"
+  />
+  <path
+    d="M44 80c0 19.882 16.118 36 36 36 12.966 0 24.41-7.038 30.92-17.62"
+    fill="none"
+    stroke="url(#signalTrack)"
+    stroke-width="6"
+    stroke-linecap="round"
+    stroke-dasharray="50 24"
+    opacity="0.65"
+  />
+  <g fill="url(#signalArrow)" stroke="rgba(14,16,28,0.35)" stroke-width="2">
+    <use href="#signalPointer" />
+    <use href="#signalPointer" transform="rotate(90 80 80)" />
+    <use href="#signalPointer" transform="rotate(180 80 80)" />
+    <use href="#signalPointer" transform="rotate(270 80 80)" />
+  </g>
+  <circle cx="80" cy="80" r="18" fill="rgba(14,16,28,0.65)" />
+  <circle cx="80" cy="80" r="10" fill="rgba(255,255,255,0.65)" />
+  <circle cx="80" cy="80" r="4" fill="#ffd972" />
+</svg>
