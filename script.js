@@ -1475,6 +1475,8 @@ const games = [
       const wrapper = document.createElement("div");
       wrapper.className = "foodchain";
 
+      let dragSourceIndex = null;
+
       const header = document.createElement("div");
       header.className = "foodchain-header";
 
@@ -1513,6 +1515,25 @@ const games = [
 
       const list = document.createElement("ul");
       list.className = "foodchain-list";
+      list.addEventListener("dragover", (event) => {
+        if (state.solved) return;
+        event.preventDefault();
+        if (event.dataTransfer) {
+          event.dataTransfer.dropEffect = "move";
+        }
+        if (event.target === list) {
+          clearDragIndicators();
+        }
+      });
+      list.addEventListener("drop", (event) => {
+        if (state.solved) return;
+        event.preventDefault();
+        clearDragIndicators();
+        const from = getDragIndex(event);
+        if (from == null) return;
+        dragSourceIndex = null;
+        moveItemToPosition(from, state.order.length);
+      });
 
       const controls = document.createElement("div");
       controls.className = "foodchain-controls";
@@ -1633,6 +1654,7 @@ const games = [
       }
 
       function renderChain() {
+        dragSourceIndex = null;
         wrapper.classList.toggle("foodchain-hard", state.hardMode);
         title.textContent = state.chain.title;
         updatePrompt();
@@ -1642,6 +1664,13 @@ const games = [
           li.className = "foodchain-item";
           li.dataset.role = item.role;
           li.dataset.index = String(index);
+          li.draggable = !state.solved;
+
+          li.addEventListener("dragstart", handleDragStart);
+          li.addEventListener("dragend", handleDragEnd);
+          li.addEventListener("dragover", handleItemDragOver);
+          li.addEventListener("dragleave", handleItemDragLeave);
+          li.addEventListener("drop", handleItemDrop);
 
           const card = document.createElement("div");
           card.className = "foodchain-card";
@@ -1682,14 +1711,105 @@ const games = [
       }
 
       function moveItem(index, delta) {
+        if (delta === 0) return;
+        if (delta > 0) {
+          moveItemToPosition(index, index + delta + 1);
+        } else {
+          moveItemToPosition(index, index + delta);
+        }
+      }
+
+      function moveItemToPosition(from, insertIndex) {
         if (state.solved) return;
-        const target = index + delta;
-        if (target < 0 || target >= state.order.length) return;
+        const length = state.order.length;
+        if (from < 0 || from >= length) return;
+        let target = Math.min(Math.max(insertIndex, 0), length);
+        if (target === from || target === from + 1) return;
         const items = state.order.slice();
-        const [moved] = items.splice(index, 1);
+        const [moved] = items.splice(from, 1);
+        if (target > from) target -= 1;
         items.splice(target, 0, moved);
         state.order = items;
+        clearDragIndicators();
+        clearFeedback();
         renderChain();
+        status.textContent = "Card moved. Keep arranging from producer up.";
+      }
+
+      function getDragIndex(event) {
+        if (dragSourceIndex !== null) return dragSourceIndex;
+        if (!event.dataTransfer) return null;
+        const raw = event.dataTransfer.getData("text/plain");
+        if (!raw) return null;
+        const parsed = Number.parseInt(raw, 10);
+        return Number.isNaN(parsed) ? null : parsed;
+      }
+
+      function clearDragIndicators() {
+        Array.from(list.children).forEach((child) => {
+          child.classList.remove("is-dragging", "is-dragover");
+        });
+      }
+
+      function handleDragStart(event) {
+        if (state.solved) {
+          event.preventDefault();
+          return;
+        }
+        const target = event.currentTarget;
+        if (!(target instanceof HTMLElement)) return;
+        const index = Number.parseInt(target.dataset.index ?? "", 10);
+        if (Number.isNaN(index)) return;
+        dragSourceIndex = index;
+        clearDragIndicators();
+        target.classList.add("is-dragging");
+        if (event.dataTransfer) {
+          event.dataTransfer.effectAllowed = "move";
+          event.dataTransfer.setData("text/plain", String(index));
+        }
+      }
+
+      function handleDragEnd() {
+        dragSourceIndex = null;
+        clearDragIndicators();
+      }
+
+      function handleItemDragOver(event) {
+        if (state.solved) return;
+        event.preventDefault();
+        if (event.dataTransfer) {
+          event.dataTransfer.dropEffect = "move";
+        }
+        const target = event.currentTarget;
+        if (!(target instanceof HTMLElement)) return;
+        if (target.classList.contains("is-dragging")) return;
+        clearDragIndicators();
+        target.classList.add("is-dragover");
+      }
+
+      function handleItemDragLeave(event) {
+        const target = event.currentTarget;
+        if (target instanceof HTMLElement) {
+          target.classList.remove("is-dragover");
+        }
+      }
+
+      function handleItemDrop(event) {
+        if (state.solved) return;
+        event.preventDefault();
+        event.stopPropagation();
+        const target = event.currentTarget;
+        if (!(target instanceof HTMLElement)) return;
+        target.classList.remove("is-dragover");
+        const index = Number.parseInt(target.dataset.index ?? "", 10);
+        if (Number.isNaN(index)) return;
+        const from = getDragIndex(event);
+        if (from == null) return;
+        const rect = target.getBoundingClientRect();
+        const insertAfter = event.clientY - rect.top > rect.height / 2;
+        const insertIndex = index + (insertAfter ? 1 : 0);
+        dragSourceIndex = null;
+        moveItemToPosition(from, insertIndex);
       }
 
       function checkOrder() {
@@ -1713,6 +1833,10 @@ const games = [
           }
           submitBtn.textContent = "Play again";
           shuffleBtn.disabled = true;
+          clearDragIndicators();
+          Array.from(list.children).forEach((child) => {
+            child.setAttribute("draggable", "false");
+          });
           status.textContent = state.hardMode
             ? "Perfect flow! Nailed the chain with roles hidden."
             : "Perfect flow! Producers power every bite above them.";
@@ -1727,7 +1851,7 @@ const games = [
 
       function clearFeedback() {
         Array.from(list.children).forEach((child) => {
-          child.classList.remove("is-correct", "is-wrong");
+          child.classList.remove("is-correct", "is-wrong", "is-dragging", "is-dragover");
         });
       }
 
