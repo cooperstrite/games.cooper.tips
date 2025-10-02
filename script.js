@@ -1403,7 +1403,7 @@ const games = [
         {
           id: "prairie",
           title: "Prairie Loop",
-          prompt: "Arrange this grassland food chain from bottom to top.",
+          prompt: "Stack this grassland food chain with producers at the bottom and the apex predator up top.",
           energyFlow: [
             { id: "grass", name: "Big Bluestem Grass", role: "Producer" },
             { id: "hopper", name: "Grasshopper", role: "Primary consumer" },
@@ -1414,7 +1414,7 @@ const games = [
         {
           id: "pond",
           title: "Pond Ripple",
-          prompt: "Who eats whom in this freshwater chain?",
+          prompt: "Line up this freshwater chain so the apex hunter sits at the top of the stack.",
           energyFlow: [
             { id: "algae", name: "Duckweed", role: "Producer" },
             { id: "mayfly", name: "Mayfly Nymph", role: "Primary consumer" },
@@ -1425,7 +1425,7 @@ const games = [
         {
           id: "ocean",
           title: "Open Ocean",
-          prompt: "Stack this marine chain in the right order.",
+          prompt: "Build this marine chain with the top predator riding highest above the producers.",
           energyFlow: [
             { id: "phyto", name: "Phytoplankton", role: "Producer" },
             { id: "krill", name: "Krill", role: "Primary consumer" },
@@ -1436,7 +1436,7 @@ const games = [
         {
           id: "forest",
           title: "Forest Flight",
-          prompt: "Line up this woodland chain from producer to hunter.",
+          prompt: "Let producers root the woodland base and the raptor soar at the very top.",
           energyFlow: [
             { id: "oak", name: "Oak Leaves", role: "Producer" },
             { id: "caterpillar", name: "Caterpillar", role: "Primary consumer" },
@@ -1447,7 +1447,7 @@ const games = [
         {
           id: "arctic",
           title: "Arctic Chill",
-          prompt: "Can you keep this polar chain in order?",
+          prompt: "Stack this polar web so the apex predator crowns the column.",
           energyFlow: [
             { id: "icephyto", name: "Sea Ice Phytoplankton", role: "Producer" },
             { id: "cod", name: "Arctic Cod", role: "Primary consumer" },
@@ -1612,7 +1612,7 @@ const games = [
 
       const status = document.createElement("p");
       status.className = "foodchain-status";
-      status.textContent = "Reorder the cards so energy flows from producer (bottom) to apex predator (top).";
+      status.textContent = "Place apex predators at the top of the stack and keep producers anchored at the bottom.";
 
       wrapper.append(header, stats, list, controls, status);
       root.appendChild(wrapper);
@@ -1629,7 +1629,7 @@ const games = [
         if (state.solved) return;
         state.order = shuffle(state.order);
         renderChain();
-        status.textContent = "Cards reshuffled. Rebuild the chain from producer upward.";
+        status.textContent = "Cards reshuffled. Rebuild it with producers low and predators high.";
       });
 
       const handleNext = (event) => {
@@ -1697,7 +1697,7 @@ const games = [
             : `Race ready: first to ${state.raceTarget}. Press Start to face the ${difficulty.label} AI.`;
         } else {
           status.textContent = state.hardMode
-            ? "Hard mode active—roles hidden. Rebuild the chain from producer upward."
+            ? "Hard mode active—roles hidden. Keep predators up high and producers down low."
             : state.chain.prompt;
         }
         updateRaceButton();
@@ -1787,8 +1787,13 @@ const games = [
           const difficulty = AI_DIFFICULTIES[state.aiDifficulty] ?? AI_DIFFICULTIES.steady;
           status.textContent = `Race running: You vs ${difficulty.label} AI. First to ${state.raceTarget}.`;
         } else {
-          status.textContent = "Cards rearranged. Keep building that food chain.";
+          status.textContent = "Cards rearranged. Keep apex predators high and producers low.";
         }
+      }
+
+      function getTargetSequence() {
+        if (!state.chain) return [];
+        return [...state.chain.energyFlow].reverse();
       }
 
       function getDragIndex(event) {
@@ -1870,9 +1875,10 @@ const games = [
       function checkOrder() {
         clearFeedback();
         let correct = true;
+        const targetSequence = getTargetSequence();
         state.order.forEach((item, idx) => {
           const li = list.children[idx];
-          if (item.id === state.chain.energyFlow[idx].id) {
+          if (item.id === targetSequence[idx]?.id) {
             li.classList.add("is-correct");
           } else {
             li.classList.add("is-wrong");
@@ -1898,7 +1904,7 @@ const games = [
           handleRaceProgress(true);
         } else {
           state.streak = 0;
-          status.textContent = "Not quite. Producers belong at the bottom—adjust and try again.";
+          status.textContent = "Not quite. Apex predators belong up top and producers should anchor the bottom.";
           handleRaceProgress(false);
         }
         updateStats();
@@ -1940,7 +1946,7 @@ const games = [
             : `Race ready: first to ${state.raceTarget}. Press Start to face the ${difficulty.label} AI.`;
         } else {
           status.textContent = state.hardMode
-            ? "Hard mode active—roles hidden. Rebuild the chain from producer upward."
+            ? "Hard mode active—roles hidden. Keep predators up high and producers down low."
             : state.chain.prompt;
         }
       }
@@ -1990,7 +1996,11 @@ const games = [
           resetRaceProgress();
           nextBtn.textContent = "New chain";
           raceSelect.value = "";
-          if (!state.hardMode && state.chain) status.textContent = state.chain.prompt;
+          if (!state.hardMode && state.chain) {
+            status.textContent = state.chain.prompt;
+          } else if (state.hardMode) {
+            status.textContent = "Hard mode active—roles hidden. Keep predators up high and producers down low.";
+          }
         }
         submitBtn.disabled = false;
         shuffleBtn.disabled = false;
