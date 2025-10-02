@@ -1459,6 +1459,12 @@ const games = [
 
       const RACE_TARGETS = [5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150];
 
+      const AI_DIFFICULTIES = {
+        casual: { label: "Casual", successRate: 0.55 },
+        steady: { label: "Steady", successRate: 0.7 },
+        ruthless: { label: "Ruthless", successRate: 0.85 },
+      };
+
       const state = {
         chain: null,
         order: [],
@@ -1470,10 +1476,14 @@ const games = [
         raceTarget: null,
         aiStreak: 0,
         raceCompleted: false,
+        aiDifficulty: "steady",
+        raceActive: false,
       };
 
       const wrapper = document.createElement("div");
       wrapper.className = "foodchain";
+
+      let dragSourceIndex = null;
 
       const header = document.createElement("div");
       header.className = "foodchain-header";
@@ -1513,6 +1523,25 @@ const games = [
 
       const list = document.createElement("ul");
       list.className = "foodchain-list";
+      list.addEventListener("dragover", (event) => {
+        if (state.solved) return;
+        event.preventDefault();
+        if (event.dataTransfer) {
+          event.dataTransfer.dropEffect = "move";
+        }
+        if (event.target === list) {
+          clearDragIndicators();
+        }
+      });
+      list.addEventListener("drop", (event) => {
+        if (state.solved) return;
+        event.preventDefault();
+        clearDragIndicators();
+        const from = getDragIndex(event);
+        if (from == null) return;
+        dragSourceIndex = null;
+        moveItemToPosition(from, state.order.length);
+      });
 
       const controls = document.createElement("div");
       controls.className = "foodchain-controls";
@@ -1522,6 +1551,22 @@ const games = [
       hardToggle.className = "foodchain-toggle";
       hardToggle.textContent = "Hard mode off";
       hardToggle.setAttribute("aria-pressed", "false");
+
+      const aiLabel = document.createElement("label");
+      aiLabel.className = "foodchain-ai-select";
+      const aiSpan = document.createElement("span");
+      aiSpan.textContent = "AI level";
+
+      const aiSelect = document.createElement("select");
+      aiSelect.setAttribute("aria-label", "AI difficulty");
+      Object.entries(AI_DIFFICULTIES).forEach(([key, config]) => {
+        const option = document.createElement("option");
+        option.value = key;
+        option.textContent = config.label;
+        aiSelect.appendChild(option);
+      });
+      aiSelect.value = state.aiDifficulty;
+      aiLabel.append(aiSpan, aiSelect);
 
       const submitBtn = document.createElement("button");
       submitBtn.type = "button";
@@ -1557,7 +1602,13 @@ const games = [
       });
       raceLabel.append(raceSpan, raceSelect);
 
-      controls.append(hardToggle, raceLabel, submitBtn, shuffleBtn, nextBtn);
+      const startRaceBtn = document.createElement("button");
+      startRaceBtn.type = "button";
+      startRaceBtn.className = "foodchain-ghost";
+      startRaceBtn.textContent = "Start race";
+      startRaceBtn.disabled = true;
+
+      controls.append(hardToggle, aiLabel, raceLabel, startRaceBtn, submitBtn, shuffleBtn, nextBtn);
 
       const status = document.createElement("p");
       status.className = "foodchain-status";
@@ -1584,11 +1635,14 @@ const games = [
       const handleNext = (event) => {
         if (event) event.preventDefault();
         if (state.raceCompleted) {
+          state.raceActive = false;
           resetRaceProgress();
           submitBtn.disabled = false;
           shuffleBtn.disabled = false;
           submitBtn.textContent = "Check order";
           state.raceCompleted = false;
+          updateRaceButton();
+          nextBtn.textContent = "New chain";
         }
         loadChain(true);
       };
@@ -1600,6 +1654,15 @@ const games = [
 
       raceSelect.addEventListener("change", () => {
         setRaceTarget(raceSelect.value ? Number.parseInt(raceSelect.value, 10) : null);
+      });
+
+      aiSelect.addEventListener("change", () => {
+        setAIDifficulty(aiSelect.value);
+      });
+
+      startRaceBtn.addEventListener("click", () => {
+        if (!state.raceTarget) return;
+        startRace();
       });
 
       function shuffle(array) {
@@ -1627,12 +1690,21 @@ const games = [
         state.raceCompleted = false;
         submitBtn.disabled = false;
         shuffleBtn.disabled = false;
-        status.textContent = state.hardMode
-          ? "Hard mode active—roles hidden. Rebuild the chain from producer upward."
-          : state.chain.prompt;
+        if (state.raceTarget) {
+          const difficulty = AI_DIFFICULTIES[state.aiDifficulty] ?? AI_DIFFICULTIES.steady;
+          status.textContent = state.raceActive
+            ? `Race running: You vs ${difficulty.label} AI. First to ${state.raceTarget}.`
+            : `Race ready: first to ${state.raceTarget}. Press Start to face the ${difficulty.label} AI.`;
+        } else {
+          status.textContent = state.hardMode
+            ? "Hard mode active—roles hidden. Rebuild the chain from producer upward."
+            : state.chain.prompt;
+        }
+        updateRaceButton();
       }
 
       function renderChain() {
+        dragSourceIndex = null;
         wrapper.classList.toggle("foodchain-hard", state.hardMode);
         title.textContent = state.chain.title;
         updatePrompt();
@@ -1642,6 +1714,13 @@ const games = [
           li.className = "foodchain-item";
           li.dataset.role = item.role;
           li.dataset.index = String(index);
+          li.draggable = !state.solved;
+
+          li.addEventListener("dragstart", handleDragStart);
+          li.addEventListener("dragend", handleDragEnd);
+          li.addEventListener("dragover", handleItemDragOver);
+          li.addEventListener("dragleave", handleItemDragLeave);
+          li.addEventListener("drop", handleItemDrop);
 
           const card = document.createElement("div");
           card.className = "foodchain-card";
@@ -1682,14 +1761,110 @@ const games = [
       }
 
       function moveItem(index, delta) {
+        if (delta === 0) return;
+        if (delta > 0) {
+          moveItemToPosition(index, index + delta + 1);
+        } else {
+          moveItemToPosition(index, index + delta);
+        }
+      }
+
+      function moveItemToPosition(from, insertIndex) {
         if (state.solved) return;
-        const target = index + delta;
-        if (target < 0 || target >= state.order.length) return;
+        const length = state.order.length;
+        if (from < 0 || from >= length) return;
+        let target = Math.min(Math.max(insertIndex, 0), length);
+        if (target === from || target === from + 1) return;
         const items = state.order.slice();
-        const [moved] = items.splice(index, 1);
+        const [moved] = items.splice(from, 1);
+        if (target > from) target -= 1;
         items.splice(target, 0, moved);
         state.order = items;
+        clearDragIndicators();
+        clearFeedback();
         renderChain();
+        if (state.raceActive && state.raceTarget) {
+          const difficulty = AI_DIFFICULTIES[state.aiDifficulty] ?? AI_DIFFICULTIES.steady;
+          status.textContent = `Race running: You vs ${difficulty.label} AI. First to ${state.raceTarget}.`;
+        } else {
+          status.textContent = "Cards rearranged. Keep building that food chain.";
+        }
+      }
+
+      function getDragIndex(event) {
+        if (dragSourceIndex !== null) return dragSourceIndex;
+        if (!event.dataTransfer) return null;
+        const raw = event.dataTransfer.getData("text/plain");
+        if (!raw) return null;
+        const parsed = Number.parseInt(raw, 10);
+        return Number.isNaN(parsed) ? null : parsed;
+      }
+
+      function clearDragIndicators() {
+        Array.from(list.children).forEach((child) => {
+          child.classList.remove("is-dragging", "is-dragover");
+        });
+      }
+
+      function handleDragStart(event) {
+        if (state.solved) {
+          event.preventDefault();
+          return;
+        }
+        const target = event.currentTarget;
+        if (!(target instanceof HTMLElement)) return;
+        const index = Number.parseInt(target.dataset.index ?? "", 10);
+        if (Number.isNaN(index)) return;
+        dragSourceIndex = index;
+        clearDragIndicators();
+        target.classList.add("is-dragging");
+        if (event.dataTransfer) {
+          event.dataTransfer.effectAllowed = "move";
+          event.dataTransfer.setData("text/plain", String(index));
+        }
+      }
+
+      function handleDragEnd() {
+        dragSourceIndex = null;
+        clearDragIndicators();
+      }
+
+      function handleItemDragOver(event) {
+        if (state.solved) return;
+        event.preventDefault();
+        if (event.dataTransfer) {
+          event.dataTransfer.dropEffect = "move";
+        }
+        const target = event.currentTarget;
+        if (!(target instanceof HTMLElement)) return;
+        if (target.classList.contains("is-dragging")) return;
+        clearDragIndicators();
+        target.classList.add("is-dragover");
+      }
+
+      function handleItemDragLeave(event) {
+        const target = event.currentTarget;
+        if (target instanceof HTMLElement) {
+          target.classList.remove("is-dragover");
+        }
+      }
+
+      function handleItemDrop(event) {
+        if (state.solved) return;
+        event.preventDefault();
+        event.stopPropagation();
+        const target = event.currentTarget;
+        if (!(target instanceof HTMLElement)) return;
+        target.classList.remove("is-dragover");
+        const index = Number.parseInt(target.dataset.index ?? "", 10);
+        if (Number.isNaN(index)) return;
+        const from = getDragIndex(event);
+        if (from == null) return;
+        const rect = target.getBoundingClientRect();
+        const insertAfter = event.clientY - rect.top > rect.height / 2;
+        const insertIndex = index + (insertAfter ? 1 : 0);
+        dragSourceIndex = null;
+        moveItemToPosition(from, insertIndex);
       }
 
       function checkOrder() {
@@ -1713,6 +1888,10 @@ const games = [
           }
           submitBtn.textContent = "Play again";
           shuffleBtn.disabled = true;
+          clearDragIndicators();
+          Array.from(list.children).forEach((child) => {
+            child.setAttribute("draggable", "false");
+          });
           status.textContent = state.hardMode
             ? "Perfect flow! Nailed the chain with roles hidden."
             : "Perfect flow! Producers power every bite above them.";
@@ -1727,7 +1906,7 @@ const games = [
 
       function clearFeedback() {
         Array.from(list.children).forEach((child) => {
-          child.classList.remove("is-correct", "is-wrong");
+          child.classList.remove("is-correct", "is-wrong", "is-dragging", "is-dragover");
         });
       }
 
@@ -1735,10 +1914,17 @@ const games = [
         solvedBadge.textContent = `Solved: ${state.solvedCount}`;
         streakBadge.textContent = `Streak: ${state.streak}`;
         bestBadge.textContent = `Best streak: ${state.bestStreak}`;
-        raceBadge.textContent = state.raceTarget
-          ? `Race: first to ${state.raceTarget}`
-          : "Race: –";
-        aiBadge.textContent = `AI streak: ${state.aiStreak}`;
+        if (!state.raceTarget) {
+          raceBadge.textContent = "Race: –";
+        } else if (state.raceCompleted) {
+          raceBadge.textContent = `Race: finished (first to ${state.raceTarget})`;
+        } else if (state.raceActive) {
+          raceBadge.textContent = `Race: first to ${state.raceTarget} (You ${state.streak} – AI ${state.aiStreak})`;
+        } else {
+          raceBadge.textContent = `Race: first to ${state.raceTarget} (not started)`;
+        }
+        const difficulty = AI_DIFFICULTIES[state.aiDifficulty] ?? AI_DIFFICULTIES.steady;
+        aiBadge.textContent = `AI streak: ${state.aiStreak} (${difficulty.label})`;
       }
 
       function setHardMode(active) {
@@ -1747,9 +1933,16 @@ const games = [
         hardToggle.setAttribute("aria-pressed", state.hardMode ? "true" : "false");
         hardToggle.textContent = state.hardMode ? "Hard mode on" : "Hard mode off";
         renderChain();
-        status.textContent = state.hardMode
-          ? "Hard mode active—roles hidden. Rebuild the chain from producer upward."
-          : state.chain.prompt;
+        if (state.raceTarget) {
+          const difficulty = AI_DIFFICULTIES[state.aiDifficulty] ?? AI_DIFFICULTIES.steady;
+          status.textContent = state.raceActive
+            ? `Race running: You vs ${difficulty.label} AI. First to ${state.raceTarget}.`
+            : `Race ready: first to ${state.raceTarget}. Press Start to face the ${difficulty.label} AI.`;
+        } else {
+          status.textContent = state.hardMode
+            ? "Hard mode active—roles hidden. Rebuild the chain from producer upward."
+            : state.chain.prompt;
+        }
       }
 
       function updatePrompt() {
@@ -1763,17 +1956,37 @@ const games = [
         state.aiStreak = 0;
         state.raceCompleted = false;
         updateStats();
+        updateRaceButton();
+      }
+
+      function updateRaceButton() {
+        if (!state.raceTarget) {
+          startRaceBtn.textContent = "Start race";
+          startRaceBtn.disabled = true;
+        } else if (state.raceActive) {
+          startRaceBtn.textContent = "Race running";
+          startRaceBtn.disabled = true;
+        } else if (state.raceCompleted) {
+          startRaceBtn.textContent = "Restart race";
+          startRaceBtn.disabled = false;
+        } else {
+          startRaceBtn.textContent = "Start race";
+          startRaceBtn.disabled = false;
+        }
       }
 
       function setRaceTarget(target) {
         if (target && Number.isFinite(target)) {
           state.raceTarget = target;
+          state.raceActive = false;
           resetRaceProgress();
           nextBtn.textContent = "New chain";
-          status.textContent = `Race mode: First to ${target} correct chains wins.`;
+          const difficulty = AI_DIFFICULTIES[state.aiDifficulty] ?? AI_DIFFICULTIES.steady;
+          status.textContent = `Race ready: first to ${target}. Press Start to face the ${difficulty.label} AI.`;
           raceSelect.value = String(target);
         } else {
           state.raceTarget = null;
+          state.raceActive = false;
           resetRaceProgress();
           nextBtn.textContent = "New chain";
           raceSelect.value = "";
@@ -1782,22 +1995,58 @@ const games = [
         submitBtn.disabled = false;
         shuffleBtn.disabled = false;
         updateStats();
+        updateRaceButton();
+      }
+
+      function startRace() {
+        if (!state.raceTarget) return;
+        state.raceActive = true;
+        state.raceCompleted = false;
+        state.streak = 0;
+        state.aiStreak = 0;
+        nextBtn.textContent = "New chain";
+        submitBtn.disabled = false;
+        shuffleBtn.disabled = false;
+        submitBtn.textContent = "Check order";
+        loadChain(true);
+        updateStats();
+        updateRaceButton();
+      }
+
+      function setAIDifficulty(key) {
+        const nextKey = key in AI_DIFFICULTIES ? key : "steady";
+        const previous = state.aiDifficulty;
+        if (previous === nextKey) return;
+        state.aiDifficulty = nextKey;
+        aiSelect.value = nextKey;
+        const difficulty = AI_DIFFICULTIES[nextKey];
+        state.aiStreak = 0;
+        if (state.raceActive) {
+          state.raceActive = false;
+          state.raceCompleted = false;
+          resetRaceProgress();
+          status.textContent = `Race paused—${difficulty.label} AI is ready when you restart.`;
+        } else if (state.raceTarget) {
+          resetRaceProgress();
+          status.textContent = `AI difficulty set to ${difficulty.label}. Press Start to race.`;
+        } else {
+          updateStats();
+          status.textContent = `AI difficulty set to ${difficulty.label}.`;
+        }
+        updateRaceButton();
       }
 
       function handleRaceProgress(userSucceeded) {
-        if (!state.raceTarget || state.raceCompleted) return;
+        if (!state.raceTarget || !state.raceActive || state.raceCompleted) return;
 
         if (userSucceeded && state.streak >= state.raceTarget) {
           finishRace("You");
           return;
         }
 
-        const aiSucceeded = Math.random() < 0.7;
-        if (aiSucceeded) {
-          state.aiStreak += 1;
-        } else {
-          state.aiStreak = 0;
-        }
+        const difficulty = AI_DIFFICULTIES[state.aiDifficulty] ?? AI_DIFFICULTIES.steady;
+        const aiSucceeded = Math.random() < difficulty.successRate;
+        state.aiStreak = aiSucceeded ? state.aiStreak + 1 : 0;
         if (state.aiStreak >= state.raceTarget) {
           finishRace("The AI");
         } else {
@@ -1806,12 +2055,15 @@ const games = [
       }
 
       function finishRace(winner) {
+        state.raceActive = false;
         state.raceCompleted = true;
         submitBtn.disabled = true;
         shuffleBtn.disabled = true;
         submitBtn.textContent = "Race finished";
         status.textContent = `${winner} reached ${state.raceTarget} in a row first!`;
         nextBtn.textContent = "Restart race";
+        updateRaceButton();
+        updateStats();
       }
 
       loadChain();

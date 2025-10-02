@@ -965,6 +965,26 @@ button:hover {
   background: rgba(255, 217, 114, 0.14);
 }
 
+.foodchain-item[draggable="true"] {
+  cursor: grab;
+}
+
+.foodchain-item[draggable="true"]:active {
+  cursor: grabbing;
+}
+
+.foodchain-item.is-dragging {
+  opacity: 0.85;
+  transform: translateY(-4px);
+  border-color: rgba(114, 246, 255, 0.55);
+  background: rgba(114, 246, 255, 0.14);
+}
+
+.foodchain-item.is-dragover {
+  border-color: rgba(255, 217, 114, 0.55);
+  background: rgba(255, 217, 114, 0.14);
+}
+
 .foodchain-item.is-correct {
   border-color: rgba(114, 255, 182, 0.65);
   background: rgba(114, 255, 182, 0.16);
@@ -1094,7 +1114,16 @@ button:hover {
   min-width: 160px;
 }
 
-.foodchain-race-select select {
+.foodchain-ai-select {
+  display: grid;
+  gap: 0.35rem;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  min-width: 160px;
+}
+
+.foodchain-race-select select,
+.foodchain-ai-select select {
   border-radius: var(--radius-md);
   border: 1px solid rgba(255, 255, 255, 0.14);
   background: rgba(255, 255, 255, 0.05);
@@ -1119,6 +1148,7 @@ button:hover {
   }
 
   .foodchain-toggle,
+  .foodchain-ai-select,
   .foodchain-race-select,
   .foodchain-controls button,
   .foodchain-controls .primary-btn {
