@@ -2584,6 +2584,448 @@ const games = [
     },
   },
   {
+    id: "spotter",
+    name: "Flight Spotter",
+    summary: "Match each tail design to the correct airline.",
+    description:
+      "Study the tail art and spotter notes, then choose the airline that flies it. Keep your streak alive as new liveries roll up to the stand.",
+    logo: "assets/flight-spotter.svg",
+    init(root) {
+      const wrapper = document.createElement("div");
+      wrapper.className = "spotter";
+
+      const status = document.createElement("p");
+      status.className = "spotter-status";
+      status.textContent = "Study the tail art, then pick the airline it belongs to.";
+
+      const stats = document.createElement("div");
+      stats.className = "spotter-stats";
+
+      const roundBadge = document.createElement("span");
+      roundBadge.className = "badge spotter-round";
+      roundBadge.textContent = "Flight: 0";
+
+      const scoreBadge = document.createElement("span");
+      scoreBadge.className = "badge spotter-score";
+      scoreBadge.textContent = "Cleared: 0";
+
+      const streakBadge = document.createElement("span");
+      streakBadge.className = "badge spotter-streak";
+      streakBadge.textContent = "Streak: 0";
+
+      stats.append(roundBadge, scoreBadge, streakBadge);
+
+      const card = document.createElement("section");
+      card.className = "spotter-card";
+
+      const hintTitle = document.createElement("h3");
+      hintTitle.className = "spotter-title";
+      hintTitle.textContent = "Spotter notes";
+
+      const photoWrap = document.createElement("div");
+      photoWrap.className = "spotter-photo";
+      const photo = document.createElement("img");
+      photo.className = "spotter-image";
+      photo.alt = "";
+      photoWrap.appendChild(photo);
+
+      const hintList = document.createElement("ul");
+      hintList.className = "spotter-hints";
+
+      card.append(hintTitle, photoWrap, hintList);
+
+      const controls = document.createElement("div");
+      controls.className = "spotter-controls";
+
+      const airlineGroup = document.createElement("label");
+      airlineGroup.className = "spotter-select";
+      const airlineSpan = document.createElement("span");
+      airlineSpan.textContent = "Airline";
+      const airlineSelect = document.createElement("select");
+      airlineSelect.setAttribute("aria-label", "Airline");
+      airlineGroup.append(airlineSpan, airlineSelect);
+
+      const buttons = document.createElement("div");
+      buttons.className = "spotter-buttons";
+
+      const checkBtn = document.createElement("button");
+      checkBtn.type = "button";
+      checkBtn.className = "primary-btn";
+      checkBtn.textContent = "Confirm";
+
+      const nextBtn = document.createElement("button");
+      nextBtn.type = "button";
+      nextBtn.className = "spotter-next";
+      nextBtn.textContent = "Next flight";
+      nextBtn.disabled = true;
+
+      const skipBtn = document.createElement("button");
+      skipBtn.type = "button";
+      skipBtn.className = "spotter-skip";
+      skipBtn.textContent = "Skip";
+
+      buttons.append(checkBtn, nextBtn, skipBtn);
+
+      controls.append(airlineGroup, buttons);
+
+      wrapper.append(status, stats, card, controls);
+      root.appendChild(wrapper);
+
+      const flights = [
+        {
+          id: "dl-a321neo",
+          aircraft: "Airbus A321neo",
+          airline: "Delta Air Lines",
+          registration: "N510DX",
+          image: "assets/spotter/delta-tail.webp",
+          hints: [
+            "Single aisle jet with new generation PW1100G engines",
+            "Blue tail with red widget, sky blue belly",
+            "Typically deployed on transcon routes from ATL and JFK",
+          ],
+        },
+        {
+          id: "wn-73g",
+          aircraft: "Boeing 737-700",
+          airline: "Southwest Airlines",
+          registration: "N7865A",
+          image: "assets/spotter/southwest-tail.webp",
+          hints: [
+            "Heart livery with bright red and royal blue fuselage",
+            "Single class layout, split scimitar winglets",
+            "Often seen hopping between DAL, HOU, and DEN",
+          ],
+        },
+        {
+          id: "ua-78w",
+          aircraft: "Boeing 787-9",
+          airline: "United Airlines",
+          registration: "N24979",
+          image: "assets/spotter/united-tail.webp",
+          hints: [
+            "Composite twin with raked wingtips and chevron nacelles",
+            "Blue swoop livery with globe tail",
+            "Anchors evening departures from SFO to Asia",
+          ],
+        },
+        {
+          id: "aa-e190",
+          aircraft: "Embraer 190",
+          airline: "American Airlines",
+          registration: "N948UW",
+          image: "assets/spotter/american-tail.webp",
+          hints: [
+            "Mid-sized Embraer with a 2-2 cabin",
+            "Silver fuselage with red, white, blue tail stripes",
+            "Operates shuttle hops along the northeast corridor",
+          ],
+        },
+        {
+          id: "b6-a220",
+          aircraft: "Airbus A220-300",
+          airline: "JetBlue",
+          registration: "N3146J",
+          image: "assets/spotter/jetblue-tail.webp",
+          hints: [
+            "Quiet geared turbofan twin with tall horizontal stabilizer",
+            "Dark blue tail featuring a mosaic pattern",
+            "Common on BOS and LGA business runs",
+          ],
+        },
+        {
+          id: "nk-a320",
+          aircraft: "Airbus A320",
+          airline: "Spirit Airlines",
+          registration: "N915NK",
+          image: "assets/spotter/spirit-tail.webp",
+          hints: [
+            "Ultra-bright yellow fuselage catches the sun from miles away",
+            "Simple blue Spirit titles near the tail",
+            "Regular on leisure hops to Orlando and Las Vegas",
+          ],
+        },
+        {
+          id: "ac-77w",
+          aircraft: "Boeing 777-300ER",
+          airline: "Air Canada",
+          registration: "C-FIVS",
+          image: "assets/spotter/aircanada-tail.webp",
+          hints: [
+            "Long-haul twin with folding raked wingtips and GE90s",
+            "Black mask cockpit and red maple leaf tail",
+            "Frequent visitor on YYZ to HKG",
+          ],
+        },
+        {
+          id: "kl-789",
+          aircraft: "Boeing 787-10",
+          airline: "KLM",
+          registration: "PH-BKH",
+          image: "assets/spotter/klm-tail.webp",
+          hints: [
+            "Blue fuselage with white crown smile, long composite fuselage",
+            "GE engines with chevrons and curved wingtips",
+            "Arrives in AMS from SIN and JFK overnight",
+          ],
+        },
+        {
+          id: "ek-380",
+          aircraft: "Airbus A380-800",
+          airline: "Emirates",
+          registration: "A6-EDP",
+          image: "assets/spotter/emirates-tail.webp",
+          hints: [
+            "Full length double decker with four Engine Alliance GP7200s",
+            "Gold tail swoosh and bold billboard titles",
+            "Handles the evening DXB to LAX rotation",
+          ],
+        },
+        {
+          id: "ba-320",
+          aircraft: "Airbus A320neo",
+          airline: "British Airways",
+          registration: "G-TTNA",
+          image: "assets/spotter/british-tail.png",
+          hints: [
+            "Sharklets sporting red caps",
+            "Union flag tail with dark blue belly",
+            "Shuttles between LHR and European hubs",
+          ],
+        },
+        {
+          id: "qf-738",
+          aircraft: "Boeing 737-800",
+          airline: "Qantas",
+          registration: "VH-VXM",
+          image: "assets/spotter/qantas-tail.webp",
+          hints: [
+            "Red tail white kangaroo, blended winglets",
+            "Cabin configured with Business and Economy",
+            "Typical on SYD to MEL shuttle runs",
+          ],
+        },
+        {
+          id: "g4-a319",
+          aircraft: "Airbus A319",
+          airline: "Allegiant Air",
+          registration: "N321NV",
+          image: "assets/spotter/allegiant-tail.webp",
+          hints: [
+            "Sunburst orange tail fading into blue",
+            "Budget carrier titles ahead of the tail",
+            "Operates seasonal leisure flights from secondary airports",
+          ],
+        },
+        {
+          id: "ha-a321",
+          aircraft: "Airbus A321neo",
+          airline: "Hawaiian Airlines",
+          registration: "N228HA",
+          image: "assets/spotter/hawaiian-tail.webp",
+          hints: [
+            "Magenta and purple hibiscus blossoms sweeping across the tail",
+            "White fuselage with purple titles near the front door",
+            "Anchors inter-island hops and West Coast runs from HNL",
+          ],
+        },
+        {
+          id: "ke-77w",
+          aircraft: "Boeing 777-300ER",
+          airline: "Korean Air",
+          registration: "HL8208",
+          image: "assets/spotter/korean-tail.webp",
+          hints: [
+            "Sky-blue tail featuring the red and blue taegeuk swirl",
+            "Year-round service between ICN and major global hubs",
+            "Pristine light blue fuselage with grey underbelly",
+          ],
+        },
+        {
+          id: "glf6-private",
+          aircraft: "Gulfstream G650",
+          airline: null,
+          registration: "N711QS",
+          image: "assets/spotter/private-gulfstream.avif",
+          hints: [
+            "Ultra-long range business jet with oval windows",
+            "Polished bright silver stripe, no airline branding",
+            "Operated by charter fractional ownership company",
+          ],
+        },
+      ];
+
+      const airlineSet = new Set(
+        flights
+          .map((flight) => flight.airline)
+          .filter((name) => name && name.trim().length > 0)
+      );
+      const airlineOptions = Array.from(airlineSet).sort();
+
+      const airlineNoneValue = "__none";
+
+      airlineSelect.textContent = "";
+      const airlinePlaceholder = document.createElement("option");
+      airlinePlaceholder.value = "";
+      airlinePlaceholder.textContent = "Select airline";
+      airlinePlaceholder.disabled = true;
+      airlinePlaceholder.selected = true;
+      airlineSelect.appendChild(airlinePlaceholder);
+
+      airlineOptions.forEach((value) => {
+        const option = document.createElement("option");
+        option.value = value;
+        option.textContent = value;
+        airlineSelect.appendChild(option);
+      });
+
+      const independentOption = document.createElement("option");
+      independentOption.value = airlineNoneValue;
+      independentOption.textContent = "No airline / Private";
+      airlineSelect.appendChild(independentOption);
+
+      const state = {
+        pool: [...flights],
+        seen: new Set(),
+        round: 0,
+        cleared: 0,
+        streak: 0,
+        bestStreak: 0,
+        current: null,
+        revealed: false,
+      };
+
+      function shufflePool() {
+        const source = [...flights];
+        for (let i = source.length - 1; i > 0; i -= 1) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [source[i], source[j]] = [source[j], source[i]];
+        }
+        state.pool = source;
+      }
+
+      shufflePool();
+      loadFlight();
+
+      function drawFlight() {
+        if (!state.pool.length) {
+          shufflePool();
+        }
+        return state.pool.pop();
+      }
+
+      function loadFlight() {
+        state.current = drawFlight();
+        state.round += 1;
+        state.revealed = false;
+        renderHints();
+        airlineSelect.selectedIndex = 0;
+        checkBtn.disabled = false;
+        nextBtn.disabled = true;
+        status.textContent = "Lock in the airline for this tail.";
+        renderStats();
+      }
+
+      function renderHints() {
+        hintList.textContent = "";
+        if (!state.current) return;
+        if (state.current.image) {
+          const airlineName = state.current.airline ?? "Private operator";
+          photo.src = state.current.image;
+          photo.alt = `${airlineName} tail design`;
+          photoWrap.hidden = false;
+        } else {
+          photo.src = "";
+          photoWrap.hidden = true;
+        }
+        state.current.hints.forEach((hint) => {
+          const item = document.createElement("li");
+          item.textContent = hint;
+          hintList.appendChild(item);
+        });
+        const tail = document.createElement("li");
+        tail.className = "spotter-tail";
+        tail.textContent = `Registration noted: ${state.current.registration}`;
+        hintList.appendChild(tail);
+      }
+
+      function renderStats() {
+        roundBadge.textContent = `Flight: ${state.round}`;
+        scoreBadge.textContent = `Cleared: ${state.cleared}`;
+        streakBadge.textContent = `Streak: ${state.streak}`;
+      }
+
+      function evaluateGuess() {
+        if (!state.current) return;
+        const airlineGuessRaw = airlineSelect.value;
+        if (!airlineGuessRaw) {
+          status.textContent = "Choose an airline before confirming.";
+          return;
+        }
+
+        const airlineGuess =
+          airlineGuessRaw === airlineNoneValue ? null : airlineGuessRaw;
+
+        const airlineCorrect = airlineGuess === state.current.airline;
+
+        state.revealed = true;
+        checkBtn.disabled = true;
+        nextBtn.disabled = false;
+
+        const airlineLabel = state.current.airline ?? "a private operator";
+
+        if (airlineCorrect) {
+          state.cleared += 1;
+          state.streak += 1;
+          if (state.streak > state.bestStreak) {
+            state.bestStreak = state.streak;
+          }
+          const regText = state.current.registration
+            ? ` (${state.current.registration})`
+            : "";
+          status.textContent = `Cleared! That tail belongs to ${airlineLabel}${regText}.`;
+        } else {
+          status.textContent = `Not quite. That tail belongs to ${airlineLabel}.`;
+          state.streak = 0;
+        }
+        renderStats();
+      }
+
+      function skipFlight() {
+        state.streak = 0;
+        renderStats();
+        loadFlight();
+      }
+
+      const handleCheck = () => {
+        evaluateGuess();
+      };
+
+      const handleNext = () => {
+        if (!state.revealed) {
+          status.textContent = "Confirm your guess before moving on.";
+          return;
+        }
+        loadFlight();
+      };
+
+      const handleSkip = () => {
+        status.textContent = "Skipping this one. New flight inbound.";
+        skipFlight();
+      };
+
+      checkBtn.addEventListener("click", handleCheck);
+      nextBtn.addEventListener("click", handleNext);
+      skipBtn.addEventListener("click", handleSkip);
+
+      return () => {
+        checkBtn.removeEventListener("click", handleCheck);
+        nextBtn.removeEventListener("click", handleNext);
+        skipBtn.removeEventListener("click", handleSkip);
+        wrapper.remove();
+      };
+    },
+  },
+  {
     id: "neondrift",
     name: "Neon Drift",
     summary: "Race neon lanes and dodge pylons in first-person.",
