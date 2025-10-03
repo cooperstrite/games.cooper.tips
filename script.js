@@ -1485,6 +1485,19 @@ const games = [
 
       let dragSourceIndex = null;
 
+      const BADGE_FLASH_DURATION = 1100;
+
+      function flashBadge(badge, variant = "player") {
+        if (!badge) return;
+        const className = variant === "ai" ? "badge-flash-ai" : "badge-flash-player";
+        badge.classList.remove("badge-flash-player", "badge-flash-ai");
+        void badge.offsetWidth;
+        badge.classList.add(className);
+        window.setTimeout(() => {
+          badge.classList.remove(className);
+        }, BADGE_FLASH_DURATION);
+      }
+
       const header = document.createElement("div");
       header.className = "foodchain-header";
 
@@ -1619,7 +1632,7 @@ const games = [
 
       submitBtn.addEventListener("click", () => {
         if (state.solved) {
-          loadChain();
+          handleNext();
           return;
         }
         checkOrder();
@@ -1632,7 +1645,7 @@ const games = [
         status.textContent = "Cards reshuffled. Rebuild it with producers low and predators high.";
       });
 
-      const handleNext = (event) => {
+      function handleNext(event) {
         if (event) event.preventDefault();
         if (state.raceCompleted) {
           state.raceActive = false;
@@ -1645,7 +1658,7 @@ const games = [
           nextBtn.textContent = "New chain";
         }
         loadChain(true);
-      };
+      }
       nextBtn.addEventListener("click", handleNext);
 
       hardToggle.addEventListener("click", () => {
@@ -1873,6 +1886,10 @@ const games = [
       }
 
       function checkOrder() {
+        if (state.solved) {
+          status.textContent = "This chain is already locked in. Load a new one to keep climbing.";
+          return;
+        }
         clearFeedback();
         let correct = true;
         const targetSequence = getTargetSequence();
@@ -1892,15 +1909,24 @@ const games = [
           if (state.streak > state.bestStreak) {
             state.bestStreak = state.streak;
           }
-          submitBtn.textContent = "Play again";
+          submitBtn.textContent = "Load new chain";
           shuffleBtn.disabled = true;
           clearDragIndicators();
           Array.from(list.children).forEach((child) => {
             child.setAttribute("draggable", "false");
           });
+          flashBadge(streakBadge, "player");
+          flashBadge(solvedBadge, "player");
+          if (state.raceActive && state.raceTarget) {
+            flashBadge(raceBadge, "player");
+          }
+          const deltaMessage = state.streak === 1 ? "First point secured!" : `Streak +1! You're at ${state.streak}.`;
+          const scoreLine = state.raceActive && state.raceTarget
+            ? ` Score: You ${state.streak} - AI ${state.aiStreak}.`
+            : "";
           status.textContent = state.hardMode
-            ? "Perfect flow! Nailed the chain with roles hidden."
-            : "Perfect flow! Producers power every bite above them.";
+            ? `Perfect flow! Nailed the chain with roles hidden. ${deltaMessage}${scoreLine}`
+            : `Perfect flow! Producers power every bite above them. ${deltaMessage}${scoreLine}`;
           handleRaceProgress(true);
         } else {
           state.streak = 0;
@@ -1925,7 +1951,7 @@ const games = [
         } else if (state.raceCompleted) {
           raceBadge.textContent = `Race: finished (first to ${state.raceTarget})`;
         } else if (state.raceActive) {
-          raceBadge.textContent = `Race: first to ${state.raceTarget} (You ${state.streak} – AI ${state.aiStreak})`;
+          raceBadge.textContent = `Race: first to ${state.raceTarget} (You ${state.streak} - AI ${state.aiStreak})`;
         } else {
           raceBadge.textContent = `Race: first to ${state.raceTarget} (not started)`;
         }
@@ -2057,10 +2083,21 @@ const games = [
         const difficulty = AI_DIFFICULTIES[state.aiDifficulty] ?? AI_DIFFICULTIES.steady;
         const aiSucceeded = Math.random() < difficulty.successRate;
         state.aiStreak = aiSucceeded ? state.aiStreak + 1 : 0;
+        if (aiSucceeded) {
+          flashBadge(aiBadge, "ai");
+          flashBadge(raceBadge, "ai");
+        }
         if (state.aiStreak >= state.raceTarget) {
           finishRace("The AI");
         } else {
           updateStats();
+          if (state.raceActive) {
+            if (userSucceeded) {
+              status.textContent = `Point for you! Score: You ${state.streak} - ${difficulty.label} AI ${state.aiStreak}.`;
+            } else if (aiSucceeded) {
+              status.textContent = `${difficulty.label} AI scores! Score: You ${state.streak} - ${difficulty.label} AI ${state.aiStreak}.`;
+            }
+          }
         }
       }
 
@@ -2080,6 +2117,425 @@ const games = [
       setRaceTarget(null);
 
       return () => {
+        wrapper.remove();
+      };
+    },
+  },
+  {
+    id: "archery",
+    name: "Aurora Archery",
+    summary: "Dial in aim and power, ride the wind, and stick the bullseye.",
+    description:
+      "Hold your breath, set your aim, and loose the arrow. Gauge the wind, choose your draw strength, and score big rings before the quiver runs dry.",
+    logo: "assets/archery.svg",
+    init(root) {
+      const config = {
+        canvasSize: 320,
+        targetRadius: 140,
+        arrowsPerRound: 6,
+        windMax: 6,
+        windFactor: 12,
+        noiseBase: 18,
+        noisePowerImpact: 0.12,
+        dropBase: 28,
+        dropPowerImpact: 0.32,
+        dropJitter: 6,
+        flightDuration: 720,
+        historySize: 6,
+      };
+
+      const rings = [
+        { radius: 14, color: "#fefefe", points: 10 },
+        { radius: 28, color: "#ffd919", points: 9 },
+        { radius: 42, color: "#ff3030", points: 8 },
+        { radius: 56, color: "#ffd919", points: 7 },
+        { radius: 70, color: "#ff3030", points: 6 },
+        { radius: 84, color: "#ffd919", points: 5 },
+        { radius: 100, color: "#326dff", points: 4 },
+        { radius: 116, color: "#ffd919", points: 3 },
+        { radius: 132, color: "#326dff", points: 2 },
+        { radius: config.targetRadius, color: "#212637", points: 1 },
+      ];
+
+      const state = {
+        score: 0,
+        best: 0,
+        arrowsLeft: config.arrowsPerRound,
+        streak: 0,
+        bestStreak: 0,
+        wind: 0,
+        aim: 0,
+        power: 78,
+        lastShots: [],
+        arrowInFlight: false,
+        rafId: null,
+      };
+
+      const wrapper = document.createElement("div");
+      wrapper.className = "archery-range";
+
+      const topRow = document.createElement("div");
+      topRow.className = "archery-top";
+
+      const title = document.createElement("h3");
+      title.className = "archery-title";
+      title.textContent = "Aurora Archery";
+
+      const status = document.createElement("p");
+      status.className = "archery-status";
+      status.textContent = "Dial in your aim and power, then loose an arrow toward the bullseye.";
+
+      topRow.append(title, status);
+
+      const stats = document.createElement("div");
+      stats.className = "archery-stats";
+
+      const scoreBadge = document.createElement("span");
+      scoreBadge.className = "badge archery-score";
+      scoreBadge.textContent = "Score: 0";
+
+      const bestBadge = document.createElement("span");
+      bestBadge.className = "badge archery-best";
+      bestBadge.textContent = "Best: 0";
+
+      const arrowsBadge = document.createElement("span");
+      arrowsBadge.className = "badge archery-arrows";
+      arrowsBadge.textContent = `Arrows: ${config.arrowsPerRound}`;
+
+      const streakBadge = document.createElement("span");
+      streakBadge.className = "badge archery-streak";
+      streakBadge.textContent = "Streak: 0";
+
+      const windBadge = document.createElement("span");
+      windBadge.className = "badge archery-wind";
+      windBadge.textContent = "Wind: 0 m/s";
+
+      stats.append(scoreBadge, bestBadge, arrowsBadge, streakBadge, windBadge);
+
+      const canvasWrap = document.createElement("div");
+      canvasWrap.className = "archery-target";
+
+      const canvas = document.createElement("canvas");
+      canvas.width = config.canvasSize;
+      canvas.height = config.canvasSize;
+      canvas.className = "archery-canvas";
+
+      canvasWrap.appendChild(canvas);
+
+      const controls = document.createElement("div");
+      controls.className = "archery-controls";
+
+      const aimGroup = document.createElement("label");
+      aimGroup.className = "archery-control";
+      const aimSpan = document.createElement("span");
+      aimSpan.textContent = "Aim";
+      const aimSlider = document.createElement("input");
+      aimSlider.type = "range";
+      aimSlider.min = "-30";
+      aimSlider.max = "30";
+      aimSlider.value = String(state.aim);
+      aimSlider.step = "1";
+      aimSlider.setAttribute("aria-label", "Aim adjustment");
+      aimGroup.append(aimSpan, aimSlider);
+
+      const powerGroup = document.createElement("label");
+      powerGroup.className = "archery-control";
+      const powerSpan = document.createElement("span");
+      powerSpan.textContent = "Draw strength";
+      const powerSlider = document.createElement("input");
+      powerSlider.type = "range";
+      powerSlider.min = "50";
+      powerSlider.max = "100";
+      powerSlider.value = String(state.power);
+      powerSlider.step = "1";
+      powerSlider.setAttribute("aria-label", "Draw strength");
+      powerGroup.append(powerSpan, powerSlider);
+
+      const buttons = document.createElement("div");
+      buttons.className = "archery-buttons";
+
+      const shootBtn = document.createElement("button");
+      shootBtn.type = "button";
+      shootBtn.className = "primary-btn";
+      shootBtn.textContent = "Loose arrow";
+
+      const resetBtn = document.createElement("button");
+      resetBtn.type = "button";
+      resetBtn.className = "archery-reset";
+      resetBtn.textContent = "Reset round";
+
+      buttons.append(shootBtn, resetBtn);
+
+      controls.append(aimGroup, powerGroup, buttons);
+
+      const log = document.createElement("ul");
+      log.className = "archery-log";
+      const logTitle = document.createElement("h4");
+      logTitle.className = "archery-log-title";
+      logTitle.textContent = "Shot history";
+
+      const sidebar = document.createElement("div");
+      sidebar.className = "archery-sidebar";
+      sidebar.append(logTitle, log);
+
+      wrapper.append(topRow, stats, canvasWrap, controls, sidebar);
+      root.appendChild(wrapper);
+
+      const ctx = canvas.getContext("2d");
+      const center = { x: config.canvasSize / 2, y: config.canvasSize / 2 };
+
+      function flashBadgeElement(badge, variant) {
+        if (!badge) return;
+        badge.classList.remove("badge-flash-player", "badge-flash-ai");
+        void badge.offsetWidth;
+        badge.classList.add(variant === "ai" ? "badge-flash-ai" : "badge-flash-player");
+        window.setTimeout(() => {
+          badge.classList.remove("badge-flash-player", "badge-flash-ai");
+        }, 900);
+      }
+
+      function randWind() {
+        const magnitude = Math.random() * config.windMax;
+        const direction = Math.random() < 0.5 ? -1 : 1;
+        return Number.parseFloat((magnitude * direction).toFixed(1));
+      }
+
+      function updateWind(forceNew = false) {
+        if (forceNew || Math.abs(state.wind) < 0.1) {
+          state.wind = randWind();
+        }
+        windBadge.textContent = state.wind === 0 ? "Wind: calm" : `Wind: ${state.wind > 0 ? "→" : "←"} ${Math.abs(state.wind).toFixed(1)} m/s`;
+        windBadge.dataset.direction = state.wind > 0 ? "right" : state.wind < 0 ? "left" : "calm";
+      }
+
+      function clearLog() {
+        log.textContent = "";
+      }
+
+      function renderLog() {
+        clearLog();
+        state.lastShots.forEach((shot) => {
+          const item = document.createElement("li");
+          item.className = "archery-log-item";
+          item.textContent = `${shot.points} pts · offset ${shot.distance.toFixed(1)} cm`;
+          log.appendChild(item);
+        });
+      }
+
+      function drawTarget(progress = 1, flight = null) {
+        ctx.clearRect(0, 0, config.canvasSize, config.canvasSize);
+        ctx.fillStyle = "#050912";
+        ctx.fillRect(0, 0, config.canvasSize, config.canvasSize);
+
+        ctx.save();
+        ctx.translate(center.x, center.y);
+        ctx.fillStyle = "#152034";
+        ctx.beginPath();
+        ctx.arc(0, 0, config.targetRadius + 6, 0, Math.PI * 2);
+        ctx.fill();
+
+        rings.forEach((ring, index) => {
+          ctx.beginPath();
+          ctx.fillStyle = ring.color;
+          ctx.arc(0, 0, ring.radius, 0, Math.PI * 2);
+          ctx.fill();
+          if (index === 0) {
+            ctx.fillStyle = "#000";
+            ctx.beginPath();
+            ctx.arc(0, 0, ring.radius * 0.35, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        });
+
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = "rgba(0, 0, 0, 0.4)";
+        ctx.beginPath();
+        ctx.moveTo(-config.targetRadius - 6, 0);
+        ctx.lineTo(config.targetRadius + 6, 0);
+        ctx.moveTo(0, -config.targetRadius - 6);
+        ctx.lineTo(0, config.targetRadius + 6);
+        ctx.stroke();
+
+        state.lastShots.forEach((shot, idx) => {
+          const alpha = 1 - idx * 0.16;
+          ctx.fillStyle = shot.points >= 9 ? `rgba(114, 255, 182, ${alpha})` : `rgba(255, 217, 114, ${alpha})`;
+          ctx.beginPath();
+          ctx.arc(shot.x, shot.y, shot.points >= 9 ? 6 : 5, 0, Math.PI * 2);
+          ctx.fill();
+        });
+
+        if (flight) {
+          const eased = progress * progress * (3 - 2 * progress);
+          const x = eased * flight.x;
+          const y = eased * flight.y;
+          ctx.fillStyle = "#72f6ff";
+          ctx.beginPath();
+          ctx.arc(x, y, 5, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.strokeStyle = "rgba(114, 246, 255, 0.35)";
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(0, config.targetRadius + 50);
+          ctx.quadraticCurveTo(x * 0.35, config.targetRadius * 0.2, x, y);
+          ctx.stroke();
+        }
+
+        ctx.restore();
+      }
+
+      function updateStats() {
+        scoreBadge.textContent = `Score: ${state.score}`;
+        bestBadge.textContent = `Best: ${state.best}`;
+        arrowsBadge.textContent = `Arrows: ${state.arrowsLeft}`;
+        streakBadge.textContent = `Streak: ${state.streak}`;
+      }
+
+      function resetRound() {
+        if (state.rafId !== null) {
+          cancelAnimationFrame(state.rafId);
+          state.rafId = null;
+        }
+        state.score = 0;
+        state.arrowsLeft = config.arrowsPerRound;
+        state.streak = 0;
+        state.lastShots = [];
+        state.arrowInFlight = false;
+        shootBtn.disabled = false;
+        status.textContent = "Fresh quiver. Adjust your aim and go for gold.";
+        aimSlider.value = "0";
+        powerSlider.value = String(state.power);
+        state.aim = 0;
+        updateWind(true);
+        updateStats();
+        renderLog();
+        drawTarget();
+      }
+
+      function finalizeShot(shot) {
+        state.arrowInFlight = false;
+        state.rafId = null;
+        state.arrowsLeft = Math.max(0, state.arrowsLeft - 1);
+        state.score += shot.points;
+        if (state.score > state.best) {
+          state.best = state.score;
+          flashBadgeElement(bestBadge, "player");
+        }
+        if (shot.points >= 9) {
+          state.streak += 1;
+          if (state.streak > state.bestStreak) {
+            state.bestStreak = state.streak;
+            flashBadgeElement(streakBadge, "player");
+          }
+        } else {
+          state.streak = 0;
+        }
+
+        state.lastShots.unshift({
+          x: shot.x,
+          y: shot.y,
+          points: shot.points,
+          distance: shot.distance,
+        });
+        if (state.lastShots.length > config.historySize) {
+          state.lastShots.length = config.historySize;
+        }
+
+        if (shot.points > 0) {
+          flashBadgeElement(scoreBadge, "player");
+        }
+        flashBadgeElement(arrowsBadge, "player");
+
+        updateStats();
+        renderLog();
+        drawTarget();
+
+        if (state.arrowsLeft === 0) {
+          shootBtn.disabled = true;
+          status.textContent = `Round complete at ${state.score} points. Tap reset for another quiver.`;
+          return;
+        }
+
+        updateWind(true);
+        status.textContent = `Hit for ${shot.points} points at ${shot.distance.toFixed(1)} cm from center. Wind shifted to ${windBadge.textContent.replace("Wind: ", "")}.`;
+        shootBtn.disabled = false;
+      }
+
+      function scoringForDistance(distance) {
+        for (let i = 0; i < rings.length; i += 1) {
+          if (distance <= rings[i].radius) {
+            return rings[i].points;
+          }
+        }
+        return 0;
+      }
+
+      function looseArrow() {
+        if (state.arrowInFlight || state.arrowsLeft <= 0) return;
+        state.arrowInFlight = true;
+        shootBtn.disabled = true;
+
+        const aim = Number.parseFloat(aimSlider.value);
+        const power = Number.parseFloat(powerSlider.value);
+        state.aim = aim;
+        state.power = power;
+
+        const windPush = state.wind * config.windFactor;
+        const noiseSpan = Math.max(4, config.noiseBase - power * config.noisePowerImpact);
+        const noise = (Math.random() - 0.5) * noiseSpan;
+        const drop = config.dropBase - power * config.dropPowerImpact + (Math.random() - 0.5) * config.dropJitter;
+        const xOffset = aim * 3 + windPush + noise;
+        const yOffset = drop;
+        const distance = Math.sqrt(xOffset ** 2 + yOffset ** 2);
+        const points = scoringForDistance(distance);
+
+        const shot = {
+          x: xOffset,
+          y: yOffset,
+          distance,
+          points,
+        };
+
+        const start = performance.now();
+
+        const animate = (time) => {
+          const progress = Math.min((time - start) / config.flightDuration, 1);
+          drawTarget(progress, shot);
+          if (progress < 1) {
+            state.rafId = requestAnimationFrame(animate);
+          } else {
+            finalizeShot(shot);
+          }
+        };
+
+        state.rafId = requestAnimationFrame(animate);
+      }
+
+      aimSlider.addEventListener("input", () => {
+        state.aim = Number.parseFloat(aimSlider.value);
+      });
+
+      powerSlider.addEventListener("input", () => {
+        state.power = Number.parseFloat(powerSlider.value);
+      });
+
+      shootBtn.addEventListener("click", () => {
+        looseArrow();
+      });
+
+      resetBtn.addEventListener("click", () => {
+        resetRound();
+      });
+
+      updateWind(true);
+      renderLog();
+      drawTarget();
+      updateStats();
+
+      return () => {
+        if (state.rafId !== null) {
+          cancelAnimationFrame(state.rafId);
+        }
         wrapper.remove();
       };
     },
@@ -6048,7 +6504,7 @@ const listTemplate = document.getElementById("game-list-item-template");
 const backButton = document.querySelector(".back-button");
 
 const LOCK_PASSWORD = "1108";
-const LOCKED_GAME_IDS = new Set(["memory", "skyport", "orbit", "catsdogs", "spotdiff"]);
+const LOCKED_GAME_IDS = new Set(["memory", "skyport", "orbit", "catsdogs", "spotdiff", "archery"]);
 let lockedUnlocked = false;
 lockedUnlocked = false;
 
