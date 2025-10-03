@@ -734,6 +734,7 @@ button:hover {
 .memory-card-front {
   background: linear-gradient(135deg, rgba(114, 246, 255, 0.18), rgba(255, 217, 114, 0.28));
   color: rgba(255, 255, 255, 0.75);
+  transition: opacity 0.18s ease;
 }
 
 .memory-card-back {
@@ -741,10 +742,21 @@ button:hover {
   background: linear-gradient(135deg, rgba(114, 246, 255, 0.35), rgba(114, 246, 255, 0.15));
 }
 
-.memory-card-back img {
-  width: clamp(48px, 10vw, 68px);
-  height: clamp(48px, 10vw, 68px);
-  object-fit: contain;
+.memory-card-emoji {
+  font-size: clamp(2.6rem, 8vw, 3.4rem);
+  line-height: 1;
+  opacity: 0;
+  transform: scale(0.75);
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+.memory-card.is-flipped .memory-card-front {
+  opacity: 0;
+}
+
+.memory-card.is-flipped .memory-card-emoji {
+  opacity: 1;
+  transform: scale(1);
 }
 
 .memory-card.is-matched .memory-card-back {

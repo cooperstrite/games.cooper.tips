@@ -833,18 +833,30 @@ const games = [
       root.appendChild(wrapper);
 
       const symbols = [
-        { id: "astronaut", icon: "assets/memory-astronaut.svg", label: "Astronaut" },
-        { id: "compass", icon: "assets/memory-compass.svg", label: "Compass" },
-        { id: "lantern", icon: "assets/memory-lantern.svg", label: "Lantern" },
-        { id: "rocket", icon: "assets/memory-rocket.svg", label: "Rocket" },
-        { id: "shell", icon: "assets/memory-shell.svg", label: "Shell" },
-        { id: "potion", icon: "assets/memory-potion.svg", label: "Potion" },
-        { id: "camera", icon: "assets/memory-camera.svg", label: "Camera" },
-        { id: "tent", icon: "assets/memory-tent.svg", label: "Tent" },
-        { id: "leaf", icon: "assets/memory-leaf.svg", label: "Leaf" },
-        { id: "watch", icon: "assets/memory-watch.svg", label: "Watch" },
-        { id: "sun", icon: "assets/memory-sun.svg", label: "Sun" },
-        { id: "star", icon: "assets/memory-star.svg", label: "Star" },
+        { id: "comet", emoji: "☄️", label: "Comet" },
+        { id: "rocket", emoji: "🚀", label: "Rocket" },
+        { id: "astronaut", emoji: "🧑‍🚀", label: "Astronaut" },
+        { id: "planet", emoji: "🪐", label: "Ringed planet" },
+        { id: "moon", emoji: "🌙", label: "Crescent moon" },
+        { id: "star", emoji: "⭐", label: "Star" },
+        { id: "sun", emoji: "🌞", label: "Smiling sun" },
+        { id: "umbrella", emoji: "☂️", label: "Umbrella" },
+        { id: "shell", emoji: "🐚", label: "Shell" },
+        { id: "leaf", emoji: "🍃", label: "Leaf" },
+        { id: "mushroom", emoji: "🍄", label: "Mushroom" },
+        { id: "snowflake", emoji: "❄️", label: "Snowflake" },
+        { id: "magnet", emoji: "🧲", label: "Magnet" },
+        { id: "hourglass", emoji: "⌛", label: "Hourglass" },
+        { id: "balloon", emoji: "🎈", label: "Balloon" },
+        { id: "gift", emoji: "🎁", label: "Gift" },
+        { id: "puzzle", emoji: "🧩", label: "Puzzle piece" },
+        { id: "music", emoji: "🎵", label: "Music note" },
+        { id: "camera", emoji: "📷", label: "Camera" },
+        { id: "compass", emoji: "🧭", label: "Compass" },
+        { id: "lantern", emoji: "🏮", label: "Lantern" },
+        { id: "gem", emoji: "💎", label: "Gem" },
+        { id: "potion", emoji: "⚗️", label: "Potion" },
+        { id: "tent", emoji: "⛺", label: "Tent" },
       ];
 
       const state = {
@@ -937,7 +949,11 @@ const games = [
 
           const back = document.createElement("span");
           back.className = "memory-card-face memory-card-back";
-          back.innerHTML = `<img src="${card.icon}" alt="${card.label}" />`;
+          const icon = document.createElement("span");
+          icon.className = "memory-card-emoji";
+          icon.textContent = card.emoji;
+          icon.setAttribute("aria-hidden", "true");
+          back.appendChild(icon);
 
           inner.append(front, back);
           cardBtn.appendChild(inner);
@@ -1027,6 +1043,16 @@ const games = [
         cardEl.classList.toggle("is-matched", isMatched);
         const card = state.deck[index];
         if (!card) return;
+        const frontFace = cardEl.querySelector(".memory-card-front");
+        const emojiFace = cardEl.querySelector(".memory-card-emoji");
+        if (frontFace) {
+          frontFace.textContent = isFlipped ? card.emoji : "?";
+          frontFace.setAttribute("aria-hidden", isFlipped ? "true" : "false");
+        }
+        if (emojiFace) {
+          emojiFace.textContent = card.emoji;
+          emojiFace.setAttribute("aria-hidden", isFlipped ? "false" : "true");
+        }
         if (isMatched) {
           cardEl.setAttribute("aria-label", `Matched ${card.label}`);
         } else if (isFlipped) {
