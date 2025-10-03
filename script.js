@@ -875,6 +875,7 @@ const games = [
         hideTimeout: null,
         bestTimes: new Map(),
         cardEls: [],
+        pendingHide: [],
       };
 
       tileSelect.value = String(state.tileCount);
@@ -906,6 +907,7 @@ const games = [
         state.elapsed = 0;
         state.timerRunning = false;
         state.busy = false;
+        state.pendingHide = [];
         applyGridColumns();
         renderStats();
         renderDeck();
@@ -969,6 +971,11 @@ const games = [
         if (state.busy) return;
         if (state.matched.has(index)) return;
         if (state.flipped.includes(index)) return;
+        if (state.pendingHide.includes(index)) return;
+
+        if (state.pendingHide.length) {
+          hidePendingCards();
+        }
 
         if (!state.timerRunning) {
           startTimer();
@@ -997,6 +1004,7 @@ const games = [
           state.matched.add(firstIndex);
           state.matched.add(secondIndex);
           state.flipped = [];
+          state.pendingHide = [];
           state.matches += 1;
           status.textContent = `Matched ${firstCard.label}!`;
           updateCardAppearance(firstIndex);
@@ -1008,15 +1016,12 @@ const games = [
           return;
         }
 
-        state.busy = true;
-        status.textContent = "Not quite. Try again.";
-        clearTimeout(state.hideTimeout);
-        state.hideTimeout = window.setTimeout(() => {
-          state.flipped = [];
-          updateCardAppearance(firstIndex);
-          updateCardAppearance(secondIndex);
-          state.busy = false;
-        }, 700);
+        state.pendingHide = [firstIndex, secondIndex];
+        state.flipped = [];
+        state.busy = false;
+        status.textContent = "Not quite. Start your next pair to keep going.";
+        updateCardAppearance(firstIndex);
+        updateCardAppearance(secondIndex);
       }
 
       function handleWin() {
@@ -1038,7 +1043,8 @@ const games = [
         const cardEl = state.cardEls[index];
         if (!cardEl) return;
         const isMatched = state.matched.has(index);
-        const isFlipped = isMatched || state.flipped.includes(index);
+        const isPending = state.pendingHide.includes(index);
+        const isFlipped = isMatched || isPending || state.flipped.includes(index);
         cardEl.classList.toggle("is-flipped", isFlipped);
         cardEl.classList.toggle("is-matched", isMatched);
         const card = state.deck[index];
@@ -1060,6 +1066,17 @@ const games = [
         } else {
           cardEl.setAttribute("aria-label", "Hidden card");
         }
+      }
+
+      function hidePendingCards() {
+        if (!state.pendingHide.length) return;
+        const toHide = [...state.pendingHide];
+        state.pendingHide = [];
+        toHide.forEach((cardIndex) => {
+          if (!state.matched.has(cardIndex)) {
+            updateCardAppearance(cardIndex);
+          }
+        });
       }
 
       function renderStats() {
