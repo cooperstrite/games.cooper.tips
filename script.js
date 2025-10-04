@@ -3962,7 +3962,7 @@ const games = [
     summary: "Pop bubbles before they fade away.",
     description:
       "Bubbles flash across the arena—click them before they burst on their own. Keep the streak alive, avoid misses, and rack up the highest score!",
-    logo: "assets/pop-dash.svg",
+    logo: "assets/pop-dash-cover.png",
     init(root) {
       const wrapper = document.createElement("div");
       wrapper.className = "popdash-game";
