@@ -1431,6 +1431,19 @@ button:hover {
   color: inherit;
   padding: 0.6rem 0.75rem;
   font: inherit;
+  transition: border var(--transition), box-shadow var(--transition), background var(--transition);
+}
+
+.spotter-select select.is-correct {
+  border-color: rgba(114, 255, 182, 0.65);
+  background: rgba(114, 255, 182, 0.12);
+  box-shadow: 0 0 0 3px rgba(114, 255, 182, 0.25);
+}
+
+.spotter-select select.is-wrong {
+  border-color: rgba(255, 107, 129, 0.7);
+  background: rgba(255, 107, 129, 0.14);
+  box-shadow: 0 0 0 3px rgba(255, 107, 129, 0.25);
 }
 
 .spotter-buttons {

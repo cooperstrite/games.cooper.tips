@@ -3009,6 +3009,30 @@ const games = [
           ],
         },
         {
+          id: "ms-789",
+          aircraft: "Boeing 787-9",
+          airline: "EgyptAir",
+          registration: "SU-GEU",
+          image: "assets/spotter/egyptair-tail.webp",
+          hints: [
+            "Deep blue tail crowned with the golden Horus falcon",
+            "Blue wave sweeping down the fuselage",
+            "Cairo departures heading overnight to Europe",
+          ],
+        },
+        {
+          id: "fi-7m8",
+          aircraft: "Boeing 737 MAX 8",
+          airline: "Icelandair",
+          registration: "TF-ICE",
+          image: "assets/spotter/icelandair-tail.jpg",
+          hints: [
+            "Royal blue tail with bold yellow stylised wing",
+            "Cool blue belly matching Icelandic branding",
+            "Stops through KEF bridging North America and Europe",
+          ],
+        },
+        {
           id: "glf6-private",
           aircraft: "Gulfstream G650",
           airline: null,
@@ -3086,6 +3110,7 @@ const games = [
         state.round += 1;
         state.revealed = false;
         renderHints();
+        airlineSelect.classList.remove("is-correct", "is-wrong");
         airlineSelect.selectedIndex = 0;
         checkBtn.disabled = false;
         nextBtn.disabled = true;
@@ -3147,6 +3172,8 @@ const games = [
           if (state.streak > state.bestStreak) {
             state.bestStreak = state.streak;
           }
+          airlineSelect.classList.remove("is-wrong");
+          airlineSelect.classList.add("is-correct");
           const regText = state.current.registration
             ? ` (${state.current.registration})`
             : "";
@@ -3154,6 +3181,8 @@ const games = [
         } else {
           status.textContent = `Not quite. That tail belongs to ${airlineLabel}.`;
           state.streak = 0;
+          airlineSelect.classList.remove("is-correct");
+          airlineSelect.classList.add("is-wrong");
         }
         renderStats();
       }
