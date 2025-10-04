@@ -5,7 +5,7 @@ const games = [
     summary: "Guess the number with hot/cold hints.",
     description:
       "Guess the hidden number between 1 and 100. Each attempt gives you warmer or colder hints as you zero in.",
-    logo: "assets/hot-and-cold.svg",
+    logo: "assets/hot-and-cold-cover.png",
     init(root) {
       const wrapper = document.createElement("div");
       wrapper.className = "guess-game";
@@ -391,7 +391,7 @@ const games = [
     summary: "Sprint to the finish without moving on red.",
     description:
       "Hold to sprint across the track, but freeze the instant the stoplight turns red. Reach the finish line without getting caught!",
-    logo: "assets/stoplight.svg",
+    logo: "assets/redlight-cover.png",
     init(root) {
       const wrapper = document.createElement("div");
       wrapper.className = "rlgl-game";
@@ -3228,7 +3228,7 @@ const games = [
     summary: "Race neon lanes and dodge pylons in first-person.",
     description:
       "Steer your hover car between three glowing lanes, boost to build distance, and weave around incoming pylons. Reach the finish before you take a hit!",
-    logo: "assets/neon-drift.svg",
+    logo: "assets/neon-drift-cover.png",
     init(root) {
       const VIEWPORT_WIDTH = 640;
       const VIEWPORT_HEIGHT = 360;
@@ -5283,7 +5283,7 @@ const games = [
     summary: "Repeat the melody by tapping glowing instruments.",
     description:
       "Memorize the growing sequence of instruments and echo it back without a mistake. Choose your difficulty and see how long you can keep the groove alive.",
-    logo: "assets/harmonic-echo.svg",
+    logo: "assets/harmonic-echo-cover.png",
     init(root) {
       const wrapper = document.createElement("div");
       wrapper.className = "harmonic-game";
@@ -5602,7 +5602,7 @@ const games = [
     summary: "Race the AI to find the shared symbol.",
     description:
       "Scan the twin glyph cards and tap the symbol they share before the AI locks it in. Dial up the difficulty for faster, sharper rivals.",
-    logo: "assets/spot-clash.svg",
+    logo: "assets/spot-clash-cover.png",
     init(root) {
       const wrapper = document.createElement("div");
       wrapper.className = "spotclash-game";
