@@ -1149,7 +1149,7 @@ const games = [
     summary: "Drop moving blocks to build the tallest tower.",
     description:
       "Time your drops to stack each moving block on the tower. Perfect overlaps keep your tower wide—misses shave it down until it topples.",
-    logo: "assets/tower-stack.svg",
+    logo: "assets/tower-stack-cover.png",
     init(root) {
       const wrapper = document.createElement("div");
       wrapper.className = "tower-game";
