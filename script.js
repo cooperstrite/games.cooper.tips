@@ -407,11 +407,15 @@ const games = [
       timerBadge.className = "badge rlgl-timer";
       timerBadge.textContent = "Time: –";
 
+      const distanceBadge = document.createElement("span");
+      distanceBadge.className = "badge rlgl-distance";
+      distanceBadge.textContent = "Distance: 0 m";
+
       const bestBadge = document.createElement("span");
       bestBadge.className = "badge rlgl-best";
       bestBadge.textContent = "Best: –";
 
-      stats.append(timerBadge, bestBadge);
+      stats.append(timerBadge, distanceBadge, bestBadge);
 
       const light = document.createElement("div");
       light.className = "rlgl-stoplight";
@@ -455,6 +459,15 @@ const games = [
       lane.append(trackFill, finishLine, runner);
       track.appendChild(lane);
 
+      const distanceModes = {
+        sprint: { label: "Sprint 50m", distance: 50 },
+        dash: { label: "Dash 100m", distance: 100 },
+        circuit: { label: "Circuit 150m", distance: 150 },
+        marathon: { label: "Marathon 200m", distance: 200 },
+        ultra: { label: "Ultra 300m", distance: 300 },
+        endless: { label: "Endless run", distance: Infinity },
+      };
+
       const controls = document.createElement("div");
       controls.className = "rlgl-controls";
 
@@ -470,7 +483,23 @@ const games = [
       runBtn.disabled = true;
       runBtn.setAttribute("aria-pressed", "false");
 
-      controls.append(startBtn, runBtn);
+      const modeLabel = document.createElement("label");
+      modeLabel.className = "rlgl-mode";
+      const modeSpan = document.createElement("span");
+      modeSpan.textContent = "Course";
+      const modeSelect = document.createElement("select");
+      modeSelect.setAttribute("aria-label", "Select course length");
+      const defaultMode = "dash";
+      Object.entries(distanceModes).forEach(([key, config]) => {
+        const option = document.createElement("option");
+        option.value = key;
+        option.textContent = config.label;
+        if (key === defaultMode) option.selected = true;
+        modeSelect.appendChild(option);
+      });
+      modeLabel.append(modeSpan, modeSelect);
+
+      controls.append(modeLabel, startBtn, runBtn);
 
       const help = document.createElement("p");
       help.className = "help-text";
@@ -487,7 +516,11 @@ const games = [
         progress: 0,
         startTime: 0,
         lastTick: 0,
-        bestTime: null,
+        mode: defaultMode,
+        targetDistance: distanceModes[defaultMode].distance,
+        bestTimes: new Map(),
+        bestDistances: new Map(),
+        speed: 0.018,
         rafId: null,
         lightTimeout: null,
         yellowTimeout: null,
@@ -496,6 +529,7 @@ const games = [
       };
 
       startBtn.addEventListener("click", startRound);
+      modeSelect.addEventListener("change", () => setMode(modeSelect.value));
 
       runBtn.addEventListener("pointerdown", () => {
         state.pointerDown = true;
@@ -534,7 +568,7 @@ const games = [
       const handleResize = () => updateRunner();
       window.addEventListener("resize", handleResize);
 
-      updateRunner();
+      setMode(state.mode);
       updateLight("idle");
 
       function startRound() {
@@ -542,6 +576,7 @@ const games = [
         state.phase = "countdown";
         startBtn.disabled = true;
         startBtn.textContent = "Counting down…";
+        modeSelect.disabled = true;
         status.textContent = "Go in 3";
         updateLight("amber");
         let counter = 3;
@@ -663,23 +698,49 @@ const games = [
         }
         const delta = timestamp - state.lastTick;
         state.lastTick = timestamp;
-        state.progress = Math.min(100, state.progress + delta * 0.018);
-        updateRunner();
-        if (state.progress >= 100) {
+        state.progress += delta * state.speed;
+        if (state.targetDistance !== Infinity && state.progress >= state.targetDistance) {
+          state.progress = state.targetDistance;
+          updateRunner();
           finishRace();
           return;
         }
+        updateRunner();
         state.rafId = window.requestAnimationFrame(stepRunner);
       }
 
       function updateRunner() {
-        const clamped = Math.max(0, Math.min(100, state.progress));
-        trackFill.style.width = `${clamped}%`;
+        const segmentLength = 50;
+        const progress = Math.max(0, state.progress);
+        const segmentIndex = Math.floor(progress / segmentLength);
+        const segmentStart = segmentIndex * segmentLength;
+        const progressInSegment = progress - segmentStart;
+        const cappedSegment = Math.max(0, Math.min(segmentLength, progressInSegment));
+        const percent = (cappedSegment / segmentLength) * 100;
+
+        lane.style.setProperty("--segment-offset", String(segmentIndex));
+        trackFill.style.width = `${percent}%`;
+
         const trackWidth = lane.clientWidth;
         const runnerWidth = runner.offsetWidth || 0;
         const maxTravel = Math.max(0, trackWidth - runnerWidth);
-        const offset = (clamped / 100) * maxTravel;
+        const offset = (percent / 100) * maxTravel;
         runner.style.setProperty("--offset", `${offset}px`);
+
+        if (state.targetDistance === Infinity) {
+          finishLine.style.display = "none";
+        } else {
+          const finishOffset = state.targetDistance - segmentStart;
+          if (finishOffset > 0 && finishOffset <= segmentLength) {
+            finishLine.style.display = "block";
+            const finishPercent = Math.max(0, Math.min(100, (finishOffset / segmentLength) * 100));
+            finishLine.style.setProperty("--finish-pos", `${finishPercent}%`);
+          } else {
+            finishLine.style.display = "none";
+          }
+        }
+
+        renderStats();
       }
 
       function finishRace() {
@@ -691,14 +752,12 @@ const games = [
         updateLight("green");
         const elapsed = performance.now() - state.startTime;
         timerBadge.textContent = `Time: ${formatTime(elapsed)}`;
-        if (!state.bestTime || elapsed < state.bestTime) {
-          state.bestTime = elapsed;
-          bestBadge.textContent = `Best: ${formatTime(elapsed)}`;
-        }
+        recordOutcome({ success: true, elapsed });
         status.textContent = "Made it! You crossed the line.";
         startBtn.disabled = false;
         startBtn.textContent = "Race again";
         runBtn.disabled = true;
+        modeSelect.disabled = false;
         state.pointerDown = false;
         state.keyDown = false;
       }
@@ -714,12 +773,14 @@ const games = [
         startBtn.disabled = false;
         startBtn.textContent = "Try again";
         runBtn.disabled = true;
+        modeSelect.disabled = false;
         state.pointerDown = false;
         state.keyDown = false;
         timerBadge.textContent = "Time: –";
+        recordOutcome({ success: false });
       }
 
-      function resetRound() {
+      function resetRound({ preserveStatus = false } = {}) {
         stopRunning();
         clearTimeout(state.lightTimeout);
         clearYellowCue();
@@ -737,11 +798,34 @@ const games = [
         state.lastTick = 0;
         timerBadge.textContent = "Time: –";
         startBtn.textContent = "Start round";
-        status.textContent = "Race to the finish. Stay absolutely still on red.";
+        if (!preserveStatus) {
+          status.textContent =
+            state.targetDistance === Infinity
+              ? "Run as far as you can without getting caught."
+              : "Race to the finish. Stay absolutely still on red.";
+        }
         runBtn.disabled = true;
+        modeSelect.disabled = false;
         runner.style.setProperty("--offset", "0px");
         trackFill.style.width = "0%";
         updateLight("idle");
+        lane.style.setProperty("--segment-offset", "0");
+        finishLine.style.display = "none";
+        finishLine.style.setProperty("--finish-pos", "100%");
+        updateRunner();
+      }
+
+      function setMode(key) {
+        if (!distanceModes[key]) return;
+        state.mode = key;
+        state.targetDistance = distanceModes[key].distance;
+        modeSelect.value = key;
+        resetRound({ preserveStatus: true });
+        status.textContent =
+          state.targetDistance === Infinity
+            ? "Endless run ready. Sprint until you slip up."
+            : `${distanceModes[key].label} armed. Press Start when ready.`;
+        renderStats();
       }
 
       function startTimer() {
@@ -764,6 +848,38 @@ const games = [
           clearTimeout(state.yellowTimeout);
           state.yellowTimeout = null;
         }
+      }
+
+      function renderStats() {
+        const distance = state.progress;
+        if (state.targetDistance === Infinity) {
+          distanceBadge.textContent = `Distance: ${distance.toFixed(1)} m`;
+          const bestDistance = state.bestDistances.get(state.mode);
+          bestBadge.textContent = bestDistance
+            ? `Longest: ${bestDistance.toFixed(1)} m`
+            : "Longest: –";
+        } else {
+          const target = state.targetDistance;
+          const clamped = Math.min(distance, target);
+          distanceBadge.textContent = `Distance: ${clamped.toFixed(1)} / ${target.toFixed(0)} m`;
+          const bestTime = state.bestTimes.get(state.mode);
+          bestBadge.textContent = bestTime ? `Best: ${formatTime(bestTime)}` : "Best: –";
+        }
+      }
+
+      function recordOutcome({ success, elapsed = null }) {
+        if (state.targetDistance === Infinity) {
+          const best = state.bestDistances.get(state.mode) ?? 0;
+          if (state.progress > best) {
+            state.bestDistances.set(state.mode, state.progress);
+          }
+        } else if (success && elapsed !== null) {
+          const best = state.bestTimes.get(state.mode);
+          if (!best || elapsed < best) {
+            state.bestTimes.set(state.mode, elapsed);
+          }
+        }
+        renderStats();
       }
 
       function formatTime(ms) {
@@ -1468,7 +1584,7 @@ const games = [
     summary: "Sort each food chain from producer to apex predator.",
     description:
       "Reorder the shuffled organisms so energy flows from the producer up to the apex predator. Watch your streak climb as you master different habitats!",
-    logo: "assets/food-chain.svg",
+    logo: "assets/food-chain-cover.png",
     init(root) {
       const chains = [
         {
