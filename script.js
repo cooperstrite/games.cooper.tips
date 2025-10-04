@@ -289,7 +289,7 @@ const games = [
     summary: "Click as soon as the panel glows.",
     description:
       "Test how fast you can click when the screen flashes. Wait for the glow, then tap as quickly as possible.",
-    logo: "assets/flash-reflex.svg",
+    logo: "assets/cats-vs-dogs-cover.png",
     init(root) {
       const wrapper = document.createElement("div");
       wrapper.className = "reaction-panel";
@@ -909,7 +909,7 @@ const games = [
     summary: "Flip cards to match every pair.",
     description:
       "Sharpen your recall by pairing symbols across the board. Choose a tile count, clear every match, and chase a faster personal best.",
-    logo: "assets/memory-loop.svg",
+    logo: "assets/archery-cover.png",
     init(root) {
       const wrapper = document.createElement("div");
       wrapper.className = "memory-game";
@@ -2314,7 +2314,7 @@ const games = [
     summary: "Dial in aim and power, ride the wind, and stick the bullseye.",
     description:
       "Hold your breath, set your aim, and loose the arrow. Gauge the wind, choose your draw strength, and score big rings before the quiver runs dry.",
-    logo: "assets/archery.svg",
+    logo: "assets/memory-loop-cover.png",
     init(root) {
       const config = {
         canvasSize: 320,
@@ -6298,7 +6298,7 @@ const games = [
     summary: "Claim the park tile-by-tile before the hounds do.",
     description:
       "Lead the clever cats in a turf tug-of-war against the dogs. Each tile’s terrain changes the odds—choose wisely, win the majority, and control the park!",
-    logo: "assets/cats-vs-dogs.svg",
+    logo: "assets/flash-reflex-cover.png",
     init(root) {
       const wrapper = document.createElement("div");
       wrapper.className = "catsdogs-game";
