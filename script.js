@@ -418,19 +418,23 @@ const games = [
       light.setAttribute("role", "img");
       light.setAttribute("aria-label", "Stoplight showing the current signal");
 
-      const redLamp = document.createElement("span");
-      redLamp.className = "rlgl-lamp rlgl-lamp-red";
-      redLamp.setAttribute("aria-hidden", "true");
+      const createLamp = (color, label) => {
+        const wrap = document.createElement("div");
+        wrap.className = "rlgl-lamp-wrap";
+        const lamp = document.createElement("span");
+        lamp.className = `rlgl-lamp rlgl-lamp-${color}`;
+        lamp.setAttribute("aria-hidden", "true");
+        const caption = document.createElement("span");
+        caption.className = "rlgl-lamp-label";
+        caption.textContent = label;
+        wrap.append(lamp, caption);
+        light.appendChild(wrap);
+        return lamp;
+      };
 
-      const amberLamp = document.createElement("span");
-      amberLamp.className = "rlgl-lamp rlgl-lamp-amber";
-      amberLamp.setAttribute("aria-hidden", "true");
-
-      const greenLamp = document.createElement("span");
-      greenLamp.className = "rlgl-lamp rlgl-lamp-green";
-      greenLamp.setAttribute("aria-hidden", "true");
-
-      light.append(redLamp, amberLamp, greenLamp);
+      const redLamp = createLamp("red", "Stop");
+      const amberLamp = createLamp("amber", "Ready");
+      const greenLamp = createLamp("green", "Go");
 
       const track = document.createElement("div");
       track.className = "rlgl-track";
@@ -486,6 +490,7 @@ const games = [
         bestTime: null,
         rafId: null,
         lightTimeout: null,
+        yellowTimeout: null,
         timerInterval: null,
         countdownInterval: null,
       };
@@ -567,7 +572,18 @@ const games = [
 
       function queueRedLight() {
         clearTimeout(state.lightTimeout);
+        clearYellowCue();
         const delay = randomBetween(1500, 3500);
+        const yellowLead = 500;
+        if (delay > yellowLead) {
+          state.yellowTimeout = window.setTimeout(() => {
+            if (state.phase === "green") {
+              updateLight("amber");
+            }
+          }, delay - yellowLead);
+        } else {
+          updateLight("amber");
+        }
         state.lightTimeout = window.setTimeout(() => {
           if (state.phase === "green") {
             switchToRed();
@@ -577,6 +593,7 @@ const games = [
 
       function switchToRed() {
         state.phase = "red";
+        clearYellowCue();
         updateLight("red");
         status.textContent = "Red light! Freeze.";
         if (state.running) {
@@ -594,6 +611,7 @@ const games = [
 
       function switchToGreen() {
         state.phase = "green";
+        clearYellowCue();
         updateLight("green");
         status.textContent = "Green again! Sprint!";
         queueRedLight();
@@ -704,9 +722,11 @@ const games = [
       function resetRound() {
         stopRunning();
         clearTimeout(state.lightTimeout);
+        clearYellowCue();
         clearInterval(state.timerInterval);
         clearInterval(state.countdownInterval);
         state.lightTimeout = null;
+        state.yellowTimeout = null;
         state.timerInterval = null;
         state.countdownInterval = null;
         state.phase = "idle";
@@ -739,6 +759,13 @@ const games = [
         light.dataset.state = signal;
       }
 
+      function clearYellowCue() {
+        if (state.yellowTimeout) {
+          clearTimeout(state.yellowTimeout);
+          state.yellowTimeout = null;
+        }
+      }
+
       function formatTime(ms) {
         return `${(ms / 1000).toFixed(2)} s`;
       }
@@ -750,6 +777,7 @@ const games = [
       return () => {
         stopRunning();
         clearTimeout(state.lightTimeout);
+        clearYellowCue();
         clearInterval(state.timerInterval);
         clearInterval(state.countdownInterval);
         window.removeEventListener("keydown", handleKeyDown);
