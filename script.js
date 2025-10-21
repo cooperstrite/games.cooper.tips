@@ -1366,17 +1366,19 @@ const games = [
         lastTimestamp: 0,
         bestHeight: 0,
         fieldWidth: 0,
+        fieldHeight: 0,
+        viewOffset: 0,
       };
 
       startBtn.addEventListener("click", () => {
         startGame();
       });
 
-      dropBtn.addEventListener("click", () => {
+      dropBtn.addEventListener("pointerdown", () => {
         dropBlock();
       });
 
-      field.addEventListener("click", () => {
+      field.addEventListener("pointerdown", () => {
         dropBlock();
       });
 
@@ -1408,6 +1410,7 @@ const games = [
         const base = createBlock({ widthRatio: 0.75, leftRatio: 0.125, bottom: 0 });
         base.element.classList.add("is-base");
         state.stack.push(base);
+        updateTowerView();
         renderStats();
         spawnMovingBlock();
       }
@@ -1423,7 +1426,9 @@ const games = [
         state.stack = [];
         state.direction = 1;
         state.lastTimestamp = 0;
+        state.viewOffset = 0;
         tower.textContent = "";
+        tower.style.setProperty("--tower-offset", "0px");
         measureField();
         dropBtn.disabled = true;
         status.textContent = "Click start to build your tower.";
@@ -1431,7 +1436,9 @@ const games = [
       }
 
       function measureField() {
-        state.fieldWidth = tower.clientWidth || tower.offsetWidth || 260;
+        state.fieldWidth = field.clientWidth || tower.clientWidth || tower.offsetWidth || 260;
+        state.fieldHeight = field.clientHeight || field.offsetHeight || config.blockHeight * config.maxLayers;
+        updateTowerView();
       }
 
       function spawnMovingBlock() {
@@ -1447,6 +1454,7 @@ const games = [
         state.activeBlock = block;
         state.readyForDrop = true;
         state.lastTimestamp = 0;
+        updateTowerView();
         runAnimation();
       }
 
@@ -1502,6 +1510,7 @@ const games = [
         active.element.classList.add("is-locked");
         state.stack.push(active);
         state.activeBlock = null;
+        updateTowerView();
         const currentHeight = state.stack.length - 1;
         if (currentHeight > state.bestHeight) {
           state.bestHeight = currentHeight;
@@ -1528,6 +1537,7 @@ const games = [
         dropBtn.disabled = true;
         startBtn.textContent = "Try again";
         status.textContent = `Tower toppled at ${state.stack.length - 1} blocks.`;
+        updateTowerView();
         renderStats();
       }
 
@@ -1540,6 +1550,38 @@ const games = [
         dropBtn.disabled = true;
         startBtn.textContent = "Play again";
         status.textContent = `Sky high! ${state.stack.length - 1} blocks tall.`;
+        updateTowerView();
+      }
+
+      function updateTowerView() {
+        const fieldHeight = state.fieldHeight || field.clientHeight || 0;
+        if (!fieldHeight) {
+          return;
+        }
+        const peak = getTowerPeak();
+        const headroom = Math.min(fieldHeight * 0.4, config.blockHeight * 3);
+        const maxVisiblePeak = Math.max(0, fieldHeight - headroom);
+        let offset = 0;
+        if (peak > maxVisiblePeak) {
+          offset = peak - maxVisiblePeak;
+        }
+        if (state.viewOffset === offset) {
+          return;
+        }
+        state.viewOffset = offset;
+        tower.style.setProperty("--tower-offset", `${offset}px`);
+      }
+
+      function getTowerPeak() {
+        let highest = 0;
+        if (state.stack.length) {
+          const topBlock = state.stack[state.stack.length - 1];
+          highest = Math.max(highest, topBlock.bottom + config.blockHeight);
+        }
+        if (state.activeBlock) {
+          highest = Math.max(highest, state.activeBlock.bottom + config.blockHeight);
+        }
+        return highest;
       }
 
       function createBlock({ widthRatio, leftRatio, bottom }) {

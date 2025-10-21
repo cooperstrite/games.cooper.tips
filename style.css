@@ -821,6 +821,9 @@ button:hover {
 .tower-stack {
   position: absolute;
   inset: 0;
+  transform: translateY(var(--tower-offset, 0));
+  transition: transform 180ms ease;
+  will-change: transform;
 }
 
 .tower-block {
