@@ -2797,6 +2797,11 @@ const games = [
       checkBtn.className = "primary-btn";
       checkBtn.textContent = "Confirm";
 
+      const revealBtn = document.createElement("button");
+      revealBtn.type = "button";
+      revealBtn.className = "spotter-reveal";
+      revealBtn.textContent = "Reveal answer";
+
       const nextBtn = document.createElement("button");
       nextBtn.type = "button";
       nextBtn.className = "spotter-next";
@@ -2808,7 +2813,7 @@ const games = [
       skipBtn.className = "spotter-skip";
       skipBtn.textContent = "Skip";
 
-      buttons.append(checkBtn, nextBtn, skipBtn);
+      buttons.append(checkBtn, nextBtn, revealBtn, skipBtn);
 
       controls.append(airlineGroup, buttons);
 
@@ -3471,17 +3476,45 @@ const games = [
       airlinePlaceholder.selected = true;
       airlineSelect.appendChild(airlinePlaceholder);
 
-      airlineOptions.forEach((value) => {
+      const optionRegistry = new Set();
+
+      function addAirlineOption(value, label) {
+        if (!value || optionRegistry.has(value)) {
+          return;
+        }
         const option = document.createElement("option");
         option.value = value;
-        option.textContent = value;
+        option.textContent = label;
         airlineSelect.appendChild(option);
+        optionRegistry.add(value);
+      }
+
+      function normalizeAirlineName(name) {
+        if (typeof name !== "string") {
+          return null;
+        }
+        const trimmed = name.trim();
+        return trimmed.length > 0 ? trimmed : null;
+      }
+
+      function ensureAirlineOption(flight) {
+        if (!flight) return;
+        const normalized = normalizeAirlineName(flight.airline);
+        if (normalized) {
+          addAirlineOption(normalized, normalized);
+        } else {
+          addAirlineOption(airlineNoneValue, "No airline / Private");
+        }
+      }
+
+      airlineOptions.forEach((value) => {
+        const normalized = normalizeAirlineName(value);
+        if (normalized) {
+          addAirlineOption(normalized, normalized);
+        }
       });
 
-      const independentOption = document.createElement("option");
-      independentOption.value = airlineNoneValue;
-      independentOption.textContent = "No airline / Private";
-      airlineSelect.appendChild(independentOption);
+      addAirlineOption(airlineNoneValue, "No airline / Private");
 
       const state = {
         pool: [...flights],
@@ -3515,12 +3548,14 @@ const games = [
 
       function loadFlight() {
         state.current = drawFlight();
+        ensureAirlineOption(state.current);
         state.round += 1;
         state.revealed = false;
         renderHints();
         airlineSelect.classList.remove("is-correct", "is-wrong");
         airlineSelect.selectedIndex = 0;
         checkBtn.disabled = false;
+        revealBtn.disabled = false;
         nextBtn.disabled = true;
         status.textContent = "Lock in the airline for this tail.";
         renderStats();
@@ -3530,7 +3565,8 @@ const games = [
         hintList.textContent = "";
         if (!state.current) return;
         if (state.current.image) {
-          const airlineName = state.current.airline ?? "Private operator";
+          const airlineName =
+            normalizeAirlineName(state.current.airline) ?? "Private operator";
           photo.src = state.current.image;
           photo.alt = `${airlineName} tail design`;
           photoWrap.hidden = false;
@@ -3564,15 +3600,20 @@ const games = [
         }
 
         const airlineGuess =
-          airlineGuessRaw === airlineNoneValue ? null : airlineGuessRaw;
+          airlineGuessRaw === airlineNoneValue
+            ? null
+            : normalizeAirlineName(airlineGuessRaw);
 
-        const airlineCorrect = airlineGuess === state.current.airline;
+        const airlineCorrect =
+          airlineGuess === normalizeAirlineName(state.current.airline);
 
         state.revealed = true;
         checkBtn.disabled = true;
+        revealBtn.disabled = true;
         nextBtn.disabled = false;
 
-        const airlineLabel = state.current.airline ?? "a private operator";
+        const airlineLabel =
+          normalizeAirlineName(state.current.airline) ?? "a private operator";
 
         if (airlineCorrect) {
           state.cleared += 1;
@@ -3601,6 +3642,30 @@ const games = [
         loadFlight();
       }
 
+      function revealFlight() {
+        if (!state.current || state.revealed) {
+          return;
+        }
+        const normalizedAirline = normalizeAirlineName(state.current.airline);
+        const airlineLabel = normalizedAirline ?? "a private operator";
+        const regText = state.current.registration
+          ? ` (${state.current.registration})`
+          : "";
+        state.streak = 0;
+        state.revealed = true;
+        renderStats();
+        checkBtn.disabled = true;
+        revealBtn.disabled = true;
+        nextBtn.disabled = false;
+        airlineSelect.classList.remove("is-correct", "is-wrong");
+        if (normalizedAirline) {
+          airlineSelect.value = normalizedAirline;
+        } else {
+          airlineSelect.value = airlineNoneValue;
+        }
+        status.textContent = `Revealed: That tail belongs to ${airlineLabel}${regText}.`;
+      }
+
       const handleCheck = () => {
         evaluateGuess();
       };
@@ -3618,12 +3683,18 @@ const games = [
         skipFlight();
       };
 
+      const handleReveal = () => {
+        revealFlight();
+      };
+
       checkBtn.addEventListener("click", handleCheck);
+      revealBtn.addEventListener("click", handleReveal);
       nextBtn.addEventListener("click", handleNext);
       skipBtn.addEventListener("click", handleSkip);
 
       return () => {
         checkBtn.removeEventListener("click", handleCheck);
+        revealBtn.removeEventListener("click", handleReveal);
         nextBtn.removeEventListener("click", handleNext);
         skipBtn.removeEventListener("click", handleSkip);
         wrapper.remove();

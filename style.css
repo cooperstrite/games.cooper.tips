@@ -1427,11 +1427,19 @@ button:hover {
 .spotter-select select {
   border-radius: var(--radius-md);
   border: 1px solid rgba(255, 255, 255, 0.18);
-  background: rgba(255, 255, 255, 0.06);
-  color: inherit;
+  background: #05090f;
+  color: #f7fbff;
   padding: 0.6rem 0.75rem;
   font: inherit;
   transition: border var(--transition), box-shadow var(--transition), background var(--transition);
+}
+
+@media (prefers-color-scheme: light) {
+  .spotter-select select {
+    border-color: rgba(17, 25, 40, 0.18);
+    background: #ffffff;
+    color: #111827;
+  }
 }
 
 .spotter-select select.is-correct {
@@ -1448,10 +1456,17 @@ button:hover {
 
 .spotter-buttons {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.65rem;
+  flex-wrap: nowrap;
+  gap: 0.5rem;
+  align-items: center;
 }
 
+.spotter-buttons > * {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.spotter-reveal,
 .spotter-next,
 .spotter-skip {
   border-radius: var(--radius-md);
@@ -1465,6 +1480,12 @@ button:hover {
   transition: transform var(--transition), border var(--transition), background var(--transition);
 }
 
+.spotter-buttons .primary-btn {
+  padding: 0.55rem 0.9rem;
+}
+
+.spotter-reveal:hover,
+.spotter-reveal:focus-visible,
 .spotter-next:hover,
 .spotter-next:focus-visible,
 .spotter-skip:hover,
@@ -1473,6 +1494,7 @@ button:hover {
   border-color: rgba(114, 246, 255, 0.4);
 }
 
+.spotter-reveal:disabled,
 .spotter-next:disabled {
   cursor: not-allowed;
   opacity: 0.55;
