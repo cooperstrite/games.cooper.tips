@@ -1333,7 +1333,14 @@ const games = [
         hard: { id: "hard", label: "Hard", baseWidth: 0.75 },
         expert: { id: "expert", label: "Expert", baseWidth: 0.6 },
       };
-      const defaultDifficulty = difficultyPresets.hard.id;
+      const defaultDifficulty = difficultyPresets.medium.id;
+      const speedPresets = {
+        slow: { id: "slow", label: "Slow", speed: 0.45 },
+        medium: { id: "medium", label: "Medium", speed: 0.6 },
+        fast: { id: "fast", label: "Fast", speed: 0.85 },
+        nitro: { id: "nitro", label: "Nitro", speed: 1.1 },
+      };
+      const defaultSpeed = speedPresets.medium.id;
 
       const heightGroup = document.createElement("label");
       heightGroup.className = "tower-select";
@@ -1378,7 +1385,21 @@ const games = [
       dropBtn.textContent = "Drop";
       dropBtn.disabled = true;
 
-      controls.append(heightGroup, difficultyGroup, startBtn, dropBtn);
+      const speedGroup = document.createElement("label");
+      speedGroup.className = "tower-select";
+      const speedLabel = document.createElement("span");
+      speedLabel.textContent = "Speed";
+      const speedSelect = document.createElement("select");
+      speedSelect.setAttribute("aria-label", "Block speed");
+      Object.values(speedPresets).forEach((preset) => {
+        const option = document.createElement("option");
+        option.value = preset.id;
+        option.textContent = preset.label;
+        speedSelect.appendChild(option);
+      });
+      speedGroup.append(speedLabel, speedSelect);
+
+      controls.append(heightGroup, difficultyGroup, speedGroup, startBtn, dropBtn);
 
       const help = document.createElement("p");
       help.className = "help-text";
@@ -1389,7 +1410,6 @@ const games = [
 
       const config = {
         blockHeight: 28,
-        initialSpeed: 0.6,
         speedIncrement: 0.055,
         maxSpeed: 1.6,
         minOverlap: 0.045,
@@ -1401,7 +1421,7 @@ const games = [
         stack: [],
         activeBlock: null,
         direction: 1,
-        speed: config.initialSpeed,
+        speed: speedPresets[defaultSpeed].speed,
         running: false,
         readyForDrop: false,
         animationId: null,
@@ -1414,6 +1434,7 @@ const games = [
         maxLayers: config.defaultMaxLayers,
         difficulty: defaultDifficulty,
         baseWidthRatio: difficultyPresets[defaultDifficulty].baseWidth,
+        speedMode: defaultSpeed,
       };
 
       startBtn.addEventListener("click", () => {
@@ -1464,27 +1485,38 @@ const games = [
 
       difficultySelect.addEventListener("change", handleDifficultyChange);
 
+      const handleSpeedChange = () => {
+        syncSpeedFromSelect();
+        if (state.running) {
+          state.speed = speedPresets[state.speedMode].speed;
+        }
+      };
+
+      speedSelect.addEventListener("change", handleSpeedChange);
+
       window.addEventListener("keydown", handleKey);
       window.addEventListener("resize", handleResize);
 
       heightSelect.value = String(config.defaultMaxLayers);
       difficultySelect.value = defaultDifficulty;
+      speedSelect.value = defaultSpeed;
       syncMaxLayersFromSelect();
       syncDifficultyFromSelect();
+      syncSpeedFromSelect();
       renderStats();
 
       function startGame() {
         resetGame();
         syncMaxLayersFromSelect();
         syncDifficultyFromSelect();
+        syncSpeedFromSelect();
         measureField();
         state.running = true;
-        state.speed = config.initialSpeed;
+        state.speed = speedPresets[state.speedMode].speed;
         startBtn.textContent = "Restart";
         dropBtn.disabled = false;
         status.textContent = "Drop blocks to build your tower.";
-        const baseLeft = Math.max(0, (1 - state.baseWidthRatio) / 2);
-        const base = createBlock({ widthRatio: state.baseWidthRatio, leftRatio: baseLeft, bottom: 0 });
+        const base = createBlock({ widthRatio: 1, leftRatio: 0, bottom: 0 });
         base.element.classList.add("is-base");
         state.stack.push(base);
         updateTowerView();
@@ -1525,7 +1557,13 @@ const games = [
         const previous = state.stack[state.stack.length - 1];
         if (!previous) return;
         state.direction = state.stack.length % 2 === 0 ? -1 : 1;
-        const widthRatio = previous.widthRatio;
+        let widthRatio = previous.widthRatio;
+        if (
+          previous.element.classList.contains("is-base") &&
+          widthRatio > state.baseWidthRatio
+        ) {
+          widthRatio = state.baseWidthRatio;
+        }
         const leftRatio = state.direction === 1 ? 0 : Math.max(0, 1 - widthRatio);
         const bottom = state.stack.length * config.blockHeight;
         const block = createBlock({ widthRatio, leftRatio, bottom });
@@ -1595,7 +1633,12 @@ const games = [
           state.bestHeight = currentHeight;
         }
         renderStats();
-        state.speed = Math.min(config.maxSpeed, state.speed + config.speedIncrement);
+        const targetSpeed = speedPresets[state.speedMode].speed;
+        const nextSpeed = Math.min(
+          config.maxSpeed,
+          Math.max(targetSpeed, state.speed + config.speedIncrement)
+        );
+        state.speed = nextSpeed;
         status.textContent = currentHeight % 4 === 0 ? "Stack looks sharp!" : "Nice drop!";
         if (Number.isFinite(state.maxLayers) && currentHeight >= state.maxLayers) {
           handleVictory();
@@ -1651,6 +1694,16 @@ const games = [
         }
         state.baseWidthRatio = difficultyPresets[state.difficulty].baseWidth;
         applyDifficultyTheme();
+      }
+
+      function syncSpeedFromSelect() {
+        const raw = speedSelect.value;
+        if (!raw || !speedPresets[raw]) {
+          state.speedMode = defaultSpeed;
+        } else {
+          state.speedMode = raw;
+        }
+        state.speed = speedPresets[state.speedMode].speed;
       }
 
       function applyDifficultyTheme() {
@@ -1720,6 +1773,7 @@ const games = [
         window.clearTimeout(state.spawnTimeout ?? 0);
         heightSelect.removeEventListener("change", handleHeightChange);
         difficultySelect.removeEventListener("change", handleDifficultyChange);
+        speedSelect.removeEventListener("change", handleSpeedChange);
         window.removeEventListener("keydown", handleKey);
         window.removeEventListener("resize", handleResize);
         delete wrapper.dataset.difficulty;
