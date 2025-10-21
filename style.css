@@ -892,6 +892,32 @@ button:hover {
   align-items: center;
 }
 
+.tower-select {
+  display: grid;
+  gap: 0.35rem;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  flex: 1 1 160px;
+}
+
+.tower-select select {
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.06);
+  color: inherit;
+  padding: 0.6rem 0.75rem;
+  font: inherit;
+  transition: border var(--transition), box-shadow var(--transition), background var(--transition);
+}
+
+@media (prefers-color-scheme: light) {
+  .tower-select select {
+    border-color: rgba(17, 25, 40, 0.18);
+    background: #ffffff;
+    color: #111827;
+  }
+}
+
 .tower-controls .primary-btn {
   flex: 1 1 140px;
 }
@@ -921,6 +947,10 @@ button:hover {
   .tower-controls {
     flex-direction: column;
     align-items: stretch;
+  }
+
+  .tower-select {
+    width: 100%;
   }
 
   .tower-drop-btn,

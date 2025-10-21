@@ -1325,6 +1325,27 @@ const games = [
       const controls = document.createElement("div");
       controls.className = "tower-controls";
 
+      const heightChoices = [10, 20, 30, 40, 50, 100, 200, 300, 400, 500, 1000];
+      const defaultMaxLayers = 50;
+
+      const heightGroup = document.createElement("label");
+      heightGroup.className = "tower-select";
+      const heightLabel = document.createElement("span");
+      heightLabel.textContent = "Tower cap";
+      const heightSelect = document.createElement("select");
+      heightSelect.setAttribute("aria-label", "Tower height limit");
+      heightChoices.forEach((value) => {
+        const option = document.createElement("option");
+        option.value = String(value);
+        option.textContent = `${value} blocks`;
+        heightSelect.appendChild(option);
+      });
+      const infiniteOption = document.createElement("option");
+      infiniteOption.value = "__infinite";
+      infiniteOption.textContent = "Infinite";
+      heightSelect.appendChild(infiniteOption);
+      heightGroup.append(heightLabel, heightSelect);
+
       const startBtn = document.createElement("button");
       startBtn.type = "button";
       startBtn.className = "primary-btn";
@@ -1336,7 +1357,7 @@ const games = [
       dropBtn.textContent = "Drop";
       dropBtn.disabled = true;
 
-      controls.append(startBtn, dropBtn);
+      controls.append(heightGroup, startBtn, dropBtn);
 
       const help = document.createElement("p");
       help.className = "help-text";
@@ -1351,7 +1372,8 @@ const games = [
         speedIncrement: 0.055,
         maxSpeed: 1.6,
         minOverlap: 0.045,
-        maxLayers: 12,
+        defaultMaxLayers,
+        heightChoices,
       };
 
       const state = {
@@ -1368,6 +1390,7 @@ const games = [
         fieldWidth: 0,
         fieldHeight: 0,
         viewOffset: 0,
+        maxLayers: config.defaultMaxLayers,
       };
 
       startBtn.addEventListener("click", () => {
@@ -1394,13 +1417,30 @@ const games = [
         if (state.activeBlock) updateBlockVisuals(state.activeBlock);
       };
 
+      const handleHeightChange = () => {
+        syncMaxLayersFromSelect();
+        updateTowerView();
+        if (
+          state.running &&
+          Number.isFinite(state.maxLayers) &&
+          state.stack.length - 1 >= state.maxLayers
+        ) {
+          handleVictory();
+        }
+      };
+
+      heightSelect.addEventListener("change", handleHeightChange);
+
       window.addEventListener("keydown", handleKey);
       window.addEventListener("resize", handleResize);
 
+      heightSelect.value = String(config.defaultMaxLayers);
+      syncMaxLayersFromSelect();
       renderStats();
 
       function startGame() {
         resetGame();
+        syncMaxLayersFromSelect();
         measureField();
         state.running = true;
         state.speed = config.initialSpeed;
@@ -1436,8 +1476,10 @@ const games = [
       }
 
       function measureField() {
+        const fallbackLayers = Number.isFinite(state.maxLayers) ? state.maxLayers : 20;
         state.fieldWidth = field.clientWidth || tower.clientWidth || tower.offsetWidth || 260;
-        state.fieldHeight = field.clientHeight || field.offsetHeight || config.blockHeight * config.maxLayers;
+        state.fieldHeight =
+          field.clientHeight || field.offsetHeight || config.blockHeight * fallbackLayers;
         updateTowerView();
       }
 
@@ -1518,7 +1560,7 @@ const games = [
         renderStats();
         state.speed = Math.min(config.maxSpeed, state.speed + config.speedIncrement);
         status.textContent = currentHeight % 4 === 0 ? "Stack looks sharp!" : "Nice drop!";
-        if (currentHeight >= config.maxLayers) {
+        if (Number.isFinite(state.maxLayers) && currentHeight >= state.maxLayers) {
           handleVictory();
           return;
         }
@@ -1551,6 +1593,15 @@ const games = [
         startBtn.textContent = "Play again";
         status.textContent = `Sky high! ${state.stack.length - 1} blocks tall.`;
         updateTowerView();
+      }
+
+      function syncMaxLayersFromSelect() {
+        const raw = heightSelect.value;
+        if (!raw) {
+          state.maxLayers = config.defaultMaxLayers;
+          return;
+        }
+        state.maxLayers = raw === "__infinite" ? Infinity : Number.parseInt(raw, 10) || Infinity;
       }
 
       function updateTowerView() {
@@ -1614,6 +1665,7 @@ const games = [
       return () => {
         cancelAnimationFrame(state.animationId ?? 0);
         window.clearTimeout(state.spawnTimeout ?? 0);
+        heightSelect.removeEventListener("change", handleHeightChange);
         window.removeEventListener("keydown", handleKey);
         window.removeEventListener("resize", handleResize);
         wrapper.remove();
