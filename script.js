@@ -1326,7 +1326,14 @@ const games = [
       controls.className = "tower-controls";
 
       const heightChoices = [10, 20, 30, 40, 50, 100, 200, 300, 400, 500, 1000];
-      const defaultMaxLayers = 50;
+      const defaultMaxLayers = 10;
+      const difficultyPresets = {
+        easy: { id: "easy", label: "Easy", baseWidth: 0.92 },
+        medium: { id: "medium", label: "Medium", baseWidth: 0.85 },
+        hard: { id: "hard", label: "Hard", baseWidth: 0.75 },
+        expert: { id: "expert", label: "Expert", baseWidth: 0.6 },
+      };
+      const defaultDifficulty = difficultyPresets.hard.id;
 
       const heightGroup = document.createElement("label");
       heightGroup.className = "tower-select";
@@ -1346,6 +1353,20 @@ const games = [
       heightSelect.appendChild(infiniteOption);
       heightGroup.append(heightLabel, heightSelect);
 
+      const difficultyGroup = document.createElement("label");
+      difficultyGroup.className = "tower-select";
+      const difficultyLabel = document.createElement("span");
+      difficultyLabel.textContent = "Difficulty";
+      const difficultySelect = document.createElement("select");
+      difficultySelect.setAttribute("aria-label", "Difficulty");
+      Object.values(difficultyPresets).forEach((preset) => {
+        const option = document.createElement("option");
+        option.value = preset.id;
+        option.textContent = preset.label;
+        difficultySelect.appendChild(option);
+      });
+      difficultyGroup.append(difficultyLabel, difficultySelect);
+
       const startBtn = document.createElement("button");
       startBtn.type = "button";
       startBtn.className = "primary-btn";
@@ -1357,7 +1378,7 @@ const games = [
       dropBtn.textContent = "Drop";
       dropBtn.disabled = true;
 
-      controls.append(heightGroup, startBtn, dropBtn);
+      controls.append(heightGroup, difficultyGroup, startBtn, dropBtn);
 
       const help = document.createElement("p");
       help.className = "help-text";
@@ -1391,6 +1412,8 @@ const games = [
         fieldHeight: 0,
         viewOffset: 0,
         maxLayers: config.defaultMaxLayers,
+        difficulty: defaultDifficulty,
+        baseWidthRatio: difficultyPresets[defaultDifficulty].baseWidth,
       };
 
       startBtn.addEventListener("click", () => {
@@ -1431,23 +1454,37 @@ const games = [
 
       heightSelect.addEventListener("change", handleHeightChange);
 
+      const handleDifficultyChange = () => {
+        syncDifficultyFromSelect();
+        if (!state.running) {
+          return;
+        }
+        status.textContent = "Difficulty updated. Restart to use new block width.";
+      };
+
+      difficultySelect.addEventListener("change", handleDifficultyChange);
+
       window.addEventListener("keydown", handleKey);
       window.addEventListener("resize", handleResize);
 
       heightSelect.value = String(config.defaultMaxLayers);
+      difficultySelect.value = defaultDifficulty;
       syncMaxLayersFromSelect();
+      syncDifficultyFromSelect();
       renderStats();
 
       function startGame() {
         resetGame();
         syncMaxLayersFromSelect();
+        syncDifficultyFromSelect();
         measureField();
         state.running = true;
         state.speed = config.initialSpeed;
         startBtn.textContent = "Restart";
         dropBtn.disabled = false;
         status.textContent = "Drop blocks to build your tower.";
-        const base = createBlock({ widthRatio: 0.75, leftRatio: 0.125, bottom: 0 });
+        const baseLeft = Math.max(0, (1 - state.baseWidthRatio) / 2);
+        const base = createBlock({ widthRatio: state.baseWidthRatio, leftRatio: baseLeft, bottom: 0 });
         base.element.classList.add("is-base");
         state.stack.push(base);
         updateTowerView();
@@ -1489,7 +1526,7 @@ const games = [
         if (!previous) return;
         state.direction = state.stack.length % 2 === 0 ? -1 : 1;
         const widthRatio = previous.widthRatio;
-        const leftRatio = state.direction === 1 ? 0 : 1 - widthRatio;
+        const leftRatio = state.direction === 1 ? 0 : Math.max(0, 1 - widthRatio);
         const bottom = state.stack.length * config.blockHeight;
         const block = createBlock({ widthRatio, leftRatio, bottom });
         block.element.classList.add("is-active");
@@ -1599,9 +1636,25 @@ const games = [
         const raw = heightSelect.value;
         if (!raw) {
           state.maxLayers = config.defaultMaxLayers;
+          heightSelect.value = String(config.defaultMaxLayers);
           return;
         }
         state.maxLayers = raw === "__infinite" ? Infinity : Number.parseInt(raw, 10) || Infinity;
+      }
+
+      function syncDifficultyFromSelect() {
+        const raw = difficultySelect.value;
+        if (!raw || !difficultyPresets[raw]) {
+          state.difficulty = defaultDifficulty;
+        } else {
+          state.difficulty = raw;
+        }
+        state.baseWidthRatio = difficultyPresets[state.difficulty].baseWidth;
+        applyDifficultyTheme();
+      }
+
+      function applyDifficultyTheme() {
+        wrapper.dataset.difficulty = state.difficulty;
       }
 
       function updateTowerView() {
@@ -1666,8 +1719,10 @@ const games = [
         cancelAnimationFrame(state.animationId ?? 0);
         window.clearTimeout(state.spawnTimeout ?? 0);
         heightSelect.removeEventListener("change", handleHeightChange);
+        difficultySelect.removeEventListener("change", handleDifficultyChange);
         window.removeEventListener("keydown", handleKey);
         window.removeEventListener("resize", handleResize);
+        delete wrapper.dataset.difficulty;
         wrapper.remove();
       };
     },

@@ -818,6 +818,16 @@ button:hover {
   opacity: 0.65;
 }
 
+.tower-game[data-difficulty="easy"] .tower-field {
+  width: 100%;
+  max-width: none;
+  margin-inline: 0;
+}
+
+.tower-game[data-difficulty="medium"] .tower-field {
+  width: clamp(260px, 78vw, 520px);
+}
+
 .tower-stack {
   position: absolute;
   inset: 0;
