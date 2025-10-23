@@ -1555,6 +1555,231 @@ button:hover {
   }
 }
 
+.cookieclicker {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.cookieclicker-header {
+  display: grid;
+  gap: 0.35rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  padding: 1rem 1.25rem;
+}
+
+.cookieclicker-total {
+  margin: 0;
+  font-size: clamp(1.6rem, 4vw, 2.1rem);
+  font-weight: 700;
+  color: #ffd971;
+  letter-spacing: 0.01em;
+}
+
+.cookieclicker-metrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.cookieclicker-metric {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.cookieclicker-status {
+  margin: 0;
+  padding: 0.85rem 1rem;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(114, 246, 255, 0.08);
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.cookieclicker-main {
+  display: flex;
+  justify-content: center;
+}
+
+.cookieclicker-oven {
+  display: grid;
+  place-items: center;
+}
+
+.cookieclicker-btn {
+  display: grid;
+  place-items: center;
+  gap: 0.4rem;
+  width: clamp(180px, 35vw, 240px);
+  height: clamp(180px, 35vw, 240px);
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.18);
+  background: radial-gradient(circle at 35% 30%, rgba(255, 217, 114, 0.45), transparent 65%),
+    linear-gradient(135deg, rgba(114, 246, 255, 0.22), rgba(255, 217, 114, 0.3));
+  color: #0f1324;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 24px 40px rgba(255, 217, 114, 0.25);
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.cookieclicker-btn span[aria-hidden="true"] {
+  font-size: clamp(2.6rem, 5vw, 3.4rem);
+}
+
+.cookieclicker-btn-label {
+  font-size: clamp(0.75rem, 1.5vw, 0.9rem);
+  color: rgba(15, 19, 36, 0.75);
+}
+
+.cookieclicker-btn:hover {
+  transform: scale(1.03);
+  box-shadow: 0 28px 45px rgba(255, 217, 114, 0.32);
+}
+
+.cookieclicker-btn.is-pressed {
+  transform: scale(0.95);
+  box-shadow: 0 16px 24px rgba(15, 19, 36, 0.3);
+}
+
+.cookieclicker-upgrades,
+.cookieclicker-achievements {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.cookieclicker-help {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.cookieclicker-upgrade-grid {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.cookieclicker-upgrade {
+  display: grid;
+  gap: 0.45rem;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  padding: 0.9rem 1rem;
+  min-height: 150px;
+}
+
+.cookieclicker-upgrade h4 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.cookieclicker-upgrade-desc {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.cookieclicker-upgrade-meta {
+  display: flex;
+  justify-content: space-between;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+}
+
+.cookieclicker-upgrade-btn {
+  align-self: flex-start;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(114, 246, 255, 0.4);
+  background: linear-gradient(135deg, rgba(114, 246, 255, 0.2), rgba(114, 246, 255, 0.38));
+  color: var(--accent);
+  padding: 0.45rem 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.cookieclicker-upgrade-btn:hover,
+.cookieclicker-upgrade-btn:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 22px rgba(114, 246, 255, 0.25);
+}
+
+.cookieclicker-upgrade-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.cookieclicker-achievement-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.6rem;
+}
+
+.cookieclicker-achievement {
+  border-radius: var(--radius-md);
+  border: 1px dashed rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.02);
+  padding: 0.6rem 0.85rem;
+  display: grid;
+  gap: 0.2rem;
+  color: var(--text-muted);
+  opacity: 0.55;
+  transition: border var(--transition), background var(--transition), opacity var(--transition);
+}
+
+.cookieclicker-achievement-name {
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.cookieclicker-achievement-desc {
+  font-size: 0.85rem;
+}
+
+.cookieclicker-achievement.is-unlocked {
+  border-style: solid;
+  border-color: rgba(114, 255, 182, 0.4);
+  background: rgba(114, 255, 182, 0.12);
+  color: inherit;
+  opacity: 1;
+}
+
+.cookieclicker-achievement.is-unlocked .cookieclicker-achievement-name {
+  color: #72ffb6;
+}
+
+@media (max-width: 720px) {
+  .cookieclicker-metrics {
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+
+  .cookieclicker-upgrade-grid {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  }
+}
+
+@media (max-width: 540px) {
+  .cookieclicker-btn {
+    width: min(220px, 70vw);
+    height: min(220px, 70vw);
+  }
+}
+
 .neondrift {
   display: grid;
   gap: 1.25rem;

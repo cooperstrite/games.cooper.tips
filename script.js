@@ -3905,6 +3905,376 @@ const games = [
     },
   },
   {
+    id: "cookieclicker",
+    name: "Cookie Clicker",
+    summary: "Tap the giant cookie, buy upgrades, and rack up achievements.",
+    description:
+      "Crank out batches of cookies with every tap. Hire helpers, automate your bakery, and chase achievements as your cookie empire grows.",
+    logo: "assets/cookie-clicker-cover.png",
+    init(root) {
+      const wrapper = document.createElement("div");
+      wrapper.className = "cookieclicker";
+
+      const header = document.createElement("section");
+      header.className = "cookieclicker-header";
+
+      const totalDisplay = document.createElement("p");
+      totalDisplay.className = "cookieclicker-total";
+      totalDisplay.textContent = "Cookies: 0";
+
+      const metrics = document.createElement("div");
+      metrics.className = "cookieclicker-metrics";
+
+      const perSecondDisplay = document.createElement("span");
+      perSecondDisplay.className = "cookieclicker-metric";
+      perSecondDisplay.textContent = "Per second: 0";
+
+      const perClickDisplay = document.createElement("span");
+      perClickDisplay.className = "cookieclicker-metric";
+      perClickDisplay.textContent = "Per click: 1";
+
+      const lifetimeDisplay = document.createElement("span");
+      lifetimeDisplay.className = "cookieclicker-metric";
+      lifetimeDisplay.textContent = "Total baked: 0";
+
+      metrics.append(perSecondDisplay, perClickDisplay, lifetimeDisplay);
+      header.append(totalDisplay, metrics);
+
+      const status = document.createElement("p");
+      status.className = "cookieclicker-status";
+      status.setAttribute("role", "status");
+      status.setAttribute("aria-live", "polite");
+      status.textContent = "Tap the cookie to start baking!";
+
+      const main = document.createElement("div");
+      main.className = "cookieclicker-main";
+
+      const oven = document.createElement("div");
+      oven.className = "cookieclicker-oven";
+
+      const cookieButton = document.createElement("button");
+      cookieButton.type = "button";
+      cookieButton.className = "cookieclicker-btn";
+      cookieButton.setAttribute("aria-label", "Bake a cookie");
+      cookieButton.innerHTML = '<span aria-hidden="true">🍪</span><span class="cookieclicker-btn-label">Bake cookie</span>';
+
+      oven.appendChild(cookieButton);
+      main.appendChild(oven);
+
+      const upgradesSection = document.createElement("section");
+      upgradesSection.className = "cookieclicker-upgrades";
+      const upgradesTitle = document.createElement("h3");
+      upgradesTitle.textContent = "Upgrades";
+      const upgradesSubtitle = document.createElement("p");
+      upgradesSubtitle.className = "cookieclicker-help";
+      upgradesSubtitle.textContent = "Spend cookies to boost clicks or automate production.";
+      const upgradeGrid = document.createElement("div");
+      upgradeGrid.className = "cookieclicker-upgrade-grid";
+      upgradesSection.append(upgradesTitle, upgradesSubtitle, upgradeGrid);
+
+      const achievementsSection = document.createElement("section");
+      achievementsSection.className = "cookieclicker-achievements";
+      const achievementsTitle = document.createElement("h3");
+      achievementsTitle.textContent = "Achievements";
+      const achievementsList = document.createElement("ul");
+      achievementsList.className = "cookieclicker-achievement-list";
+      achievementsSection.append(achievementsTitle, achievementsList);
+
+      wrapper.append(header, status, main, upgradesSection, achievementsSection);
+      root.appendChild(wrapper);
+
+      const upgradeDefs = [
+        {
+          id: "mitts",
+          name: "Extra Mitts",
+          description: "+1 cookie per click.",
+          type: "click",
+          baseCost: 15,
+          costScale: 1.25,
+          value: 1,
+        },
+        {
+          id: "rolling-pin",
+          name: "Rolling Pin Set",
+          description: "+2 cookies per click.",
+          type: "click",
+          baseCost: 120,
+          costScale: 1.35,
+          value: 2,
+        },
+        {
+          id: "convection",
+          name: "Convection Oven",
+          description: "+1 cookie per second.",
+          type: "cps",
+          baseCost: 90,
+          costScale: 1.3,
+          value: 1,
+        },
+        {
+          id: "bakery",
+          name: "Mini Bakery",
+          description: "+4 cookies per second.",
+          type: "cps",
+          baseCost: 420,
+          costScale: 1.5,
+          value: 4,
+        },
+        {
+          id: "factory",
+          name: "Cookie Factory",
+          description: "+12 cookies per second.",
+          type: "cps",
+          baseCost: 1300,
+          costScale: 1.6,
+          value: 12,
+        },
+      ];
+
+      const achievementDefs = [
+        {
+          id: "first-click",
+          name: "First Crumbs",
+          description: "Click the cookie once.",
+          check: (state) => state.totalClicks >= 1,
+        },
+        {
+          id: "dozen",
+          name: "Dozen Delight",
+          description: "Bake 50 cookies in total.",
+          check: (state) => state.lifetime >= 50,
+        },
+        {
+          id: "century",
+          name: "Century Baker",
+          description: "Bake 500 cookies in total.",
+          check: (state) => state.lifetime >= 500,
+        },
+        {
+          id: "click-master",
+          name: "Click Master",
+          description: "Tap the cookie 250 times.",
+          check: (state) => state.totalClicks >= 250,
+        },
+        {
+          id: "automation",
+          name: "Automation Nation",
+          description: "Reach 20 cookies per second.",
+          check: (state) => state.perSecond >= 20,
+        },
+        {
+          id: "upgrade-fan",
+          name: "Upgrade Fanatic",
+          description: "Buy 10 upgrades.",
+          check: (state) => state.totalUpgrades >= 10,
+        },
+      ];
+
+      const state = {
+        cookies: 0,
+        lifetime: 0,
+        perSecond: 0,
+        clickPower: 1,
+        totalClicks: 0,
+        totalUpgrades: 0,
+        upgrades: new Map(),
+        achievementsUnlocked: new Set(),
+        rafId: null,
+        lastTick: null,
+      };
+
+      const upgradeRefs = new Map();
+      const achievementRefs = new Map();
+      let pressTimeout = null;
+
+      function formatNumber(value) {
+        if (value >= 1_000_000_000) return `${(value / 1_000_000_000).toFixed(2)}B`;
+        if (value >= 1_000_000) return `${(value / 1_000_000).toFixed(2)}M`;
+        if (value >= 10_000) return `${(value / 1000).toFixed(1)}k`;
+        if (value >= 100) return Math.floor(value).toLocaleString();
+        return value.toFixed(1).replace(/\.0$/, "");
+      }
+
+      function computeCost(def) {
+        const owned = state.upgrades.get(def.id) ?? 0;
+        const rawCost = def.baseCost * def.costScale ** owned;
+        return Math.ceil(rawCost);
+      }
+
+      function updateStats() {
+        totalDisplay.textContent = `${formatNumber(state.cookies)} cookies`;
+        perSecondDisplay.textContent = `Per second: ${formatNumber(state.perSecond)}`;
+        perClickDisplay.textContent = `Per click: ${formatNumber(state.clickPower)}`;
+        lifetimeDisplay.textContent = `Total baked: ${formatNumber(state.lifetime)}`;
+      }
+
+      function updateUpgrades() {
+        upgradeDefs.forEach((def) => {
+          const refs = upgradeRefs.get(def.id);
+          if (!refs) return;
+          const owned = state.upgrades.get(def.id) ?? 0;
+          const cost = computeCost(def);
+          refs.count.textContent = `Owned: ${owned}`;
+          refs.cost.textContent = `Cost: ${formatNumber(cost)}`;
+          refs.button.disabled = state.cookies < cost;
+        });
+      }
+
+      function unlockAchievement(def) {
+        if (state.achievementsUnlocked.has(def.id)) return;
+        state.achievementsUnlocked.add(def.id);
+        const item = achievementRefs.get(def.id);
+        if (item) {
+          item.classList.add("is-unlocked");
+        }
+        status.textContent = `Achievement unlocked: ${def.name}!`;
+      }
+
+      function checkAchievements() {
+        achievementDefs.forEach((def) => {
+          if (!state.achievementsUnlocked.has(def.id) && def.check(state)) {
+            unlockAchievement(def);
+          }
+        });
+      }
+
+      function addCookies(amount) {
+        if (amount <= 0) return;
+        state.cookies += amount;
+        state.lifetime += amount;
+        updateStats();
+        updateUpgrades();
+        checkAchievements();
+      }
+
+      function purchaseUpgrade(def) {
+        const cost = computeCost(def);
+        if (state.cookies < cost) {
+          const deficit = cost - state.cookies;
+          status.textContent = `You need ${formatNumber(deficit)} more cookies for ${def.name}.`;
+          return;
+        }
+        state.cookies -= cost;
+        const owned = (state.upgrades.get(def.id) ?? 0) + 1;
+        state.upgrades.set(def.id, owned);
+        state.totalUpgrades += 1;
+        if (def.type === "click") {
+          state.clickPower += def.value;
+        } else if (def.type === "cps") {
+          state.perSecond += def.value;
+        }
+        updateStats();
+        updateUpgrades();
+        checkAchievements();
+        status.textContent = `Purchased ${def.name}!`;
+      }
+
+      function startTicker() {
+        state.lastTick = performance.now();
+        const step = (timestamp) => {
+          const delta = timestamp - (state.lastTick ?? timestamp);
+          state.lastTick = timestamp;
+          if (state.perSecond > 0) {
+            addCookies((state.perSecond * delta) / 1000);
+          }
+          state.rafId = window.requestAnimationFrame(step);
+        };
+        state.rafId = window.requestAnimationFrame(step);
+      }
+
+      upgradeDefs.forEach((def) => {
+        const card = document.createElement("article");
+        card.className = "cookieclicker-upgrade";
+
+        const name = document.createElement("h4");
+        name.textContent = def.name;
+
+        const description = document.createElement("p");
+        description.className = "cookieclicker-upgrade-desc";
+        description.textContent = def.description;
+
+        const meta = document.createElement("div");
+        meta.className = "cookieclicker-upgrade-meta";
+
+        const cost = document.createElement("span");
+        cost.className = "cookieclicker-upgrade-cost";
+
+        const count = document.createElement("span");
+        count.className = "cookieclicker-upgrade-count";
+
+        meta.append(cost, count);
+
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "cookieclicker-upgrade-btn";
+        button.textContent = "Buy";
+
+        const handleClick = () => purchaseUpgrade(def);
+        button.addEventListener("click", handleClick);
+
+        card.append(name, description, meta, button);
+        upgradeGrid.appendChild(card);
+
+        upgradeRefs.set(def.id, { cost, count, button, handler: handleClick });
+      });
+
+      achievementDefs.forEach((def) => {
+        const item = document.createElement("li");
+        item.className = "cookieclicker-achievement";
+
+        const label = document.createElement("span");
+        label.className = "cookieclicker-achievement-name";
+        label.textContent = def.name;
+
+        const desc = document.createElement("span");
+        desc.className = "cookieclicker-achievement-desc";
+        desc.textContent = def.description;
+
+        item.append(label, desc);
+        achievementsList.appendChild(item);
+        achievementRefs.set(def.id, item);
+      });
+
+      const handleCookieClick = () => {
+        state.totalClicks += 1;
+        addCookies(state.clickPower);
+        cookieButton.classList.add("is-pressed");
+        if (pressTimeout) {
+          window.clearTimeout(pressTimeout);
+        }
+        pressTimeout = window.setTimeout(() => {
+          cookieButton.classList.remove("is-pressed");
+        }, 120);
+      };
+
+      cookieButton.addEventListener("click", handleCookieClick);
+
+      updateStats();
+      updateUpgrades();
+      checkAchievements();
+      startTicker();
+
+      return () => {
+        if (state.rafId) {
+          window.cancelAnimationFrame(state.rafId);
+          state.rafId = null;
+        }
+        if (pressTimeout) {
+          window.clearTimeout(pressTimeout);
+          pressTimeout = null;
+        }
+        cookieButton.removeEventListener("click", handleCookieClick);
+        upgradeDefs.forEach((def) => {
+          const refs = upgradeRefs.get(def.id);
+          if (refs) {
+            refs.button.removeEventListener("click", refs.handler);
+          }
+        });
+        wrapper.remove();
+      };
+    },
+  },
+  {
     id: "neondrift",
     name: "Neon Drift",
     summary: "Race neon lanes and dodge pylons in first-person.",
