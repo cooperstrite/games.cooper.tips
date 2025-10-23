@@ -1476,11 +1476,16 @@ const games = [
       heightSelect.addEventListener("change", handleHeightChange);
 
       const handleDifficultyChange = () => {
+        const hadProgress = state.running || state.stack.length > 0;
         syncDifficultyFromSelect();
-        if (!state.running) {
-          return;
+        if (hadProgress) {
+          resetGame();
+          state.speed = speedPresets[state.speedMode].speed;
+          startBtn.textContent = "Start";
+          status.textContent = "Difficulty updated. Click start to build your tower.";
+        } else {
+          measureField();
         }
-        status.textContent = "Difficulty updated. Restart to use new block width.";
       };
 
       difficultySelect.addEventListener("change", handleDifficultyChange);
