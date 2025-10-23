@@ -2798,117 +2798,181 @@ button:hover {
   }
 }
 
-.catsdogs-game {
+.catsdogs-tug {
   display: grid;
-  gap: 1.25rem;
+  gap: 1.4rem;
 }
 
-.catsdogs-status {
+.catsdogs-tug-status {
   border-radius: var(--radius-md);
   border: 1px solid rgba(255, 255, 255, 0.12);
   background: rgba(255, 255, 255, 0.04);
-  padding: 0.9rem 1.1rem;
+  padding: 1rem 1.2rem;
   font-weight: 600;
   letter-spacing: 0.01em;
 }
 
-.catsdogs-scoreboard {
+.catsdogs-tug-controls {
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem;
+  align-items: flex-end;
 }
 
-.catsdogs-board {
+.catsdogs-field {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: clamp(0.6rem, 2vw, 0.8rem);
+  gap: 0.3rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
 }
 
-.catsdogs-tile {
+.catsdogs-field select {
   border-radius: var(--radius-md);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  background: rgba(255, 255, 255, 0.05);
-  padding: clamp(1rem, 3vw, 1.3rem) 0.5rem;
-  min-height: 72px;
-  display: grid;
-  place-items: center;
-  text-align: center;
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 140ms ease, box-shadow 140ms ease, border 140ms ease;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.06);
+  color: inherit;
+  padding: 0.55rem 0.75rem;
+  font: inherit;
 }
 
-.tile-icon {
-  width: clamp(32px, 6vw, 44px);
-  height: clamp(32px, 6vw, 44px);
-  object-fit: contain;
-  margin-bottom: 0.35rem;
+@media (prefers-color-scheme: light) {
+  .catsdogs-field select {
+    border-color: rgba(17, 25, 40, 0.18);
+    background: #ffffff;
+    color: #111827;
+  }
 }
 
-.catsdogs-tile:hover:not(:disabled),
-.catsdogs-tile:focus-visible {
-  transform: translateY(-2px);
-  box-shadow: 0 18px 28px rgba(114, 246, 255, 0.25);
-  border-color: rgba(114, 246, 255, 0.45);
-}
-
-.catsdogs-tile:disabled {
-  cursor: not-allowed;
-  opacity: 0.7;
-}
-
-.catsdogs-tile.tile-cat {
-  border-color: rgba(114, 246, 255, 0.55);
-  box-shadow: 0 18px 34px rgba(114, 246, 255, 0.28);
-}
-
-.catsdogs-tile.tile-dog {
-  border-color: rgba(255, 217, 114, 0.55);
-  box-shadow: 0 18px 34px rgba(255, 217, 114, 0.28);
-}
-
-.catsdogs-controls {
-  display: flex;
-  justify-content: flex-start;
-}
-
-.catsdogs-controls button {
+.catsdogs-control-btn {
   border-radius: 999px;
   border: 1px solid rgba(114, 246, 255, 0.35);
   background: linear-gradient(135deg, rgba(114, 246, 255, 0.18), rgba(114, 246, 255, 0.32));
-  padding: 0.45rem 1.2rem;
+  padding: 0.5rem 1.35rem;
   color: var(--accent);
   font-weight: 600;
-  box-shadow: 0 12px 24px rgba(114, 246, 255, 0.24);
+  box-shadow: 0 14px 26px rgba(114, 246, 255, 0.25);
 }
 
-.tile-name {
-  font-size: 0.95rem;
-  line-height: 1.3;
+.catsdogs-mode-note {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-muted);
 }
 
-.tile-harbor {
-  background: linear-gradient(135deg, rgba(114, 246, 255, 0.22), rgba(114, 246, 255, 0.08));
+.catsdogs-tug-score {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.75rem;
 }
 
-.tile-kennel {
-  background: linear-gradient(135deg, rgba(255, 217, 114, 0.24), rgba(255, 217, 114, 0.08));
+.catsdogs-tug-score .badge {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-md);
+  padding: 0.6rem 0.9rem;
+  transition: border var(--transition), box-shadow var(--transition), background var(--transition);
 }
 
-.tile-plaza {
-  background: linear-gradient(135deg, rgba(255, 108, 129, 0.18), rgba(255, 108, 129, 0.06));
+.catsdogs-tug-score .badge.is-active {
+  border: 1px solid rgba(114, 246, 255, 0.45);
+  box-shadow: 0 12px 22px rgba(114, 246, 255, 0.25);
+  background: rgba(114, 246, 255, 0.12);
 }
 
-.tile-fountain {
-  background: linear-gradient(135deg, rgba(132, 176, 255, 0.22), rgba(132, 176, 255, 0.08));
+.catsdogs-tug-arena {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: center;
+  gap: 1rem;
 }
 
-.tile-trail {
-  background: linear-gradient(135deg, rgba(114, 255, 182, 0.22), rgba(114, 255, 182, 0.08));
+.catsdogs-tug-cat,
+.catsdogs-tug-dog {
+  display: grid;
+  justify-items: center;
+  gap: 0.35rem;
+  font-weight: 600;
+  color: var(--text-muted);
 }
 
-.tile-market {
-  background: linear-gradient(135deg, rgba(255, 176, 147, 0.22), rgba(255, 176, 147, 0.08));
+.catsdogs-tug-track {
+  position: relative;
+  height: 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+}
+
+.catsdogs-tug-fill {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 14px;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(114, 246, 255, 0.55), rgba(255, 217, 114, 0.45));
+  transition: left 90ms ease;
+}
+
+.catsdogs-tug-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.catsdogs-tug-btn {
+  border-radius: 999px;
+  border: 1px solid rgba(114, 246, 255, 0.35);
+  background: linear-gradient(135deg, rgba(114, 246, 255, 0.18), rgba(114, 246, 255, 0.32));
+  padding: 0.55rem 1.35rem;
+  color: var(--accent);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 16px 28px rgba(114, 246, 255, 0.25);
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.catsdogs-tug-btn.is-active {
+  box-shadow: 0 20px 34px rgba(114, 246, 255, 0.3);
+  transform: translateY(-1px);
+}
+
+.catsdogs-tug-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.catsdogs-tug-btn:not(:disabled):hover,
+.catsdogs-tug-btn:not(:disabled):focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 20px 34px rgba(114, 246, 255, 0.32);
+}
+
+@media (max-width: 700px) {
+  .catsdogs-tug-arena {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.75rem;
+  }
+}
+
+@media (max-width: 540px) {
+  .catsdogs-tug-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .catsdogs-tug-btn {
+    width: 100%;
+  }
 }
 
 .coming-strip {

@@ -6944,277 +6944,366 @@ const games = [
   {
     id: "catsdogs",
     name: "Cats vs Dogs",
-    summary: "Claim the park tile-by-tile before the hounds do.",
+    summary: "Mash buttons to win the tug-of-war showdown.",
     description:
-      "Lead the clever cats in a turf tug-of-war against the dogs. Each tile’s terrain changes the odds—choose wisely, win the majority, and control the park!",
+      "Battle for the park in a frantic tug-of-war. Mash your button to pull the rope to your side. Play pass-and-play with a friend or face a determined dog AI handler.",
     logo: "assets/flash-reflex-cover.png",
     init(root) {
-      const wrapper = document.createElement("div");
-      wrapper.className = "catsdogs-game";
+      const modes = [
+        {
+          id: "pass",
+          label: "Pass & Play",
+          description: "Two players share the screen. Cats mash A (or Tap for Cats) while dogs mash L (or Tap for Dogs).",
+        },
+        {
+          id: "ai",
+          label: "Player vs AI",
+          description: "You control the cats. The dogs respond with adaptive mash speed.",
+        },
+      ];
 
-      const status = document.createElement("div");
-      status.className = "catsdogs-status";
-      status.textContent = "Welcome to Meadow Park. Pick a tile to deploy the cats.";
+      const aiDifficulties = [
+        { id: "easy", label: "Easy", baseImpulse: 2.8, rateScale: 0.35 },
+        { id: "normal", label: "Normal", baseImpulse: 3.2, rateScale: 0.45 },
+        { id: "hard", label: "Hard", baseImpulse: 3.8, rateScale: 0.6 },
+      ];
+
+      const MAX_PULL = 100;
+      const CLICK_IMPULSE = 4.6;
+      const BASE_RETURN = 0.12;
+
+      const wrapper = document.createElement("div");
+      wrapper.className = "catsdogs-tug";
+
+      const status = document.createElement("p");
+      status.className = "catsdogs-tug-status";
+      status.setAttribute("role", "status");
+      status.setAttribute("aria-live", "polite");
+      status.textContent = "Select a mode, then start the tug-of-war.";
+
+      const controls = document.createElement("div");
+      controls.className = "catsdogs-tug-controls";
+
+      const modeField = document.createElement("label");
+      modeField.className = "catsdogs-field";
+      const modeLabel = document.createElement("span");
+      modeLabel.textContent = "Mode";
+      const modeSelect = document.createElement("select");
+      modeSelect.setAttribute("aria-label", "Cats vs Dogs game mode");
+      modes.forEach((mode) => {
+        const option = document.createElement("option");
+        option.value = mode.id;
+        option.textContent = mode.label;
+        modeSelect.appendChild(option);
+      });
+      modeField.append(modeLabel, modeSelect);
+
+      const difficultyField = document.createElement("label");
+      difficultyField.className = "catsdogs-field catsdogs-field-difficulty";
+      const difficultyLabel = document.createElement("span");
+      difficultyLabel.textContent = "AI difficulty";
+      const difficultySelect = document.createElement("select");
+      difficultySelect.setAttribute("aria-label", "AI difficulty");
+      aiDifficulties.forEach((entry) => {
+        const option = document.createElement("option");
+        option.value = entry.id;
+        option.textContent = entry.label;
+        difficultySelect.appendChild(option);
+      });
+      difficultyField.append(difficultyLabel, difficultySelect);
+
+      const startBtn = document.createElement("button");
+      startBtn.type = "button";
+      startBtn.className = "catsdogs-control-btn";
+      startBtn.textContent = "Start Match";
+
+      controls.append(modeField, difficultyField, startBtn);
+
+      const modeDescription = document.createElement("p");
+      modeDescription.className = "catsdogs-mode-note";
 
       const scoreboard = document.createElement("div");
-      scoreboard.className = "catsdogs-scoreboard";
+      scoreboard.className = "catsdogs-tug-score";
       const catBadge = document.createElement("span");
       catBadge.className = "badge catsdogs-cats";
       const dogBadge = document.createElement("span");
       dogBadge.className = "badge catsdogs-dogs";
-      const tilesBadge = document.createElement("span");
-      tilesBadge.className = "badge catsdogs-tiles";
-      scoreboard.append(catBadge, dogBadge, tilesBadge);
+      scoreboard.append(catBadge, dogBadge);
 
-      const board = document.createElement("div");
-      board.className = "catsdogs-board";
+      const arena = document.createElement("div");
+      arena.className = "catsdogs-tug-arena";
+      const catSide = document.createElement("div");
+      catSide.className = "catsdogs-tug-cat";
+      catSide.innerHTML = '<span aria-hidden="true">🐱</span><span>Tap: A key or button</span>';
+      const ropeTrack = document.createElement("div");
+      ropeTrack.className = "catsdogs-tug-track";
+      const ropeFill = document.createElement("div");
+      ropeFill.className = "catsdogs-tug-fill";
+      ropeFill.setAttribute("role", "presentation");
+      ropeTrack.appendChild(ropeFill);
+      const dogSide = document.createElement("div");
+      dogSide.className = "catsdogs-tug-dog";
+      dogSide.innerHTML = '<span aria-hidden="true">🐶</span><span>Tap: L key or button</span>';
+      arena.append(catSide, ropeTrack, dogSide);
 
-      const controls = document.createElement("div");
-      controls.className = "catsdogs-controls";
-      const restartBtn = document.createElement("button");
-      restartBtn.type = "button";
-      restartBtn.textContent = "Reset Park";
-      restartBtn.addEventListener("click", () => {
-        setupGame(true);
-      });
-      controls.appendChild(restartBtn);
+      const buttonsRow = document.createElement("div");
+      buttonsRow.className = "catsdogs-tug-buttons";
+      const catButton = document.createElement("button");
+      catButton.className = "catsdogs-tug-btn catsdogs-tug-btn-cat";
+      catButton.textContent = "Tap for Cats";
+      const dogButton = document.createElement("button");
+      dogButton.className = "catsdogs-tug-btn catsdogs-tug-btn-dog";
+      dogButton.textContent = "Tap for Dogs";
+      buttonsRow.append(catButton, dogButton);
 
-      wrapper.append(status, scoreboard, board, controls);
+      wrapper.append(status, controls, modeDescription, scoreboard, arena, buttonsRow);
       root.appendChild(wrapper);
 
-      const terrains = [
-        {
-          id: "harbor",
-          name: "Fish Wharf",
-          cat: 3.4,
-          dog: 1.6,
-          className: "tile-harbor",
-          blurb: "Fishy scent gives cats +2.",
-          icon: "assets/terrain-fish.svg",
-        },
-        {
-          id: "kennel",
-          name: "Bone Yard",
-          cat: 1.5,
-          dog: 3.6,
-          className: "tile-kennel",
-          blurb: "Bones everywhere—dogs gain +2.",
-          icon: "assets/terrain-bone.svg",
-        },
-        {
-          id: "plaza",
-          name: "Sun Plaza",
-          cat: 2.4,
-          dog: 2.2,
-          className: "tile-plaza",
-          blurb: "Neutral ground, almost even odds.",
-          icon: "assets/terrain-sun.svg",
-        },
-        {
-          id: "fountain",
-          name: "Fountain Run",
-          cat: 2.9,
-          dog: 2.4,
-          className: "tile-fountain",
-          blurb: "Water play favors nimble paws.",
-          icon: "assets/terrain-fountain.svg",
-        },
-        {
-          id: "trail",
-          name: "Scent Trail",
-          cat: 1.8,
-          dog: 3.1,
-          className: "tile-trail",
-          blurb: "Trail patrol boosts dog instincts.",
-          icon: "assets/terrain-trail.svg",
-        },
-        {
-          id: "market",
-          name: "Snack Market",
-          cat: 2.6,
-          dog: 2.6,
-          className: "tile-market",
-          blurb: "Treats for all—pure toss-up.",
-          icon: "assets/terrain-market.svg",
-        },
-      ];
-
-      const terrainById = new Map(terrains.map((terrain) => [terrain.id, terrain]));
-      const totalTiles = 25;
-      const target = Math.floor(totalTiles / 2) + 1;
-
       const state = {
-        board: [],
-        catScore: 0,
-        dogScore: 0,
-        locked: false,
+        mode: modes[0].id,
+        difficulty: aiDifficulties[1].id,
+        position: 0,
+        running: false,
         finished: false,
-        aiTimeout: null,
+        catWins: 0,
+        dogWins: 0,
+        lastTick: 0,
+        rafId: null,
+        aiInterval: null,
+        clickWindow: [],
       };
 
-      setupGame(false);
+      function syncModeFromSelect() {
+        const match = modes.find((mode) => mode.id === modeSelect.value) ?? modes[0];
+        state.mode = match.id;
+        modeSelect.value = match.id;
+        modeDescription.textContent = match.description;
+        const showDifficulty = state.mode === "ai";
+        difficultyField.hidden = !showDifficulty;
+        difficultySelect.disabled = !showDifficulty;
+        if (!showDifficulty) {
+          state.difficulty = aiDifficulties[1].id;
+          difficultySelect.value = state.difficulty;
+        }
+      }
 
-      function setupGame(announce) {
-        clearTimeout(state.aiTimeout ?? 0);
-        state.aiTimeout = null;
-        state.board = generateBoard();
-        state.catScore = 0;
-        state.dogScore = 0;
-        state.locked = false;
+      function syncDifficultyFromSelect() {
+        const match = aiDifficulties.find((entry) => entry.id === difficultySelect.value) ?? aiDifficulties[1];
+        state.difficulty = match.id;
+        difficultySelect.value = match.id;
+      }
+
+      function registerClick(side) {
+        if (!state.running || state.finished) return;
+        if (state.mode === "ai" && side === "dogs") return;
+        applyImpulse(side, CLICK_IMPULSE);
+        recordClick(side);
+        renderArena();
+        checkWinConditions();
+      }
+
+      function applyImpulse(side, amount) {
+        const direction = side === "cats" ? -1 : 1;
+        state.position += direction * amount;
+        if (state.position > MAX_PULL) state.position = MAX_PULL;
+        if (state.position < -MAX_PULL) state.position = -MAX_PULL;
+      }
+
+      function recordClick(side) {
+        const now = performance.now();
+        state.clickWindow.push({ side, time: now });
+        pruneClickWindow();
+      }
+
+      function pruneClickWindow() {
+        const now = performance.now();
+        state.clickWindow = state.clickWindow.filter((entry) => now - entry.time <= 1200);
+      }
+
+      function clickRate(side) {
+        pruneClickWindow();
+        const count = state.clickWindow.filter((entry) => entry.side === side).length;
+        return count / 1.2; // approximate clicks per second
+      }
+
+      function startAi() {
+        stopAi();
+        state.aiInterval = window.setInterval(() => {
+          if (!state.running || state.finished) return;
+          const rate = clickRate("cats");
+          const config = aiDifficulties.find((entry) => entry.id === state.difficulty) ?? aiDifficulties[1];
+          const impulse = config.baseImpulse + rate * config.rateScale;
+          applyImpulse("dogs", impulse);
+          recordClick("dogs");
+          renderArena();
+          checkWinConditions();
+        }, 160);
+      }
+
+      function stopAi() {
+        if (state.aiInterval) {
+          window.clearInterval(state.aiInterval);
+          state.aiInterval = null;
+        }
+      }
+
+      function loop(timestamp) {
+        if (!state.running) return;
+        if (!state.lastTick) state.lastTick = timestamp;
+        const delta = (timestamp - state.lastTick) / 1000;
+        state.lastTick = timestamp;
+        if (!state.finished) {
+          const pullBack = -state.position * BASE_RETURN * delta;
+          state.position += pullBack;
+          if (state.position > MAX_PULL) state.position = MAX_PULL;
+          if (state.position < -MAX_PULL) state.position = -MAX_PULL;
+          renderArena();
+          checkWinConditions();
+          state.rafId = window.requestAnimationFrame(loop);
+        }
+      }
+
+      function startMatch() {
+        if (state.running) return;
+        state.position = 0;
+        state.running = true;
         state.finished = false;
-        renderBoard();
+        state.lastTick = 0;
+        state.clickWindow = [];
+        renderArena();
+        renderButtons();
+        setStatus(state.mode === "ai" ? "Mash for the cats! The dogs will auto-counter." : "Mash for your side! Cats use A, dogs use L.");
+        state.rafId = window.requestAnimationFrame(loop);
+        if (state.mode === "ai") startAi();
+      }
+
+      function finishMatch(winner) {
+        if (state.finished) return;
+        state.finished = true;
+        state.running = false;
+        stopLoops();
+        if (winner === "cats") {
+          state.catWins += 1;
+          setStatus("Cats win the tug! Press Start Match for a rematch.");
+        } else {
+          state.dogWins += 1;
+          setStatus("Dogs win the tug! Press Start Match for a rematch.");
+        }
         renderScoreboard();
-        if (announce) {
-          status.textContent = "Fresh park layout ready. Cats take the first move.";
+        renderButtons();
+      }
+
+      function checkWinConditions() {
+        if (state.finished) return;
+        if (state.position <= -MAX_PULL) {
+          finishMatch("cats");
+        } else if (state.position >= MAX_PULL) {
+          finishMatch("dogs");
         }
       }
 
-      function generateBoard() {
-        const collection = [];
-        for (let i = 0; i < totalTiles; i += 1) {
-          const terrain = terrains[Math.floor(Math.random() * terrains.length)];
-          collection.push({
-            terrain: terrain.id,
-            owner: null,
-          });
-        }
-        return collection;
-      }
-
-      function renderBoard() {
-        board.textContent = "";
-        state.board.forEach((tile, index) => {
-          const terrain = terrainById.get(tile.terrain);
-          const button = document.createElement("button");
-          button.type = "button";
-          button.className = "catsdogs-tile";
-          button.classList.add(terrain.className);
-          if (tile.owner === "player") button.classList.add("tile-cat");
-          if (tile.owner === "ai") button.classList.add("tile-dog");
-          button.disabled = state.locked || state.finished || tile.owner !== null;
-          button.innerHTML = `
-            <img src="${terrain.icon}" alt="" class="tile-icon" />
-            <span class="tile-name">${terrain.name}</span>
-          `;
-          button.setAttribute(
-            "aria-label",
-            `${terrain.name}. ${tile.owner ? (tile.owner === "player" ? "Cats control" : "Dogs control") : "Unclaimed"}`
-          );
-          button.addEventListener("click", () => handlePlayerMove(index));
-          board.appendChild(button);
-        });
+      function renderArena() {
+        const percent = 50 + (state.position / (MAX_PULL * 2)) * 100;
+        const clamped = Math.max(0, Math.min(100, percent));
+        ropeFill.style.left = `${clamped}%`;
+        ropeFill.style.transform = "translateX(-50%)";
+        renderScoreboard();
+        renderButtons();
       }
 
       function renderScoreboard() {
-        catBadge.textContent = `Cats: ${state.catScore}`;
-        dogBadge.textContent = `Dogs: ${state.dogScore}`;
-        const remaining = totalTiles - (state.catScore + state.dogScore);
-        tilesBadge.textContent = `Tiles left: ${remaining}`;
+        catBadge.textContent = `Cats wins: ${state.catWins}`;
+        dogBadge.textContent = `Dogs wins: ${state.dogWins}`;
+        catBadge.classList.toggle("is-active", state.position < 0 && state.running);
+        dogBadge.classList.toggle("is-active", state.position > 0 && state.running);
       }
 
-      function handlePlayerMove(index) {
-        if (state.locked || state.finished) return;
-        const tile = state.board[index];
-        if (!tile || tile.owner) return;
-        state.locked = true;
-        const outcome = resolveBattle(index, "player");
-        status.textContent = `${outcome} Dogs are preparing a counter move...`;
-        renderBoard();
+      function renderButtons() {
+        const catsActive = state.running && !state.finished;
+        const dogsActive = state.running && !state.finished && state.mode === "pass";
+        catButton.disabled = !catsActive;
+        dogButton.disabled = !dogsActive;
+        catButton.classList.toggle("is-active", catsActive);
+        dogButton.classList.toggle("is-active", dogsActive);
+      }
+
+      function stopLoops() {
+        if (state.rafId) {
+          window.cancelAnimationFrame(state.rafId);
+          state.rafId = null;
+        }
+        stopAi();
+      }
+
+      function resetMatch() {
+        stopLoops();
+        state.position = 0;
+        state.running = false;
+        state.finished = false;
+        state.lastTick = 0;
+        state.clickWindow = [];
+        renderArena();
         renderScoreboard();
-        if (checkVictory()) return;
-        state.aiTimeout = window.setTimeout(() => {
-          aiMove();
-        }, 700);
+        renderButtons();
       }
 
-      function aiMove() {
-        if (state.finished) return;
-        const choices = state.board
-          .map((tile, index) => ({ tile, index }))
-          .filter((entry) => entry.tile.owner === null);
-        if (!choices.length) {
-          concludeMatch();
-          return;
-        }
-        const scored = choices.map((choice) => {
-          const terrain = terrainById.get(choice.tile.terrain);
-          const preference = terrain.dog - terrain.cat + Math.random() * 0.5;
-          return { ...choice, preference };
-        });
-        scored.sort((a, b) => b.preference - a.preference);
-        const targetChoice = scored[0];
-        const outcome = resolveBattle(targetChoice.index, "ai");
-        renderBoard();
-        renderScoreboard();
-        const finished = checkVictory();
-        if (!finished) {
-          state.locked = false;
-          status.textContent = `${outcome} Your turn—choose the next tile.`;
-        }
+      function setStatus(message) {
+        status.textContent = message;
       }
 
-      function resolveBattle(index, attacker) {
-        const tile = state.board[index];
-        const terrain = terrainById.get(tile.terrain);
-        const catRoll = terrain.cat + Math.random() * 2 + (attacker === "player" ? 0.35 : 0);
-        const dogRoll = terrain.dog + Math.random() * 2 + (attacker === "ai" ? 0.35 : 0);
-        let winner;
-        let detail = terrain.blurb;
-        if (Math.abs(catRoll - dogRoll) < 0.25) {
-          if (terrain.cat >= terrain.dog) {
-            winner = "player";
-            detail += " Cats edged the tie.";
-          } else if (terrain.dog > terrain.cat) {
-            winner = "ai";
-            detail += " Dogs took the tiebreak.";
-          } else {
-            winner = Math.random() < 0.5 ? "player" : "ai";
-            detail += winner === "player" ? " Cats won the scramble." : " Dogs won the scramble.";
-          }
-        } else if (catRoll > dogRoll) {
-          winner = "player";
-        } else {
-          winner = "ai";
-        }
+      const handleModeChange = () => {
+        syncModeFromSelect();
+        syncDifficultyFromSelect();
+        state.catWins = 0;
+        state.dogWins = 0;
+        resetMatch();
+      };
 
-        tile.owner = winner;
-        if (winner === "player") {
-          state.catScore += 1;
-          return `${terrain.name}: Cats claimed the tile. ${detail}`;
-        }
-        state.dogScore += 1;
-        return `${terrain.name}: Dogs took control. ${detail}`;
-      }
+      const handleStartClick = () => {
+        resetMatch();
+        startMatch();
+      };
 
-      function checkVictory() {
-        if (state.catScore >= target || state.dogScore >= target) {
-          concludeMatch();
-          return true;
-        }
-        if (state.catScore + state.dogScore === totalTiles) {
-          concludeMatch();
-          return true;
-        }
-        return false;
-      }
+      modeSelect.addEventListener("change", handleModeChange);
+      startBtn.addEventListener("click", handleStartClick);
 
-      function concludeMatch() {
-        clearTimeout(state.aiTimeout ?? 0);
-        state.aiTimeout = null;
-        state.finished = true;
-        state.locked = true;
-        const result = state.catScore === state.dogScore
-          ? "It’s a stalemate. Reset to play again."
-          : state.catScore > state.dogScore
-          ? "Cats dominate the park!"
-          : "Dogs overrun the park!";
-        status.textContent = result;
-        renderBoard();
-        renderScoreboard();
-      }
+      const handleDifficultyChange = () => {
+        syncDifficultyFromSelect();
+        if (state.running && state.mode === "ai") {
+          stopAi();
+          startAi();
+        }
+      };
+      difficultySelect.addEventListener("change", handleDifficultyChange);
+
+      const handleCatClick = () => registerClick("cats");
+      const handleDogClick = () => registerClick("dogs");
+      catButton.addEventListener("click", handleCatClick);
+      dogButton.addEventListener("click", handleDogClick);
+
+      const handleKeydown = (event) => {
+        if (!state.running || state.finished) return;
+        if (event.repeat) return;
+        if (event.key === "a" || event.key === "A") {
+          registerClick("cats");
+        } else if (event.key === "l" || event.key === "L") {
+          registerClick("dogs");
+        }
+      };
+      window.addEventListener("keydown", handleKeydown);
+
+      syncModeFromSelect();
+      syncDifficultyFromSelect();
+      resetMatch();
 
       return () => {
-        clearTimeout(state.aiTimeout ?? 0);
+        stopLoops();
+        modeSelect.removeEventListener("change", handleModeChange);
+        startBtn.removeEventListener("click", handleStartClick);
+        catButton.removeEventListener("click", handleCatClick);
+        dogButton.removeEventListener("click", handleDogClick);
+        difficultySelect.removeEventListener("change", handleDifficultyChange);
+        window.removeEventListener("keydown", handleKeydown);
         wrapper.remove();
       };
     },
@@ -8243,7 +8332,7 @@ const listTemplate = document.getElementById("game-list-item-template");
 const backButton = document.querySelector(".back-button");
 
 const LOCK_PASSWORD = "1108";
-const LOCKED_GAME_IDS = new Set(["memory", "skyport", "orbit", "catsdogs", "spotdiff", "archery"]);
+const LOCKED_GAME_IDS = new Set(["memory", "skyport", "orbit", "spotdiff", "archery"]);
 let lockedUnlocked = false;
 lockedUnlocked = false;
 
