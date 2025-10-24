@@ -7309,6 +7309,518 @@ const games = [
     },
   },
   {
+    id: "haunt",
+    name: "Haunted Harvest",
+    summary: "Answer spooky trivia to capture roaming pumpkins.",
+    description:
+      "Pumpkins zip through Moonlight Grove. Tap one, answer a Halloween riddle or ordering puzzle, and collect the candy before the clock strikes midnight!",
+    logo: "assets/haunted-harvest-cover.png",
+    init(root) {
+      const shuffle = (source) => {
+        const clone = [...source];
+        for (let i = clone.length - 1; i > 0; i -= 1) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [clone[i], clone[j]] = [clone[j], clone[i]];
+        }
+        return clone;
+      };
+
+      const questions = [
+        { type: "choice", prompt: "Which creature can vanish through walls?", options: ["Ghost", "Ghoul", "Goblin"], answer: "Ghost" },
+        { type: "choice", prompt: "What do witches stir on Halloween night?", options: ["Cauldron", "Lantern", "Coffin"], answer: "Cauldron" },
+        { type: "choice", prompt: "Jack-o'-lanterns were first carved from which veggie?", options: ["Turnips", "Pumpkins", "Potatoes"], answer: "Turnips" },
+        { type: "choice", prompt: "Which pet is often a witch's familiar?", options: ["Black cat", "Hedgehog", "Ferret"], answer: "Black cat" },
+        { type: "choice", prompt: "Which candy is shaped like little corn kernels?", options: ["Candy corn", "Peppermint", "Jelly beans"], answer: "Candy corn" },
+        { type: "choice", prompt: "What monster transforms during a full moon?", options: ["Werewolf", "Mummy", "Zombie"], answer: "Werewolf" },
+        { type: "choice", prompt: "Which festival marked the Celtic new year?", options: ["Samhain", "Beltane", "Imbolc"], answer: "Samhain" },
+        { type: "choice", prompt: "Who sleeps in a coffin by day?", options: ["Vampire", "Specter", "Poltergeist"], answer: "Vampire" },
+        { type: "choice", prompt: "What fruit is used for bobbing games?", options: ["Apples", "Pears", "Grapes"], answer: "Apples" },
+        { type: "choice", prompt: "Which lantern guides lost souls?", options: ["Will-o'-the-wisp", "Glowbug", "Torch"], answer: "Will-o'-the-wisp" },
+        { type: "order", prompt: "Arrange these night visitors from dusk to dawn.", options: ["Bats", "Ghosts", "Roosters"], answer: ["Bats", "Ghosts", "Roosters"] },
+        { type: "order", prompt: "Tap the spooky sounds from softest to loudest.", options: ["Whisper", "Chime", "Thunder"], answer: ["Whisper", "Chime", "Thunder"] },
+      ];
+
+      const wrapper = document.createElement("div");
+      wrapper.className = "haunt-game";
+
+      const status = document.createElement("p");
+      status.className = "haunt-status";
+      status.setAttribute("role", "status");
+      status.setAttribute("aria-live", "polite");
+      status.textContent = "Welcome to Moonlight Grove. Tap Start to begin the candy chase.";
+
+      const scoreboard = document.createElement("div");
+      scoreboard.className = "haunt-scoreboard";
+      const candyBadge = document.createElement("span");
+      candyBadge.className = "badge haunt-candy";
+      const missBadge = document.createElement("span");
+      missBadge.className = "badge haunt-miss";
+      const timerBadge = document.createElement("span");
+      timerBadge.className = "badge haunt-timer";
+      scoreboard.append(candyBadge, missBadge, timerBadge);
+
+      const controls = document.createElement("div");
+      controls.className = "haunt-controls";
+      const startBtn = document.createElement("button");
+      startBtn.type = "button";
+      startBtn.className = "catsdogs-control-btn haunt-start";
+      startBtn.textContent = "Start hunt";
+
+      const muteBtn = document.createElement("button");
+      muteBtn.type = "button";
+      muteBtn.className = "catsdogs-control-btn haunt-mute";
+      controls.append(startBtn, muteBtn);
+
+      const stage = document.createElement("div");
+      stage.className = "haunt-stage";
+
+      const questionOverlay = document.createElement("div");
+      questionOverlay.className = "haunt-question";
+      questionOverlay.hidden = true;
+      const questionCard = document.createElement("div");
+      questionCard.className = "haunt-question-card";
+      const questionPrompt = document.createElement("p");
+      questionPrompt.className = "haunt-question-text";
+      const questionChoices = document.createElement("div");
+      questionChoices.className = "haunt-question-choices";
+      questionCard.append(questionPrompt, questionChoices);
+      questionOverlay.appendChild(questionCard);
+
+      wrapper.append(status, scoreboard, controls, stage, questionOverlay);
+      root.appendChild(wrapper);
+
+      const state = {
+        running: false,
+        candies: 0,
+        misses: 0,
+        timeLeft: 45,
+        timerId: null,
+        spawnTimeout: null,
+        questionActive: false,
+        questionQueue: [],
+        clickPoint: { x: 0, y: 0 },
+        spirits: new Set(),
+        pausedSpirits: [],
+        ambientCtx: null,
+        masterGain: null,
+        muted: false,
+        timerPaused: false,
+        melodyInterval: null,
+      };
+
+      function clearMelodyLoop() {
+        if (state.melodyInterval) {
+          window.clearInterval(state.melodyInterval);
+          state.melodyInterval = null;
+        }
+      }
+
+      function startMelodyLoop() {
+        if (!state.ambientCtx || !state.masterGain) return;
+        clearMelodyLoop();
+        const notes = [392, 494, 659, 523];
+        let step = 0;
+        state.melodyInterval = window.setInterval(() => {
+          const osc = state.ambientCtx.createOscillator();
+          osc.type = "square";
+          osc.frequency.value = notes[step % notes.length];
+          const gain = state.ambientCtx.createGain();
+          gain.gain.setValueAtTime(0.0001, state.ambientCtx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.16, state.ambientCtx.currentTime + 0.02);
+          gain.gain.exponentialRampToValueAtTime(0.002, state.ambientCtx.currentTime + 0.28);
+          osc.connect(gain).connect(state.masterGain);
+          osc.start();
+          osc.stop(state.ambientCtx.currentTime + 0.3);
+          step += 1;
+        }, 360);
+      }
+
+      function ensureAmbientAudio() {
+        if (state.muted) return;
+        if (state.ambientCtx) {
+          if (state.ambientCtx.state === "suspended") {
+            state.ambientCtx.resume().catch(() => {});
+          }
+          startMelodyLoop();
+          return;
+        }
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const master = ctx.createGain();
+        master.gain.value = 0.08;
+        master.connect(ctx.destination);
+        state.ambientCtx = ctx;
+        state.masterGain = master;
+        const pad = ctx.createOscillator();
+        pad.type = "triangle";
+        pad.frequency.value = 60;
+        const padGain = ctx.createGain();
+        padGain.gain.value = 0.12;
+        pad.connect(padGain).connect(master);
+        pad.start();
+
+        const shimmer = ctx.createOscillator();
+        shimmer.type = "sawtooth";
+        shimmer.frequency.value = 118;
+        const shimmerGain = ctx.createGain();
+        shimmerGain.gain.value = 0.04;
+        shimmer.connect(shimmerGain).connect(master);
+        shimmer.start();
+
+        const heartbeat = ctx.createOscillator();
+        heartbeat.type = "square";
+        heartbeat.frequency.value = 2.4;
+        const beatGain = ctx.createGain();
+        beatGain.gain.value = 0.2;
+        heartbeat.connect(beatGain).connect(master);
+        heartbeat.start();
+
+        const noise = ctx.createBufferSource();
+        const buffer = ctx.createBuffer(1, ctx.sampleRate * 2, ctx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < data.length; i += 1) {
+          data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (ctx.sampleRate * 1.4));
+        }
+        noise.buffer = buffer;
+        noise.loop = true;
+        const noiseGain = ctx.createGain();
+        noiseGain.gain.value = 0.03;
+        noise.connect(noiseGain).connect(master);
+        noise.start();
+
+        startMelodyLoop();
+      }
+
+      function updateMuteButton() {
+        muteBtn.textContent = state.muted ? "Unmute music" : "Mute music";
+      }
+
+      function setMuted(next) {
+        state.muted = next;
+        updateMuteButton();
+        if (state.muted) {
+          state.ambientCtx?.suspend().catch(() => {});
+          clearMelodyLoop();
+        } else {
+          ensureAmbientAudio();
+        }
+      }
+
+      function updateScoreboard() {
+        candyBadge.textContent = `Candy caught: ${state.candies}`;
+        missBadge.textContent = `Missed spirits: ${state.misses}`;
+        timerBadge.textContent = `Time: ${Math.max(0, state.timeLeft)}s`;
+      }
+
+      function setStatusText(message) {
+        status.textContent = message;
+      }
+
+      function resetGame() {
+        clearTimeout(state.spawnTimeout ?? 0);
+        state.spawnTimeout = null;
+        window.clearInterval(state.timerId ?? 0);
+        state.timerId = null;
+        state.spirits.forEach((spirit) => removeSpirit(spirit));
+        state.spirits.clear();
+        state.pausedSpirits = [];
+        state.running = false;
+        state.questionActive = false;
+        questionOverlay.hidden = true;
+        stage.classList.remove("is-paused", "flash-success", "flash-fail");
+        startBtn.textContent = "Start hunt";
+        state.timerPaused = false;
+      }
+
+      function startGame() {
+        resetGame();
+        ensureAmbientAudio();
+        state.running = true;
+        state.candies = 0;
+        state.misses = 0;
+        state.timeLeft = 45;
+        state.questionQueue = shuffle(questions);
+        state.timerPaused = false;
+        updateScoreboard();
+        setStatusText("Spirits are roaming! Tap them before they vanish.");
+        state.timerId = window.setInterval(() => {
+          if (state.timerPaused) return;
+          state.timeLeft -= 1;
+          updateScoreboard();
+          if (state.timeLeft <= 0) {
+            endGame();
+          }
+        }, 1000);
+        scheduleSpawn();
+      }
+
+      function endGame() {
+        if (!state.running) return;
+        state.running = false;
+        clearTimeout(state.spawnTimeout ?? 0);
+        state.spawnTimeout = null;
+        window.clearInterval(state.timerId ?? 0);
+        state.timerId = null;
+        questionOverlay.hidden = true;
+        state.questionActive = false;
+        stage.classList.remove("is-paused");
+        state.timerPaused = false;
+        const message =
+          state.candies >= state.misses
+            ? "Sweet victory! You ruled Moonlight Grove."
+            : "The spirits slipped away! Try again for more candy.";
+        setStatusText(message);
+        startBtn.textContent = "Play again";
+      }
+
+      function scheduleSpawn() {
+        if (!state.running || state.questionActive) return;
+        clearTimeout(state.spawnTimeout ?? 0);
+        const delay = 420 + Math.random() * 420;
+        state.spawnTimeout = window.setTimeout(() => {
+          state.spawnTimeout = null;
+          spawnSpirit();
+          scheduleSpawn();
+        }, delay);
+      }
+
+      function spawnSpirit() {
+        if (!state.running) return;
+        const spirit = document.createElement("button");
+        spirit.type = "button";
+        spirit.className = "haunt-spirit";
+        spirit.setAttribute("aria-label", "Catch spirit");
+        const size = 56 + Math.random() * 32;
+        positionSpirit(spirit, size);
+        stage.appendChild(spirit);
+        state.spirits.add(spirit);
+        spirit._moveInterval = window.setInterval(() => moveSpirit(spirit), 420 + Math.random() * 320);
+        startVanishTimer(spirit, 2000 + Math.random() * 800);
+        spirit.addEventListener("mousedown", (event) => {
+          event.preventDefault();
+          handleSpiritClick(spirit);
+        });
+      }
+
+      function startVanishTimer(spirit, duration) {
+        clearTimeout(spirit._vanishTimeout ?? 0);
+        spirit._vanishEndsAt = performance.now() + duration;
+        spirit._vanishTimeout = window.setTimeout(() => {
+          if (!spirit.isConnected) return;
+          removeSpirit(spirit);
+          state.misses += 1;
+          updateScoreboard();
+        }, duration);
+      }
+
+      function positionSpirit(spirit, size) {
+        const maxLeft = Math.max(0, stage.clientWidth - size);
+        const maxTop = Math.max(0, stage.clientHeight - size);
+        spirit.style.width = `${size}px`;
+        spirit.style.height = `${size}px`;
+        spirit.style.left = `${Math.random() * maxLeft}px`;
+        spirit.style.top = `${Math.random() * maxTop}px`;
+      }
+
+      function moveSpirit(spirit) {
+        if (!spirit.isConnected) return;
+        const size = spirit.offsetWidth || 60;
+        positionSpirit(spirit, size);
+      }
+
+      function handleSpiritClick(spirit) {
+        if (!state.running || state.questionActive) return;
+        const stageRect = stage.getBoundingClientRect();
+        const rect = spirit.getBoundingClientRect();
+        state.clickPoint = {
+          x: rect.left - stageRect.left + rect.width / 2,
+          y: rect.top - stageRect.top + rect.height / 2,
+        };
+        removeSpirit(spirit);
+        pauseSpirits();
+        askQuestion();
+      }
+
+      function pauseSpirits() {
+        stage.classList.add("is-paused");
+        state.pausedSpirits = [];
+        state.spirits.forEach((spirit) => {
+          const remaining = spirit._vanishEndsAt ? Math.max(400, spirit._vanishEndsAt - performance.now()) : 1600;
+          clearInterval(spirit._moveInterval ?? 0);
+          clearTimeout(spirit._vanishTimeout ?? 0);
+        state.pausedSpirits.push({ spirit, remaining });
+      });
+        state.timerPaused = true;
+      }
+
+      function resumeSpirits() {
+        stage.classList.remove("is-paused");
+        state.pausedSpirits.forEach(({ spirit, remaining }) => {
+          if (!spirit.isConnected) return;
+          spirit._moveInterval = window.setInterval(() => moveSpirit(spirit), 420 + Math.random() * 320);
+          startVanishTimer(spirit, remaining);
+        });
+        state.pausedSpirits = [];
+        state.timerPaused = false;
+      }
+
+      function askQuestion() {
+        if (!state.questionQueue.length) {
+          state.questionQueue = shuffle(questions);
+        }
+        state.questionActive = true;
+        questionOverlay.hidden = false;
+        state.currentQuestion = state.questionQueue.shift();
+        renderQuestion(state.currentQuestion);
+        setStatusText("Answer the riddle to claim the candy!");
+      }
+
+      function renderQuestion(question) {
+        questionPrompt.textContent = question.prompt;
+        questionChoices.textContent = "";
+        questionChoices.classList.toggle("is-order", question.type === "order");
+        if (question.type === "order") {
+          renderOrderQuestion(question);
+        } else {
+          renderChoiceQuestion(question);
+        }
+      }
+
+      function renderChoiceQuestion(question) {
+        shuffle(question.options).forEach((option) => {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.className = "haunt-question-choice";
+          button.textContent = option;
+          button.addEventListener("click", () => handleAnswer(option === question.answer));
+          questionChoices.appendChild(button);
+        });
+      }
+
+      function renderOrderQuestion(question) {
+        const instruction = document.createElement("p");
+        instruction.className = "haunt-order-instructions";
+        instruction.textContent = "Tap the options in the correct order.";
+        questionChoices.appendChild(instruction);
+
+        const selected = document.createElement("div");
+        selected.className = "haunt-order-selected";
+        questionChoices.appendChild(selected);
+
+        const optionsWrap = document.createElement("div");
+        optionsWrap.className = "haunt-order-options";
+        questionChoices.appendChild(optionsWrap);
+
+        const chosen = [];
+        shuffle(question.options).forEach((option) => {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.className = "haunt-question-choice";
+          button.textContent = option;
+          button.addEventListener("click", () => {
+            button.disabled = true;
+            chosen.push(option);
+            selected.textContent = chosen.join(" → ");
+            if (chosen.length === question.answer.length) {
+              const correct = chosen.every((value, index) => value === question.answer[index]);
+              handleAnswer(correct);
+            }
+          });
+          optionsWrap.appendChild(button);
+        });
+
+        const reset = document.createElement("button");
+        reset.type = "button";
+        reset.className = "haunt-question-choice haunt-order-reset";
+        reset.textContent = "Reset order";
+        reset.addEventListener("click", () => {
+          chosen.length = 0;
+          selected.textContent = "";
+          optionsWrap.querySelectorAll("button").forEach((btn) => (btn.disabled = false));
+        });
+        questionChoices.appendChild(reset);
+      }
+
+      function handleAnswer(correct) {
+        questionOverlay.hidden = true;
+        showPopEffect(correct);
+        flashStage(correct ? "success" : "fail");
+        if (correct) {
+          state.candies += 1;
+          setStatusText("Delicious! You snagged the candy.");
+        } else {
+          state.misses += 1;
+          setStatusText("Boo! The pumpkin popped in a puff of smoke.");
+        }
+        state.questionActive = false;
+        updateScoreboard();
+        resumeSpirits();
+        if (state.running) {
+          scheduleSpawn();
+        }
+      }
+
+      function removeSpirit(spirit) {
+        if (!spirit || !spirit.isConnected) return;
+        clearInterval(spirit._moveInterval ?? 0);
+        clearTimeout(spirit._vanishTimeout ?? 0);
+        state.spirits.delete(spirit);
+        spirit.remove();
+      }
+
+      function showPopEffect(success) {
+        const fx = document.createElement("span");
+        fx.className = `haunt-pop ${success ? "haunt-pop-good" : "haunt-pop-bad"}`;
+        fx.textContent = success ? "🍬" : "💥";
+        fx.style.left = `${state.clickPoint.x}px`;
+        fx.style.top = `${state.clickPoint.y}px`;
+        stage.appendChild(fx);
+        window.setTimeout(() => fx.remove(), 600);
+        showBanner(success);
+      }
+
+      function flashStage(mode) {
+        stage.classList.remove("flash-success", "flash-fail");
+        stage.classList.add(mode === "success" ? "flash-success" : "flash-fail");
+        window.setTimeout(() => stage.classList.remove("flash-success", "flash-fail"), 450);
+      }
+
+      function showBanner(success) {
+        const banner = document.createElement("div");
+        banner.className = `haunt-banner ${success ? "haunt-banner-success" : "haunt-banner-fail"}`;
+        banner.textContent = success ? "CORRECT" : "INCORRECT";
+        wrapper.appendChild(banner);
+        requestAnimationFrame(() => banner.classList.add("is-active"));
+        window.setTimeout(() => banner.remove(), 900);
+      }
+
+      const handleStart = () => {
+        if (state.running) {
+          endGame();
+        }
+        startBtn.textContent = "Restart";
+        startGame();
+      };
+      startBtn.addEventListener("click", handleStart);
+
+      const handleMute = () => setMuted(!state.muted);
+      muteBtn.addEventListener("click", handleMute);
+      updateMuteButton();
+
+      updateScoreboard();
+
+      return () => {
+        resetGame();
+        startBtn.removeEventListener("click", handleStart);
+        muteBtn.removeEventListener("click", handleMute);
+        clearMelodyLoop();
+        state.ambientCtx?.close().catch(() => {});
+        state.ambientCtx = null;
+        state.masterGain = null;
+        wrapper.remove();
+      };
+    },
+  },
+  {
     id: "lights",
     name: "Lights Down",
     summary: "Toggle tiles to switch off the board.",

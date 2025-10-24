@@ -37,6 +37,10 @@ body {
   padding: clamp(2rem, 5vw, 4rem) clamp(1rem, 4vw, 3rem);
 }
 
+[hidden] {
+  display: none !important;
+}
+
 
 #app {
   width: min(1024px, 100%);
@@ -2973,6 +2977,241 @@ button:hover {
   .catsdogs-tug-btn {
     width: 100%;
   }
+}
+
+.haunt-game {
+  position: relative;
+  display: grid;
+  gap: 1.25rem;
+}
+
+.haunt-status {
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.05);
+  padding: 0.9rem 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.haunt-scoreboard {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.haunt-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.haunt-start {
+  padding: 0.45rem 1.35rem;
+}
+
+.haunt-mute {
+  padding: 0.4rem 1rem;
+  background: linear-gradient(135deg, rgba(114, 246, 255, 0.12), rgba(114, 246, 255, 0.24));
+}
+
+.haunt-stage {
+  position: relative;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: radial-gradient(circle at 30% 20%, rgba(255, 217, 114, 0.18), transparent 55%),
+    radial-gradient(circle at 70% 80%, rgba(114, 246, 255, 0.15), transparent 50%),
+    rgba(8, 12, 24, 0.85);
+  height: clamp(260px, 60vw, 340px);
+  overflow: hidden;
+}
+
+.haunt-stage.is-paused::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(5, 8, 18, 0.55);
+}
+
+.haunt-stage.is-paused .haunt-spirit {
+  opacity: 0.45;
+}
+
+.haunt-stage.flash-success {
+  animation: hauntStageGlow 0.5s ease;
+  box-shadow: 0 0 25px rgba(114, 255, 182, 0.35);
+}
+
+.haunt-stage.flash-fail {
+  animation: hauntStageGlow 0.5s ease;
+  box-shadow: 0 0 25px rgba(255, 108, 129, 0.35);
+}
+
+.haunt-spirit {
+  position: absolute;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.9), rgba(173, 142, 255, 0.35));
+  box-shadow: 0 18px 32px rgba(114, 246, 255, 0.25);
+  display: grid;
+  place-items: center;
+  transition: transform 120ms ease, opacity 120ms ease;
+}
+
+.haunt-spirit.is-caught {
+  transform: scale(1.1);
+  opacity: 0.3;
+}
+
+.haunt-spirit::after {
+  content: "🎃";
+  font-size: clamp(1.4rem, 3vw, 1.8rem);
+}
+
+.haunt-spirit.is-caught::after {
+  content: "🍬";
+}
+
+.haunt-question {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(5, 8, 18, 0.88);
+  backdrop-filter: blur(5px);
+  padding: 1.5rem;
+}
+
+.haunt-question-card {
+  max-width: 420px;
+  width: min(90vw, 420px);
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(114, 246, 255, 0.35);
+  background: rgba(10, 14, 30, 0.95);
+  padding: 1.25rem;
+  display: grid;
+  gap: 0.75rem;
+  text-align: center;
+}
+
+.haunt-question-text {
+  margin: 0;
+  font-weight: 600;
+  font-size: 1.05rem;
+}
+
+.haunt-question-choices {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.haunt-question-choice {
+  border-radius: 999px;
+  border: 1px solid rgba(114, 246, 255, 0.35);
+  background: rgba(114, 246, 255, 0.15);
+  color: var(--accent);
+  padding: 0.55rem 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.haunt-question-choice:hover,
+.haunt-question-choice:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 20px rgba(114, 246, 255, 0.25);
+}
+
+.haunt-question-choices.is-order {
+  gap: 0.35rem;
+}
+
+.haunt-order-instructions {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.haunt-order-selected {
+  min-height: 1.4rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.haunt-order-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.haunt-question-choice.haunt-order-reset {
+  background: rgba(255, 217, 114, 0.18);
+  border-color: rgba(255, 217, 114, 0.4);
+}
+
+.haunt-pop {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  font-size: 1.6rem;
+  animation: hauntPop 0.6s ease forwards;
+  pointer-events: none;
+}
+
+.haunt-pop-good {
+  filter: drop-shadow(0 0 12px rgba(255, 217, 114, 0.65));
+}
+
+.haunt-pop-bad {
+  filter: drop-shadow(0 0 12px rgba(255, 108, 129, 0.65));
+}
+
+@keyframes hauntPop {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -80%) scale(1.3);
+  }
+}
+
+@keyframes hauntStageGlow {
+  0% {
+    filter: drop-shadow(0 0 0 rgba(255, 255, 255, 0));
+  }
+  100% {
+    filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0));
+  }
+}
+
+.haunt-banner {
+  position: absolute;
+  left: 50%;
+  top: 20%;
+  transform: translate(-50%, -50%) scale(0.8);
+  font-size: clamp(2.2rem, 8vw, 3.5rem);
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 220ms ease, opacity 220ms ease;
+}
+
+.haunt-banner-success {
+  color: #72ffb6;
+}
+
+.haunt-banner-fail {
+  color: #ff6b81;
+}
+
+.haunt-banner.is-active {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1.05);
 }
 
 .coming-strip {
