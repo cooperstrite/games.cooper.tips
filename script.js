@@ -396,8 +396,16 @@ const games = [
       const config = {
         gridSize: 16,
         startLength: 4,
-        tickMs: 140,
       };
+
+      const difficulties = [
+        { id: "sloth", label: "Sloth", speedMs: 220 },
+        { id: "easy", label: "Easy", speedMs: 180 },
+        { id: "classic", label: "Classic", speedMs: 140 },
+        { id: "fast", label: "Fast", speedMs: 110 },
+        { id: "blitz", label: "Blitz", speedMs: 90 },
+      ];
+      const defaultDifficulty = difficulties[1];
 
       const directions = {
         up: { x: 0, y: -1 },
@@ -422,15 +430,34 @@ const games = [
       scoreValue.textContent = "0";
       scoreCard.append(scoreLabel, scoreValue);
 
-      header.append(scoreCard);
+      const speedCard = document.createElement("div");
+      speedCard.className = "snake-score";
+      const speedLabel = document.createElement("span");
+      speedLabel.textContent = "Speed";
+      const speedValue = document.createElement("strong");
+      speedValue.textContent = defaultDifficulty.label;
+      speedCard.append(speedLabel, speedValue);
+
+      header.append(scoreCard, speedCard);
 
       const status = document.createElement("p");
       status.className = "help-text";
-      status.textContent = "Press Start to begin. Use arrow keys or WASD to steer.";
+      status.textContent =
+        "Press Start to begin. Use arrow keys, WASD, or the on-screen arrows to steer.";
+
+      const boardWrap = document.createElement("div");
+      boardWrap.className = "snake-board-wrap";
 
       const board = document.createElement("div");
       board.className = "snake-board";
       board.style.setProperty("--grid-size", String(config.gridSize));
+
+      const countdown = document.createElement("div");
+      countdown.className = "snake-countdown";
+      countdown.setAttribute("aria-live", "polite");
+      countdown.hidden = true;
+      const countdownText = document.createElement("span");
+      countdown.appendChild(countdownText);
 
       const cells = [];
       for (let i = 0; i < config.gridSize * config.gridSize; i += 1) {
@@ -440,8 +467,28 @@ const games = [
         cells.push(cell);
       }
 
+      boardWrap.append(board, countdown);
+
       const controls = document.createElement("div");
       controls.className = "snake-controls";
+
+      const difficultyLabel = document.createElement("label");
+      difficultyLabel.className = "range-select";
+      const difficultyText = document.createElement("span");
+      difficultyText.textContent = "Difficulty";
+      const difficultySelect = document.createElement("select");
+      difficultySelect.name = "difficulty";
+      difficultySelect.setAttribute("aria-label", "Snake difficulty");
+      difficulties.forEach((difficulty) => {
+        const option = document.createElement("option");
+        option.value = difficulty.id;
+        option.textContent = difficulty.label;
+        if (difficulty.id === defaultDifficulty.id) {
+          option.selected = true;
+        }
+        difficultySelect.appendChild(option);
+      });
+      difficultyLabel.append(difficultyText, difficultySelect);
 
       const startBtn = document.createElement("button");
       startBtn.type = "button";
@@ -453,7 +500,7 @@ const games = [
       pauseBtn.textContent = "Pause";
       pauseBtn.disabled = true;
 
-      controls.append(startBtn, pauseBtn);
+      controls.append(difficultyLabel, startBtn, pauseBtn);
 
       const pad = document.createElement("div");
       pad.className = "snake-pad";
@@ -478,19 +525,22 @@ const games = [
         createPadButton("↓", "down", "Move down")
       );
 
-      wrapper.append(header, status, board, controls, pad);
+      wrapper.append(header, status, boardWrap, controls, pad);
       root.appendChild(wrapper);
 
-      let state = createInitialState();
+      let difficultyId = defaultDifficulty.id;
+      let state = createInitialState(getDifficulty(difficultyId));
       let queuedDirection = state.direction;
       let tickId = null;
+      let countdownId = null;
+      let countdownTimeout = null;
 
       render();
       updateUI();
 
       startBtn.addEventListener("click", () => {
         if (state.phase === "ready") {
-          startGame();
+          startCountdown();
         } else {
           resetGame(true);
         }
@@ -498,6 +548,16 @@ const games = [
 
       pauseBtn.addEventListener("click", () => {
         togglePause();
+      });
+
+      difficultySelect.addEventListener("change", () => {
+        difficultyId = difficultySelect.value;
+        const difficulty = getDifficulty(difficultyId);
+        state = { ...state, speedMs: difficulty.speedMs, difficulty: difficulty.id };
+        if (state.phase === "running") {
+          startTimer();
+        }
+        updateUI();
       });
 
       const handleKeydown = (event) => {
@@ -532,7 +592,7 @@ const games = [
       function handleDirectionInput(dirKey) {
         if (!directions[dirKey]) return;
         if (state.phase === "over" || state.phase === "won") return;
-        if (state.phase === "ready") startGame();
+        if (state.phase === "ready") startCountdown();
         queueDirection(dirKey);
       }
 
@@ -546,7 +606,11 @@ const games = [
         return a.x === -b.x && a.y === -b.y;
       }
 
-      function createInitialState() {
+      function getDifficulty(id) {
+        return difficulties.find((entry) => entry.id === id) ?? defaultDifficulty;
+      }
+
+      function createInitialState(difficulty = defaultDifficulty) {
         const snake = createStartSnake(config.gridSize, config.startLength);
         const food = spawnFood(config.gridSize, snake, rng);
         return {
@@ -554,6 +618,8 @@ const games = [
           direction: directions.right,
           food,
           score: 0,
+          speedMs: difficulty.speedMs,
+          difficulty: difficulty.id,
           phase: "ready",
         };
       }
@@ -585,7 +651,7 @@ const games = [
 
       function startTimer() {
         stopTimer();
-        tickId = window.setInterval(tick, config.tickMs);
+        tickId = window.setInterval(tick, state.speedMs);
       }
 
       function stopTimer() {
@@ -604,11 +670,13 @@ const games = [
 
       function resetGame(autoStart = false) {
         stopTimer();
-        state = createInitialState();
+        clearCountdown();
+        const difficulty = getDifficulty(difficultyId);
+        difficultySelect.value = difficulty.id;
+        state = createInitialState(difficulty);
         queuedDirection = state.direction;
         if (autoStart) {
-          state = { ...state, phase: "running" };
-          startTimer();
+          startCountdown();
         }
         render();
         updateUI();
@@ -623,6 +691,49 @@ const games = [
           startTimer();
         }
         updateUI();
+      }
+
+      function startCountdown() {
+        if (state.phase === "countdown") return;
+        clearCountdown();
+        state = { ...state, phase: "countdown" };
+        let remaining = 3;
+        updateCountdownDisplay(remaining);
+        updateUI();
+        countdownId = window.setInterval(() => {
+          remaining -= 1;
+          if (remaining <= 0) {
+            window.clearInterval(countdownId);
+            countdownId = null;
+            countdownText.textContent = "GO!";
+            countdown.classList.add("is-go");
+            countdownTimeout = window.setTimeout(() => {
+              clearCountdown();
+              startGame();
+            }, 500);
+          } else {
+            updateCountdownDisplay(remaining);
+          }
+        }, 1000);
+      }
+
+      function updateCountdownDisplay(value) {
+        countdownText.textContent = String(value);
+        countdown.classList.remove("is-go");
+        countdown.hidden = false;
+      }
+
+      function clearCountdown() {
+        if (countdownId) {
+          window.clearInterval(countdownId);
+          countdownId = null;
+        }
+        if (countdownTimeout) {
+          window.clearTimeout(countdownTimeout);
+          countdownTimeout = null;
+        }
+        countdown.hidden = true;
+        countdown.classList.remove("is-go");
       }
 
       function tick() {
@@ -690,13 +801,26 @@ const games = [
 
       function render() {
         cells.forEach((cell) => {
-          cell.classList.remove("snake", "snake-head", "snake-food");
+          cell.classList.remove(
+            "snake",
+            "snake-head",
+            "snake-body",
+            "snake-tail",
+            "snake-food"
+          );
         });
         state.snake.forEach((index, idx) => {
           const cell = cells[index];
           if (!cell) return;
           cell.classList.add("snake");
-          if (idx === 0) cell.classList.add("snake-head");
+          if (idx === 0) {
+            cell.classList.add("snake-head");
+          } else {
+            cell.classList.add("snake-body");
+          }
+          if (idx === state.snake.length - 1) {
+            cell.classList.add("snake-tail");
+          }
         });
         if (state.food !== null && cells[state.food]) {
           cells[state.food].classList.add("snake-food");
@@ -704,9 +828,14 @@ const games = [
       }
 
       function updateUI() {
+        const difficulty = getDifficulty(state.difficulty);
         scoreValue.textContent = String(state.score);
+        speedValue.textContent = difficulty.label;
         if (state.phase === "ready") {
-          status.textContent = "Press Start to begin. Use arrow keys or WASD to steer.";
+          status.textContent =
+            "Press Start to begin. Use arrow keys, WASD, or the on-screen arrows to steer.";
+        } else if (state.phase === "countdown") {
+          status.textContent = "Get ready... Snake launches in 3 seconds.";
         } else if (state.phase === "running") {
           status.textContent = "Eat the food, avoid the walls, and don't bite yourself.";
         } else if (state.phase === "paused") {
@@ -719,11 +848,17 @@ const games = [
 
         startBtn.textContent = state.phase === "ready" ? "Start" : "Restart";
         pauseBtn.textContent = state.phase === "paused" ? "Resume" : "Pause";
-        pauseBtn.disabled = state.phase === "ready" || state.phase === "over" || state.phase === "won";
+        pauseBtn.disabled =
+          state.phase === "ready" ||
+          state.phase === "countdown" ||
+          state.phase === "over" ||
+          state.phase === "won";
+        startBtn.disabled = state.phase === "countdown";
       }
 
       return () => {
         stopTimer();
+        clearCountdown();
         window.removeEventListener("keydown", handleKeydown);
         wrapper.remove();
       };

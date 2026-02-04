@@ -3605,10 +3605,16 @@ button:hover {
   font-size: 1.1rem;
 }
 
-.snake-board {
+.snake-board-wrap {
   width: min(420px, 90vw);
   aspect-ratio: 1 / 1;
   justify-self: center;
+  position: relative;
+}
+
+.snake-board {
+  width: 100%;
+  height: 100%;
   display: grid;
   grid-template-columns: repeat(var(--grid-size), 1fr);
   grid-template-rows: repeat(var(--grid-size), 1fr);
@@ -3617,6 +3623,32 @@ button:hover {
   border-radius: var(--radius-lg);
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.snake-countdown {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-lg);
+  background: rgba(9, 12, 26, 0.78);
+  backdrop-filter: blur(6px);
+  font-size: clamp(3rem, 12vw, 6rem);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--accent-strong);
+  text-shadow: 0 0 24px rgba(114, 246, 255, 0.45);
+}
+
+.snake-countdown span {
+  background: linear-gradient(135deg, rgba(114, 246, 255, 0.95), rgba(255, 217, 114, 0.95));
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.snake-countdown.is-go span {
+  background: linear-gradient(135deg, rgba(114, 255, 182, 0.95), rgba(114, 246, 255, 0.95));
+  -webkit-background-clip: text;
 }
 
 .snake-cell {
@@ -3646,8 +3678,12 @@ button:hover {
   align-items: center;
 }
 
+.snake-controls .range-select select {
+  min-width: 140px;
+}
+
 .snake-pad {
-  display: none;
+  display: grid;
   justify-content: center;
   gap: 0.35rem;
   grid-template-columns: repeat(3, 48px);
@@ -3682,12 +3718,6 @@ button:hover {
 
 .snake-pad-btn[data-dir="right"] {
   grid-area: right;
-}
-
-@media (max-width: 720px) {
-  .snake-pad {
-    display: grid;
-  }
 }
 
 .lights-grid {
