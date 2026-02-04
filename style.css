@@ -3571,6 +3571,125 @@ button:hover {
   }
 }
 
+.snake-game {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.snake-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.snake-score {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.snake-score span {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+.snake-score strong {
+  font-size: 1.1rem;
+}
+
+.snake-board {
+  width: min(420px, 90vw);
+  aspect-ratio: 1 / 1;
+  justify-self: center;
+  display: grid;
+  grid-template-columns: repeat(var(--grid-size), 1fr);
+  grid-template-rows: repeat(var(--grid-size), 1fr);
+  gap: 0.2rem;
+  padding: 0.6rem;
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.snake-cell {
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.snake-cell.snake {
+  background: rgba(114, 246, 255, 0.35);
+}
+
+.snake-cell.snake-head {
+  background: linear-gradient(135deg, rgba(114, 246, 255, 0.7), rgba(255, 217, 114, 0.75));
+  box-shadow: 0 0 14px rgba(114, 246, 255, 0.45);
+}
+
+.snake-cell.snake-food {
+  background: rgba(255, 107, 129, 0.85);
+  box-shadow: 0 0 12px rgba(255, 107, 129, 0.5);
+}
+
+.snake-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.snake-pad {
+  display: none;
+  justify-content: center;
+  gap: 0.35rem;
+  grid-template-columns: repeat(3, 48px);
+  grid-template-rows: repeat(3, 48px);
+  grid-template-areas:
+    ". up ."
+    "left . right"
+    ". down .";
+  touch-action: manipulation;
+}
+
+.snake-pad-btn {
+  padding: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  font-size: 1.05rem;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.snake-pad-btn[data-dir="up"] {
+  grid-area: up;
+}
+
+.snake-pad-btn[data-dir="down"] {
+  grid-area: down;
+}
+
+.snake-pad-btn[data-dir="left"] {
+  grid-area: left;
+}
+
+.snake-pad-btn[data-dir="right"] {
+  grid-area: right;
+}
+
+@media (max-width: 720px) {
+  .snake-pad {
+    display: grid;
+  }
+}
+
 .lights-grid {
   display: grid;
   gap: 0.4rem;

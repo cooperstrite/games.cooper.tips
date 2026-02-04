@@ -386,6 +386,350 @@ const games = [
     },
   },
   {
+    id: "snake",
+    name: "Snake",
+    summary: "Grow the snake without hitting walls.",
+    description:
+      "Guide the snake with arrow keys or WASD. Eat the food to grow longer and avoid crashing into walls or yourself.",
+    logo: "assets/snake-cover.svg",
+    init(root) {
+      const config = {
+        gridSize: 16,
+        startLength: 4,
+        tickMs: 140,
+      };
+
+      const directions = {
+        up: { x: 0, y: -1 },
+        down: { x: 0, y: 1 },
+        left: { x: -1, y: 0 },
+        right: { x: 1, y: 0 },
+      };
+
+      const rng = () => Math.random();
+
+      const wrapper = document.createElement("div");
+      wrapper.className = "snake-game";
+
+      const header = document.createElement("div");
+      header.className = "snake-meta";
+
+      const scoreCard = document.createElement("div");
+      scoreCard.className = "snake-score";
+      const scoreLabel = document.createElement("span");
+      scoreLabel.textContent = "Score";
+      const scoreValue = document.createElement("strong");
+      scoreValue.textContent = "0";
+      scoreCard.append(scoreLabel, scoreValue);
+
+      header.append(scoreCard);
+
+      const status = document.createElement("p");
+      status.className = "help-text";
+      status.textContent = "Press Start to begin. Use arrow keys or WASD to steer.";
+
+      const board = document.createElement("div");
+      board.className = "snake-board";
+      board.style.setProperty("--grid-size", String(config.gridSize));
+
+      const cells = [];
+      for (let i = 0; i < config.gridSize * config.gridSize; i += 1) {
+        const cell = document.createElement("div");
+        cell.className = "snake-cell";
+        board.appendChild(cell);
+        cells.push(cell);
+      }
+
+      const controls = document.createElement("div");
+      controls.className = "snake-controls";
+
+      const startBtn = document.createElement("button");
+      startBtn.type = "button";
+      startBtn.className = "primary-btn";
+      startBtn.textContent = "Start";
+
+      const pauseBtn = document.createElement("button");
+      pauseBtn.type = "button";
+      pauseBtn.textContent = "Pause";
+      pauseBtn.disabled = true;
+
+      controls.append(startBtn, pauseBtn);
+
+      const pad = document.createElement("div");
+      pad.className = "snake-pad";
+
+      const createPadButton = (label, dirKey, title) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "snake-pad-btn";
+        button.dataset.dir = dirKey;
+        button.setAttribute("aria-label", title);
+        button.textContent = label;
+        button.addEventListener("click", () => {
+          handleDirectionInput(dirKey);
+        });
+        return button;
+      };
+
+      pad.append(
+        createPadButton("↑", "up", "Move up"),
+        createPadButton("←", "left", "Move left"),
+        createPadButton("→", "right", "Move right"),
+        createPadButton("↓", "down", "Move down")
+      );
+
+      wrapper.append(header, status, board, controls, pad);
+      root.appendChild(wrapper);
+
+      let state = createInitialState();
+      let queuedDirection = state.direction;
+      let tickId = null;
+
+      render();
+      updateUI();
+
+      startBtn.addEventListener("click", () => {
+        if (state.phase === "ready") {
+          startGame();
+        } else {
+          resetGame(true);
+        }
+      });
+
+      pauseBtn.addEventListener("click", () => {
+        togglePause();
+      });
+
+      const handleKeydown = (event) => {
+        const key = event.key.toLowerCase();
+        const dirKey = {
+          arrowup: "up",
+          w: "up",
+          arrowdown: "down",
+          s: "down",
+          arrowleft: "left",
+          a: "left",
+          arrowright: "right",
+          d: "right",
+        }[key];
+
+        if (dirKey) {
+          event.preventDefault();
+          handleDirectionInput(dirKey);
+          return;
+        }
+
+        if (event.code === "Space") {
+          if (state.phase === "running" || state.phase === "paused") {
+            event.preventDefault();
+            togglePause();
+          }
+        }
+      };
+
+      window.addEventListener("keydown", handleKeydown);
+
+      function handleDirectionInput(dirKey) {
+        if (!directions[dirKey]) return;
+        if (state.phase === "over" || state.phase === "won") return;
+        if (state.phase === "ready") startGame();
+        queueDirection(dirKey);
+      }
+
+      function queueDirection(dirKey) {
+        const next = directions[dirKey];
+        if (!next || isOpposite(next, state.direction)) return;
+        queuedDirection = next;
+      }
+
+      function isOpposite(a, b) {
+        return a.x === -b.x && a.y === -b.y;
+      }
+
+      function createInitialState() {
+        const snake = createStartSnake(config.gridSize, config.startLength);
+        const food = spawnFood(config.gridSize, snake, rng);
+        return {
+          snake,
+          direction: directions.right,
+          food,
+          score: 0,
+          phase: "ready",
+        };
+      }
+
+      function createStartSnake(gridSize, length) {
+        const centerY = Math.floor(gridSize / 2);
+        const headX = Math.floor(gridSize / 2) + Math.floor(length / 2) - 1;
+        const snake = [];
+        for (let i = 0; i < length; i += 1) {
+          snake.push((headX - i) + centerY * gridSize);
+        }
+        return snake;
+      }
+
+      function spawnFood(gridSize, snake, randomFn) {
+        const total = gridSize * gridSize;
+        const occupied = new Set(snake);
+        const available = total - occupied.size;
+        if (available <= 0) return null;
+        const target = Math.floor(randomFn() * available);
+        let count = -1;
+        for (let i = 0; i < total; i += 1) {
+          if (occupied.has(i)) continue;
+          count += 1;
+          if (count === target) return i;
+        }
+        return null;
+      }
+
+      function startTimer() {
+        stopTimer();
+        tickId = window.setInterval(tick, config.tickMs);
+      }
+
+      function stopTimer() {
+        if (tickId) {
+          window.clearInterval(tickId);
+          tickId = null;
+        }
+      }
+
+      function startGame() {
+        if (state.phase === "running") return;
+        state = { ...state, phase: "running" };
+        startTimer();
+        updateUI();
+      }
+
+      function resetGame(autoStart = false) {
+        stopTimer();
+        state = createInitialState();
+        queuedDirection = state.direction;
+        if (autoStart) {
+          state = { ...state, phase: "running" };
+          startTimer();
+        }
+        render();
+        updateUI();
+      }
+
+      function togglePause() {
+        if (state.phase === "running") {
+          stopTimer();
+          state = { ...state, phase: "paused" };
+        } else if (state.phase === "paused") {
+          state = { ...state, phase: "running" };
+          startTimer();
+        }
+        updateUI();
+      }
+
+      function tick() {
+        if (state.phase !== "running") return;
+        state = stepState(state, queuedDirection);
+        queuedDirection = state.direction;
+        render();
+        updateUI();
+        if (state.phase === "over" || state.phase === "won") {
+          stopTimer();
+        }
+      }
+
+      function stepState(current, nextDirection) {
+        const direction = isOpposite(nextDirection, current.direction)
+          ? current.direction
+          : nextDirection;
+        const head = current.snake[0];
+        const headX = head % config.gridSize;
+        const headY = Math.floor(head / config.gridSize);
+        const nextX = headX + direction.x;
+        const nextY = headY + direction.y;
+
+        if (
+          nextX < 0 ||
+          nextX >= config.gridSize ||
+          nextY < 0 ||
+          nextY >= config.gridSize
+        ) {
+          return { ...current, direction, phase: "over" };
+        }
+
+        const nextIndex = nextY * config.gridSize + nextX;
+        const snakeSet = new Set(current.snake);
+        const tail = current.snake[current.snake.length - 1];
+        const willEat = nextIndex === current.food;
+        const hitSelf = snakeSet.has(nextIndex) && !(!willEat && nextIndex === tail);
+        if (hitSelf) {
+          return { ...current, direction, phase: "over" };
+        }
+
+        const nextSnake = [nextIndex, ...current.snake];
+        if (!willEat) nextSnake.pop();
+
+        let nextFood = current.food;
+        let nextScore = current.score;
+        let nextPhase = current.phase;
+        if (willEat) {
+          nextScore += 1;
+          nextFood = spawnFood(config.gridSize, nextSnake, rng);
+          if (nextFood === null) {
+            nextPhase = "won";
+          }
+        }
+
+        return {
+          ...current,
+          snake: nextSnake,
+          direction,
+          food: nextFood,
+          score: nextScore,
+          phase: nextPhase,
+        };
+      }
+
+      function render() {
+        cells.forEach((cell) => {
+          cell.classList.remove("snake", "snake-head", "snake-food");
+        });
+        state.snake.forEach((index, idx) => {
+          const cell = cells[index];
+          if (!cell) return;
+          cell.classList.add("snake");
+          if (idx === 0) cell.classList.add("snake-head");
+        });
+        if (state.food !== null && cells[state.food]) {
+          cells[state.food].classList.add("snake-food");
+        }
+      }
+
+      function updateUI() {
+        scoreValue.textContent = String(state.score);
+        if (state.phase === "ready") {
+          status.textContent = "Press Start to begin. Use arrow keys or WASD to steer.";
+        } else if (state.phase === "running") {
+          status.textContent = "Eat the food, avoid the walls, and don't bite yourself.";
+        } else if (state.phase === "paused") {
+          status.textContent = "Paused. Press Resume or Space to continue.";
+        } else if (state.phase === "won") {
+          status.textContent = `You cleared the board! Final score: ${state.score}.`;
+        } else {
+          status.textContent = `Game over. Final score: ${state.score}.`;
+        }
+
+        startBtn.textContent = state.phase === "ready" ? "Start" : "Restart";
+        pauseBtn.textContent = state.phase === "paused" ? "Resume" : "Pause";
+        pauseBtn.disabled = state.phase === "ready" || state.phase === "over" || state.phase === "won";
+      }
+
+      return () => {
+        stopTimer();
+        window.removeEventListener("keydown", handleKeydown);
+        wrapper.remove();
+      };
+    },
+  },
+  {
     id: "redlight",
     name: "Red Light Green Light",
     summary: "Sprint to the finish without moving on red.",
