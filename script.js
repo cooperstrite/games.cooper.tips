@@ -391,7 +391,7 @@ const games = [
     summary: "Grow the snake without hitting walls.",
     description:
       "Guide the snake with arrow keys or WASD. Eat the food to grow longer and avoid crashing into walls or yourself.",
-    logo: "assets/snake-cover.svg",
+    logo: "assets/ChatGPT Image Feb 4, 2026, 06_33_02 PM.png",
     init(root) {
       const config = {
         gridSize: 16,
