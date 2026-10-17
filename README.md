@@ -25,7 +25,7 @@ A playful single-page playground inspired by [neal.fun](https://neal.fun), bundl
 - **Submerged Explorer** — Glide through ocean zones, collect samples, and finish mission objectives in a retro submarine.
 - **Spotlight** — Compare two vibrant scenes and spot every subtle difference against the clock.
 - **Food Chain Relay** — Shuffle producers, consumers, and apex predators back into order to prove you understand energy flow.
-- **Neon Drift** — Steer a hover car between neon lanes, boost for speed, and dodge pylons to reach the finish.
+- **Neon Drift** — Drive a sports car down a night highway, weave through traffic, and boost toward the finish with a rear-view perspective.
 
 ## Getting Started
 
