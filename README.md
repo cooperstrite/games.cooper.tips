@@ -7,6 +7,9 @@ A playful single-page playground inspired by [neal.fun](https://neal.fun), bundl
 - **Hot & Cold** — Hunt down a mystery number with warmer/colder hints on every guess.
 - **Flash Reflex** — Train your reaction speed by tapping the moment the panel lights up.
 - **Snake** — Gobble up food, grow longer, and avoid walls or your own tail.
+- **Runway Glide** — Line up the runway lights and land the plane on target.
+- **Rocket Boost** — Hold boost, stage within the target band, and reach orbit.
+- **Switchyard Signals** — Flip the switch before each train hits the junction.
 - **Red Light Green Light** — Hold to sprint toward the finish while freezing the instant the signal turns red.
 - **Memory Loop** — Flip cards to match every pair, tuning the tile count to dial up the difficulty.
 - **Tower Stack** — Drop moving blocks with precise timing to grow the tallest, straightest tower.

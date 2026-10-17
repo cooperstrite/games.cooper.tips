@@ -865,6 +865,886 @@ const games = [
     },
   },
   {
+    id: "runway",
+    name: "Runway Glide",
+    summary: "Land on the glowing runway window.",
+    description:
+      "Time the approach. Click Land when the marker sits inside the green runway lights to score smooth touchdowns.",
+    logo: "assets/flight-spotter-cover.png",
+    init(root) {
+      const config = {
+        totalRuns: 5,
+        speed: 0.012,
+        targetWidth: 0.18,
+        glideSpeed: 0.009,
+        glideTargetWidth: 0.22,
+      };
+
+      const wrapper = document.createElement("div");
+      wrapper.className = "runway-game";
+
+      const stats = document.createElement("div");
+      stats.className = "runway-stats";
+
+      const scoreBadge = document.createElement("span");
+      scoreBadge.className = "badge runway-score";
+      scoreBadge.textContent = "Score: 0";
+
+      const runBadge = document.createElement("span");
+      runBadge.className = "badge runway-round";
+      runBadge.textContent = `Run: 0/${config.totalRuns}`;
+
+      const streakBadge = document.createElement("span");
+      streakBadge.className = "badge runway-streak";
+      streakBadge.textContent = "Streak: 0";
+
+      const ratingBadge = document.createElement("span");
+      ratingBadge.className = "badge runway-rating";
+      ratingBadge.textContent = "Rating: —";
+
+      stats.append(scoreBadge, runBadge, streakBadge, ratingBadge);
+
+      const status = document.createElement("p");
+      status.className = "help-text";
+      status.textContent = "Line up with the green runway lights and click Land.";
+
+      const panel = document.createElement("div");
+      panel.className = "runway-panel";
+
+      const strip = document.createElement("div");
+      strip.className = "runway-strip";
+
+      const target = document.createElement("div");
+      target.className = "runway-target";
+
+      const marker = document.createElement("div");
+      marker.className = "runway-marker";
+
+      strip.append(target, marker);
+
+      const glide = document.createElement("div");
+      glide.className = "runway-glide";
+
+      const glideTarget = document.createElement("div");
+      glideTarget.className = "runway-glide-target";
+
+      const glideMarker = document.createElement("div");
+      glideMarker.className = "runway-glide-marker";
+
+      glide.append(glideTarget, glideMarker);
+
+      panel.append(strip, glide);
+
+      const controls = document.createElement("div");
+      controls.className = "runway-controls";
+
+      const actionBtn = document.createElement("button");
+      actionBtn.type = "button";
+      actionBtn.className = "primary-btn";
+      actionBtn.textContent = "Start Approach";
+
+      controls.append(actionBtn);
+
+      wrapper.append(stats, status, panel, controls);
+      root.appendChild(wrapper);
+
+      let intervalId = null;
+      let state = {
+        phase: "idle",
+        score: 0,
+        streak: 0,
+        rating: "—",
+        run: 0,
+        position: 0.25,
+        direction: 1,
+        targetStart: 0.4,
+        targetEnd: 0.6,
+        glide: 0.5,
+        glideDirection: 1,
+        glideTargetStart: 0.3,
+        glideTargetEnd: 0.6,
+      };
+
+      render();
+      updateUI();
+
+      actionBtn.addEventListener("click", () => {
+        if (state.phase === "running") {
+          land();
+        } else if (state.phase === "over") {
+          resetGame();
+        } else {
+          startRun();
+        }
+      });
+
+      function startRun() {
+        state.run += 1;
+        const targetRange = getTargetRange();
+        state.targetStart = targetRange.start;
+        state.targetEnd = targetRange.end;
+        const glideRange = getGlideRange();
+        state.glideTargetStart = glideRange.start;
+        state.glideTargetEnd = glideRange.end;
+        state.position = Math.random();
+        state.direction = Math.random() > 0.5 ? 1 : -1;
+        state.glide = Math.random();
+        state.glideDirection = Math.random() > 0.5 ? 1 : -1;
+        state.phase = "running";
+        status.textContent = "Ease in and land inside the lights.";
+        startTimer();
+        render();
+        updateUI();
+      }
+
+      function land() {
+        stopTimer();
+        const center = (state.targetStart + state.targetEnd) / 2;
+        const glideCenter = (state.glideTargetStart + state.glideTargetEnd) / 2;
+        const lateralOffset = Math.abs(state.position - center);
+        const glideOffset = Math.abs(state.glide - glideCenter);
+        const lateralWithin = state.position >= state.targetStart && state.position <= state.targetEnd;
+        const glideWithin = state.glide >= state.glideTargetStart && state.glide <= state.glideTargetEnd;
+        const within = lateralWithin && glideWithin;
+        const perfect = within && Math.max(lateralOffset, glideOffset) <= 0.025;
+
+        if (within) {
+          state.score += perfect ? 2 : 1;
+          state.streak += 1;
+          state.rating = perfect ? "Butter" : "Smooth";
+          status.textContent = perfect
+            ? "Butter-smooth landing. Perfect flare."
+            : "Safe landing. Nice work.";
+        } else {
+          state.streak = 0;
+          state.rating = "Rough";
+          if (!lateralWithin && !glideWithin) {
+            status.textContent = "Hard landing. Missed both glide and centerline.";
+          } else if (!lateralWithin) {
+            status.textContent = state.position < center
+              ? "Drifted left of centerline. Try again."
+              : "Drifted right of centerline. Try again.";
+          } else {
+            status.textContent = state.glide < glideCenter
+              ? "Too low on glide slope. Try again."
+              : "Too high on glide slope. Try again.";
+          }
+        }
+
+        if (state.run >= config.totalRuns) {
+          state.phase = "over";
+          status.textContent += ` Final score: ${state.score}/${config.totalRuns}.`;
+        } else {
+          state.phase = "result";
+        }
+        updateUI();
+      }
+
+      function resetGame() {
+        stopTimer();
+        state = {
+          phase: "idle",
+          score: 0,
+          streak: 0,
+          rating: "—",
+          run: 0,
+          position: 0.25,
+          direction: 1,
+          targetStart: 0.4,
+          targetEnd: 0.6,
+          glide: 0.5,
+          glideDirection: 1,
+          glideTargetStart: 0.3,
+          glideTargetEnd: 0.6,
+        };
+        status.textContent = "Line up with the green runway lights and click Land.";
+        render();
+        updateUI();
+      }
+
+      function getTargetRange() {
+        const width = config.targetWidth;
+        const minCenter = 0.2 + width / 2;
+        const maxCenter = 0.8 - width / 2;
+        const center = minCenter + Math.random() * (maxCenter - minCenter);
+        return { start: center - width / 2, end: center + width / 2 };
+      }
+
+      function getGlideRange() {
+        const width = config.glideTargetWidth;
+        const minCenter = 0.25 + width / 2;
+        const maxCenter = 0.75 - width / 2;
+        const center = minCenter + Math.random() * (maxCenter - minCenter);
+        return { start: center - width / 2, end: center + width / 2 };
+      }
+
+      function startTimer() {
+        stopTimer();
+        intervalId = window.setInterval(() => {
+          state.position += state.direction * config.speed;
+          if (state.position <= 0) {
+            state.position = 0;
+            state.direction = 1;
+          } else if (state.position >= 1) {
+            state.position = 1;
+            state.direction = -1;
+          }
+          state.glide += state.glideDirection * config.glideSpeed;
+          if (state.glide <= 0) {
+            state.glide = 0;
+            state.glideDirection = 1;
+          } else if (state.glide >= 1) {
+            state.glide = 1;
+            state.glideDirection = -1;
+          }
+          render();
+        }, 30);
+      }
+
+      function stopTimer() {
+        if (intervalId) {
+          window.clearInterval(intervalId);
+          intervalId = null;
+        }
+      }
+
+      function render() {
+        marker.style.left = `${state.position * 100}%`;
+        const left = state.targetStart * 100;
+        const width = (state.targetEnd - state.targetStart) * 100;
+        target.style.left = `${left}%`;
+        target.style.width = `${width}%`;
+        glideMarker.style.top = `${(1 - state.glide) * 100}%`;
+        const glideTop = (1 - state.glideTargetEnd) * 100;
+        const glideHeight = (state.glideTargetEnd - state.glideTargetStart) * 100;
+        glideTarget.style.top = `${glideTop}%`;
+        glideTarget.style.height = `${glideHeight}%`;
+      }
+
+      function updateUI() {
+        scoreBadge.textContent = `Score: ${state.score}`;
+        runBadge.textContent = `Run: ${Math.min(state.run, config.totalRuns)}/${config.totalRuns}`;
+        streakBadge.textContent = `Streak: ${state.streak}`;
+        ratingBadge.textContent = `Rating: ${state.rating}`;
+        if (state.phase === "idle") {
+          actionBtn.textContent = "Start Approach";
+        } else if (state.phase === "running") {
+          actionBtn.textContent = "Land Now";
+        } else if (state.phase === "result") {
+          actionBtn.textContent = "Next Approach";
+        } else {
+          actionBtn.textContent = "Restart";
+        }
+      }
+
+      return () => {
+        stopTimer();
+        wrapper.remove();
+      };
+    },
+  },
+  {
+    id: "rocket",
+    name: "Rocket Boost",
+    summary: "Hold thrust and cut engines in the target window.",
+    description:
+      "Hold Boost to climb, release to drift, and hit Stage inside the green target band to keep the launch going.",
+    logo: "assets/memory-rocket.svg",
+    init(root) {
+      const config = {
+        totalStages: 5,
+        thrust: 1.6,
+        drift: 0.9,
+        tickMs: 50,
+        targetWidth: 18,
+        fuelBurn: 1.4,
+        fuelRegen: 0.6,
+        heatGain: 2.2,
+        heatCool: 1.6,
+        heatLimit: 100,
+        safeHeat: 85,
+      };
+
+      const wrapper = document.createElement("div");
+      wrapper.className = "rocket-game";
+
+      const stats = document.createElement("div");
+      stats.className = "rocket-stats";
+
+      const stageBadge = document.createElement("span");
+      stageBadge.className = "badge rocket-stage";
+      stageBadge.textContent = `Stage: 0/${config.totalStages}`;
+
+      const altitudeBadge = document.createElement("span");
+      altitudeBadge.className = "badge rocket-altitude";
+      altitudeBadge.textContent = "Altitude: 0 km";
+
+      stats.append(stageBadge, altitudeBadge);
+
+      const status = document.createElement("p");
+      status.className = "help-text";
+      status.textContent = "Hold Boost to climb. Hit Stage inside the green band.";
+
+      const panel = document.createElement("div");
+      panel.className = "rocket-panel";
+
+      const meter = document.createElement("div");
+      meter.className = "rocket-meter";
+
+      const target = document.createElement("div");
+      target.className = "rocket-target";
+
+      const indicator = document.createElement("div");
+      indicator.className = "rocket-indicator";
+
+      meter.append(target, indicator);
+
+      const gauges = document.createElement("div");
+      gauges.className = "rocket-gauges";
+
+      const fuelGauge = buildGauge("Fuel");
+      const heatGauge = buildGauge("Heat");
+      gauges.append(fuelGauge.wrap, heatGauge.wrap);
+
+      const controls = document.createElement("div");
+      controls.className = "rocket-controls";
+
+      const startBtn = document.createElement("button");
+      startBtn.type = "button";
+      startBtn.className = "primary-btn";
+      startBtn.textContent = "Start Launch";
+
+      const stageBtn = document.createElement("button");
+      stageBtn.type = "button";
+      stageBtn.textContent = "Stage";
+      stageBtn.disabled = true;
+
+      const boostBtn = document.createElement("button");
+      boostBtn.type = "button";
+      boostBtn.className = "rocket-boost";
+      boostBtn.textContent = "Hold Boost";
+
+      controls.append(startBtn, stageBtn, boostBtn);
+
+      panel.append(meter, gauges, controls);
+
+      wrapper.append(stats, status, panel);
+      root.appendChild(wrapper);
+
+      let intervalId = null;
+      let thrusting = false;
+      let state = {
+        phase: "idle",
+        stage: 1,
+        score: 0,
+        altitude: 0,
+        fuel: 100,
+        heat: 0,
+        targetMin: 40,
+        targetMax: 60,
+      };
+      let fuelWarning = false;
+
+      render();
+      updateUI();
+
+      startBtn.addEventListener("click", () => {
+        if (state.phase === "running") return;
+        if (state.phase === "idle" || state.phase === "over" || state.phase === "won") {
+          resetGame();
+        }
+        startLaunch();
+      });
+
+      stageBtn.addEventListener("click", () => {
+        if (state.phase !== "running") return;
+        stageCheck();
+      });
+
+      const stopThrust = () => {
+        thrusting = false;
+      };
+
+      boostBtn.addEventListener("pointerdown", (event) => {
+        if (state.phase !== "running") return;
+        event.preventDefault();
+        thrusting = true;
+      });
+      boostBtn.addEventListener("pointerup", stopThrust);
+      boostBtn.addEventListener("pointerleave", stopThrust);
+      boostBtn.addEventListener("pointercancel", stopThrust);
+
+      function startLaunch() {
+        state.phase = "running";
+        status.textContent = "Boost carefully, then stage inside the window.";
+        startTimer();
+        updateUI();
+      }
+
+      function stageCheck() {
+        stopThrust();
+        const within = state.altitude >= state.targetMin && state.altitude <= state.targetMax;
+
+        if (!within) {
+          state.phase = "over";
+          status.textContent = "Stage missed the window. Mission scrubbed.";
+          stopTimer();
+          updateUI();
+          return;
+        }
+
+        if (state.heat > config.safeHeat) {
+          state.phase = "over";
+          status.textContent = "Engines too hot to stage safely. Mission scrubbed.";
+          stopTimer();
+          updateUI();
+          return;
+        }
+
+        state.score += 1;
+        if (state.stage >= config.totalStages) {
+          state.phase = "won";
+          status.textContent = `Orbit achieved! Final score: ${state.score}/${config.totalStages}.`;
+          stopTimer();
+          updateUI();
+          return;
+        }
+
+        state.stage += 1;
+        state.altitude = 0;
+        state.fuel = Math.min(100, state.fuel + 25);
+        state.heat = Math.max(0, state.heat - 30);
+        const targetRange = getTargetRange();
+        state.targetMin = targetRange.min;
+        state.targetMax = targetRange.max;
+        status.textContent = `Stage ${state.stage} ready. Hold Boost to climb.`;
+        render();
+        updateUI();
+      }
+
+      function resetGame() {
+        stopTimer();
+        state = {
+          phase: "idle",
+          stage: 1,
+          score: 0,
+          altitude: 0,
+          fuel: 100,
+          heat: 0,
+          targetMin: 40,
+          targetMax: 60,
+        };
+        fuelWarning = false;
+        const targetRange = getTargetRange();
+        state.targetMin = targetRange.min;
+        state.targetMax = targetRange.max;
+        status.textContent = "Hold Boost to climb. Hit Stage inside the green band.";
+        render();
+        updateUI();
+      }
+
+      function getTargetRange() {
+        const width = config.targetWidth;
+        const minCenter = 35 + width / 2;
+        const maxCenter = 75 - width / 2;
+        const center = minCenter + Math.random() * (maxCenter - minCenter);
+        return { min: center - width / 2, max: center + width / 2 };
+      }
+
+      function startTimer() {
+        stopTimer();
+        intervalId = window.setInterval(() => {
+          if (state.phase !== "running") return;
+          if (thrusting && state.fuel > 0) {
+            state.altitude = Math.min(100, state.altitude + config.thrust);
+            state.fuel = Math.max(0, state.fuel - config.fuelBurn);
+            state.heat = Math.min(config.heatLimit, state.heat + config.heatGain);
+          } else {
+            state.altitude = Math.max(0, state.altitude - config.drift);
+            state.fuel = Math.min(100, state.fuel + config.fuelRegen);
+            state.heat = Math.max(0, state.heat - config.heatCool);
+          }
+          if (state.fuel <= 0 && thrusting) {
+            thrusting = false;
+            if (!fuelWarning) {
+              status.textContent = "Fuel depleted! Ease off to recover.";
+              fuelWarning = true;
+            }
+          }
+          if (state.fuel > 12) {
+            fuelWarning = false;
+          }
+          if (state.heat >= config.heatLimit) {
+            state.phase = "over";
+            status.textContent = "Engines overheated. Mission scrubbed.";
+            stopTimer();
+            updateUI();
+            return;
+          }
+          render();
+          updateUI();
+        }, config.tickMs);
+      }
+
+      function stopTimer() {
+        if (intervalId) {
+          window.clearInterval(intervalId);
+          intervalId = null;
+        }
+      }
+
+      function render() {
+        target.style.bottom = `${state.targetMin}%`;
+        target.style.height = `${state.targetMax - state.targetMin}%`;
+        indicator.style.bottom = `calc(${state.altitude}% - 13px)`;
+      }
+
+      function updateUI() {
+        const displayStage =
+          state.phase === "running" || state.phase === "idle"
+            ? state.stage
+            : Math.min(state.score, config.totalStages);
+        stageBadge.textContent = `Stage: ${displayStage}/${config.totalStages}`;
+        altitudeBadge.textContent = `Altitude: ${Math.round(state.altitude)} km`;
+        startBtn.textContent = state.phase === "running" ? "Launching..." : "Start Launch";
+        startBtn.disabled = state.phase === "running";
+        stageBtn.disabled = state.phase !== "running";
+        boostBtn.disabled = state.phase !== "running";
+        fuelGauge.fill.style.width = `${state.fuel}%`;
+        fuelGauge.value.textContent = `${Math.round(state.fuel)}%`;
+        heatGauge.fill.style.width = `${state.heat}%`;
+        heatGauge.value.textContent = `${Math.round(state.heat)}%`;
+        heatGauge.wrap.classList.toggle("is-hot", state.heat >= 75);
+      }
+
+      function buildGauge(labelText) {
+        const wrap = document.createElement("div");
+        wrap.className = "rocket-gauge";
+        const label = document.createElement("span");
+        label.textContent = labelText;
+        const track = document.createElement("div");
+        track.className = "rocket-gauge-track";
+        const fill = document.createElement("div");
+        fill.className = "rocket-gauge-fill";
+        track.appendChild(fill);
+        const value = document.createElement("span");
+        value.className = "rocket-gauge-value";
+        value.textContent = "0%";
+        wrap.append(label, track, value);
+        return { wrap, fill, value };
+      }
+
+      return () => {
+        stopTimer();
+        wrapper.remove();
+      };
+    },
+  },
+  {
+    id: "switchyard",
+    name: "Switchyard Signals",
+    summary: "Flip the switch before the train hits the junction.",
+    description:
+      "Watch the signal, choose left or right, and clear each train before it reaches the switch.",
+    logo: "assets/signal-sprint.svg",
+    init(root) {
+      const config = {
+        totalTrains: 8,
+        baseSpeed: 0.012,
+        speedStep: 0.003,
+        lockZone: 0.78,
+        bonusThreshold: 0.45,
+      };
+
+      const wrapper = document.createElement("div");
+      wrapper.className = "train-game";
+
+      const stats = document.createElement("div");
+      stats.className = "train-stats";
+
+      const clearedBadge = document.createElement("span");
+      clearedBadge.className = "badge train-cleared";
+      clearedBadge.textContent = "Cleared: 0";
+
+      const scoreBadge = document.createElement("span");
+      scoreBadge.className = "badge train-score";
+      scoreBadge.textContent = "Score: 0";
+
+      const streakBadge = document.createElement("span");
+      streakBadge.className = "badge train-streak";
+      streakBadge.textContent = "Streak: 0";
+
+      const trainBadge = document.createElement("span");
+      trainBadge.className = "badge train-round";
+      trainBadge.textContent = `Train: 0/${config.totalTrains}`;
+
+      stats.append(clearedBadge, scoreBadge, streakBadge, trainBadge);
+
+      const queue = document.createElement("div");
+      queue.className = "train-queue";
+      const queueLabel = document.createElement("span");
+      queueLabel.className = "train-queue-label";
+      queueLabel.textContent = "Up next:";
+      const queueList = document.createElement("div");
+      queueList.className = "train-queue-list";
+      queue.append(queueLabel, queueList);
+
+      const status = document.createElement("p");
+      status.className = "help-text";
+      status.textContent = "Start the shift and flip the switch before the junction.";
+
+      const yard = document.createElement("div");
+      yard.className = "train-yard";
+
+      const signal = document.createElement("div");
+      signal.className = "train-signal is-left";
+      signal.textContent = "Signal: Left";
+
+      const train = document.createElement("div");
+      train.className = "train-car";
+
+      const junction = document.createElement("div");
+      junction.className = "train-junction";
+
+      const lockZone = document.createElement("div");
+      lockZone.className = "train-lock-zone";
+
+      yard.append(signal, lockZone, train, junction);
+
+      const controls = document.createElement("div");
+      controls.className = "train-controls";
+
+      const leftBtn = document.createElement("button");
+      leftBtn.type = "button";
+      leftBtn.textContent = "Switch Left";
+
+      const rightBtn = document.createElement("button");
+      rightBtn.type = "button";
+      rightBtn.textContent = "Switch Right";
+
+      const actionBtn = document.createElement("button");
+      actionBtn.type = "button";
+      actionBtn.className = "primary-btn";
+      actionBtn.textContent = "Start Shift";
+
+      controls.append(leftBtn, rightBtn, actionBtn);
+
+      wrapper.append(stats, queue, status, yard, controls);
+      root.appendChild(wrapper);
+
+      let intervalId = null;
+      let state = {
+        phase: "idle",
+        cleared: 0,
+        score: 0,
+        streak: 0,
+        bestStreak: 0,
+        run: 0,
+        progress: 0,
+        signal: "left",
+        switchDir: "left",
+        switchSetProgress: 0,
+        locked: false,
+        nextSignals: [],
+      };
+
+      seedQueue();
+      render();
+      updateUI();
+
+      actionBtn.addEventListener("click", () => {
+        if (state.phase === "over" || state.phase === "won") {
+          resetGame();
+          return;
+        }
+        if (state.phase === "idle" || state.phase === "result") {
+          startRun();
+        }
+      });
+
+      leftBtn.addEventListener("click", () => {
+        setSwitch("left");
+      });
+
+      rightBtn.addEventListener("click", () => {
+        setSwitch("right");
+      });
+
+      const handleKeydown = (event) => {
+        if (event.key === "ArrowLeft" || event.key.toLowerCase() === "a") {
+          event.preventDefault();
+          setSwitch("left");
+        } else if (event.key === "ArrowRight" || event.key.toLowerCase() === "d") {
+          event.preventDefault();
+          setSwitch("right");
+        }
+      };
+
+      window.addEventListener("keydown", handleKeydown);
+
+      function startRun() {
+        state.run += 1;
+        state.progress = 0;
+        state.locked = false;
+        state.switchSetProgress = 0;
+        if (!state.nextSignals.length) {
+          seedQueue();
+        }
+        state.signal = state.nextSignals.shift();
+        state.nextSignals.push(createSignal());
+        state.phase = "running";
+        status.textContent = "Signal is live. Flip the switch before the junction.";
+        startTimer();
+        render();
+        updateUI();
+      }
+
+      function resolveRun() {
+        stopTimer();
+        const correct = state.switchDir === state.signal;
+        if (!correct) {
+          state.phase = "over";
+          state.streak = 0;
+          status.textContent = "Wrong track! Train rerouted. Shift over.";
+          updateUI();
+          return;
+        }
+
+        state.cleared += 1;
+        const bonus = state.switchSetProgress <= config.bonusThreshold;
+        state.score += bonus ? 2 : 1;
+        state.streak += 1;
+        state.bestStreak = Math.max(state.bestStreak, state.streak);
+        if (state.run >= config.totalTrains) {
+          state.phase = "won";
+          status.textContent = `All clear! You routed ${state.cleared} trains.`;
+        } else {
+          state.phase = "result";
+          status.textContent = bonus
+            ? "Clear route! Early switch bonus."
+            : "Clear route! Ready the next train.";
+        }
+        updateUI();
+      }
+
+      function resetGame() {
+        stopTimer();
+        state = {
+          phase: "idle",
+          cleared: 0,
+          score: 0,
+          streak: 0,
+          bestStreak: 0,
+          run: 0,
+          progress: 0,
+          signal: "left",
+          switchDir: "left",
+          switchSetProgress: 0,
+          locked: false,
+          nextSignals: [],
+        };
+        seedQueue();
+        status.textContent = "Start the shift and flip the switch before the junction.";
+        render();
+        updateUI();
+      }
+
+      function setSwitch(direction) {
+        if (state.phase === "running" && state.locked) {
+          status.textContent = "Switch locked! Hold steady.";
+          return;
+        }
+        state.switchDir = direction;
+        if (state.phase === "running") {
+          state.switchSetProgress = state.progress;
+        }
+        updateUI();
+      }
+
+      function startTimer() {
+        stopTimer();
+        intervalId = window.setInterval(() => {
+          if (state.phase !== "running") return;
+          const speed = config.baseSpeed + (state.run - 1) * config.speedStep;
+          state.progress += speed;
+          if (!state.locked && state.progress >= config.lockZone) {
+            state.locked = true;
+            status.textContent = "Switch locked! Train entering junction.";
+          }
+          if (state.progress >= 1) {
+            state.progress = 1;
+            render();
+            resolveRun();
+            return;
+          }
+          render();
+        }, 30);
+      }
+
+      function stopTimer() {
+        if (intervalId) {
+          window.clearInterval(intervalId);
+          intervalId = null;
+        }
+      }
+
+      function render() {
+        train.style.top = `${state.progress * 100}%`;
+        signal.textContent = `Signal: ${state.signal === "left" ? "Left" : "Right"}`;
+        signal.classList.toggle("is-left", state.signal === "left");
+        signal.classList.toggle("is-right", state.signal === "right");
+        lockZone.style.top = `${config.lockZone * 100}%`;
+        renderQueue();
+      }
+
+      function updateUI() {
+        clearedBadge.textContent = `Cleared: ${state.cleared}`;
+        scoreBadge.textContent = `Score: ${state.score}`;
+        streakBadge.textContent = `Streak: ${state.streak}`;
+        trainBadge.textContent = `Train: ${Math.min(state.run, config.totalTrains)}/${config.totalTrains}`;
+        leftBtn.classList.toggle("is-active", state.switchDir === "left");
+        rightBtn.classList.toggle("is-active", state.switchDir === "right");
+        leftBtn.disabled = state.phase === "running" && state.locked;
+        rightBtn.disabled = state.phase === "running" && state.locked;
+        actionBtn.disabled = state.phase === "running";
+        if (state.phase === "idle") {
+          actionBtn.textContent = "Start Shift";
+        } else if (state.phase === "result") {
+          actionBtn.textContent = "Next Train";
+        } else if (state.phase === "over" || state.phase === "won") {
+          actionBtn.textContent = "Restart Shift";
+        } else {
+          actionBtn.textContent = "En route...";
+        }
+      }
+
+      return () => {
+        stopTimer();
+        window.removeEventListener("keydown", handleKeydown);
+        wrapper.remove();
+      };
+
+      function createSignal() {
+        return Math.random() > 0.5 ? "left" : "right";
+      }
+
+      function seedQueue() {
+        state.nextSignals = [createSignal(), createSignal()];
+        renderQueue();
+      }
+
+      function renderQueue() {
+        queueList.textContent = "";
+        state.nextSignals.forEach((signalDir) => {
+          const item = document.createElement("span");
+          item.className = `train-queue-item ${signalDir === "left" ? "is-left" : "is-right"}`;
+          item.textContent = signalDir === "left" ? "← Left" : "Right →";
+          queueList.appendChild(item);
+        });
+      }
+    },
+  },
+  {
     id: "redlight",
     name: "Red Light Green Light",
     summary: "Sprint to the finish without moving on red.",
