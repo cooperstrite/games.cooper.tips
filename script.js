@@ -1,4 +1,5 @@
 import { createNeonDrift } from "./neon-drift.js";
+import { createSnakeAudio } from "./snake-audio.js";
 
 const games = [
   {
@@ -392,7 +393,7 @@ const games = [
     name: "Snake",
     summary: "Grow the snake without hitting walls.",
     description:
-      "Guide the snake with arrow keys or WASD. Eat the food to grow longer and avoid crashing into walls or yourself.",
+      "Guide the snake with arrow keys or WASD. Eat the apples to grow longer and avoid crashing into walls or yourself.",
     logo: "assets/ChatGPT Image Feb 4, 2026, 06_33_02 PM.png",
     init(root) {
       const config = {
@@ -408,6 +409,56 @@ const games = [
         { id: "blitz", label: "Blitz", speedMs: 90 },
       ];
       const defaultDifficulty = difficulties[1];
+      const skins = [
+        { id: "generic", label: "Generic", note: "Soft scales, bright eyes, and a tapered tail." },
+        { id: "gardener", label: "Gardener", note: "Sunny stripes, with a straw hat by default." },
+        { id: "python", label: "Python", note: "Bold saddle spots and curious, catlike eyes." },
+        { id: "rattlesnake", label: "Rattlesnake", note: "Diamond markings and a little segmented rattle." },
+      ];
+      const colors = [
+        { id: "green", label: "Leaf green", shades: ["#c1e783", "#83c85c", "#55a148", "#367b3d", "#2d6337"] },
+        { id: "blue", label: "Ocean blue", shades: ["#c1edff", "#71bfe8", "#438fc4", "#2d6493", "#244b70"] },
+        { id: "teal", label: "Mint teal", shades: ["#b9f1d8", "#68d1b6", "#3aa890", "#277c70", "#205b55"] },
+        { id: "purple", label: "Lavender", shades: ["#e5d0ff", "#b899ed", "#886ac5", "#614796", "#49376e"] },
+        { id: "pink", label: "Rose pink", shades: ["#ffd4e5", "#ed98bb", "#c96493", "#98446e", "#713454"] },
+        { id: "orange", label: "Coral orange", shades: ["#ffe0b7", "#f5ae76", "#d77b52", "#a5553c", "#774031"] },
+        { id: "gold", label: "Golden honey", shades: ["#fff1b4", "#e9cc75", "#bf9b43", "#8e702e", "#66512a"] },
+        { id: "slate", label: "Midnight slate", shades: ["#c3d2e5", "#849ab8", "#586c91", "#3c4b6b", "#2b354e"] },
+      ];
+      const accessories = {
+        hat: [
+          { id: "skin", label: "Match skin" },
+          { id: "none", label: "None" },
+          { id: "straw", label: "Straw hat" },
+          { id: "crown", label: "Royal crown" },
+          { id: "party", label: "Party hat" },
+          { id: "flowers", label: "Flower crown" },
+        ],
+        eyewear: [
+          { id: "none", label: "None" },
+          { id: "round", label: "Round glasses" },
+          { id: "shades", label: "Sunglasses" },
+        ],
+        neckwear: [
+          { id: "none", label: "None" },
+          { id: "bandana", label: "Red bandana" },
+          { id: "bow", label: "Blue bow tie" },
+          { id: "scarf", label: "Purple scarf" },
+        ],
+      };
+      const settingsKey = "snake-garden-settings-v1";
+      let saved = {};
+      try { saved = JSON.parse(localStorage.getItem(settingsKey)) || {}; } catch { /* Use defaults when storage is unavailable. */ }
+      const settings = {
+        skin: skins.some((skin) => skin.id === saved.skin) ? saved.skin : "generic",
+        color: colors.some((color) => color.id === saved.color) ? saved.color : "green",
+        hat: accessories.hat.some((item) => item.id === saved.hat) ? saved.hat : "skin",
+        eyewear: accessories.eyewear.some((item) => item.id === saved.eyewear) ? saved.eyewear : "none",
+        neckwear: accessories.neckwear.some((item) => item.id === saved.neckwear) ? saved.neckwear : "none",
+        music: saved.music === true,
+        effects: saved.effects !== false,
+      };
+      const audio = createSnakeAudio(settings);
 
       const directions = {
         up: { x: 0, y: -1 },
@@ -449,10 +500,184 @@ const games = [
 
       const boardWrap = document.createElement("div");
       boardWrap.className = "snake-board-wrap";
+      boardWrap.tabIndex = 0;
+      boardWrap.setAttribute("role", "group");
+      boardWrap.setAttribute("aria-label", "Snake play area. Use arrow keys or WASD to steer, and Space to pause.");
 
       const board = document.createElement("div");
       board.className = "snake-board";
       board.style.setProperty("--grid-size", String(config.gridSize));
+      board.setAttribute("aria-hidden", "true");
+
+      const art = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      art.classList.add("snake-art");
+      art.setAttribute("viewBox", "0 0 512 512");
+      art.setAttribute("role", "img");
+      art.setAttribute("aria-label", "A green snake with a tapered tail and bright eyes, hunting a red apple in a garden.");
+      art.innerHTML = `
+        <defs>
+          <linearGradient id="snake-skin" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="var(--snake-light)"/>
+            <stop offset="0.35" stop-color="var(--snake-color)"/>
+            <stop offset="0.74" stop-color="var(--snake-mid)"/>
+            <stop offset="1" stop-color="var(--snake-dark)"/>
+          </linearGradient>
+          <linearGradient id="snake-body-color" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="512" y2="512">
+            <stop offset="0" stop-color="var(--snake-body-light)"/>
+            <stop offset="0.5" stop-color="var(--snake-body-color)"/>
+            <stop offset="1" stop-color="var(--snake-body-dark)"/>
+          </linearGradient>
+          <linearGradient id="snake-tail-skin" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="var(--snake-body-light)"/>
+            <stop offset="0.55" stop-color="var(--snake-body-color)"/>
+            <stop offset="1" stop-color="var(--snake-dark)"/>
+          </linearGradient>
+          <pattern id="snake-scales" width="13" height="11" patternUnits="userSpaceOnUse">
+            <path d="M-6 2Q0 10 6 2M7 2Q13 10 19 2M0-4Q6 4 13-4M0 7Q6 15 13 7"
+              fill="none" stroke="var(--snake-edge)" stroke-width="0.8" opacity="0.22"/>
+          </pattern>
+          <pattern id="snake-markings" width="36" height="32" patternUnits="userSpaceOnUse"></pattern>
+          <radialGradient id="snake-apple-skin" cx="30%" cy="25%" r="80%">
+            <stop offset="0" stop-color="#ff9b7b"/>
+            <stop offset="0.32" stop-color="#f45c55"/>
+            <stop offset="0.72" stop-color="#d92e3d"/>
+            <stop offset="1" stop-color="#9c2035"/>
+          </radialGradient>
+          <linearGradient id="snake-apple-leaf" x1="0" y1="0" x2="1" y2="1">
+            <stop stop-color="#cae57a"/><stop offset="1" stop-color="#5d9a42"/>
+          </linearGradient>
+        </defs>
+        <g class="snake-apple">
+          <ellipse cx="0" cy="13" rx="13" ry="4" fill="#081d15" opacity="0.32"/>
+          <path d="M0-7C-7-14-17-8-14 3C-12 12-6 16 0 12C6 16 12 12 14 3C17-8 7-14 0-7Z"
+            fill="url(#snake-apple-skin)" stroke="#852d32" stroke-width="0.8"/>
+          <path d="M-8-4Q-12 1-8 6" fill="none" stroke="#ffe0b9" stroke-width="2.5"
+            stroke-linecap="round" opacity="0.7"/>
+          <ellipse cx="-6.5" cy="-5.5" rx="2.4" ry="1.4" fill="#fff0d7" opacity="0.75"/>
+          <path d="M0-7Q-2-12 2-16" fill="none" stroke="#76533a" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M2-12Q5-20 12-16Q11-9 2-12Z" fill="url(#snake-apple-leaf)"/>
+          <path d="M3-12L10-16" fill="none" stroke="#608d41" stroke-width="0.8"/>
+          <path d="M-3 11Q0 9 3 11" fill="none" stroke="#9a2e38" stroke-width="1" opacity="0.65"/>
+        </g>
+        <g class="snake-tail-art">
+          <path d="M0-12C-16-11-31-6-43 0C-31 6-16 11 0 12Z"
+            fill="url(#snake-tail-skin)" stroke="var(--snake-edge)" stroke-width="1.2"/>
+          <path d="M0-12C-16-11-31-6-43 0C-31 6-16 11 0 12Z" fill="url(#snake-markings)"/>
+          <path d="M-3-7Q-20-7-35 0" fill="none" stroke="var(--snake-light)" stroke-width="2.5" opacity="0.45" stroke-linecap="round"/>
+          <path class="snake-gardener-detail" d="M0 0H-32" fill="none" stroke="#f4e8a3" stroke-width="4" opacity="0.85"/>
+          <g class="snake-rattle">
+            <path d="M-29-4L-43-5Q-50 0-43 5L-29 4Z" fill="#e8ce8b" stroke="#81663e" stroke-width="1"/>
+            <path d="M-33-4Q-36 0-33 4M-38-4.5Q-41 0-38 4.5M-43-4Q-46 0-43 4" fill="none" stroke="#a78850" stroke-width="1.5"/>
+            <path d="M-31-2H-43" stroke="#fff0ba" stroke-width="1.2" opacity="0.8"/>
+          </g>
+        </g>
+        <path class="snake-body-shadow" fill="none" stroke="#081d15" stroke-width="27"
+          stroke-linecap="round" stroke-linejoin="round" opacity="0.3" transform="translate(0 3)"/>
+        <path class="snake-body-outline" fill="none" stroke="var(--snake-edge)" stroke-width="27"
+          stroke-linecap="butt" stroke-linejoin="round"/>
+        <path class="snake-body-skin" fill="none" stroke="url(#snake-body-color)" stroke-width="24"
+          stroke-linecap="round" stroke-linejoin="round"/>
+        <path class="snake-body-shine" fill="none" stroke="var(--snake-light)" stroke-width="11"
+          stroke-linecap="round" stroke-linejoin="round" opacity="0.3" transform="translate(0 -3)"/>
+        <path class="snake-body-markings" fill="none" stroke="url(#snake-markings)" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+        <path class="snake-body-stripe snake-gardener-detail" fill="none" stroke="#f4e8a3" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
+        <path class="snake-body-stripe-center snake-gardener-detail" fill="none" stroke="var(--snake-edge)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.5"/>
+        <path class="snake-body-scales" fill="none" stroke="url(#snake-scales)" stroke-width="23"
+          stroke-linecap="round" stroke-linejoin="round"/>
+        <g class="snake-head-art">
+          <g class="snake-tongue">
+            <path d="M13 0H22M22 0L26-2M22 0L26 2" fill="none" stroke="#dc8290" stroke-width="1.7" stroke-linecap="round"/>
+          </g>
+          <path d="M-13-9C-8-15 2-16 10-11C17-9 19-5 19 0C19 6 16 10 9 12C1 16-8 15-13 9Z"
+            fill="#0b2419" opacity="0.28" transform="translate(0 2.5)"/>
+          <path d="M-13-9C-8-15 2-16 10-11C17-9 19-5 19 0C19 6 16 10 9 12C1 16-8 15-13 9Z"
+            fill="url(#snake-skin)" stroke="var(--snake-edge)" stroke-width="1.3"/>
+          <path d="M-11-8Q-7-13-1-11" fill="none" stroke="var(--snake-light)" stroke-width="2.4" stroke-linecap="round" opacity="0.6"/>
+          <path d="M-10-4Q-6 0-10 4M-6-7Q-2-4-6-1M-6 2Q-2 5-6 8" fill="none" stroke="var(--snake-dark)" stroke-width="0.8" opacity="0.5"/>
+          <path class="snake-patterned-detail" d="M-12-5Q-3-9-1 0Q-3 9-12 5Z" fill="var(--snake-edge)" opacity="0.35"/>
+          <ellipse cx="7" cy="10" rx="3.3" ry="1.6" fill="#d4b36e" opacity="0.5"/>
+          <g class="snake-eye">
+            <ellipse cx="4" cy="-8" rx="5.3" ry="5.6" fill="#f6f5d6" stroke="var(--snake-dark)" stroke-width="0.7"/>
+            <ellipse class="snake-pupil" cx="5.7" cy="-7.6" rx="2.5" ry="3.2" fill="#233b2a"/>
+            <circle cx="6.4" cy="-8.8" r="1" fill="#fffef3"/>
+          </g>
+          <g class="snake-eye">
+            <ellipse cx="4" cy="8" rx="5.3" ry="5.6" fill="#f6f5d6" stroke="var(--snake-dark)" stroke-width="0.7"/>
+            <ellipse class="snake-pupil" cx="5.7" cy="7.6" rx="2.5" ry="3.2" fill="#233b2a"/>
+            <circle cx="6.4" cy="6.4" r="1" fill="#fffef3"/>
+          </g>
+          <ellipse cx="14" cy="-3" rx="0.8" ry="1.1" fill="var(--snake-dark)"/>
+          <ellipse cx="14" cy="3" rx="0.8" ry="1.1" fill="var(--snake-dark)"/>
+          <path class="snake-mouth" d="M11 5Q14 5 15 2" fill="none" stroke="var(--snake-edge)" stroke-width="1.1" stroke-linecap="round"/>
+          <g class="snake-accessory snake-neckwear-bandana">
+            <g transform="translate(-12 0)">
+            <path d="M-17-11Q-12-14-9-11L-9 11Q-12 14-17 11Z" fill="#ec6b6d" stroke="#9b3d50" stroke-width="0.9"/>
+            <path d="M-14 9L-9 21-21 17Z" fill="#d94b5a" stroke="#9b3d50" stroke-width="0.8"/>
+            <path d="M-14-8V8" stroke="#ffe0ce" stroke-width="1.5" stroke-dasharray="2 3"/>
+            </g>
+          </g>
+          <g class="snake-accessory snake-neckwear-bow">
+            <g transform="translate(-12 0)">
+            <path d="M-17 0L-23-12Q-13-14-10-8L-14 0L-10 8Q-13 14-23 12Z" fill="#75c5ed" stroke="#386a9c" stroke-width="1"/>
+            <path d="M-18-2L-18-8M-18 2L-18 8" stroke="#b7e8ff" stroke-width="1.4"/>
+            <ellipse cx="-16" cy="0" rx="3.2" ry="3.5" fill="#4999d5" stroke="#386a9c" stroke-width="0.8"/>
+            </g>
+          </g>
+          <g class="snake-accessory snake-neckwear-scarf">
+            <g transform="translate(-12 0)">
+            <path d="M-18 7L-31 13-27 19-13 12Z" fill="#af83d9" stroke="#674887" stroke-width="0.8"/>
+            <path d="M-28 13L-25 18M-25 12L-22 17" stroke="#e2c1f6" stroke-width="1.3"/>
+            <path d="M-18-11Q-12-15-10-10L-10 10Q-14 15-18 11Z" fill="#c69ae8" stroke="#674887" stroke-width="0.9"/>
+            <path d="M-14-10V10" stroke="#e2c1f6" stroke-width="1.7"/>
+            </g>
+          </g>
+          <g class="snake-accessory snake-hat-straw">
+            <ellipse cx="-13" cy="1" rx="11" ry="17" fill="#765833" opacity="0.25"/>
+            <ellipse cx="-14" cy="0" rx="10" ry="17" fill="#e7c986" stroke="#9e7846" stroke-width="0.9"/>
+            <ellipse cx="-16" cy="0" rx="7" ry="11" fill="#f2dca2" stroke="#c5a165" stroke-width="0.9"/>
+            <path d="M-11-10Q-7 0-11 10" fill="none" stroke="#8caa62" stroke-width="3"/>
+            <path d="M-11-7Q-7-14-5-9Q-5-5-11-7Z" fill="#4f8f4a"/>
+          </g>
+          <g class="snake-accessory snake-hat-crown">
+            <path d="M-9-10L-24-14-19-5-27 0-19 5-24 14-9 10Z" fill="#f4cc65" stroke="#a77836" stroke-width="1" stroke-linejoin="round"/>
+            <path d="M-10-10V10" stroke="#ffe9a1" stroke-width="3"/>
+            <circle cx="-19" cy="0" r="2.2" fill="#e47285"/>
+            <circle cx="-17" cy="-8" r="1.5" fill="#6dbce1"/>
+            <circle cx="-17" cy="8" r="1.5" fill="#6dbce1"/>
+          </g>
+          <g class="snake-accessory snake-hat-party">
+            <path d="M-10-12L-30 0-10 12Q-5 0-10-12Z" fill="#a28ae5" stroke="#66539d" stroke-width="0.9"/>
+            <path d="M-23-4L-21 5M-17-8L-14 9" stroke="#f3ce80" stroke-width="3"/>
+            <path d="M-10-11Q-6 0-10 11" fill="none" stroke="#e7c6f5" stroke-width="2.3"/>
+            <circle cx="-30" cy="0" r="3.6" fill="#f7dc9a"/>
+          </g>
+          <g class="snake-accessory snake-hat-flowers">
+            <path d="M-12-13Q-22 0-12 13" fill="none" stroke="#417c46" stroke-width="3"/>
+            <path d="M-15-6Q-23-10-21-3ZM-15 6Q-23 10-21 3Z" fill="#87b95f"/>
+            <g fill="#f4b0ca" stroke="#c67999" stroke-width="0.5">
+              <path d="M-12-12C-19-18-20-8-13-9C-8-4-5-13-12-12Z"/>
+              <path d="M-18-2C-25-8-26 2-19 1C-14 6-11-3-18-2Z"/>
+              <path d="M-12 9C-19 3-20 13-13 12C-8 17-5 8-12 9Z"/>
+            </g>
+            <g fill="#ffe59c"><circle cx="-13" cy="-11" r="1.8"/><circle cx="-19" cy="0" r="1.8"/><circle cx="-13" cy="11" r="1.8"/></g>
+          </g>
+          <g class="snake-accessory snake-eyewear-round">
+            <g fill="#a2ddf5" fill-opacity="0.18" stroke="#684f48" stroke-width="1.3">
+              <ellipse cx="5" cy="-8" rx="6.2" ry="6"/><ellipse cx="5" cy="8" rx="6.2" ry="6"/>
+            </g>
+            <path d="M5-2V2M-1-10L-7-11M-1 10L-7 11" fill="none" stroke="#684f48" stroke-width="1.3"/>
+            <path d="M2-11L5-13M2 5L5 3" stroke="#fff" stroke-width="1.2" opacity="0.65"/>
+          </g>
+          <g class="snake-accessory snake-eyewear-shades">
+            <path d="M-1-13H11V-7Q11-1 5-2Q-1-2-1-7ZM-1 13H11V7Q11 1 5 2Q-1 2-1 7Z" fill="#243648" stroke="#141f2d" stroke-width="1.2"/>
+            <path d="M5-2V2M0-11H-6M0 11H-6" stroke="#141f2d" stroke-width="1.7"/>
+            <path d="M2-10H8M2 6H8" stroke="#a5d3e7" stroke-width="1.5" opacity="0.65"/>
+          </g>
+        </g>`;
+      const appleArt = art.querySelector(".snake-apple");
+      const headArt = art.querySelector(".snake-head-art");
+      const tailArt = art.querySelector(".snake-tail-art");
+      const bodyPaths = art.querySelectorAll(".snake-body-shadow, .snake-body-outline, .snake-body-skin, .snake-body-shine, .snake-body-scales, .snake-body-markings, .snake-body-stripe, .snake-body-stripe-center");
 
       const countdown = document.createElement("div");
       countdown.className = "snake-countdown";
@@ -465,11 +690,12 @@ const games = [
       for (let i = 0; i < config.gridSize * config.gridSize; i += 1) {
         const cell = document.createElement("div");
         cell.className = "snake-cell";
+        cell.classList.toggle("is-dark", (i % config.gridSize + Math.floor(i / config.gridSize)) % 2 === 1);
         board.appendChild(cell);
         cells.push(cell);
       }
 
-      boardWrap.append(board, countdown);
+      boardWrap.append(board, art, countdown);
 
       const controls = document.createElement("div");
       controls.className = "snake-controls";
@@ -504,6 +730,114 @@ const games = [
 
       controls.append(difficultyLabel, startBtn, pauseBtn);
 
+      const customization = document.createElement("fieldset");
+      customization.className = "snake-customization";
+      const customizationTitle = document.createElement("legend");
+      customizationTitle.textContent = "Customize your snake";
+
+      const skinLabel = document.createElement("label");
+      skinLabel.className = "range-select";
+      const skinLabelText = document.createElement("span");
+      skinLabelText.textContent = "Skin";
+      const skinSelect = document.createElement("select");
+      skinSelect.setAttribute("aria-label", "Snake skin");
+      skins.forEach((skin) => {
+        const option = document.createElement("option");
+        option.value = skin.id;
+        option.textContent = skin.label;
+        skinSelect.appendChild(option);
+      });
+      skinSelect.value = settings.skin;
+      const skinNote = document.createElement("p");
+      skinNote.className = "snake-setting-note";
+      skinNote.id = "snake-skin-note";
+      skinSelect.setAttribute("aria-describedby", skinNote.id);
+      skinLabel.append(skinLabelText, skinSelect);
+
+      const colorGroup = document.createElement("fieldset");
+      colorGroup.className = "snake-color-group";
+      const colorLegend = document.createElement("legend");
+      const colorName = document.createElement("span");
+      colorLegend.append("Color ", colorName);
+      const colorGrid = document.createElement("div");
+      colorGrid.className = "snake-color-grid";
+      colors.forEach((color) => {
+        const label = document.createElement("label");
+        label.className = "snake-color-choice";
+        label.title = color.label;
+        const input = document.createElement("input");
+        input.type = "radio";
+        input.name = "snake-color";
+        input.value = color.id;
+        input.checked = color.id === settings.color;
+        input.setAttribute("aria-label", color.label);
+        const swatch = document.createElement("span");
+        swatch.className = "snake-color-swatch";
+        swatch.style.setProperty("--swatch", color.shades[1]);
+        swatch.setAttribute("aria-hidden", "true");
+        input.addEventListener("change", () => {
+          if (!input.checked) return;
+          settings.color = input.value;
+          applyAppearance();
+          persistSettings();
+        });
+        label.append(input, swatch);
+        colorGrid.appendChild(label);
+      });
+      colorGroup.append(colorLegend, colorGrid);
+
+      const accessoryGroup = document.createElement("fieldset");
+      accessoryGroup.className = "snake-accessories";
+      const accessoryLegend = document.createElement("legend");
+      accessoryLegend.textContent = "Accessories";
+      const accessoryNote = document.createElement("p");
+      accessoryNote.className = "snake-setting-note";
+      accessoryNote.textContent = "Mix hats, glasses, and neckwear with any skin.";
+      const accessoryFields = document.createElement("div");
+      accessoryFields.className = "snake-accessory-fields";
+      Object.entries(accessories).forEach(([key, choices]) => {
+        const label = document.createElement("label");
+        label.className = "range-select";
+        const title = document.createElement("span");
+        title.textContent = { hat: "Hat", eyewear: "Eyewear", neckwear: "Neckwear" }[key];
+        const select = document.createElement("select");
+        select.setAttribute("aria-label", `Snake ${key}`);
+        choices.forEach((choice) => {
+          const option = document.createElement("option");
+          option.value = choice.id;
+          option.textContent = choice.label;
+          select.appendChild(option);
+        });
+        select.value = settings[key];
+        select.addEventListener("change", () => {
+          settings[key] = select.value;
+          applyAppearance();
+          persistSettings();
+        });
+        label.append(title, select);
+        accessoryFields.appendChild(label);
+      });
+      accessoryGroup.append(accessoryLegend, accessoryNote, accessoryFields);
+
+      const soundGroup = document.createElement("fieldset");
+      soundGroup.className = "snake-sound-group";
+      const soundLegend = document.createElement("legend");
+      soundLegend.textContent = "Audio";
+      const soundButtons = document.createElement("div");
+      soundButtons.className = "snake-sound-buttons";
+      const musicButton = document.createElement("button");
+      const effectsButton = document.createElement("button");
+      musicButton.type = effectsButton.type = "button";
+      soundButtons.append(musicButton, effectsButton);
+      const soundNote = document.createElement("p");
+      soundNote.className = "snake-setting-note";
+      soundNote.textContent = "A mellow garden tune while you play, with bites, turns, and countdown sounds.";
+      soundGroup.append(soundLegend, soundButtons, soundNote);
+      const savedNote = document.createElement("p");
+      savedNote.className = "snake-setting-note";
+      savedNote.textContent = "Changes apply instantly and are saved in this browser.";
+      customization.append(customizationTitle, skinLabel, skinNote, colorGroup, accessoryGroup, soundGroup, savedNote);
+
       const pad = document.createElement("div");
       pad.className = "snake-pad";
 
@@ -516,6 +850,7 @@ const games = [
         button.textContent = label;
         button.addEventListener("click", () => {
           handleDirectionInput(dirKey);
+          boardWrap.focus({ preventScroll: true });
         });
         return button;
       };
@@ -527,7 +862,13 @@ const games = [
         createPadButton("↓", "down", "Move down")
       );
 
-      wrapper.append(header, status, boardWrap, controls, pad);
+      const playArea = document.createElement("div");
+      playArea.className = "snake-play-area";
+      const playfield = document.createElement("div");
+      playfield.className = "snake-playfield";
+      playfield.append(boardWrap, controls, pad);
+      playArea.append(playfield, customization);
+      wrapper.append(header, status, playArea);
       root.appendChild(wrapper);
 
       let difficultyId = defaultDifficulty.id;
@@ -536,7 +877,20 @@ const games = [
       let tickId = null;
       let countdownId = null;
       let countdownTimeout = null;
+      let animationFrameId = null;
+      let motionFrom = state.snake.map(pointAt);
+      let motionTo = motionFrom;
+      let motionTailFrom = motionFrom[motionFrom.length - 2];
+      let motionTailTo = motionTailFrom;
+      let motionStarted = performance.now();
+      let motionDuration = state.speedMs;
+      let motionAngleFrom = 0;
+      let motionAngleTo = 0;
+      let motionEatenApple = null;
+      let animationPausedAt = null;
 
+      applyAppearance();
+      updateSoundButtons();
       render();
       updateUI();
 
@@ -550,6 +904,28 @@ const games = [
 
       pauseBtn.addEventListener("click", () => {
         togglePause();
+        boardWrap.focus({ preventScroll: true });
+      });
+
+      skinSelect.addEventListener("change", () => {
+        settings.skin = skinSelect.value;
+        applyAppearance();
+        persistSettings();
+      });
+
+      musicButton.addEventListener("click", () => {
+        settings.music = !settings.music;
+        audio.setMusic(settings.music);
+        updateSoundButtons();
+        persistSettings();
+      });
+
+      effectsButton.addEventListener("click", () => {
+        settings.effects = !settings.effects;
+        audio.setEffects(settings.effects);
+        if (settings.effects) audio.effect("turn");
+        updateSoundButtons();
+        persistSettings();
       });
 
       difficultySelect.addEventListener("change", () => {
@@ -563,6 +939,7 @@ const games = [
       });
 
       const handleKeydown = (event) => {
+        if (event.target instanceof Element && event.target.closest("input, select, textarea")) return;
         const key = event.key.toLowerCase();
         const dirKey = {
           arrowup: "up",
@@ -582,6 +959,7 @@ const games = [
         }
 
         if (event.code === "Space") {
+          if (event.target instanceof Element && event.target.closest("button")) return;
           if (state.phase === "running" || state.phase === "paused") {
             event.preventDefault();
             togglePause();
@@ -590,6 +968,59 @@ const games = [
       };
 
       window.addEventListener("keydown", handleKeydown);
+      boardWrap.addEventListener("pointerdown", () => boardWrap.focus({ preventScroll: true }));
+
+      function persistSettings() {
+        try { localStorage.setItem(settingsKey, JSON.stringify(settings)); } catch { /* The game also works without storage. */ }
+      }
+
+      function updateSoundButtons() {
+        musicButton.textContent = `Music: ${settings.music ? "On" : "Off"}`;
+        effectsButton.textContent = `Sound FX: ${settings.effects ? "On" : "Off"}`;
+        musicButton.setAttribute("aria-pressed", String(settings.music));
+        effectsButton.setAttribute("aria-pressed", String(settings.effects));
+      }
+
+      function applyAppearance() {
+        const skin = skins.find((entry) => entry.id === settings.skin);
+        const color = colors.find((entry) => entry.id === settings.color);
+        wrapper.dataset.skin = skin.id;
+        wrapper.dataset.color = color.id;
+        const hat = settings.hat === "skin" ? (skin.id === "gardener" ? "straw" : "none") : settings.hat;
+        wrapper.dataset.hat = hat;
+        wrapper.dataset.eyewear = settings.eyewear;
+        wrapper.dataset.neckwear = settings.neckwear;
+        skinNote.textContent = skin.note;
+        colorName.textContent = color.label;
+        ["light", "color", "mid", "dark", "edge"].forEach((name, index) => {
+          art.style.setProperty(`--snake-${name}`, color.shades[index]);
+        });
+        // Preserve the original green skin's soft body shading.
+        const bodyColors = color.id === "green" ? ["#a8d974", "#79ba54", "#4b9344"] : [color.shades[0], color.shades[1], color.shades[2]];
+        ["light", "color", "dark"].forEach((name, index) => {
+          art.style.setProperty(`--snake-body-${name}`, bodyColors[index]);
+        });
+        const markings = art.querySelector("#snake-markings");
+        if (skin.id === "python") {
+          markings.innerHTML = `<path d="M2 7Q7-2 14 5L18 11Q26 8 28 16Q27 25 18 22L11 27Q3 26 5 19Z" fill="var(--snake-edge)" stroke="var(--snake-light)" stroke-width="1.4" opacity="0.65"/>
+            <ellipse cx="33" cy="2" rx="4" ry="5" fill="var(--snake-edge)" opacity="0.5"/>`;
+        } else if (skin.id === "rattlesnake") {
+          markings.innerHTML = `<path d="M18 1L31 16 18 31 5 16Z" fill="var(--snake-edge)" stroke="#f4e8bd" stroke-width="1.8" opacity="0.8"/>
+            <path d="M18 8L25 16 18 24 11 16Z" fill="var(--snake-dark)" opacity="0.6"/>`;
+        } else {
+          markings.replaceChildren();
+        }
+        art.querySelectorAll(".snake-pupil").forEach((pupil) => {
+          pupil.setAttribute("rx", skin.id === "python" || skin.id === "rattlesnake" ? "1.4" : "2.5");
+        });
+        const wornAccessories = [
+          hat === "none" ? null : accessories.hat.find((item) => item.id === hat).label.toLowerCase(),
+          settings.eyewear === "none" ? null : accessories.eyewear.find((item) => item.id === settings.eyewear).label.toLowerCase(),
+          settings.neckwear === "none" ? null : accessories.neckwear.find((item) => item.id === settings.neckwear).label.toLowerCase(),
+        ].filter(Boolean);
+        const accessoryDescription = wornAccessories.length ? `, wearing ${wornAccessories.join(", ")},` : "";
+        art.setAttribute("aria-label", `A ${color.label.toLowerCase()} ${skin.label.toLowerCase()} snake${accessoryDescription} hunting a red apple in a garden.`);
+      }
 
       function handleDirectionInput(dirKey) {
         if (!directions[dirKey]) return;
@@ -673,10 +1104,13 @@ const games = [
       function resetGame(autoStart = false) {
         stopTimer();
         clearCountdown();
+        stopAnimation();
+        audio.setPlaying(false);
         const difficulty = getDifficulty(difficultyId);
         difficultySelect.value = difficulty.id;
         state = createInitialState(difficulty);
         queuedDirection = state.direction;
+        resetArtwork();
         if (autoStart) {
           startCountdown();
         }
@@ -686,11 +1120,22 @@ const games = [
 
       function togglePause() {
         if (state.phase === "running") {
+          animationPausedAt = performance.now();
+          drawArtwork(getMotion(animationPausedAt));
+          stopAnimation();
           stopTimer();
           state = { ...state, phase: "paused" };
         } else if (state.phase === "paused") {
+          const paused = getMotion(animationPausedAt);
+          motionFrom = paused.points;
+          motionTailFrom = paused.points[paused.points.length - 2];
+          motionAngleFrom = paused.angle;
+          motionStarted = performance.now();
+          motionDuration = state.speedMs;
+          animationPausedAt = null;
           state = { ...state, phase: "running" };
           startTimer();
+          startAnimation();
         }
         updateUI();
       }
@@ -698,9 +1143,12 @@ const games = [
       function startCountdown() {
         if (state.phase === "countdown") return;
         clearCountdown();
+        audio.unlock();
+        boardWrap.focus({ preventScroll: true });
         state = { ...state, phase: "countdown" };
         let remaining = 3;
         updateCountdownDisplay(remaining);
+        audio.effect("count");
         updateUI();
         countdownId = window.setInterval(() => {
           remaining -= 1;
@@ -709,12 +1157,14 @@ const games = [
             countdownId = null;
             countdownText.textContent = "GO!";
             countdown.classList.add("is-go");
+            audio.effect("go");
             countdownTimeout = window.setTimeout(() => {
               clearCountdown();
               startGame();
             }, 500);
           } else {
             updateCountdownDisplay(remaining);
+            audio.effect("count");
           }
         }, 1000);
       }
@@ -740,12 +1190,34 @@ const games = [
 
       function tick() {
         if (state.phase !== "running") return;
+        const now = performance.now();
+        const previousVisual = getMotion(now);
+        const previousFood = state.food;
+        const previousScore = state.score;
+        const previousDirection = state.direction;
         state = stepState(state, queuedDirection);
         queuedDirection = state.direction;
+        motionFrom = previousVisual.points;
+        motionTo = state.snake.map(pointAt);
+        motionTailFrom = previousVisual.points[previousVisual.points.length - 2];
+        motionTailTo = motionTo[motionTo.length - 2];
+        motionAngleFrom = previousVisual.angle;
+        const angle = Math.atan2(state.direction.y, state.direction.x) * 180 / Math.PI;
+        const turn = ((angle - motionAngleFrom + 540) % 360 + 360) % 360 - 180;
+        motionAngleTo = motionAngleFrom + turn;
+        motionEatenApple = state.score > previousScore ? previousFood : null;
+        motionStarted = now;
+        motionDuration = state.speedMs;
         render();
         updateUI();
+        startAnimation();
         if (state.phase === "over" || state.phase === "won") {
           stopTimer();
+          audio.effect(state.phase === "won" ? "win" : "crash");
+        } else if (state.score > previousScore) {
+          audio.effect("eat");
+        } else if (state.direction !== previousDirection) {
+          audio.effect("turn");
         }
       }
 
@@ -801,6 +1273,59 @@ const games = [
         };
       }
 
+      function pointAt(index) {
+        return {
+          x: (index % config.gridSize + 0.5) * 32,
+          y: (Math.floor(index / config.gridSize) + 0.5) * 32,
+        };
+      }
+
+      function resetArtwork() {
+        motionFrom = state.snake.map(pointAt);
+        motionTo = motionFrom;
+        motionTailFrom = motionFrom[motionFrom.length - 2];
+        motionTailTo = motionTailFrom;
+        motionAngleFrom = motionAngleTo = 0;
+        motionStarted = performance.now();
+        motionDuration = state.speedMs;
+        motionEatenApple = null;
+        animationPausedAt = null;
+      }
+
+      function getMotion(now) {
+        const time = animationPausedAt ?? now;
+        const progress = Math.max(0, Math.min(1, (time - motionStarted) / motionDuration));
+        const interpolate = (from, to) => ({
+          x: from.x + (to.x - from.x) * progress,
+          y: from.y + (to.y - from.y) * progress,
+        });
+        const points = motionTo.map((target, index) => interpolate(motionFrom[index] ?? motionFrom[motionFrom.length - 1], target));
+        // When an apple adds a segment, the tail stays put while the neck grows.
+        points[points.length - 2] = interpolate(motionTailFrom, motionTailTo);
+        const turn = Math.min(1, progress * 1.6);
+        const easedTurn = turn * turn * (3 - 2 * turn);
+        return { points, progress, angle: motionAngleFrom + (motionAngleTo - motionAngleFrom) * easedTurn };
+      }
+
+      function startAnimation() {
+        if (animationFrameId !== null) return;
+        animationFrameId = window.requestAnimationFrame(animate);
+      }
+
+      function stopAnimation() {
+        if (animationFrameId !== null) window.cancelAnimationFrame(animationFrameId);
+        animationFrameId = null;
+      }
+
+      function animate(now) {
+        animationFrameId = null;
+        const motion = getMotion(now);
+        drawArtwork(motion);
+        if (state.phase === "running" || (state.phase !== "paused" && motion.progress < 1)) {
+          animationFrameId = window.requestAnimationFrame(animate);
+        }
+      }
+
       function render() {
         cells.forEach((cell) => {
           cell.classList.remove(
@@ -827,9 +1352,39 @@ const games = [
         if (state.food !== null && cells[state.food]) {
           cells[state.food].classList.add("snake-food");
         }
+
+        drawArtwork(getMotion(performance.now()));
+      }
+
+      function drawArtwork(motion) {
+        const points = motion.points.slice(0, -1).reverse();
+        let path = `M${points[0].x} ${points[0].y}`;
+        for (let i = 1; i < points.length - 1; i += 1) {
+          const point = points[i];
+          const next = points[i + 1];
+          path += `Q${point.x} ${point.y} ${(point.x + next.x) / 2} ${(point.y + next.y) / 2}`;
+        }
+        const head = motion.points[0];
+        path += `L${head.x} ${head.y}`;
+        bodyPaths.forEach((bodyPath) => bodyPath.setAttribute("d", path));
+        headArt.setAttribute("transform", `translate(${head.x} ${head.y}) rotate(${motion.angle})`);
+        const tail = motion.points[motion.points.length - 1];
+        const tailRoot = motion.points[motion.points.length - 2];
+        const tailAngle = Math.atan2(tailRoot.y - tail.y, tailRoot.x - tail.x) * 180 / Math.PI;
+        tailArt.setAttribute("transform", `translate(${tailRoot.x} ${tailRoot.y}) rotate(${tailAngle})`);
+        const eating = motionEatenApple !== null && motion.progress < 0.65;
+        const foodIndex = eating ? motionEatenApple : state.food;
+        appleArt.style.display = foodIndex === null ? "none" : "";
+        if (foodIndex !== null) {
+          const apple = pointAt(foodIndex);
+          const scale = eating ? 1 - Math.max(0, motion.progress - 0.25) / 0.4 * 0.9 : 1;
+          appleArt.setAttribute("transform", `translate(${apple.x} ${apple.y}) scale(${scale})`);
+        }
       }
 
       function updateUI() {
+        wrapper.dataset.phase = state.phase;
+        audio.setPlaying(state.phase === "running" || state.phase === "countdown");
         const difficulty = getDifficulty(state.difficulty);
         scoreValue.textContent = String(state.score);
         speedValue.textContent = difficulty.label;
@@ -839,7 +1394,7 @@ const games = [
         } else if (state.phase === "countdown") {
           status.textContent = "Get ready... Snake launches in 3 seconds.";
         } else if (state.phase === "running") {
-          status.textContent = "Eat the food, avoid the walls, and don't bite yourself.";
+          status.textContent = "Eat the apples, avoid the walls, and don't bite yourself.";
         } else if (state.phase === "paused") {
           status.textContent = "Paused. Press Resume or Space to continue.";
         } else if (state.phase === "won") {
@@ -861,6 +1416,8 @@ const games = [
       return () => {
         stopTimer();
         clearCountdown();
+        stopAnimation();
+        audio.dispose();
         window.removeEventListener("keydown", handleKeydown);
         wrapper.remove();
       };

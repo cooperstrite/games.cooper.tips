@@ -6,7 +6,7 @@ A playful single-page playground inspired by [neal.fun](https://neal.fun), bundl
 
 - **Hot & Cold** — Hunt down a mystery number with warmer/colder hints on every guess.
 - **Flash Reflex** — Train your reaction speed by tapping the moment the panel lights up.
-- **Snake** — Gobble up food, grow longer, and avoid walls or your own tail.
+- **Snake** — Glide through the garden and gobble up apples. Customize a Generic, Gardener, Python, or Rattlesnake skin in eight colors, add hats, glasses, and neckwear, and toggle music and sound effects.
 - **Runway Glide** — Line up the runway lights and land the plane on target.
 - **Rocket Boost** — Hold boost, stage within the target band, and reach orbit.
 - **Switchyard Signals** — Flip the switch before each train hits the junction.
@@ -28,6 +28,8 @@ A playful single-page playground inspired by [neal.fun](https://neal.fun), bundl
 - **Neon Drift** — Pick from five routes, four difficulty levels, and four cars with special abilities. Traffic and speed build with distance. Choose a 1 km, 3 km, 8 km, or endless drive, with crash explosions, varied vehicles, music, and sound effects.
 
 Neon Drift controls: A/D or the arrow keys steer, Space boosts, and E activates your car's ability. Comet GT has a nitro surge, Sentinel SUV shields one impact and flings the other car away, Phantom Coupe phases through traffic, and Rally RS slows approaching traffic and improves handling. Country Curves has blind bends and hills; Alpine Pass has fog and crests; Midnight Rain has slippery steering; Canyon Crosswinds has gusts and heavy trucks. Music and Sound FX can be toggled separately, and your choices are saved in this browser.
+
+Snake controls: arrow keys, WASD, or the on-screen arrows steer; Space pauses and resumes. Skin, color, and accessory changes apply immediately without restarting. Mix a straw hat, royal crown, party hat, or flower crown with round glasses or sunglasses and a bandana, bow tie, or scarf. Hat's "Match skin" option gives the Gardener a straw hat; "None" removes it. Appearance, Music, and Sound FX preferences are saved in this browser. Music starts with a game, pauses when you pause, and stops when you leave Snake.
 
 ## Getting Started
 
