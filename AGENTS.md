@@ -2,13 +2,14 @@
 
 ## Project Snapshot
 - Static single-page web app inspired by neal.fun aesthetics.
-- Frontend only: `index.html`, `style.css`, `script.js`. No build tooling.
+- Frontend only: `index.html`, `style.css`, `script.js`, plus Neon Drift's renderer, simulation, and audio modules. No build tooling.
 - Hosted on GitHub Pages via `.github/workflows/deploy.yml`.
 
 ## Local Workflow
 1. Use `npx serve .` or `python3 -m http.server 4173` from the repo root for local preview.
 2. After changes, manually exercise each mini-game (Hot & Cold, Flash Reflex, Red Light Green Light, Memory Loop, Tower Stack, Orbit Dash, Pop Dash, Nim Duel, Bubble Rally, Skyport Command, Harmonic Echo, Spot Clash, Cats vs Dogs, Lights Down, Submerged Explorer, Spotlight).
 3. Inspect responsive behavior with browser devtools; layout supports narrow viewports.
+4. For Neon Drift changes, run `node --test tests/neon-drift.test.mjs` and check the route, garage, ability, crash, and audio controls in the browser.
 
 ## Deployment Notes
 - Pushes to `main` trigger the GitHub Actions workflow (`Deploy static site`) that uploads the repo contents and deploys to Pages.

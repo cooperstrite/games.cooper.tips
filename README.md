@@ -25,7 +25,9 @@ A playful single-page playground inspired by [neal.fun](https://neal.fun), bundl
 - **Submerged Explorer** — Glide through ocean zones, collect samples, and finish mission objectives in a retro submarine.
 - **Spotlight** — Compare two vibrant scenes and spot every subtle difference against the clock.
 - **Food Chain Relay** — Shuffle producers, consumers, and apex predators back into order to prove you understand energy flow.
-- **Neon Drift** — Drive a sports car down a night highway, weave through traffic, and boost toward the finish with a rear-view perspective.
+- **Neon Drift** — Pick from five routes, four difficulty levels, and four cars with special abilities. Traffic and speed build with distance. Choose a 1 km, 3 km, 8 km, or endless drive, with crash explosions, varied vehicles, music, and sound effects.
+
+Neon Drift controls: A/D or the arrow keys steer, Space boosts, and E activates your car's ability. Comet GT has a nitro surge, Sentinel SUV shields one impact and flings the other car away, Phantom Coupe phases through traffic, and Rally RS slows approaching traffic and improves handling. Country Curves has blind bends and hills; Alpine Pass has fog and crests; Midnight Rain has slippery steering; Canyon Crosswinds has gusts and heavy trucks. Music and Sound FX can be toggled separately, and your choices are saved in this browser.
 
 ## Getting Started
 
@@ -44,6 +46,8 @@ The project is entirely client-side, so functional testing is manual:
 - Walk through each game module after making changes to confirm interactions still work.
 - Use browser devtools for responsive checks; the layout adapts down to small screens.
 - Optional: enable network throttling or reduced motion in devtools to test accessibility quirks.
+
+Neon Drift's driving rules also have focused automated checks: `node --test tests/neon-drift.test.mjs`. Its simulation, canvas rendering, and Web Audio soundtrack are in `neon-drift-engine.js`, `neon-drift.js`, and `neon-drift-audio.js`; no build step or dependencies are required.
 
 ## Deployment
 
