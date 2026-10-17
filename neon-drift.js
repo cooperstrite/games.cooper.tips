@@ -307,9 +307,17 @@ export function createNeonDrift(root) {
   }
 
   function drawRoadside(z, side, kind) {
-    const x = side * (roadHalf() + (kind === "tree" ? 2.4 : kind === "lamp" ? 1.4 : 0.4));
+    const x = side * (roadHalf() + (kind === "tree" || kind === "rock" ? 2.4 : kind === "lamp" ? 1.4 : 0.4));
     const base = project(x, z);
     const s = base.scale;
+    if (kind === "rock") {
+      polygon([{ x: base.x - s * 1.2, y: base.y }, { x: base.x - s * 0.8, y: base.y - s * 2.2 },
+        { x: base.x + s * 0.35, y: base.y - s * 2.8 }, { x: base.x + s * 1.1, y: base.y - s * 1.2 },
+        { x: base.x + s * 1.4, y: base.y }], "#825b49");
+      polygon([{ x: base.x - s * 0.8, y: base.y - s * 2.2 }, { x: base.x + s * 0.35, y: base.y - s * 2.8 },
+        { x: base.x + s * 0.45, y: base.y - s * 0.5 }, { x: base.x - s * 0.45, y: base.y }], "#ba8867");
+      return;
+    }
     if (kind === "tree") {
       const top = project(x, z, 5.5);
       ctx.fillStyle = "#4a4439";
@@ -559,7 +567,8 @@ export function createNeonDrift(root) {
     const objects = state.traffic.map((vehicle) => ({ ...vehicle, type: "car" }));
     for (let z = 9 - state.distance % 9; z < ROAD.maxDepth; z += 9) if (z > ROAD.nearDepth) objects.push({ type: "post", z });
     for (let z = 32 - state.distance % 32; z < ROAD.maxDepth; z += 32) {
-      if (z > ROAD.nearDepth) objects.push({ type: route().landscape === "city" ? "lamp" : "tree", z });
+      if (z > ROAD.nearDepth) objects.push({ type: route().landscape === "city" ? "lamp"
+        : route().landscape === "canyon" ? "rock" : "tree", z });
     }
     const signZ = 180 - state.distance % 180;
     if (signZ < ROAD.maxDepth && signZ > ROAD.nearDepth) objects.push({ type: "sign", z: signZ });
@@ -613,7 +622,8 @@ export function createNeonDrift(root) {
     condition.textContent = route().weather === "wind" && Math.abs(state.wind) > 0.07 ? "CROSSWIND"
       : model.settings.route === "country" ? `BLIND BENDS - ${Math.round(getVisibility(model.settings, state.distance, model.active("focus")))} m VIEW`
       : route().weather === "fog" ? `FOG - ${Math.round(getVisibility(model.settings, state.distance))} m VIEW`
-      : route().weather === "rain" ? "WET ROAD - STEER EARLY" : "WATCH FOR MERGING TRAFFIC";
+      : route().weather === "rain" ? "WET ROAD - STEER EARLY"
+      : route().weather === "wind" ? "WATCH FOR GUSTS AND HEAVY TRUCKS" : "WATCH FOR MERGING TRAFFIC";
     startButton.textContent = running ? "Restart run" : state.phase === "crashed" ? "Try again" : "Start run";
     startButton.disabled = !running && locked;
     [...options.querySelectorAll("select"), ...carInputs].forEach((input) => { input.disabled = locked; });
