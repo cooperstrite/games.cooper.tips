@@ -29,7 +29,7 @@ export function createFlappyBird(root, { editorOnly = false, onAppearanceChange 
     <div class="flappy-heading"><div><p class="flappy-eyebrow">THE LITTLE SKY CLUB</p><h3 class="flappy-page-title">A little flap. A big adventure.</h3></div><nav class="flappy-page-nav" aria-label="Flappy Bird pages"><a href="#flappy" data-flappy-page-link="play">Play</a><a href="#flappy/customize" data-flappy-page-link="customize" class="flappy-customize-link">Customize</a><a href="#flappy/shop" data-flappy-page-link="shop" class="flappy-shop-link">${coinIcon}<span class="flappy-wallet">0</span> <span>Shop</span></a></nav></div>
     <div class="flappy-flight-settings">
       <label>Difficulty <span class="flappy-label-note">starts a new flight</span><select aria-label="Flight difficulty">${options(DIFFICULTIES)}</select></label>
-      <label>View mode<select aria-label="Flappy view mode"><option value="side">Classic side view</option><option value="first-person">First-person 3D</option><option value="first-person-webgl">Enhanced first-person 3D</option></select></label>
+      <label>View mode<select aria-label="Flappy view mode"><option value="side">Classic side view</option><option value="first-person">First-person 3D (Beta)</option><option value="first-person-webgl">Enhanced first-person 3D (Beta)</option></select></label>
       <p class="flappy-difficulty-note"></p>
     </div>
     <div class="flappy-hud" aria-label="Flight statistics">
@@ -42,7 +42,7 @@ export function createFlappyBird(root, { editorOnly = false, onAppearanceChange 
     </div>
     <div class="flappy-actions"><button type="button" class="flappy-flap">Flap / Start</button><button type="button" class="flappy-pause" disabled>Pause</button><button type="button" class="flappy-restart">Restart</button><label class="flappy-guide-label"><input type="checkbox" class="flappy-guide" checked> Gap guide</label><label class="flappy-guide-label"><input type="checkbox" class="flappy-sound" checked> Sound FX</label></div>
     <p class="flappy-status" role="status" aria-live="polite">Your adventure is ready. One tap starts your flight.</p>
-    <section class="flappy-instructions" aria-labelledby="flappy-how-title"><h4 id="flappy-how-title">How to fly</h4><ol><li><strong>Flap to climb.</strong> Tap the scene, click Flap, or press Space, W, or Up. Gravity pulls you down between flaps.</li><li><strong>Find the opening.</strong> Each pipe scores 1 point on Easy, 3 on Medium, 6 on Hard, or 10 on Expert. A pipe or the ground ends your flight. Hard starts by default. The pace increases as you clear more pipes.</li><li><strong>Try a new perspective.</strong> First-person 3D puts you behind your bird's beak. The dotted circle marks the next gap; line it up with the small center ring as you approach.</li></ol><p id="flappy-controls-help"><kbd>P</kbd> pauses or resumes. <kbd>R</kbd> restarts. Difficulty starts a new flight; use Play, Customize, and Shop above. Shop and customization pause your flight; Play brings it back. Every character has the same flight abilities.</p></section>
+    <section class="flappy-instructions" aria-labelledby="flappy-how-title"><h4 id="flappy-how-title">How to fly</h4><ol><li><strong>Flap to climb.</strong> Tap the scene, click Flap, or press Space, W, or Up. Gravity pulls you down between flaps.</li><li><strong>Find the opening.</strong> Each pipe scores 1 point on Easy, 3 on Medium, 6 on Hard, or 10 on Expert. A pipe or the ground ends your flight. Hard starts by default. The pace increases as you clear more pipes.</li><li><strong>Try a new perspective.</strong> First-person 3D (Beta) puts you behind your bird's beak. The dotted circle marks the next gap; line it up with the small center ring as you approach.</li></ol><p id="flappy-controls-help"><kbd>P</kbd> pauses or resumes. <kbd>R</kbd> restarts. Difficulty starts a new flight; use Play, Customize, and Shop above. Shop and customization pause your flight; Play brings it back. Every character has the same flight abilities.</p></section>
     <section class="flappy-studio" aria-labelledby="flappy-studio-title"><div class="flappy-studio-heading"><p class="flappy-eyebrow">MAKE IT YOURS</p><h4 id="flappy-studio-title">Your flight studio</h4><p>Mix your favorite creature, world, and accessories. Your choices save automatically.</p></div>
       <div class="flappy-studio-grid">
         <figure class="flappy-preview"><canvas class="flappy-bird-preview" width="360" height="280" role="img" aria-label="Your customized bird"></canvas><figcaption><strong class="flappy-bird-name">Sunny sparrow</strong><span>Live character preview</span></figcaption></figure>
@@ -69,7 +69,7 @@ export function createFlappyBird(root, { editorOnly = false, onAppearanceChange 
     const link = $('[data-flappy-page-link="customize"]'); link.href = "#characters/flappy"; link.removeAttribute("data-flappy-page-link");
   }
   const renderer = createFlappyRenderer(canvas, previewCanvas, model, () => settings);
-  const webglCanvas = document.createElement("canvas"); webglCanvas.className = "flappy-webgl-canvas"; webglCanvas.hidden = true; webglCanvas.setAttribute("role", "img"); webglCanvas.setAttribute("aria-label", "Enhanced 3D flight"); canvas.after(webglCanvas);
+  const webglCanvas = document.createElement("canvas"); webglCanvas.className = "flappy-webgl-canvas"; webglCanvas.hidden = true; webglCanvas.setAttribute("role", "img"); webglCanvas.setAttribute("aria-label", "Enhanced 3D (Beta) flight"); canvas.after(webglCanvas);
   let webgl = null, webglLoading = false, webglDisposed = false;
   function syncWebGL() {
     if (editorOnly) return;
@@ -83,12 +83,12 @@ export function createFlappyBird(root, { editorOnly = false, onAppearanceChange 
       webglLoading = false;
       if (webglDisposed) { view.dispose(); return; }
       webgl = view; webglCanvas.hidden = settings.view !== "first-person-webgl"; wrapper.dataset.renderer = "webgl3d"; webgl.draw();
-    }).catch(() => { webglLoading = false; webgl?.dispose(); webgl = null; webglCanvas.hidden = true; if (!webglDisposed && settings.view === "first-person-webgl" && currentPage === "play") { wrapper.dataset.renderer = "canvas2d"; announce("Enhanced 3D is unavailable on this device. Classic 3D is ready to play."); } });
+    }).catch(() => { webglLoading = false; webgl?.dispose(); webgl = null; webglCanvas.hidden = true; if (!webglDisposed && settings.view === "first-person-webgl" && currentPage === "play") { wrapper.dataset.renderer = "canvas2d"; announce("Enhanced 3D (Beta) is unavailable on this device. Classic 3D (Beta) is ready to play."); } });
   }
   function drawFlight() {
     if (settings.view === "first-person-webgl" && webgl) {
       try { webgl.draw(); return; }
-      catch { webgl.dispose(); webgl = null; webglCanvas.hidden = true; wrapper.dataset.renderer = "canvas2d"; announce("Enhanced 3D stopped. Your flight continues in classic 3D."); }
+      catch { webgl.dispose(); webgl = null; webglCanvas.hidden = true; wrapper.dataset.renderer = "canvas2d"; announce("Enhanced 3D (Beta) stopped. Your flight continues in classic 3D (Beta)."); }
     }
     renderer.draw();
   }
@@ -146,13 +146,13 @@ export function createFlappyBird(root, { editorOnly = false, onAppearanceChange 
     wrapper.querySelectorAll("[data-setting]").forEach(input => { input.value = settings[input.dataset.setting]; });
     wrapper.querySelectorAll("[data-color]").forEach(input => { const value = settings.colors[input.dataset.color]; input.value = value; $(`[data-color-output="${input.dataset.color}"]`).textContent = value; });
     wrapper.querySelectorAll("[data-palette]").forEach(button => button.setAttribute("aria-pressed", String(Object.keys(COLOR_FIELDS).every(key => settings.colors[key] === PALETTES[button.dataset.palette][key]))));
-    $(".flappy-view-badge").textContent = settings.view.startsWith("first-person") ? "FIRST-PERSON 3D" : "SIDE VIEW";
+    $(".flappy-view-badge").textContent = settings.view.startsWith("first-person") ? "FIRST-PERSON 3D (Beta)" : "SIDE VIEW";
     $(".flappy-bird-name").textContent = BIRDS[settings.bird];
     $(".flappy-preview figcaption > span").textContent = BIRD_DESIGNS[settings.bird].detail;
     $(".flappy-natural-colors").setAttribute("aria-pressed", String(Object.entries(BIRD_DESIGNS[settings.bird].colors).every(([key, color]) => settings.colors[key] === color)));
     const outfit = [HATS[settings.hat], EYEWEAR[settings.eyewear], NECKWEAR[settings.neckwear]].filter(name => name !== "None");
     previewCanvas.setAttribute("aria-label", `${BIRDS[settings.bird]}${outfit.length ? ` wearing ${outfit.join(", ")}` : ""}, with your custom colors`);
-    canvas.setAttribute("aria-label", `${settings.view.startsWith("first-person") ? "First-person 3D" : "Side-view"} flight, ${BIRDS[settings.bird]}, ${PIPES[settings.pipeStyle]}, ${BACKGROUNDS[settings.background]}`);
+    canvas.setAttribute("aria-label", `${settings.view.startsWith("first-person") ? "First-person 3D (Beta)" : "Side-view"} flight, ${BIRDS[settings.bird]}, ${PIPES[settings.pipeStyle]}, ${BACKGROUNDS[settings.background]}`);
     renderer.preview(); renderer.draw(); updateControls(); updateShop();
     onAppearanceChange?.(structuredClone(settings));
   }

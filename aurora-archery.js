@@ -67,14 +67,14 @@ export function createAuroraArchery(root, { editorOnly = false, onAppearanceChan
       <div class="archery-wind"><span>Wind <svg viewBox="0 0 44 16" aria-hidden="true"><path d="M2 8h36m-7-6 7 6-7 6M3 2h12M3 14h18"/></svg></span><strong>Calm</strong></div>
     </div>
     <div class="archery-view-controls">
-      <label><span>View mode</span><select aria-label="Archery view mode"><option value="side">Classic side view</option><option value="first-person">First-person 3D</option></select></label>
+      <label><span>View mode</span><select aria-label="Archery view mode"><option value="side">Classic side view</option><option value="first-person">First-person 3D (Beta)</option></select></label>
       <button class="archery-focus" type="button" aria-pressed="false" hidden>Focus target (2x)</button>
       <p class="archery-view-help"></p>
     </div>
     <div class="archery-scene" tabindex="0" role="group" aria-label="Archery range. Drag to aim. Arrow up and down adjust angle; left and right adjust power; Space shoots; P pauses.">
       <canvas class="archery-canvas" role="img" aria-label="A hooded archer with a wooden bow in a mountain meadow. A ringed target, windsock, and dotted flight path show where the arrow will go."></canvas>
       <div class="archery-scene-label"><span class="archery-scene-dot"></span><span class="archery-scene-mode">Stationary target</span></div>
-      <div class="archery-view-badge" hidden>FIRST-PERSON 3D</div>
+      <div class="archery-view-badge" hidden>FIRST-PERSON 3D (Beta)</div>
       <div class="archery-scene-hint">Drag to aim <span>&middot;</span><span class="archery-keyboard-hint">Space to shoot</span><span class="archery-touch-hint">Tap Shoot below</span></div>
       <div class="archery-pause-overlay" hidden><strong>Range paused</strong><span>Press Resume or P to continue.</span></div>
       <div class="archery-result" hidden>
@@ -203,7 +203,7 @@ export function createAuroraArchery(root, { editorOnly = false, onAppearanceChan
     const beard = gear.facialHair === "none" ? "clean shaven" : `${FACIAL_HAIR[gear.facialHair].toLowerCase()} in ${colorName(HAIR_COLORS, gear.facialHairColor).toLowerCase()}`;
     const appearance = `${AVATAR_STYLES[gear.avatarStyle]} with ${skin} skin, ${FACE_SHAPES[gear.faceShape].toLowerCase()} face, ${hair}, ${beard}, and ${colorName(EYE_COLORS, gear.eyeColor).toLowerCase()} eyes, wearing a ${outfit} outfit and holding the ${bowColor} ${BOW_STYLES[gear.bowStyle].toLowerCase()}`;
     $(".archery-appearance-preview").setAttribute("aria-label", `${previewView === "face" ? "Face close-up" : "Full body"}: ${appearance}. ${HEADWEAR[gear.headwear]}, ${ACCESSORIES[gear.accessory].toLowerCase()} accessory.`);
-    const viewDescription = viewMode === "first-person" ? "First-person 3D view looking down the range, with your hands, customized bow, and arrow in the foreground." : "Side view of the archer in a mountain landscape.";
+    const viewDescription = viewMode === "first-person" ? "First-person 3D (Beta) view looking down the range, with your hands, customized bow, and arrow in the foreground." : "Side view of the archer in a mountain landscape.";
     $(".archery-canvas").setAttribute("aria-label", `${viewDescription} ${appearance}. A ringed target, windsock, and dotted flight path show where the arrow will go.`);
     $(".archery-avatar-name").textContent = AVATAR_STYLES[gear.avatarStyle];
     $(".archery-bow-name").textContent = `${colorName(BOW_COLORS, gear.bowColor)} ${BOW_STYLES[gear.bowStyle].toLowerCase()}`;
@@ -236,7 +236,7 @@ export function createAuroraArchery(root, { editorOnly = false, onAppearanceChan
     $(".archery-focus").textContent = focusTarget ? "Wide view (1x)" : "Focus target (2x)";
     $(".archery-view-badge").hidden = !firstPerson;
     $(".archery-view-help").textContent = firstPerson ? "Drag up or down to raise or lower your bow. Focus target magnifies distant targets." : "Watch your archer and the arrow's full flight from the side.";
-    $(".archery-view-instructions").textContent = firstPerson ? "First-person 3D: drag up to raise the bow, or down to lower it. The crosshair shows your launch direction; the dotted circle shows the predicted landing point. Use Focus target for distant targets. Wind blows along the range: a tailwind carries arrows farther, while a headwind slows them down." : "Choose First-person 3D above the range to shoot through your archer's eyes. You can switch views at any time during a round.";
+    $(".archery-view-instructions").textContent = firstPerson ? "First-person 3D (Beta): drag up to raise the bow, or down to lower it. The crosshair shows your launch direction; the dotted circle shows the predicted landing point. Use Focus target for distant targets. Wind blows along the range: a tailwind carries arrows farther, while a headwind slows them down." : "Choose First-person 3D (Beta) above the range to shoot through your archer's eyes. You can switch views at any time during a round.";
     updateGear(); updateHUD(); showHistory();
   }
   function updateControls() {

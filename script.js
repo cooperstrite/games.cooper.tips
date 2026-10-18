@@ -400,7 +400,7 @@ const games = [
     name: "Flappy Bird",
     summary: "A little flap. A big adventure.",
     description:
-      "Fly a bird or baby dragon through a sky of pipes. Customize your creature, accessories, colors, and world, or try a first-person 3D flight.",
+      "Fly a bird or baby dragon through a sky of pipes. Customize your creature, accessories, colors, and world, or try a first-person 3D (Beta) flight.",
     logo: "assets/flappy-bird-cover.svg",
     init: createFlappyBird,
   },
@@ -4486,9 +4486,9 @@ const games = [
   {
     id: "archery",
     name: "Aurora Archery",
-    summary: "Explore six archery trails in side view or first-person 3D.",
+    summary: "Explore six archery trails in side view or first-person 3D (Beta).",
     description:
-      "Customize your archer, choose side view or first-person 3D, and follow the arrow into the target. Explore six trails with moving targets, changing wind, and longer distances.",
+      "Customize your archer, choose side view or first-person 3D (Beta), and follow the arrow into the target. Explore six trails with moving targets, changing wind, and longer distances.",
     logo: "assets/archery-cover.png",
     init: createAuroraArchery,
   },
@@ -10169,7 +10169,7 @@ function renderRoute() {
   const characterRoute = /^characters(?:\/(flappy|archery|snake|neondrift))?$/.exec(hash);
   if (characterRoute) {
     if (activeId === "characters") return;
-    showGame({ id: "characters", name: "Your Character Library", description: "Your complete character controls with matching 2D and 3D previews.", init: root => createCharacterLibrary(root, { gameId: characterRoute[1] || "flappy", mountEditor: (id, host, onAppearanceChange) => games.find(game => game.id === id).init(host, { editorOnly: true, onAppearanceChange }) }) });
+    showGame({ id: "characters", name: "Your Character Library", description: "Your complete character controls with matching 2D and 3D (Beta) previews.", init: root => createCharacterLibrary(root, { gameId: characterRoute[1] || "flappy", mountEditor: (id, host, onAppearanceChange) => games.find(game => game.id === id).init(host, { editorOnly: true, onAppearanceChange }) }) });
     return;
   }
   const gameId = /^flappy\/(shop|customize)$/.test(hash) ? "flappy" : hash;
