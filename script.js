@@ -4489,7 +4489,7 @@ const games = [
     summary: "Explore six archery trails in side view or first-person 3D (Beta).",
     description:
       "Customize your archer, choose side view or first-person 3D (Beta), and follow the arrow into the target. Explore six trails with moving targets, changing wind, and longer distances.",
-    logo: "assets/archery-cover.png",
+    logo: "assets/memory-loop-cover.png",
     init: createAuroraArchery,
   },
   {

@@ -3,9 +3,9 @@ import { createStudioPreview } from "./studio-preview.js";
 
 const STUDIOS = {
   flappy: { image: "assets/flappy-bird-cover.svg", summary: "Birds, dragons, accessories, colors, backgrounds, and pipes.", description: "Every bird, accessory, trail, and individual color, plus a preview of your background and pipes." },
-  // These covers use the original 2D character artwork exported from each studio.
-  archery: { image: "assets/archery-character-cover.png", summary: "Your archer's face, hair, outfit, bow, and arrows.", description: "Your full avatar, face, hair, facial hair, outfit, bow, and arrows. Inspect the same look in 2D or turn and zoom it in 3D (Beta)." },
-  snake: { image: "assets/snake-character-cover.png", summary: "Snake skins, colors, hats, glasses, and neckwear.", description: "All snake skins, colors, hats, eyewear, neckwear, music, and sound effects, with the original live artwork." },
+  // The original Aurora Archery cover retains its legacy Memory Loop filename.
+  archery: { image: "assets/memory-loop-cover.png", summary: "Your archer's face, hair, outfit, bow, and arrows.", description: "Your full avatar, face, hair, facial hair, outfit, bow, and arrows. Inspect the same look in 2D or turn and zoom it in 3D (Beta)." },
+  snake: { image: "assets/ChatGPT Image Feb 4, 2026, 06_33_02 PM.png", summary: "Snake skins, colors, hats, glasses, and neckwear.", description: "All snake skins, colors, hats, eyewear, neckwear, music, and sound effects, with the original live artwork." },
   neondrift: { image: "assets/neon-drift-cover.png", summary: "Choose your car, explore its ability, and pick your paint.", description: "Choose your car, see its original special ability, and customize its paint in 2D or try the 3D preview (Beta)." },
 };
 
