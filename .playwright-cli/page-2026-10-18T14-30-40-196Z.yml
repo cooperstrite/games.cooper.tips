@@ -1,0 +1,151 @@
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - heading "games.cooper.tips" [level=1] [ref=e5]
+    - paragraph [ref=e6]: Small games, big vibes.
+  - main [ref=e7]:
+    - region "Mini game selection" [ref=e8]:
+      - list [ref=e9]:
+        - listitem [ref=e10]:
+          - button "Hot & Cold Guess the number with hot/cold hints. →" [ref=e11] [cursor=pointer]:
+            - strong [ref=e13]: Hot & Cold
+            - generic [ref=e14]: Guess the number with hot/cold hints.
+            - text: →
+        - listitem [ref=e15]:
+          - button "Flash Reflex Click as soon as the panel glows. →" [ref=e16] [cursor=pointer]:
+            - strong [ref=e18]: Flash Reflex
+            - generic [ref=e19]: Click as soon as the panel glows.
+            - text: →
+        - listitem [ref=e20]:
+          - button "Snake Grow the snake without hitting walls. →" [ref=e21] [cursor=pointer]:
+            - strong [ref=e23]: Snake
+            - generic [ref=e24]: Grow the snake without hitting walls.
+            - text: →
+        - listitem [ref=e25]:
+          - button "Runway Glide Land on the glowing runway window. →" [ref=e26] [cursor=pointer]:
+            - strong [ref=e28]: Runway Glide
+            - generic [ref=e29]: Land on the glowing runway window.
+            - text: →
+        - listitem [ref=e30]:
+          - button "Red Light Green Light Sprint to the finish without moving on red. →" [ref=e31] [cursor=pointer]:
+            - strong [ref=e33]: Red Light Green Light
+            - generic [ref=e34]: Sprint to the finish without moving on red.
+            - text: →
+        - listitem [ref=e35]:
+          - button "Tower Stack Drop moving blocks to build the tallest tower. →" [ref=e36] [cursor=pointer]:
+            - strong [ref=e38]: Tower Stack
+            - generic [ref=e39]: Drop moving blocks to build the tallest tower.
+            - text: →
+        - listitem [ref=e40]:
+          - button "Food Chain Relay Sort each food chain from producer to apex predator. →" [ref=e41] [cursor=pointer]:
+            - strong [ref=e43]: Food Chain Relay
+            - generic [ref=e44]: Sort each food chain from producer to apex predator.
+            - text: →
+        - listitem [ref=e45]:
+          - button "Aurora Archery Explore six archery trails in side view or first-person 3D. →" [ref=e46] [cursor=pointer]:
+            - strong [ref=e48]: Aurora Archery
+            - generic [ref=e49]: Explore six archery trails in side view or first-person 3D.
+            - text: →
+        - listitem [ref=e50]:
+          - button "Flight Spotter Match each tail design to the correct airline. →" [ref=e51] [cursor=pointer]:
+            - strong [ref=e53]: Flight Spotter
+            - generic [ref=e54]: Match each tail design to the correct airline.
+            - text: →
+        - listitem [ref=e55]:
+          - button "Cookie Clicker Tap the giant cookie, buy upgrades, and rack up achievements. →" [ref=e56] [cursor=pointer]:
+            - strong [ref=e58]: Cookie Clicker
+            - generic [ref=e59]: Tap the giant cookie, buy upgrades, and rack up achievements.
+            - text: →
+        - listitem [ref=e60]:
+          - button "Neon Drift Choose your car, master wild roads, and outrun the traffic. →" [ref=e61] [cursor=pointer]:
+            - strong [ref=e63]: Neon Drift
+            - generic [ref=e64]: Choose your car, master wild roads, and outrun the traffic.
+            - text: →
+        - listitem [ref=e65]:
+          - button "Pop Dash Pop bubbles before they fade away. →" [ref=e66] [cursor=pointer]:
+            - strong [ref=e68]: Pop Dash
+            - generic [ref=e69]: Pop bubbles before they fade away.
+            - text: →
+        - listitem [ref=e70]:
+          - button "Nim Duel Empty the piles and leave none for the AI. →" [ref=e71] [cursor=pointer]:
+            - strong [ref=e73]: Nim Duel
+            - generic [ref=e74]: Empty the piles and leave none for the AI.
+            - text: →
+        - listitem [ref=e75]:
+          - button "Bubble Rally Pop the orb and race around the loop first. →" [ref=e76] [cursor=pointer]:
+            - strong [ref=e78]: Bubble Rally
+            - generic [ref=e79]: Pop the orb and race around the loop first.
+            - text: →
+        - listitem [ref=e80]:
+          - button "Harmonic Echo Repeat the melody by tapping glowing instruments. →" [ref=e81] [cursor=pointer]:
+            - strong [ref=e83]: Harmonic Echo
+            - generic [ref=e84]: Repeat the melody by tapping glowing instruments.
+            - text: →
+        - listitem [ref=e85]:
+          - button "Spot Clash Race the AI to find the shared symbol. →" [ref=e86] [cursor=pointer]:
+            - strong [ref=e88]: Spot Clash
+            - generic [ref=e89]: Race the AI to find the shared symbol.
+            - text: →
+        - listitem [ref=e90]:
+          - button "Cats vs Dogs Mash buttons to win the tug-of-war showdown. →" [ref=e91] [cursor=pointer]:
+            - strong [ref=e93]: Cats vs Dogs
+            - generic [ref=e94]: Mash buttons to win the tug-of-war showdown.
+            - text: →
+        - listitem [ref=e95]:
+          - button "Haunted Harvest Answer spooky trivia to capture roaming pumpkins. →" [ref=e96] [cursor=pointer]:
+            - strong [ref=e98]: Haunted Harvest
+            - generic [ref=e99]: Answer spooky trivia to capture roaming pumpkins.
+            - text: →
+        - listitem [ref=e100]:
+          - button "Lights Down Toggle tiles to switch off the board. →" [ref=e101] [cursor=pointer]:
+            - strong [ref=e103]: Lights Down
+            - generic [ref=e104]: Toggle tiles to switch off the board.
+            - text: →
+        - listitem [ref=e105]:
+          - button "Submerged Explorer Glide through ocean zones and complete underwater missions. →" [ref=e106] [cursor=pointer]:
+            - strong [ref=e108]: Submerged Explorer
+            - generic [ref=e109]: Glide through ocean zones and complete underwater missions.
+            - text: →
+      - generic [ref=e110]:
+        - heading "Coming Soon" [level=2] [ref=e111]
+        - generic [ref=e112]:
+          - paragraph [ref=e113]: Enter your access key to preview upcoming games.
+          - generic [ref=e114]:
+            - textbox "Access key" [ref=e115]
+            - button "Unlock" [ref=e116]
+        - list [ref=e117]:
+          - listitem [ref=e118]:
+            - button "Rocket Boost Hold thrust and cut engines in the target window. Coming Soon" [disabled] [ref=e119]:
+              - strong [ref=e121]: Rocket Boost
+              - generic [ref=e122]: Hold thrust and cut engines in the target window.
+              - text: Coming Soon
+          - listitem [ref=e123]:
+            - button "Switchyard Signals Flip the switch before the train hits the junction. Coming Soon" [disabled] [ref=e124]:
+              - strong [ref=e126]: Switchyard Signals
+              - generic [ref=e127]: Flip the switch before the train hits the junction.
+              - text: Coming Soon
+          - listitem [ref=e128]:
+            - button "Memory Loop Flip cards to match every pair. Coming Soon" [disabled] [ref=e129]:
+              - strong [ref=e131]: Memory Loop
+              - generic [ref=e132]: Flip cards to match every pair.
+              - text: Coming Soon
+          - listitem [ref=e133]:
+            - button "Orbit Dash Dash through gates while orbiting the core. Coming Soon" [disabled] [ref=e134]:
+              - strong [ref=e136]: Orbit Dash
+              - generic [ref=e137]: Dash through gates while orbiting the core.
+              - text: Coming Soon
+          - listitem [ref=e138]:
+            - button "Skyport Command Dispatch drones. Reinvest fast before the day ends. Coming Soon" [disabled] [ref=e139]:
+              - strong [ref=e141]: Skyport Command
+              - generic [ref=e142]: Dispatch drones. Reinvest fast before the day ends.
+              - text: Coming Soon
+          - listitem [ref=e143]:
+            - button "Spotlight Spot three differences before the timer runs out. Coming Soon" [disabled] [ref=e144]:
+              - strong [ref=e146]: Spotlight
+              - generic [ref=e147]: Spot three differences before the timer runs out.
+              - text: Coming Soon
+  - contentinfo [ref=e148]:
+    - paragraph [ref=e149]:
+      - text: Built with curiosity, inspired by
+      - link "neal.fun" [ref=e150] [cursor=pointer]:
+        - /url: https://neal.fun
+      - text: .
