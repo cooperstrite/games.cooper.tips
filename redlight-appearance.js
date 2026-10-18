@@ -37,7 +37,7 @@ export function saveRunnerAppearance(appearance, storage) {
 }
 
 // Original 2D artwork, shared by the race and character studio. Feet sit at y=0.
-export function drawRunner(context, appearance, { x = 0, y = 0, scale = 1, stride = 0, running = false } = {}) {
+export function drawRunner(context, appearance, { x = 0, y = 0, scale = 1, stride = 0, running = false, view = "front" } = {}) {
   const a = appearance, c = a.colors, ctx = context;
   ctx.save(); ctx.translate(x, y); ctx.scale(scale, scale);
   const broad = a.build === "strong" ? 1.16 : a.build === "lean" ? .88 : 1;
@@ -48,19 +48,26 @@ export function drawRunner(context, appearance, { x = 0, y = 0, scale = 1, strid
   function line(points, width, color) { ctx.beginPath(); ctx.strokeStyle = color; ctx.lineWidth = width; ctx.lineCap = "round"; ctx.lineJoin = "round"; points.forEach(([px,py],i) => i ? ctx.lineTo(px,py) : ctx.moveTo(px,py)); ctx.stroke(); }
   const long = a.runner === "tracksuit", shorts = a.runner === "trail" ? 29 : 24;
   for (const side of [-1,1]) {
-    const footX = side * (8 + swing * 20), kneeX = side * (8 - swing * 9), footY = -7 - Math.max(0, side * swing) * 10;
-    line([[side*8,-57],[kneeX,-32],[footX,footY]],long ? 13 : 10,long ? c.bottoms : c.skin);
-    if (!long) line([[side*8,-60],[side*10,-60+shorts]],16,c.bottoms);
+    // Lift alternate legs within their own lanes in this front-facing view.
+    const lift = Math.max(0, side * swing), hipX = side * 8 * broad;
+    const kneeX = side * (10 * broad + lift * 2), kneeY = -32 - lift * 5;
+    const footX = side * (13 * broad + lift * 2), footY = -7 - lift * 18;
+    line([[hipX,-57],[kneeX,kneeY],[footX,footY]],long ? 13 : 10,long ? c.bottoms : c.skin);
+    if (!long) {
+      const hem = shorts / 31;
+      line([[hipX,-60],[hipX+(kneeX-hipX)*hem,-60+(kneeY+60)*hem]],16,c.bottoms);
+    }
     line([[footX,footY-4],[footX,footY+1]],11,"#f1eee1");
-    ellipse(footX+3,footY+3,12,6,c.shoes); line([[footX-6,footY+7],[footX+13,footY+7]],3,"#e8eced");
-    line([[footX-1,footY],[footX+6,footY+1]],2,c.accessory);
+    ellipse(footX+side*3,footY+3,12,6,c.shoes); line([[footX-side*6,footY+7],[footX+side*13,footY+7]],3,"#e8eced");
+    line([[footX-side,footY],[footX+side*6,footY+1]],2,c.accessory);
   }
   const top = ctx.createLinearGradient(-20,-112,20,-55); top.addColorStop(0,c.body); top.addColorStop(1,c.body); ctx.fillStyle=top;
   ctx.beginPath(); ctx.moveTo(-17*broad,-112);ctx.quadraticCurveTo(0,-121,17*broad,-112);ctx.lineTo(20*broad,-61);ctx.quadraticCurveTo(0,-53,-20*broad,-61);ctx.closePath();ctx.fill();
   line([[-15*broad,-106],[-13*broad,-65]],3,c.accessory); line([[15*broad,-106],[13*broad,-65]],3,c.accessory);
-  if(a.runner === "tracksuit") line([[0,-112],[0,-60]],2,c.accessory);
+  if(view === "front" && a.runner === "tracksuit") line([[0,-112],[0,-60]],2,c.accessory);
   if(a.runner === "trail") { line([[-11,-111],[-13,-66]],6,c.bottoms);line([[11,-111],[13,-66]],6,c.bottoms);line([[-12,-92],[12,-92]],3,c.accessory); }
-  else { ctx.fillStyle="#f4f4ec";ctx.fillRect(-9,-91,18,16);ctx.fillStyle="#253747";ctx.font="bold 11px sans-serif";ctx.textAlign="center";ctx.fillText("01",0,-79); }
+  else if(view === "front") { ctx.fillStyle="#f4f4ec";ctx.fillRect(-9,-91,18,16);ctx.fillStyle="#253747";ctx.font="bold 11px sans-serif";ctx.textAlign="center";ctx.fillText("01",0,-79); }
+  else line([[-12*broad,-105],[0,-101],[12*broad,-105]],2,c.accessory);
   for(const side of [-1,1]) {
     const elbowX=side*(29*broad+Math.sin(phase)*7), handX=side*(25*broad-swing*9), handY=-68+side*swing*12;
     line([[side*19*broad,-107],[elbowX,-86],[handX,handY]],long ? 11 : 9,long ? c.body : c.skin);
@@ -69,6 +76,30 @@ export function drawRunner(context, appearance, { x = 0, y = 0, scale = 1, strid
     if(a.wristwear === "bands" || (a.wristwear === "watch" && side === -1)) line([[handX,handY-7],[handX+side*2,handY-10]],a.wristwear === "watch" ? 8 : 10,c.accessory);
   }
   line([[0,-113],[0,-126]],12,c.skin);
+  if(view === "back") {
+    if(a.runner === "trail") {
+      ctx.fillStyle=c.bottoms;ctx.beginPath();ctx.roundRect(-14,-110,28,43,9);ctx.fill();
+      line([[-9,-82],[9,-82]],2,c.accessory);line([[0,-105],[0,-92]],3,c.accessory);
+    }
+    ellipse(-19,-139,4,7,c.skin);ellipse(19,-139,4,7,c.skin);ellipse(0,-144,20,25,c.skin);
+    if(a.hair !== "bald") {
+      ctx.fillStyle=c.hair;ctx.beginPath();ctx.moveTo(-18,-131);ctx.quadraticCurveTo(-26,-167,0,-170);ctx.quadraticCurveTo(26,-167,18,-131);ctx.quadraticCurveTo(0,-121,-18,-131);ctx.fill();
+      if(a.hair === "bob") {ellipse(-12,-133,10,22,c.hair,-.1);ellipse(12,-133,10,22,c.hair,.1);}
+      if(a.hair === "curls")for(let i=0;i<15;i++){const a=i/15*Math.PI*2;ellipse(Math.cos(a)*16,-147+Math.sin(a)*20,6,7,c.hair);}
+    }
+    if(a.headwear === "headband")line([[-19,-148],[0,-145],[19,-148]],6,c.headwear);
+    if(a.headwear === "cap") {
+      ctx.fillStyle=c.headwear;ctx.beginPath();ctx.ellipse(0,-149,22,22,0,Math.PI,Math.PI*2);ctx.fill();
+      line([[-19,-149],[-8,-146]],5,c.headwear);line([[8,-146],[19,-149]],5,c.headwear);
+      line([[-6,-148],[6,-148]],3,c.accessory);
+    }
+    const hairSway=running?Math.sin(phase)*3:0;
+    if(a.hair === "ponytail") {ellipse(hairSway,-128,9,27,c.hair,-hairSway*.04);line([[-6,-148],[6,-148]],3,c.accessory);}
+    if(a.hair === "bun")ellipse(0,-156,11,10,c.hair);
+    if(a.hair === "braids")for(const side of [-1,1])for(let i=0;i<9;i++)ellipse(side*16+hairSway*i/9,-140+i*4,4,3,c.hair);
+    if(a.eyewear !== "none")for(const side of [-1,1])line([[side*19,-145],[side*21,-139]],2,c.accessory);
+    ctx.restore();return;
+  }
   if(["bob","braids","ponytail"].includes(a.hair)) {
     if(a.hair === "ponytail") ellipse(19,-132,9,26,c.hair,-.2);
     else for(const side of [-1,1]) ellipse(side*16,-131,7,22,c.hair,side*-.08);
