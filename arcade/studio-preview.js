@@ -48,7 +48,7 @@ export function createStudioPreview(root) {
     const family = character.family;
     const aspect = Math.max(0.3, canvas.clientWidth / (canvas.clientHeight || 1));
     const narrowScale = Math.max(1, 0.85 / aspect);
-    const targets = { bird: [0, 1.7, -0.1], humanoid: [0.025, 1.94, -0.065], runner: [0, 1.82, -.065], snake: [1.28, 0.75, -0.1], vehicle: [0, 0.8, -0.9] };
+    const targets = { bird: [0, 1.7, -0.1], humanoid: [0.025, 1.94, -0.065], runner: [0, 1.76, -.065], snake: [1.28, 0.75, -0.1], vehicle: [0, 0.8, -0.9] };
     if (focus === "face") { camera.setTarget(new world.B.Vector3(...targets[family])); camera.radius = { bird: 2, humanoid: 0.67, runner: .7, snake: 1.65, vehicle: 2.7 }[family] * narrowScale; }
     else if (focus === "equipment") { camera.setTarget(new world.B.Vector3(0.55, 1.68, -0.2)); camera.radius = 2.1 * narrowScale; }
     else if (entity) {
