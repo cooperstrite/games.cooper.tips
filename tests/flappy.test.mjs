@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { createFlappyModel, DIFFICULTIES, WORLD, circleHitsRect, hitsPipe, speedFor } from "../flappy-engine.js";
+import { createFlappyModel, DIFFICULTIES, WORLD, POINTS_PER_PIPE, SCORING_VERSION, circleHitsRect, hitsPipe, speedFor, pointsForPipes, readFlappyProgress } from "../flappy-engine.js";
 import { readFlappySettings, PALETTES, COLOR_FIELDS } from "../flappy-appearance.js";
 import { flappyCamera, clipFlappyFace } from "../flappy-renderer.js";
 import { SHOP_ITEMS, flightReward, readFlappyWallet, canEquip, buyFlappyItem, bankFlappyReward } from "../flappy-shop.js";
@@ -8,15 +8,16 @@ import { SHOP_ITEMS, flightReward, readFlappyWallet, canEquip, buyFlappyItem, ba
 const modelFor = (id = "easy") => createFlappyModel(id, () => 0.5);
 const near = (actual, expected, tolerance = 1e-8) => assert.ok(Math.abs(actual - expected) < tolerance, `${actual} should be close to ${expected}`);
 function seededRandom(seed) { return () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; }; }
-function flyCourse(model, points) {
+function flyCourse(model, pipes) {
   model.flap();
-  for (let frame = 0; frame < 120 * 300 && model.state.score < points && model.state.phase === "playing"; frame++) {
+  for (let frame = 0; frame < 120 * 300 && model.state.pipesCleared < pipes && model.state.phase === "playing"; frame++) {
     const s = model.state, target = s.pipes.find(pipe => !pipe.passed).center - 0.12;
     if (s.y < target - 0.12 && (s.vy < -0.15 || s.y < target - 0.55)) model.flap();
     model.advance(1 / 120);
   }
   assert.equal(model.state.phase, "playing", `Flight ended at score ${model.state.score}`);
-  assert.equal(model.state.score, points);
+  assert.equal(model.state.pipesCleared, pipes);
+  assert.equal(model.state.score, pointsForPipes(pipes, model.state.difficultyId));
 }
 
 test("ready flights wait for a gesture without falling, moving, or scoring", () => {
@@ -142,8 +143,8 @@ test("harder difficulties have faster speed and smaller gaps", () => {
     assert.ok(levels[i].gravity > levels[i - 1].gravity);
   }
   const model = modelFor(); const initial = speedFor(model.state);
-  model.state.score = 10; assert.ok(speedFor(model.state) > initial);
-  model.state.score = 10000; assert.equal(speedFor(model.state), initial + 0.85);
+  model.state.pipesCleared = 10; assert.ok(speedFor(model.state) > initial);
+  model.state.pipesCleared = 10000; assert.equal(speedFor(model.state), initial + 0.85);
 });
 
 test("Easy preserves the original gentle flight settings", () => {
@@ -178,7 +179,7 @@ test("reset clears a paused flight and starts the selected difficulty", () => {
 });
 
 test("invalid difficulties and time values are safe", () => {
-  for (const id of ["__proto__", null, ["easy"], {}, 2]) assert.equal(modelFor(id).state.difficultyId, "easy");
+  for (const id of ["__proto__", null, ["easy"], {}, 2]) assert.equal(modelFor(id).state.difficultyId, "hard");
   const model = modelFor(), before = structuredClone(model.state);
   for (const dt of [NaN, Infinity, -1, 0]) model.advance(dt);
   assert.deepEqual(model.state, before);
@@ -241,14 +242,14 @@ test("3D near-plane clipping removes passed geometry and keeps crossing faces fi
   assert.deepEqual(clipFlappyFace(face.map(p => ({ ...p, x: 8 })), camera.near), []);
 });
 
-test("flight awards increase at pipe milestones and reward harder difficulties", () => {
-  const examples = [[0, "First flight", 0], [1, "Sky coin", 1], [4, "Sky coin", 4], [5, "Bronze wings", 10], [14, "Bronze wings", 19], [15, "Silver wings", 30], [30, "Golden wings", 65], [60, "Diamond wings", 150]];
+test("medals recognize milestones while coins follow the exact per-pipe difficulty rate", () => {
+  const examples = [[0, "First flight", 0], [1, "Sky coin", 1], [4, "Sky coin", 4], [5, "Bronze wings", 5], [14, "Bronze wings", 14], [15, "Silver wings", 15], [30, "Golden wings", 30], [60, "Diamond wings", 60]];
   for (const [pipes, name, coins] of examples) { const reward = flightReward(pipes); assert.equal(reward.name, name); assert.equal(reward.coins, coins); }
   assert.equal(flightReward(5, "medium").coins, 15);
-  assert.equal(flightReward(5, "hard").coins, 20);
-  assert.equal(flightReward(5, "expert").coins, 25);
+  assert.equal(flightReward(5, "hard").coins, 25);
+  assert.equal(flightReward(5, "expert").coins, 50);
   assert.equal(flightReward(0, "expert").coins, 0);
-  assert.equal(flightReward(5, "__proto__").coins, 10);
+  assert.equal(flightReward(5, "__proto__").coins, 5);
   assert.equal(flightReward(-5).coins, 0);
 });
 
@@ -266,7 +267,7 @@ test("shop purchases spend coins once, permanently unlock, and reject insufficie
   assert.equal(canEquip(wallet, "bird", "dragon"), true);
   assert.equal(buyFlappyItem(wallet, item.id).ok, false);
   assert.equal(wallet.coins, 0);
-  const reward = flightReward(75);
+  const reward = flightReward(20, "expert");
   bankFlappyReward(wallet, reward);
   assert.equal(wallet.coins, reward.coins);
   const purchase = buyFlappyItem(wallet, item.id);
@@ -277,6 +278,37 @@ test("shop purchases spend coins once, permanently unlock, and reject insufficie
   assert.equal(wallet.coins, reward.coins - item.cost);
   assert.equal(buyFlappyItem(wallet, "missing").ok, false);
   assert.deepEqual(readFlappyWallet(wallet), wallet);
+});
+
+test("one cleared pipe counts as one on every difficulty, independently of points and coins", () => {
+  for (const id of Object.keys(DIFFICULTIES)) {
+    const model = modelFor(id); model.flap();
+    const pipe = model.state.pipes[0];
+    Object.assign(model.state, { distance: pipe.x + WORLD.pipeWidth / 2, y: pipe.center, vy: 0 });
+    model.advance(0.1);
+    assert.equal(model.state.pipesCleared, 1);
+    assert.equal(model.state.score, POINTS_PER_PIPE[id]);
+    assert.equal(flightReward(model.state.pipesCleared, id).coins, { easy: 1, medium: 3, hard: 5, expert: 10 }[id]);
+    model.advance(0.05);
+    assert.equal(model.state.pipesCleared, 1);
+  }
+});
+
+test("point multipliers do not multiply the course acceleration", () => {
+  const model = modelFor(); model.state.pipesCleared = 4;
+  const speed = speedFor(model.state); model.state.score = 400;
+  assert.equal(speedFor(model.state), speed);
+});
+
+test("Hard is the default and old records migrate from pipe counts to points only once", () => {
+  assert.equal(createFlappyModel().state.difficultyId, "hard");
+  const legacy = readFlappyProgress({ difficulty: "easy", bests: { easy: 7, medium: 8, hard: 9, expert: 10 } });
+  assert.equal(legacy.difficulty, "hard");
+  assert.deepEqual(legacy.bests, { easy: 7, medium: 24, hard: 54, expert: 100 });
+  assert.deepEqual(readFlappyProgress(legacy), legacy);
+  assert.equal(readFlappyProgress({ ...legacy, difficulty: "easy" }).difficulty, "easy");
+  assert.equal(readFlappyProgress({ scoringVersion: SCORING_VERSION, difficulty: "__proto__" }).difficulty, "hard");
+  assert.equal(readFlappyProgress(null).difficulty, "hard");
 });
 
 test("all shop items have unique identifiers, a supported look, and positive integer prices", () => {

@@ -10119,7 +10119,8 @@ function renderRoute() {
     showHome();
     return;
   }
-  const game = games.find((entry) => entry.id === hash);
+  const gameId = /^flappy\/(shop|customize)$/.test(hash) ? "flappy" : hash;
+  const game = games.find((entry) => entry.id === gameId);
   if (!game) {
     showHome(true);
     return;
@@ -10129,6 +10130,7 @@ function renderRoute() {
     showHome(true);
     return;
   }
+  if (game.id === "flappy" && activeId === "flappy") return;
   showGame(game);
 }
 

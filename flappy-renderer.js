@@ -1,5 +1,6 @@
 import { WORLD, clamp } from "./flappy-engine.js";
 import { THEMES, drawBird, drawBirdPreview, star, tint } from "./flappy-appearance.js";
+import { drawBirdCockpit } from "./flappy-bird-art.js";
 
 const TAU = Math.PI * 2;
 const mod = (value, max) => ((value % max) + max) % max;
@@ -156,7 +157,7 @@ function mesh3D(ctx, camera, fog) {
   } };
 }
 
-function firstPerson(ctx, w, h, state, settings, flap) {
+function firstPerson(ctx, w, h, state, settings, flap, animationTime) {
   const theme = THEMES[settings.background], camera = flappyCamera(w, h, state.distance, state.y), mesh = mesh3D(ctx, camera, theme.sky[1]);
   const start = Math.floor(state.distance / 3) * 3;
   for (let x = start; x < state.distance + 54; x += 3) for (let z = -12; z < 12; z += 3) {
@@ -221,29 +222,7 @@ function firstPerson(ctx, w, h, state, settings, flap) {
     ctx.strokeStyle = "rgba(255,250,210,0.7)"; ctx.lineWidth = 1.5; ctx.setLineDash([4, 5]); ctx.beginPath(); ctx.arc(p.x, p.y, clamp(camera.focal * next.gap / (next.x - state.distance) * 0.16, 7, 40), 0, TAU); ctx.stroke(); ctx.setLineDash([]);
     ctx.font = "600 12px system-ui"; ctx.textAlign = "center"; ctx.fillStyle = "#fff8dc"; ctx.shadowColor = "#294d53"; ctx.shadowBlur = 4; ctx.fillText(`${Math.max(0, next.x - state.distance).toFixed(1)} m to gap`, p.x, clamp(p.y - 25, 45, h - 80)); ctx.shadowBlur = 0;
   }
-  const wings = mesh3D(ctx, camera, theme.sky[1]), c = settings.colors, bones = [];
-  for (const side of [-1, 1]) {
-    const root = point(state.distance + 0.48, state.y - 0.55, side * 0.37);
-    if (settings.bird === "dragon") {
-      const elbow = point(state.distance + 1.15, state.y - 0.24 + flap * 0.23, side * 0.57);
-      const tips = [point(state.distance + 1.6, state.y - 0.3 + flap * 0.16, side * 0.98), point(state.distance + 1.1, state.y - 0.46 + flap * 0.12, side * 0.86), point(state.distance + 0.8, state.y - 0.6, side * 0.7)];
-      wings.face([root, elbow, tips[0]], c.wing, 1.08); wings.face([root, tips[0], tips[1]], c.wing, 0.86); wings.face([root, tips[1], tips[2]], c.wing, 0.7);
-      bones.push([root, elbow, tips[0]], [root, tips[1]], [root, tips[2]]);
-    } else {
-      for (let feather = 7; feather >= 0; feather--) {
-        const z = side * (0.32 + feather * 0.085), y = state.y - 0.3 + flap * 0.2 - feather * 0.016, x = state.distance + 1.1 + feather * 0.06;
-        const tip = point(x + 0.12, y, z), edge = point(x + 0.04, y - 0.06, z + side * 0.06);
-        wings.face([root, point(x, y + 0.01, z - side * 0.055), tip, edge, point(state.distance + 0.62, state.y - 0.58, side * (0.32 + feather * 0.035))], feather % 2 ? c.wing : tint(c.wing, 0.08), 0.94 + feather * 0.015);
-        wings.face([root, tip, point(x + 0.02, y - 0.025, z)], tint(c.wing, 0.23), 1);
-      }
-    }
-  }
-  const length = settings.bird === "hummingbird" ? 0.9 : settings.bird === "dragon" ? 0.58 : 0.62;
-  wings.face([point(state.distance + 0.22, state.y - 0.35, -0.11), point(state.distance + length, state.y - 0.25, 0), point(state.distance + 0.22, state.y - 0.35, 0.11)], c.beak, 1.1);
-  wings.face([point(state.distance + 0.22, state.y - 0.35, -0.11), point(state.distance + 0.22, state.y - 0.44, 0), point(state.distance + length, state.y - 0.25, 0)], c.beak, 0.75);
-  wings.face([point(state.distance + 0.22, state.y - 0.35, -0.012), point(state.distance + length, state.y - 0.25, 0), point(state.distance + 0.22, state.y - 0.35, 0.012)], tint(c.beak, 0.3));
-  wings.draw();
-  bones.forEach(points => line(ctx, points.map(camera.project), tint(c.body, 0.15), 2.2));
+  drawBirdCockpit(ctx, w, h, settings, { flap, time: animationTime, crashed: state.phase === "gameover" });
   if (settings.eyewear === "goggles" || settings.eyewear === "shades") { ctx.fillStyle = settings.eyewear === "shades" ? "rgba(23,35,57,0.12)" : "rgba(157,219,229,0.04)"; ctx.fillRect(0, 0, w, h); }
   if (settings.hat === "space") { ctx.strokeStyle = "rgba(224,246,245,0.35)"; ctx.lineWidth = 5; ctx.beginPath(); ctx.ellipse(w / 2, h / 2, w * 0.49, h * 0.48, 0, Math.PI * 1.05, Math.PI * 1.5); ctx.stroke(); }
   ctx.strokeStyle = "rgba(255,250,220,0.75)"; ctx.lineWidth = 1.3; ctx.beginPath(); ctx.arc(w / 2, h * 0.46, 4.5, 0, TAU); ctx.stroke();
@@ -267,7 +246,7 @@ export function createFlappyRenderer(canvas, previewCanvas, model, getSettings) 
       const dead = state.phase === "gameover" && !reduced, age = state.crashAge;
       ctx.save();
       if (dead) { ctx.translate(width / 2, height / 2); ctx.rotate(Math.sin(age * 10) * 0.055 * Math.max(0, 1 - age)); ctx.translate(-width / 2, -height / 2); }
-      firstPerson(ctx, width, height, dead ? { ...state, y: Math.max(0.35, state.y + age * 0.4 - age * age * 3), distance: state.distance + Math.min(0.5, age * 0.5) } : state, settings, dead ? -Math.min(1, age) : flap);
+      firstPerson(ctx, width, height, dead ? { ...state, y: Math.max(0.35, state.y + age * 0.4 - age * age * 3), distance: state.distance + Math.min(0.5, age * 0.5) } : state, settings, dead ? -Math.min(1, age) : flap, reduced ? 0 : state.time);
       ctx.restore();
     }
     else {
@@ -321,5 +300,6 @@ export function drawFlappyShopPreview(canvas, settings, item) {
   sky(ctx, w, h, preview, 0, 0);
   if (item.setting === "pipeStyle") pipe2D(ctx, preview, 198, 41, 99, 30, h, -10);
   if (item.value === "rainbow") ["#e99b98", "#ebc98b", "#e7e2a2", "#9ac6aa", "#90b7d2", "#bba2ce"].forEach((color, i) => line(ctx, [point(20, 91 + i * 3), point(60, 85 + i * 3), point(108, 90 + i * 3)], color, 3));
-  drawBird(ctx, preview, { x: item.category === "worlds" ? 115 : 145, y: 92, scale: item.category === "worlds" ? 0.85 : 1.35, time: 0 });
+  const tallOwlHat = preview.bird === "owl" && ["wizard", "party"].includes(preview.hat);
+  drawBird(ctx, preview, { x: item.category === "worlds" ? 115 : 145, y: 92, scale: item.category === "worlds" ? 0.85 : tallOwlHat ? 1.1 : 1.35, time: 0 });
 }

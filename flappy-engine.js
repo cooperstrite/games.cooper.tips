@@ -1,4 +1,7 @@
 export const WORLD = { height: 7.2, radius: 0.22, pipeWidth: 1.05 };
+export const DEFAULT_DIFFICULTY = "hard";
+export const SCORING_VERSION = 2;
+export const POINTS_PER_PIPE = { easy: 1, medium: 3, hard: 6, expert: 10 };
 export const DIFFICULTIES = {
   easy: { name: "Easy", note: "Wide gaps, a gentle pace", speed: 2.8, gap: 3.15, spacing: 5.4, gravity: 8.2, flap: 3.15 },
   medium: { name: "Medium", note: "Quicker falls, rising and falling gaps", speed: 3.6, gap: 2.45, spacing: 5.1, gravity: 12.5, flap: 4.4, levels: [2, 3.05, 4.15, 5.2], maxShift: 1.4 },
@@ -6,7 +9,24 @@ export const DIFFICULTIES = {
   expert: { name: "Expert", note: "Very fast drops, tiny openings, almost no room for error", speed: 5.7, gap: 1.45, spacing: 5.1, gravity: 25, flap: 5.8, levels: [1.45, 2.5, 3.55, 4.6, 5.65], maxShift: 1.4 },
 };
 export const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
-export const speedFor = state => state.difficulty.speed + Math.min(0.85, state.score * 0.035);
+export const speedFor = state => state.difficulty.speed + Math.min(0.85, state.pipesCleared * 0.035);
+
+export function pointsForPipes(pipes, difficulty = DEFAULT_DIFFICULTY) {
+  const count = Number.isSafeInteger(pipes) && pipes >= 0 ? pipes : 0;
+  const value = typeof difficulty === "string" && Object.hasOwn(POINTS_PER_PIPE, difficulty) ? POINTS_PER_PIPE[difficulty] : POINTS_PER_PIPE[DEFAULT_DIFFICULTY];
+  return Math.min(Number.MAX_SAFE_INTEGER, count * value);
+}
+
+export function readFlappyProgress(saved = {}) {
+  if (!saved || typeof saved !== "object" || Array.isArray(saved)) saved = {};
+  const current = saved.scoringVersion === SCORING_VERSION;
+  const bests = Object.fromEntries(Object.keys(DIFFICULTIES).map(id => {
+    const value = Number.isSafeInteger(saved.bests?.[id]) && saved.bests[id] >= 0 ? saved.bests[id] : 0;
+    return [id, current ? value : pointsForPipes(value, id)];
+  }));
+  const difficulty = current && typeof saved.difficulty === "string" && Object.hasOwn(DIFFICULTIES, saved.difficulty) ? saved.difficulty : DEFAULT_DIFFICULTY;
+  return { bests, difficulty, scoringVersion: SCORING_VERSION };
+}
 
 export function circleHitsRect(x, y, radius, rect) {
   const nearestX = clamp(x, rect.x, rect.x + rect.width);
@@ -20,7 +40,7 @@ export function hitsPipe(distance, y, pipe, radius = WORLD.radius) {
   return circleHitsRect(distance, y, radius, { x, y: -2, width: WORLD.pipeWidth, height: bottom + 2 }) || circleHitsRect(distance, y, radius, { x, y: top, width: WORLD.pipeWidth, height: WORLD.height + 2 - top });
 }
 
-export function createFlappyModel(difficultyId = "easy", random = Math.random) {
+export function createFlappyModel(difficultyId = DEFAULT_DIFFICULTY, random = Math.random) {
   const state = {};
   let nextPipeId = 1;
   function makePipe(x, previousCenter = WORLD.height * 0.52, first = false) {
@@ -45,9 +65,9 @@ export function createFlappyModel(difficultyId = "easy", random = Math.random) {
     return { id: nextPipeId++, x, center: clamp(center, margin, WORLD.height - margin), gap, passed: false };
   }
   function reset(id = state.difficultyId || difficultyId) {
-    const selected = typeof id === "string" && Object.hasOwn(DIFFICULTIES, id) ? id : "easy";
+    const selected = typeof id === "string" && Object.hasOwn(DIFFICULTIES, id) ? id : DEFAULT_DIFFICULTY;
     nextPipeId = 1;
-    Object.assign(state, { difficultyId: selected, difficulty: DIFFICULTIES[selected], phase: "ready", paused: false, time: 0, distance: 0, y: WORLD.height * 0.52, vy: 0, score: 0, flaps: 0, lastFlap: -10, crashAge: 0, crashReason: "", pipes: [] });
+    Object.assign(state, { difficultyId: selected, difficulty: DIFFICULTIES[selected], phase: "ready", paused: false, time: 0, distance: 0, y: WORLD.height * 0.52, vy: 0, score: 0, pipesCleared: 0, flaps: 0, lastFlap: -10, crashAge: 0, crashReason: "", pipes: [] });
     for (let index = 0; index < 7; index++) {
       const previous = state.pipes[state.pipes.length - 1];
       state.pipes.push(makePipe(9 + index * state.difficulty.spacing, previous?.center, index === 0));
@@ -68,7 +88,7 @@ export function createFlappyModel(difficultyId = "easy", random = Math.random) {
     if (state.y - WORLD.radius <= 0) { state.y = WORLD.radius; crash("ground"); return; }
     for (const pipe of state.pipes) {
       if (hitsPipe(state.distance, state.y, pipe)) { crash("pipe"); return; }
-      if (!pipe.passed && state.distance - WORLD.radius > pipe.x + WORLD.pipeWidth / 2) { pipe.passed = true; state.score += 1; }
+      if (!pipe.passed && state.distance - WORLD.radius > pipe.x + WORLD.pipeWidth / 2) { pipe.passed = true; state.pipesCleared += 1; state.score = pointsForPipes(state.pipesCleared, state.difficultyId); }
     }
     while (state.pipes[0].x < state.distance - 5) {
       state.pipes.shift(); const previous = state.pipes[state.pipes.length - 1];

@@ -14,12 +14,12 @@ const MAX_COINS = 1000000000;
 export const REWARD_TIERS = [
   { at: 0, name: "First flight", color: "#b4bdb5", bonus: 0 },
   { at: 1, name: "Sky coin", color: "#d9ac55", bonus: 0 },
-  { at: 5, name: "Bronze wings", color: "#bb825a", bonus: 5 },
-  { at: 15, name: "Silver wings", color: "#adbfc8", bonus: 15 },
-  { at: 30, name: "Golden wings", color: "#e8bc54", bonus: 35 },
-  { at: 60, name: "Diamond wings", color: "#91d8db", bonus: 90 },
+  { at: 5, name: "Bronze wings", color: "#bb825a", bonus: 0 },
+  { at: 15, name: "Silver wings", color: "#adbfc8", bonus: 0 },
+  { at: 30, name: "Golden wings", color: "#e8bc54", bonus: 0 },
+  { at: 60, name: "Diamond wings", color: "#91d8db", bonus: 0 },
 ];
-export const COIN_MULTIPLIERS = { easy: 1, medium: 2, hard: 3, expert: 4 };
+export const COIN_MULTIPLIERS = { easy: 1, medium: 3, hard: 5, expert: 10 };
 const validAmount = value => Number.isSafeInteger(value) && value >= 0 ? Math.min(MAX_COINS, value) : 0;
 
 export function flightReward(score, difficulty = "easy") {
