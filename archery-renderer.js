@@ -1,5 +1,7 @@
 import { LAUNCH, getTarget, getWind, velocityFor, predictFlight, clamp } from "./archery-engine.js";
 import { drawArcher, drawArrow as arrowArt } from "./archery-appearance.js";
+import { createFirstPersonRenderer } from "./archery-first-person.js";
+import { firstPersonAim } from "./archery-camera.js";
 
 const TAU = Math.PI * 2;
 const THEMES = {
@@ -60,6 +62,9 @@ export function createArcheryRenderer(canvas, faceCanvas, model, getGear) {
   let guideCache = null;
   let guideKey = "";
   let guideShown = true;
+  let viewMode = "side";
+  let focusTarget = false;
+  const firstPerson = createFirstPersonRenderer(ctx, model, getGear, prediction);
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   function resize() {
@@ -272,6 +277,11 @@ export function createArcheryRenderer(canvas, faceCanvas, model, getGear) {
     });
   }
   function draw() {
+    if (viewMode === "first-person") {
+      firstPerson.draw(width, height, { focus: focusTarget, guide: guideShown });
+      drawFace();
+      return;
+    }
     const g = geometry();
     ctx.clearRect(0, 0, width, height);
     scenery(g); wind(g); target(g); drawGuide(g); archer(g);
@@ -296,9 +306,12 @@ export function createArcheryRenderer(canvas, faceCanvas, model, getGear) {
   resize();
   return {
     draw, resize, prediction,
+    setViewMode(value) { viewMode = value === "first-person" ? "first-person" : "side"; },
+    setFocus(value) { focusTarget = value; },
     showGuide(value) { guideShown = value; },
-    aimAt(clientX, clientY) {
+    aimAt(clientX, clientY, dragStart) {
       const rect = canvas.getBoundingClientRect();
+      if (viewMode === "first-person") return dragStart ? firstPersonAim(dragStart.angle, dragStart.y, clientY, rect.height) : model.state.angle;
       const g = geometry();
       const x = (clientX - rect.left) / rect.width * width;
       const y = (clientY - rect.top) / rect.height * height;

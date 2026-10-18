@@ -14,7 +14,7 @@ const COLORS = [
 const DESIGNS = { ranger: "Woodcraft", moonsteel: "Moonsteel", aurora: "Aurora crystal" };
 const STORAGE_KEY = "aurora-archery-v2";
 const distanceLabel = level => level.shotDistances ? `${Math.min(...level.shotDistances)}-${Math.max(...level.shotDistances)}` : level.motionX ? `${level.distance - level.motionX}-${level.distance + level.motionX}` : String(level.distance);
-const windLabel = wind => Math.abs(wind) < 0.15 ? "calm" : `${Math.abs(wind).toFixed(1)} m/s ${wind > 0 ? "right" : "left"}`;
+const windLabel = (wind, firstPerson = false) => Math.abs(wind) < 0.15 ? "calm" : `${Math.abs(wind).toFixed(1)} m/s ${firstPerson ? wind > 0 ? "tailwind" : "headwind" : wind > 0 ? "right" : "left"}`;
 const colorName = (choices, value) => choices.find(color => color.value === value)?.name || `Custom ${value.toUpperCase()}`;
 const STAR = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2 3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1Z"/></svg>';
 
@@ -42,6 +42,8 @@ export function createAuroraArchery(root) {
   };
   const model = createArcheryModel(saved.level);
   const state = model.state;
+  let viewMode = saved.viewMode === "first-person" ? "first-person" : "side";
+  let focusTarget = saved.focusTarget === true;
   const wrapper = document.createElement("div");
   wrapper.className = "archery-range";
   wrapper.innerHTML = `
@@ -60,9 +62,15 @@ export function createAuroraArchery(root) {
       <div><span>Target distance</span><strong class="archery-distance">20 <small>m</small></strong></div>
       <div class="archery-wind"><span>Wind <svg viewBox="0 0 44 16" aria-hidden="true"><path d="M2 8h36m-7-6 7 6-7 6M3 2h12M3 14h18"/></svg></span><strong>Calm</strong></div>
     </div>
+    <div class="archery-view-controls">
+      <label><span>View mode</span><select aria-label="Archery view mode"><option value="side">Classic side view</option><option value="first-person">First-person 3D</option></select></label>
+      <button class="archery-focus" type="button" aria-pressed="false" hidden>Focus target (2x)</button>
+      <p class="archery-view-help"></p>
+    </div>
     <div class="archery-scene" tabindex="0" role="group" aria-label="Archery range. Drag to aim. Arrow up and down adjust angle; left and right adjust power; Space shoots; P pauses.">
       <canvas class="archery-canvas" role="img" aria-label="A hooded archer with a wooden bow in a mountain meadow. A ringed target, windsock, and dotted flight path show where the arrow will go."></canvas>
       <div class="archery-scene-label"><span class="archery-scene-dot"></span><span class="archery-scene-mode">Stationary target</span></div>
+      <div class="archery-view-badge" hidden>FIRST-PERSON 3D</div>
       <div class="archery-scene-hint">Drag to aim <span>&middot;</span><span class="archery-keyboard-hint">Space to shoot</span><span class="archery-touch-hint">Tap Shoot below</span></div>
       <div class="archery-pause-overlay" hidden><strong>Range paused</strong><span>Press Resume or P to continue.</span></div>
       <div class="archery-result" hidden>
@@ -80,7 +88,8 @@ export function createAuroraArchery(root) {
     <div class="archery-details-grid">
       <section class="archery-instructions" aria-labelledby="archery-how-title">
         <h4 id="archery-how-title">How to play</h4>
-        <ol><li><strong>Aim the bow.</strong> Drag in the range or use Bow angle. Raising the angle makes a higher arc.</li><li><strong>Set your power.</strong> More power sends the arrow faster and farther. Follow the dotted flight path toward the target.</li><li><strong>Read the range, then shoot.</strong> Wind to the right pushes arrows farther; wind to the left slows them. Lead a moving target: aim where it will be when the arrow arrives. Recheck the meters after every shot: some trails change wind or distance between arrows.</li></ol>
+        <p class="archery-view-instructions"></p>
+        <ol><li><strong>Aim the bow.</strong> Drag in the range or use Bow angle. Raising the angle makes a higher arc.</li><li><strong>Set your power.</strong> More power sends the arrow faster and farther. Follow the dotted flight path toward the target.</li><li><strong>Read the range, then shoot.</strong> Tailwinds carry arrows farther; headwinds slow them down. Lead a moving target: aim where it will be when the arrow arrives. Recheck the meters after every shot: some trails change wind or distance between arrows.</li></ol>
         <p>You have <strong>6 arrows</strong>. Gold scores 9&ndash;10 points; a miss scores 0. Meet the trail's goal to earn a star. You can choose any trail above.</p>
         <p class="archery-key-help">Keyboard: <kbd>&uarr;</kbd> <kbd>&darr;</kbd> aim &nbsp; <kbd>&larr;</kbd> <kbd>&rarr;</kbd> power &nbsp; <kbd>Space</kbd> shoot &nbsp; <kbd>P</kbd> pause</p>
       </section>
@@ -166,11 +175,12 @@ export function createAuroraArchery(root) {
   let lastHUD = 0;
   let lastShotCount = 0;
   let dragging = false;
+  let dragStart = null;
   let disposed = false;
   let previewView = "body";
 
   function persist() {
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ records, level: state.level.id, ...gear })); } catch { /* Storage is optional. */ }
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ records, level: state.level.id, viewMode, focusTarget, ...gear })); } catch { /* Storage is optional. */ }
   }
   function updateGear() {
     wrapper.dataset.arrowDesign = gear.design;
@@ -187,7 +197,8 @@ export function createAuroraArchery(root) {
     const beard = gear.facialHair === "none" ? "clean shaven" : `${FACIAL_HAIR[gear.facialHair].toLowerCase()} in ${colorName(HAIR_COLORS, gear.facialHairColor).toLowerCase()}`;
     const appearance = `${AVATAR_STYLES[gear.avatarStyle]} with ${skin} skin, ${FACE_SHAPES[gear.faceShape].toLowerCase()} face, ${hair}, ${beard}, and ${colorName(EYE_COLORS, gear.eyeColor).toLowerCase()} eyes, wearing a ${outfit} outfit and holding the ${bowColor} ${BOW_STYLES[gear.bowStyle].toLowerCase()}`;
     $(".archery-appearance-preview").setAttribute("aria-label", `${previewView === "face" ? "Face close-up" : "Full body"}: ${appearance}. ${HEADWEAR[gear.headwear]}, ${ACCESSORIES[gear.accessory].toLowerCase()} accessory.`);
-    $(".archery-canvas").setAttribute("aria-label", `${appearance} in a mountain landscape. A ringed target, windsock, and dotted flight path show where the arrow will go.`);
+    const viewDescription = viewMode === "first-person" ? "First-person 3D view looking down the range, with your hands, customized bow, and arrow in the foreground." : "Side view of the archer in a mountain landscape.";
+    $(".archery-canvas").setAttribute("aria-label", `${viewDescription} ${appearance}. A ringed target, windsock, and dotted flight path show where the arrow will go.`);
     $(".archery-avatar-name").textContent = AVATAR_STYLES[gear.avatarStyle];
     $(".archery-bow-name").textContent = `${colorName(BOW_COLORS, gear.bowColor)} ${BOW_STYLES[gear.bowStyle].toLowerCase()}`;
     drawArcherPreview($(".archery-appearance-preview"), gear, previewView);
@@ -207,6 +218,19 @@ export function createAuroraArchery(root) {
       $(`#archery-panel-${button.dataset.avatarTab}`).hidden = !active;
     });
     setPreviewView(tab === "outfit" ? "body" : "face");
+  }
+  function updateView() {
+    wrapper.dataset.view = viewMode;
+    $('[aria-label="Archery view mode"]').value = viewMode;
+    const firstPerson = viewMode === "first-person";
+    renderer.setViewMode(viewMode); renderer.setFocus(focusTarget);
+    $(".archery-focus").hidden = !firstPerson;
+    $(".archery-focus").setAttribute("aria-pressed", String(focusTarget));
+    $(".archery-focus").textContent = focusTarget ? "Wide view (1x)" : "Focus target (2x)";
+    $(".archery-view-badge").hidden = !firstPerson;
+    $(".archery-view-help").textContent = firstPerson ? "Drag up or down to raise or lower your bow. Focus target magnifies distant targets." : "Watch your archer and the arrow's full flight from the side.";
+    $(".archery-view-instructions").textContent = firstPerson ? "First-person 3D: drag up to raise the bow, or down to lower it. The crosshair shows your launch direction; the dotted circle shows the predicted landing point. Use Focus target for distant targets. Wind blows along the range: a tailwind carries arrows farther, while a headwind slows them down." : "Choose First-person 3D above the range to shoot through your archer's eyes. You can switch views at any time during a round.";
+    updateGear(); updateHUD(); showHistory();
   }
   function updateControls() {
     angleInput.value = String(state.angle);
@@ -229,7 +253,7 @@ export function createAuroraArchery(root) {
     $(".archery-score").innerHTML = `${state.score} <small>/ 60</small>`;
     $(".archery-arrows").innerHTML = `${state.arrowsLeft} <small>/ ${QUIVER}</small>`;
     $(".archery-distance").innerHTML = `${target.x.toFixed(state.level.motionX ? 1 : 0)} <small>m</small>`;
-    $(".archery-wind strong").textContent = Math.abs(wind) < 0.15 ? "Calm" : `${Math.abs(wind).toFixed(1)} m/s ${wind > 0 ? "right" : "left"}`;
+    $(".archery-wind strong").textContent = Math.abs(wind) < 0.15 ? "Calm" : windLabel(wind, viewMode === "first-person");
     $(".archery-wind").dataset.direction = Math.abs(wind) < 0.15 ? "calm" : wind > 0 ? "right" : "left";
     $(".archery-wind-hint").textContent = Math.abs(wind) < 0.15 ? "Still air: watch the dotted path." : wind > 0 ? "Tailwind pushes your arrow farther." : "Headwind slows your arrow down.";
     const crossing = renderer.prediction().crossing;
@@ -253,7 +277,7 @@ export function createAuroraArchery(root) {
     });
   }
   function showHistory() {
-    $(".archery-log").innerHTML = state.shots.length ? state.shots.map(shot => `<li class="${shot.points ? "is-hit" : "is-miss"}"><span>Arrow ${shot.number}</span><strong>${shot.points ? `${shot.points} points` : "Miss"}</strong><small>${shot.reason === "short" ? "Landed short" : Math.abs(shot.offset) < 0.04 ? "Center hit" : `${Math.abs(shot.offset * 100).toFixed(0)} cm ${shot.offset > 0 ? "above" : "below"} center`}</small><small>${shot.targetX.toFixed(0)} m &middot; ${windLabel(shot.wind)}</small></li>`).join("") : '<li class="archery-empty-log">Six arrows, one fresh target. Your shots will appear here.</li>';
+    $(".archery-log").innerHTML = state.shots.length ? state.shots.map(shot => `<li class="${shot.points ? "is-hit" : "is-miss"}"><span>Arrow ${shot.number}</span><strong>${shot.points ? `${shot.points} points` : "Miss"}</strong><small>${shot.reason === "short" ? "Landed short" : Math.abs(shot.offset) < 0.04 ? "Center hit" : `${Math.abs(shot.offset * 100).toFixed(0)} cm ${shot.offset > 0 ? "above" : "below"} center`}</small><small>${shot.targetX.toFixed(0)} m &middot; ${windLabel(shot.wind, viewMode === "first-person")}</small></li>`).join("") : '<li class="archery-empty-log">Six arrows, one fresh target. Your shots will appear here.</li>';
   }
   function onShot() {
     lastShotCount = state.shots.length;
@@ -263,7 +287,7 @@ export function createAuroraArchery(root) {
     if (state.arrowsLeft > 0 && state.level.shotDistances) {
       status.textContent = `${shot.points ? `${shot.points} points!` : "Miss."} Next target: ${getTarget(state.level, state.time, state.shots.length).x} m (was ${shot.targetX.toFixed(0)} m). Recalibrate your angle and power; the wind is calm.`;
     } else if (state.arrowsLeft > 0 && state.level.shotWinds) {
-      status.textContent = `${shot.points ? `${shot.points} points!` : "Miss."} New wind: ${windLabel(getWind(state.level, state.time, state.shots.length))}. It stays steady for your next arrow. Recalibrate before shooting.`;
+      status.textContent = `${shot.points ? `${shot.points} points!` : "Miss."} New wind: ${windLabel(getWind(state.level, state.time, state.shots.length), viewMode === "first-person")}. It stays steady for your next arrow. Recalibrate before shooting.`;
     }
     showHistory();
     if (state.phase === "complete") {
@@ -303,7 +327,7 @@ export function createAuroraArchery(root) {
     if (state.phase !== "complete") status.textContent = state.paused ? "Paused. The target, wind, and arrow are frozen. Press Resume or P to continue." : "Range resumed. Read the wind and time your next shot.";
   }
   function aimFromPointer(event) {
-    model.setAim(renderer.aimAt(event.clientX, event.clientY), state.power);
+    model.setAim(renderer.aimAt(event.clientX, event.clientY, dragStart), state.power);
     updateControls(); updateHUD();
   }
   function onKey(event) {
@@ -343,6 +367,8 @@ export function createAuroraArchery(root) {
   wrapper.querySelectorAll("[data-level]").forEach(button => button.addEventListener("click", () => resetLevel(button.dataset.level)));
   $('[aria-label="Choose archery level"]').addEventListener("change", event => resetLevel(event.target.value));
   $(".archery-guide").addEventListener("change", event => renderer.showGuide(event.target.checked));
+  $('[aria-label="Archery view mode"]').addEventListener("change", event => { viewMode = event.target.value; dragging = false; dragStart = null; updateView(); persist(); });
+  $(".archery-focus").addEventListener("click", () => { focusTarget = !focusTarget; updateView(); persist(); });
   $(".archery-customize").addEventListener("click", () => {
     $(".archery-customizer").scrollIntoView({ block: "start", behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
     $('[aria-label="Avatar style"]').focus({ preventScroll: true });
@@ -371,16 +397,16 @@ export function createAuroraArchery(root) {
   }));
   scene.addEventListener("pointerdown", event => {
     if (event.target !== $(".archery-canvas") || state.phase !== "aiming" || state.paused) return;
-    dragging = true; scene.setPointerCapture(event.pointerId); scene.focus({ preventScroll: true }); aimFromPointer(event); event.preventDefault();
+    dragging = true; dragStart = { angle: state.angle, y: event.clientY }; scene.setPointerCapture(event.pointerId); scene.focus({ preventScroll: true }); aimFromPointer(event); event.preventDefault();
   });
   scene.addEventListener("pointermove", event => { if (dragging) aimFromPointer(event); });
-  scene.addEventListener("pointerup", () => { dragging = false; });
-  scene.addEventListener("pointercancel", () => { dragging = false; });
+  scene.addEventListener("pointerup", () => { dragging = false; dragStart = null; });
+  scene.addEventListener("pointercancel", () => { dragging = false; dragStart = null; });
   window.addEventListener("keydown", onKey);
   document.addEventListener("visibilitychange", onVisibility);
   const observer = new ResizeObserver(() => { renderer.resize(); renderer.draw(); });
   observer.observe($(".archery-canvas"));
-  updateGear(); resetLevel(); renderer.draw();
+  updateView(); resetLevel(); renderer.draw();
   frame = requestAnimationFrame(animate);
   return () => {
     disposed = true; cancelAnimationFrame(frame); observer.disconnect();
