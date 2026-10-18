@@ -1,12 +1,15 @@
 import { GameCharacter } from "./characters.js";
-import { buildArcherMesh } from "./humanoid-mesh.js";
+import { buildArcherMesh, prepareArcherAssets } from "./humanoid-mesh.js";
 import { buildCreatureAccessories } from "./accessory-mesh.js";
 import { BIRD_DESIGNS } from "../flappy-bird-art.js";
-
+export function prepareCharacterAssets(character) {
+  return character.family === "humanoid" ? prepareArcherAssets() : Promise.resolve();
+}
 
 export function buildCharacterMesh(world, character) {
   if (!(character instanceof GameCharacter)) throw new TypeError("Build a GameCharacter before rendering it");
   const { B, scene, material } = world, root = new B.TransformNode(character.id, scene), wings = [], trailParts = [];
+  let archer;
   const natural = BIRD_DESIGNS[character.key]?.colors || {};
   const colors = { body: natural.body || "#75aaa4", wing: natural.wing || "#517889", belly: natural.belly || "#e4d2ad", beak: natural.beak || "#d4ae68", skin: "#d7aa86", hair: "#554035", ...character.colors };
   function sphere(name, position, scale, color, parent = root) {
@@ -49,7 +52,7 @@ export function buildCharacterMesh(world, character) {
     }
     buildCreatureAccessories(world, character, { root, sphere, position: [0, 1.75, -0.12], eyes: [[-0.19, 0.07, -0.35, bigEyes ? 0.45 : 0.28], [0.19, 0.07, -0.35, bigEyes ? 0.45 : 0.28]], neck: [0, 1.4, -0.04] });
   } else if (character.family === "humanoid") {
-    buildArcherMesh(world, character, { root, sphere, box });
+    archer = buildArcherMesh(world, character, { root, sphere, box });
   } else if (character.family === "snake") {
     const path = Array.from({ length: 45 }, (_, i) => { const a = i / 44 * Math.PI * 2; return new B.Vector3(Math.cos(a) * (0.4 + i / 50), 0.18 + i / 100, Math.sin(a) * 0.65); });
     const body = B.MeshBuilder.CreateTube("snake", { path, radius: 0.15, cap: B.Mesh.CAP_ALL }, scene); body.parent = root; body.material = material(colors.body);
@@ -92,6 +95,6 @@ export function buildCharacterMesh(world, character) {
       for (const wing of wings) wing.node.rotation.z = wing.side * (0.5 + Math.sin(time * (character.key === "hummingbird" ? 35 : 6)) * 0.5);
       for (const { mesh, index } of trailParts) { const age = (time * 0.5 + index / 9) % 1; mesh.position.set(Math.sin(index * 2.4 + time) * 0.18, 1 + Math.sin(index + time) * 0.12 - age * 0.13, 0.5 + age * 1.9); mesh.visibility = 1 - age; mesh.rotation.z = time + index; }
     },
-    dispose() { root.dispose(false); },
+    dispose() { root.dispose(false); archer?.dispose(); },
   };
 }

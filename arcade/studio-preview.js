@@ -1,6 +1,7 @@
 import { createWebGLScene } from "./babylon.js";
 import { CharacterBuilder } from "./characters.js";
-import { buildCharacterMesh } from "./character-renderers.js";
+import { buildCharacterMesh, prepareCharacterAssets } from "./character-renderers.js";
+import { lightArcherStudio } from "./archer-materials.js";
 import { createFrameLoop } from "./runtime.js";
 import { createCharacterPortrait } from "./studio-2d.js";
 
@@ -26,7 +27,7 @@ export function createStudioPreview(root) {
   root.append(panel);
   const canvas = panel.querySelector("canvas"), status = panel.querySelector("[role=status]");
   const portraitRoot = panel.querySelector(".arcade-studio-portrait"), portrait = createCharacterPortrait(portraitRoot), hint = panel.querySelector(".arcade-studio-stage > span");
-  let world, entity, camera, character, appearance, gameId, loading, signature = "", disposed = false, focus = "body", mode = "2d", failed = false, portraitTime = 0;
+  let world, entity, camera, backdrop, character, appearance, gameId, loading, signature = "", disposed = false, focus = "body", mode = "2d", failed = false, portraitTime = 0;
   panel.dataset.mode = mode;
   panel.dataset.ready = "true";
   function drawPortrait() { if (appearance) portrait.update(gameId, appearance, focus); }
@@ -45,9 +46,9 @@ export function createStudioPreview(root) {
     const family = character.family;
     const aspect = Math.max(0.3, canvas.clientWidth / (canvas.clientHeight || 1));
     const narrowScale = Math.max(1, 0.85 / aspect);
-    const targets = { bird: [0, 1.7, -0.1], humanoid: [0, 1.9, -0.05], snake: [1.28, 0.75, -0.1], vehicle: [0, 0.8, -0.9] };
-    if (focus === "face") { camera.setTarget(new world.B.Vector3(...targets[family])); camera.radius = { bird: 2, humanoid: 0.85, snake: 1.65, vehicle: 2.7 }[family] * narrowScale; }
-    else if (focus === "equipment") { camera.setTarget(new world.B.Vector3(-0.05, 1.2, -0.12)); camera.radius = 2.3 * narrowScale; }
+    const targets = { bird: [0, 1.7, -0.1], humanoid: [0.025, 1.94, -0.065], snake: [1.28, 0.75, -0.1], vehicle: [0, 0.8, -0.9] };
+    if (focus === "face") { camera.setTarget(new world.B.Vector3(...targets[family])); camera.radius = { bird: 2, humanoid: 0.67, snake: 1.65, vehicle: 2.7 }[family] * narrowScale; }
+    else if (focus === "equipment") { camera.setTarget(new world.B.Vector3(0.55, 1.68, -0.2)); camera.radius = 2.1 * narrowScale; }
     else if (entity) {
       const { B } = world;
       let min = new B.Vector3(Infinity, Infinity, Infinity), max = new B.Vector3(-Infinity, -Infinity, -Infinity);
@@ -59,9 +60,9 @@ export function createStudioPreview(root) {
       }
       camera.setTarget(min.add(max).scale(0.5));
       const halfAngle = Math.atan(Math.tan(camera.fov / 2) * Math.min(1, aspect));
-      camera.radius = B.Vector3.Distance(min, max) / 2 / Math.sin(halfAngle) * 1.08;
+      camera.radius = B.Vector3.Distance(min, max) / 2 / Math.sin(halfAngle) * (family === "humanoid" ? .84 : 1.08);
     }
-    camera.alpha = -Math.PI / 2 - 0.25; camera.beta = focus === "face" ? Math.PI / 2.15 : Math.PI / 2.6;
+    camera.alpha = -Math.PI / 2 + (family === "humanoid" ? .2 : -.25); camera.beta = family === "humanoid" ? Math.PI / 2.12 : focus === "face" ? Math.PI / 2.15 : Math.PI / 2.6;
   }
   function rebuild() {
     if (!world || !character) return;
@@ -70,21 +71,22 @@ export function createStudioPreview(root) {
   function load3D() {
     if (loading) return loading;
     panel.dataset.ready = "loading";
-    loading = createWebGLScene(canvas, { quality: "balanced", isCurrent: () => !disposed }).then(next => {
+    loading = prepareCharacterAssets(character).then(() => createWebGLScene(canvas, { quality: gameId === "archery" ? "high" : "balanced", isCurrent: () => !disposed })).then(next => {
       if (disposed) { next.dispose(); return; }
       world = next; const { B, scene } = world; world.camera.dispose();
       camera = new B.ArcRotateCamera("character-orbit", -Math.PI / 2 - 0.25, Math.PI / 2.6, 4.5, new B.Vector3(0, 1, 0), scene);
       camera.minZ = 0.03; camera.maxZ = 100;
       scene.activeCamera = camera; camera.attachControl(canvas, true); camera.lowerRadiusLimit = 0.45; camera.upperRadiusLimit = 10; camera.lowerBetaLimit = 0.15; camera.upperBetaLimit = Math.PI / 2 + 0.3; camera.wheelDeltaPercentage = 0.01; camera.pinchDeltaPercentage = 0.01; camera.panningSensibility = 0;
       scene.clearColor = B.Color4.FromHexString("#213744ff");
-      const floor = B.MeshBuilder.CreateGround("studio-floor", { width: 24, height: 24 }, scene); floor.material = world.material("#485e62", { roughness: 0.9 }); floor.receiveShadows = true;
+      if (gameId === "archery") backdrop = lightArcherStudio(world);
+      else { const floor = B.MeshBuilder.CreateGround("studio-floor", { width: 24, height: 24 }, scene); floor.material = world.material("#485e62", { roughness: 0.9 }); floor.receiveShadows = true; }
       rebuild(); setMode(mode); panel.dataset.ready = "true";
     }).catch(() => { if (!disposed) { failed = true; panel.dataset.ready = "fallback"; panel.querySelector('[data-mode="3d"]').disabled = true; setMode("2d"); } });
     return loading;
   }
   const loop = createFrameLoop(time => {
     const animationTime = matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : time / 1000;
-    if (mode === "3d" && world && entity) { entity.animate(animationTime); world.render(); }
+    if (mode === "3d" && world && entity) { entity.animate(animationTime); if (backdrop) backdrop.rotation.y = -camera.alpha - Math.PI / 2; world.render(); }
     else if (mode === "2d" && time - portraitTime > 80) { portrait.animate(animationTime); portraitTime = time; }
   }); loop.start();
   const observer = new ResizeObserver(() => { if (mode === "3d") focusCamera(); }); observer.observe(panel.querySelector(".arcade-studio-stage"));
