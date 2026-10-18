@@ -1,6 +1,7 @@
 import { createNeonDrift } from "./neon-drift.js";
 import { createSnakeAudio } from "./snake-audio.js";
 import { createAuroraArchery } from "./aurora-archery.js";
+import { createFlappyBird } from "./flappy-bird.js";
 
 const games = [
   {
@@ -388,6 +389,15 @@ const games = [
         wrapper.remove();
       };
     },
+  },
+  {
+    id: "flappy",
+    name: "Flappy Bird",
+    summary: "A little flap. A big adventure.",
+    description:
+      "Fly a bird or baby dragon through a sky of pipes. Customize your creature, accessories, colors, and world, or try a first-person 3D flight.",
+    logo: "assets/flappy-bird-cover.svg",
+    init: createFlappyBird,
   },
   {
     id: "snake",

@@ -6,6 +6,7 @@ A playful single-page playground inspired by [neal.fun](https://neal.fun), bundl
 
 - **Hot & Cold** — Hunt down a mystery number with warmer/colder hints on every guess.
 - **Flash Reflex** — Train your reaction speed by tapping the moment the panel lights up.
+- **Flappy Bird** — Customize birds (including a baby dragon and unlockable phoenix), pipes, backgrounds, accessories, and seven colors. Fly in side view or first-person 3D across four difficulty levels, earn coins, and unlock new looks in the shop.
 - **Snake** — Glide through the garden and gobble up apples. Customize a Generic, Gardener, Python, or Rattlesnake skin in eight colors, add hats, glasses, and neckwear, and toggle music and sound effects.
 - **Aurora Archery** — Customize your archer, bow, and arrows in a mountain landscape, and explore six trails with moving targets, changing wind, and distances from 20 to 70 meters.
 - **Runway Glide** — Line up the runway lights and land the plane on target.
@@ -44,6 +45,10 @@ Start with a Trail ranger, Woodland scout, or Aurora knight, then use the Face, 
 
 The bow section has a dedicated close-up of the Woodland longbow, Swift recurve, or Aurora crystal bow. Choose six preset colors, a custom color, and three grip wraps. The previews and the archer on the range share the same artwork. Woodcraft, Moonsteel, and Aurora crystal arrows also offer six feather colors.
 
+Flappy Bird controls: tap or click the scene, use the Flap button, or press Space, W, or Up to climb. P pauses or resumes; R restarts. Clear a pipe pair for one point; hitting a pipe or the ground ends the flight with a tumble and feather animation. Speed gently increases with your score. Easy keeps gentle gravity and wide gaps; the other modes fall faster and change vertical level at every pipe pair. Hard has heavy gravity and narrow openings; Expert has very fast falls, tiny gaps, and the fastest pace. Height changes are bounded to keep the course reachable. Difficulty starts a new flight and keeps a separate best score. View changes preserve your current flight; opening the studio or shop pauses it. In first-person 3D, line up the center ring with the dotted circle in the next opening. The flight studio sits below the instructions, with independent bird, world, accessory, trail, and color controls and four full color palettes. Flapping, passing a gap, and landing have retro sound effects; the Sound FX toggle mutes them. Choices and records save in this browser.
+
+Every cleared pipe earns 1 coin on Easy, 2 on Medium, 3 on Hard, or 4 on Expert. A flight receives its highest milestone bonus: Bronze at 5 pipes adds 5 coins, Silver at 15 adds 15, Gold at 30 adds 35, and Diamond at 60 adds 90. Zero-pipe flights earn nothing. Rewards bank once when the flight ends, including restarting, changing difficulty, or leaving. The Sky Shop unlocks ten permanent cosmetic items, including a flower crown, aviator and space helmets, a monocle, a champion medal, a rainbow trail, aurora and volcano backgrounds, metallic pipes, and a phoenix. Buying equips the item immediately; owned items remain available in the studio. The starter collection and all colors remain free.
+
 ## Getting Started
 
 1. Clone the repository: `git clone https://github.com/<your-user>/games.cooper.tips.git`
@@ -65,6 +70,8 @@ The project is entirely client-side, so functional testing is manual:
 Neon Drift's driving rules also have focused automated checks: `node --test tests/neon-drift.test.mjs`. Its simulation, canvas rendering, and Web Audio soundtrack are in `neon-drift-engine.js`, `neon-drift.js`, and `neon-drift-audio.js`; no build step or dependencies are required.
 
 Aurora Archery's flight, scoring, wind, target motion, round rules, perspective projection, and first-person aiming have focused checks: `node --test tests/archery*.test.mjs`. Its rules, side view, first-person renderer, camera, appearance, and controls are in `archery-engine.js`, `archery-renderer.js`, `archery-first-person.js`, `archery-camera.js`, `archery-appearance.js`, and `aurora-archery.js`.
+
+Flappy Bird's flight rules, collision detection, scoring, course reachability, customization validation, perspective math, coin awards, and shop purchases have focused checks: `node --test tests/flappy.test.mjs`. Its modules are `flappy-engine.js`, `flappy-appearance.js`, `flappy-renderer.js`, `flappy-audio.js`, `flappy-shop.js`, and `flappy-bird.js`.
 
 ## Deployment
 
