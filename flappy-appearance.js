@@ -1,7 +1,8 @@
 import { drawSpecies, tint } from "./flappy-bird-art.js";
+import { characterOptions } from "./arcade/characters.js";
 export { tint, BIRD_DESIGNS } from "./flappy-bird-art.js";
 
-export const BIRDS = { sparrow: "Sunny sparrow", jay: "Blue jay", owl: "Little owl", hummingbird: "Hummingbird", dragon: "Baby dragon", phoenix: "Tiny phoenix" };
+export const BIRDS = characterOptions("flappy");
 export const PIPES = { classic: "Classic pipes", candy: "Candy towers", ruins: "Ancient pillars", crystal: "Crystal gates", gold: "Golden pipes" };
 export const BACKGROUNDS = { meadow: "Meadow morning", sunset: "Sunset canyon", forest: "Moonlit forest", islands: "Floating islands", neon: "Neon skyline", aurora: "Aurora skies", volcano: "Volcanic twilight" };
 export const HATS = { none: "None", cap: "Explorer cap", crown: "Tiny crown", wizard: "Wizard hat", party: "Party hat", flowers: "Flower crown", aviator: "Aviator helmet", space: "Space helmet" };
@@ -29,7 +30,7 @@ export function readFlappySettings(saved = {}) {
   if (!saved || typeof saved !== "object" || Array.isArray(saved)) saved = {};
   const option = (choices, value, fallback) => typeof value === "string" && Object.hasOwn(choices, value) ? value : fallback;
   const colors = Object.fromEntries(Object.keys(COLOR_FIELDS).map(key => [key, typeof saved.colors?.[key] === "string" && /^#[0-9a-f]{6}$/i.test(saved.colors[key]) ? saved.colors[key].toLowerCase() : PALETTES.sunshine[key]]));
-  return { bird: option(BIRDS, saved.bird, "sparrow"), pipeStyle: option(PIPES, saved.pipeStyle, "classic"), background: option(BACKGROUNDS, saved.background, "meadow"), hat: option(HATS, saved.hat, "none"), eyewear: option(EYEWEAR, saved.eyewear, "none"), neckwear: option(NECKWEAR, saved.neckwear, "none"), trail: option(TRAILS, saved.trail, "feathers"), view: saved.view === "first-person" ? "first-person" : "side", guide: saved.guide !== false, sound: saved.sound !== false, colors };
+  return { bird: option(BIRDS, saved.bird, "sparrow"), pipeStyle: option(PIPES, saved.pipeStyle, "classic"), background: option(BACKGROUNDS, saved.background, "meadow"), hat: option(HATS, saved.hat, "none"), eyewear: option(EYEWEAR, saved.eyewear, "none"), neckwear: option(NECKWEAR, saved.neckwear, "none"), trail: option(TRAILS, saved.trail, "feathers"), view: ["first-person", "first-person-webgl"].includes(saved.view) ? saved.view : "side", guide: saved.guide !== false, sound: saved.sound !== false, colors };
 }
 const TAU = Math.PI * 2;
 function ellipse(ctx, x, y, rx, ry, color, angle = 0) { ctx.fillStyle = color; ctx.beginPath(); ctx.ellipse(x, y, rx, ry, angle, 0, TAU); ctx.fill(); }

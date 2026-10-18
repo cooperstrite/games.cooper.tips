@@ -1,6 +1,7 @@
 import { WORLD, clamp } from "./flappy-engine.js";
 import { THEMES, drawBird, drawBirdPreview, star, tint } from "./flappy-appearance.js";
 import { drawBirdCockpit } from "./flappy-bird-art.js";
+import { createCanvasSurface } from "./arcade/runtime.js";
 
 const TAU = Math.PI * 2;
 const mod = (value, max) => ((value % max) + max) % max;
@@ -230,19 +231,17 @@ function firstPerson(ctx, w, h, state, settings, flap, animationTime) {
 }
 
 export function createFlappyRenderer(canvas, previewCanvas, model, getSettings) {
-  const ctx = canvas.getContext("2d"); let width = 950, height = 535, lastPreview = -1;
+  const surface = createCanvasSurface(canvas), ctx = surface.context; let width = 950, height = 535, lastPreview = -1;
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   function resize() {
-    const rect = canvas.getBoundingClientRect(); if (!rect.width || !rect.height) return;
-    width = rect.width; height = rect.height;
-    const ratio = Math.min(window.devicePixelRatio || 1, 2); canvas.width = Math.round(width * ratio); canvas.height = Math.round(height * ratio); ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+    const size = surface.resize(); if (size.width && size.height) { width = size.width; height = size.height; }
   }
   function preview() { drawBirdPreview(previewCanvas, getSettings(), reduced ? 0 : model.state.time); }
   function draw() {
     const state = model.state, settings = getSettings(), theme = THEMES[settings.background];
     const flapAge = state.time - state.lastFlap, flap = state.phase === "ready" ? 0.5 + Math.sin(state.time * 7) * 0.3 : Math.exp(-flapAge * 8);
-    sky(ctx, width, height, settings, reduced ? 0 : state.time, settings.view === "first-person" ? state.distance * 0.15 : state.distance);
-    if (settings.view === "first-person") {
+    sky(ctx, width, height, settings, reduced ? 0 : state.time, settings.view.startsWith("first-person") ? state.distance * 0.15 : state.distance);
+    if (settings.view.startsWith("first-person")) {
       const dead = state.phase === "gameover" && !reduced, age = state.crashAge;
       ctx.save();
       if (dead) { ctx.translate(width / 2, height / 2); ctx.rotate(Math.sin(age * 10) * 0.055 * Math.max(0, 1 - age)); ctx.translate(-width / 2, -height / 2); }
@@ -284,7 +283,7 @@ export function createFlappyRenderer(canvas, previewCanvas, model, getSettings) 
       }
     }
     if (state.phase === "gameover" && state.crashAge < 0.3) { ctx.fillStyle = `rgba(244,159,123,${(1 - state.crashAge / 0.3) * 0.17})`; ctx.fillRect(0, 0, width, height); }
-    if (settings.view === "first-person" && state.phase === "gameover" && !reduced && state.crashAge < 0.8) {
+    if (settings.view.startsWith("first-person") && state.phase === "gameover" && !reduced && state.crashAge < 0.8) {
       const age = state.crashAge; ctx.globalAlpha = Math.max(0, 1 - age / 0.8);
       for (let i = 0; i < 10; i++) { const a = i / 10 * TAU, r = 18 + age * 150; star(ctx, width / 2 + Math.cos(a) * r, height * 0.46 + Math.sin(a) * r * 0.65, 4, settings.colors.trail, a + age * 4); }
       ctx.globalAlpha = 1;

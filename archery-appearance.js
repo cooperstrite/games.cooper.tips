@@ -1,4 +1,5 @@
-export const AVATAR_STYLES = { ranger: "Trail ranger", scout: "Woodland scout", knight: "Aurora knight" };
+import { characterOptions } from "./arcade/characters.js";
+export const AVATAR_STYLES = characterOptions("archery");
 export const BOW_STYLES = { longbow: "Woodland longbow", recurve: "Swift recurve", crystal: "Aurora crystal" };
 export const HAIR_STYLES = { short: "Short waves", bob: "Long bob", ponytail: "Ponytail", braids: "Braids", curls: "Curly", bun: "High bun", bald: "Bald" };
 export const FACIAL_HAIR = { none: "Clean shaven", stubble: "Stubble", mustache: "Mustache", goatee: "Goatee", beard: "Short beard", full: "Full beard" };

@@ -2,29 +2,34 @@ import { createFlappyModel, DIFFICULTIES, POINTS_PER_PIPE, readFlappyProgress, s
 import { BIRDS, BIRD_DESIGNS, PIPES, BACKGROUNDS, HATS, EYEWEAR, NECKWEAR, TRAILS, COLOR_FIELDS, PALETTES, readFlappySettings } from "./flappy-appearance.js";
 import { createFlappyRenderer, drawFlappyShopPreview } from "./flappy-renderer.js";
 import { createFlappyAudio } from "./flappy-audio.js";
-import { SHOP_ITEMS, COIN_MULTIPLIERS, flightReward, readFlappyWallet, canEquip, buyFlappyItem, bankFlappyReward } from "./flappy-shop.js";
+import { SHOP_ITEMS, COIN_MULTIPLIERS, flightReward, canEquip } from "./flappy-shop.js";
+import { getArcadeWallet, flappyWalletView } from "./arcade/wallet.js";
+import { createRewardSession, applyEquippedKit, mountGameWallet } from "./arcade/game-services.js";
+import { createFrameLoop } from "./arcade/runtime.js";
 
 const STORAGE_KEY = "cooper-flappy-bird-v1";
 const coinIcon = '<svg viewBox="0 0 24 24" width="21" height="21" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#e6bb5d" stroke="#bd8c3f" stroke-width="1.4"/><circle cx="12" cy="12" r="7.3" fill="none" stroke="#fff0af"/><path d="m7 13 4-5 2 3 4-1-5 7z" fill="#fff1b5"/></svg>';
 const options = choices => Object.entries(choices).map(([id, value]) => `<option value="${id}">${typeof value === "string" ? value : value.name}</option>`).join("");
 
-export function createFlappyBird(root) {
+export function createFlappyBird(root, { editorOnly = false, onAppearanceChange } = {}) {
   const deathTime = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0.15 : 1.05;
   let saved = {};
   try { const value = JSON.parse(localStorage.getItem(STORAGE_KEY)); if (value && typeof value === "object" && !Array.isArray(value)) saved = value; } catch { /* Use defaults when storage is unavailable. */ }
-  const settings = readFlappySettings(saved);
-  const wallet = readFlappyWallet(saved.wallet), defaults = readFlappySettings();
+  const settings = applyEquippedKit("flappy", readFlappySettings(saved));
+  const arcadeWallet = getArcadeWallet(), wallet = flappyWalletView(arcadeWallet.getState()), defaults = readFlappySettings();
+  let rewardSession = createRewardSession("flappy");
   for (const item of SHOP_ITEMS) if (settings[item.setting] === item.value && !canEquip(wallet, item.setting, item.value)) settings[item.setting] = defaults[item.setting];
   const audio = createFlappyAudio(settings.sound);
   const progress = readFlappyProgress(saved), bests = progress.bests;
   const model = createFlappyModel(progress.difficulty);
   const wrapper = document.createElement("section");
   wrapper.className = "flappy-game";
+  wrapper.dataset.editorOnly = String(editorOnly);
   wrapper.innerHTML = `
     <div class="flappy-heading"><div><p class="flappy-eyebrow">THE LITTLE SKY CLUB</p><h3 class="flappy-page-title">A little flap. A big adventure.</h3></div><nav class="flappy-page-nav" aria-label="Flappy Bird pages"><a href="#flappy" data-flappy-page-link="play">Play</a><a href="#flappy/customize" data-flappy-page-link="customize" class="flappy-customize-link">Customize</a><a href="#flappy/shop" data-flappy-page-link="shop" class="flappy-shop-link">${coinIcon}<span class="flappy-wallet">0</span> <span>Shop</span></a></nav></div>
     <div class="flappy-flight-settings">
       <label>Difficulty <span class="flappy-label-note">starts a new flight</span><select aria-label="Flight difficulty">${options(DIFFICULTIES)}</select></label>
-      <label>View mode<select aria-label="Flappy view mode"><option value="side">Classic side view</option><option value="first-person">First-person 3D</option></select></label>
+      <label>View mode<select aria-label="Flappy view mode"><option value="side">Classic side view</option><option value="first-person">First-person 3D</option><option value="first-person-webgl">Enhanced first-person 3D</option></select></label>
       <p class="flappy-difficulty-note"></p>
     </div>
     <div class="flappy-hud" aria-label="Flight statistics">
@@ -60,15 +65,42 @@ export function createFlappyBird(root) {
   const scene = $(".flappy-scene"), canvas = $(".flappy-canvas"), previewCanvas = $(".flappy-bird-preview");
   const overlay = $(".flappy-overlay"), overlayTitle = overlay.querySelector("h4"), overlayText = overlay.querySelector("p"), playButton = $(".flappy-play");
   const flapButton = $(".flappy-flap"), pauseButton = $(".flappy-pause"), difficultySelect = $('[aria-label="Flight difficulty"]'), viewSelect = $('[aria-label="Flappy view mode"]');
+  if (!editorOnly) {
+    const link = $('[data-flappy-page-link="customize"]'); link.href = "#characters/flappy"; link.removeAttribute("data-flappy-page-link");
+  }
   const renderer = createFlappyRenderer(canvas, previewCanvas, model, () => settings);
+  const webglCanvas = document.createElement("canvas"); webglCanvas.className = "flappy-webgl-canvas"; webglCanvas.hidden = true; webglCanvas.setAttribute("role", "img"); webglCanvas.setAttribute("aria-label", "Enhanced 3D flight"); canvas.after(webglCanvas);
+  let webgl = null, webglLoading = false, webglDisposed = false;
+  function syncWebGL() {
+    if (editorOnly) return;
+    webglCanvas.hidden = settings.view !== "first-person-webgl" || !webgl;
+    wrapper.dataset.renderer = settings.view === "first-person-webgl" && webgl ? "webgl3d" : "canvas2d";
+    if (settings.view !== "first-person-webgl" || (!editorOnly && currentPage !== "play") || webgl || webglLoading || webglDisposed) return;
+    webglLoading = true;
+    // Give the engine a real viewport while it starts. Classic 3D remains underneath.
+    webglCanvas.hidden = false;
+    import("./arcade/flappy-webgl.js").then(module => module.createFlappyWebGL(webglCanvas, model, () => settings, () => !webglDisposed && settings.view === "first-person-webgl" && (editorOnly || currentPage === "play"))).then(view => {
+      webglLoading = false;
+      if (webglDisposed) { view.dispose(); return; }
+      webgl = view; webglCanvas.hidden = settings.view !== "first-person-webgl"; wrapper.dataset.renderer = "webgl3d"; webgl.draw();
+    }).catch(() => { webglLoading = false; webgl?.dispose(); webgl = null; webglCanvas.hidden = true; if (!webglDisposed && settings.view === "first-person-webgl" && currentPage === "play") { wrapper.dataset.renderer = "canvas2d"; announce("Enhanced 3D is unavailable on this device. Classic 3D is ready to play."); } });
+  }
+  function drawFlight() {
+    if (settings.view === "first-person-webgl" && webgl) {
+      try { webgl.draw(); return; }
+      catch { webgl.dispose(); webgl = null; webglCanvas.hidden = true; wrapper.dataset.renderer = "canvas2d"; announce("Enhanced 3D stopped. Your flight continues in classic 3D."); }
+    }
+    renderer.draw();
+  }
   const disposers = [];
-  let frameId, lastTime = 0, hudAt = 0, previousPhase = "ready", previousScore = 0, retryReady = false, flightSettled = false, lastReward = null, currentPage = "play";
+  let hudAt = 0, previousPhase = "ready", previousScore = 0, retryReady = false, flightSettled = false, lastReward = null, currentPage = "play";
   const previousTitle = document.title;
   function on(target, name, callback, options) { target.addEventListener(name, callback, options); disposers.push(() => target.removeEventListener(name, callback, options)); }
   function persist() { try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...settings, difficulty: model.state.difficultyId, bests, wallet, scoringVersion: progress.scoringVersion })); } catch { /* The game also works without storage. */ } }
   function settleFlight() {
     if (flightSettled || model.state.phase === "ready") return;
-    flightSettled = true; lastReward = flightReward(model.state.pipesCleared, model.state.difficultyId); bankFlappyReward(wallet, lastReward); persist(); updateShop();
+    flightSettled = true; lastReward = flightReward(model.state.pipesCleared, model.state.difficultyId);
+    rewardSession.award({ pipes: model.state.pipesCleared, difficulty: model.state.difficultyId }).then(() => { if (wrapper.isConnected) { persist(); updateShop(); } });
   }
   function rememberBest() { const s = model.state; if (s.score > bests[s.difficultyId]) { bests[s.difficultyId] = s.score; persist(); } }
   function announce(message) { $(".flappy-status").textContent = message; }
@@ -97,7 +129,7 @@ export function createFlappyBird(root) {
     flapButton.textContent = s.phase === "ready" ? "Flap / Start" : s.phase === "gameover" ? "Fly again" : "Flap";
     if (s.paused) { overlayTitle.textContent = "Taking a little breather"; overlayText.textContent = "Your flight is paused. Resume when you're ready."; playButton.textContent = "Resume flight"; }
     else if (s.phase === "gameover") { overlayTitle.textContent = "One more little adventure?"; overlayText.textContent = `${s.crashReason === "pipe" ? "You clipped a pipe." : "You touched the ground."} ${s.score} points from ${s.pipesCleared} ${s.pipesCleared === 1 ? "pipe" : "pipes"}. Best on ${s.difficulty.name}: ${bests[s.difficultyId]} points.`; playButton.textContent = "Fly again"; }
-    else { overlayTitle.textContent = "Ready to spread your wings?"; overlayText.innerHTML = settings.view === "first-person" ? "Tap, click, or press Space to flap.<br>Line up the center ring with the dotted gap ahead." : "Tap, click, or press Space to flap.<br>Fly through the gaps. Keep off the ground."; playButton.textContent = "Let's fly"; }
+    else { overlayTitle.textContent = "Ready to spread your wings?"; overlayText.innerHTML = settings.view.startsWith("first-person") ? "Tap, click, or press Space to flap.<br>Line up the center ring with the dotted gap ahead." : "Tap, click, or press Space to flap.<br>Fly through the gaps. Keep off the ground."; playButton.textContent = "Let's fly"; }
     if (s.phase === "gameover" && lastReward) {
       $(".flappy-award-name").textContent = lastReward.name;
       $(".flappy-award-coins").textContent = `+${lastReward.coins} ${lastReward.coins === 1 ? "coin" : "coins"} earned`;
@@ -108,19 +140,21 @@ export function createFlappyBird(root) {
   function updateAppearance() {
     wrapper.dataset.view = settings.view;
     viewSelect.value = settings.view;
+    syncWebGL();
     $(".flappy-guide").checked = settings.guide;
     $(".flappy-sound").checked = settings.sound;
     wrapper.querySelectorAll("[data-setting]").forEach(input => { input.value = settings[input.dataset.setting]; });
     wrapper.querySelectorAll("[data-color]").forEach(input => { const value = settings.colors[input.dataset.color]; input.value = value; $(`[data-color-output="${input.dataset.color}"]`).textContent = value; });
     wrapper.querySelectorAll("[data-palette]").forEach(button => button.setAttribute("aria-pressed", String(Object.keys(COLOR_FIELDS).every(key => settings.colors[key] === PALETTES[button.dataset.palette][key]))));
-    $(".flappy-view-badge").textContent = settings.view === "first-person" ? "FIRST-PERSON 3D" : "SIDE VIEW";
+    $(".flappy-view-badge").textContent = settings.view.startsWith("first-person") ? "FIRST-PERSON 3D" : "SIDE VIEW";
     $(".flappy-bird-name").textContent = BIRDS[settings.bird];
     $(".flappy-preview figcaption > span").textContent = BIRD_DESIGNS[settings.bird].detail;
     $(".flappy-natural-colors").setAttribute("aria-pressed", String(Object.entries(BIRD_DESIGNS[settings.bird].colors).every(([key, color]) => settings.colors[key] === color)));
     const outfit = [HATS[settings.hat], EYEWEAR[settings.eyewear], NECKWEAR[settings.neckwear]].filter(name => name !== "None");
     previewCanvas.setAttribute("aria-label", `${BIRDS[settings.bird]}${outfit.length ? ` wearing ${outfit.join(", ")}` : ""}, with your custom colors`);
-    canvas.setAttribute("aria-label", `${settings.view === "first-person" ? "First-person 3D" : "Side-view"} flight, ${BIRDS[settings.bird]}, ${PIPES[settings.pipeStyle]}, ${BACKGROUNDS[settings.background]}`);
+    canvas.setAttribute("aria-label", `${settings.view.startsWith("first-person") ? "First-person 3D" : "Side-view"} flight, ${BIRDS[settings.bird]}, ${PIPES[settings.pipeStyle]}, ${BACKGROUNDS[settings.background]}`);
     renderer.preview(); renderer.draw(); updateControls(); updateShop();
+    onAppearanceChange?.(structuredClone(settings));
   }
   function updateShop() {
     for (const item of SHOP_ITEMS) {
@@ -137,6 +171,7 @@ export function createFlappyBird(root) {
   }
   function reset(id = model.state.difficultyId) {
     rememberBest(); settleFlight(); model.reset(id); previousPhase = "ready"; previousScore = 0; retryReady = false; flightSettled = false; lastReward = null;
+    rewardSession = createRewardSession("flappy");
     difficultySelect.value = model.state.difficultyId;
     updateDifficultyNote();
     announce(`${model.state.difficulty.name} flight ready. Tap the scene or press Space to start.`);
@@ -144,7 +179,7 @@ export function createFlappyBird(root) {
   }
   function focusFlight() { scene.focus({ preventScroll: true }); }
   function flap() {
-    if (currentPage !== "play") return;
+    if (editorOnly || currentPage !== "play") return;
     if (model.state.phase === "gameover") { if (!retryReady) return; reset(); }
     const starting = model.state.phase === "ready";
     if (!model.flap()) return;
@@ -170,7 +205,7 @@ export function createFlappyBird(root) {
     $(".flappy-difficulty-note").textContent = `${s.difficulty.note}. Each pipe: ${points} ${points === 1 ? "point" : "points"}, ${coins} ${coins === 1 ? "coin" : "coins"}.`;
   }
   function applyPageRoute(focus = false) {
-    const route = /^#flappy(?:\/(shop|customize))?$/.exec(location.hash);
+    const route = editorOnly ? { 1: "customize" } : /^#flappy(?:\/(shop|customize))?$/.exec(location.hash);
     if (!route) return;
     const next = route[1] || "play";
     if (next !== "play" && model.state.phase === "playing" && !model.state.paused) { model.togglePause(); updateControls(); announce("Flight paused. Return to Play to resume."); }
@@ -179,7 +214,7 @@ export function createFlappyBird(root) {
     wrapper.querySelectorAll("[data-flappy-page-link]").forEach(link => { if (link.dataset.flappyPageLink === next) link.setAttribute("aria-current", "page"); else link.removeAttribute("aria-current"); });
     $(".flappy-page-title").textContent = { play: "A little flap. A big adventure.", customize: "Customize your flyer", shop: "The sky shop" }[next];
     document.title = `${next === "play" ? "Play" : next === "shop" ? "Shop" : "Customize"} | Flappy Bird | games.cooper.tips`;
-    if (next === "play") { renderer.resize(); renderer.draw(); } else if (next === "customize") renderer.preview();
+    if (next === "play" || editorOnly) { renderer.resize(); syncWebGL(); webgl?.resize(); drawFlight(); } else if (next === "customize") renderer.preview();
     if (focus) { const heading = next === "play" ? $(".flappy-page-title") : pages[next].querySelector("h4"); heading.tabIndex = -1; heading.focus({ preventScroll: true }); wrapper.scrollIntoView({ block: "start" }); }
   }
   function navigatePage(page) { const hash = `#flappy${page === "play" ? "" : `/${page}`}`; if (location.hash === hash) applyPageRoute(true); else location.hash = hash; }
@@ -187,7 +222,7 @@ export function createFlappyBird(root) {
   on($(".flappy-shop-after"), "click", () => navigatePage("shop"));
   on(window, "hashchange", () => applyPageRoute(true));
   on($(".flappy-studio"), "focusin", () => { if (model.state.phase === "playing" && !model.state.paused) { model.togglePause(); updateControls(); announce("Flight paused while you customize. Press P or Resume to keep flying."); } });
-  on($(".flappy-shop"), "click", event => {
+  on($(".flappy-shop"), "click", async event => {
     const button = event.target.closest("[data-buy], [data-shop-filter]"); if (!button) return;
     if (model.state.phase === "playing" && !model.state.paused) pause();
     if (button.dataset.shopFilter) {
@@ -195,7 +230,10 @@ export function createFlappyBird(root) {
       wrapper.querySelectorAll("[data-shop-filter]").forEach(tab => tab.setAttribute("aria-pressed", String(tab === button)));
       wrapper.querySelectorAll(".flappy-shop-item").forEach(card => { card.hidden = filter !== "all" && card.dataset.category !== filter; }); return;
     }
-    const result = buyFlappyItem(wallet, button.dataset.buy);
+    button.disabled = true;
+    const result = await arcadeWallet.purchase(`flappy:${button.dataset.buy}`);
+    if (!wrapper.isConnected) return;
+    updateShop();
     if (!result.ok) { $(".flappy-shop-status").textContent = result.reason === "coins" ? `Earn ${result.needed} more coins to unlock this item.` : "That item is unavailable."; return; }
     settings[result.item.setting] = result.item.value;
     if (result.purchased) { audio.unlock(); audio.purchase(); }
@@ -203,22 +241,21 @@ export function createFlappyBird(root) {
     updateAppearance(); updateHUD(); persist();
   });
   wrapper.querySelectorAll("[data-setting]").forEach(input => on(input, "change", () => { if (canEquip(wallet, input.dataset.setting, input.value)) settings[input.dataset.setting] = input.value; updateAppearance(); persist(); }));
-  wrapper.querySelectorAll("[data-color]").forEach(input => on(input, "input", () => { settings.colors[input.dataset.color] = input.value; updateAppearance(); persist(); }));
-  wrapper.querySelectorAll("[data-palette]").forEach(button => on(button, "click", () => { const palette = PALETTES[button.dataset.palette]; Object.keys(COLOR_FIELDS).forEach(key => { settings.colors[key] = palette[key]; }); updateAppearance(); persist(); }));
-  on($(".flappy-natural-colors"), "click", () => { Object.assign(settings.colors, BIRD_DESIGNS[settings.bird].colors); updateAppearance(); persist(); });
+  wrapper.querySelectorAll("[data-color]").forEach(input => on(input, "input", () => { arcadeWallet.equip(null, "flappy"); settings.colors[input.dataset.color] = input.value; updateAppearance(); persist(); }));
+  wrapper.querySelectorAll("[data-palette]").forEach(button => on(button, "click", () => { arcadeWallet.equip(null, "flappy"); const palette = PALETTES[button.dataset.palette]; Object.keys(COLOR_FIELDS).forEach(key => { settings.colors[key] = palette[key]; }); updateAppearance(); persist(); }));
+  on($(".flappy-natural-colors"), "click", () => { arcadeWallet.equip(null, "flappy"); Object.assign(settings.colors, BIRD_DESIGNS[settings.bird].colors); updateAppearance(); persist(); });
   on(document, "keydown", event => {
-    if (currentPage !== "play" || event.repeat || event.ctrlKey || event.altKey || event.metaKey || event.target.closest("input, select, textarea, [contenteditable='true']")) return;
+    if (editorOnly || currentPage !== "play" || event.repeat || event.ctrlKey || event.altKey || event.metaKey || event.target.closest("input, select, textarea, [contenteditable='true']")) return;
     const key = event.key.toLowerCase();
     if ([" ", "arrowup", "w"].includes(key)) { if (key === " " && event.target.closest("button, a")) return; event.preventDefault(); flap(); }
     else if (key === "p") { event.preventDefault(); pause(); }
     else if (key === "r") { event.preventDefault(); reset(); focusFlight(); }
   });
   on(document, "visibilitychange", () => { audio.setPaused(document.hidden); if (document.hidden && model.state.phase === "playing" && !model.state.paused) pause(); });
-  const observer = new ResizeObserver(() => { renderer.resize(); renderer.draw(); });
+  const observer = new ResizeObserver(() => { renderer.resize(); webgl?.resize(); drawFlight(); });
   observer.observe(canvas);
-  function animate(timestamp) {
-    const dt = lastTime ? Math.min(0.05, (timestamp - lastTime) / 1000) : 0;
-    lastTime = timestamp; model.advance(dt);
+  function animate(timestamp, dt) {
+    model.advance(dt);
     const s = model.state;
     if (s.score !== previousScore) { rememberBest(); previousScore = s.score; audio.score(); announce(`${s.score} points from ${s.pipesCleared} ${s.pipesCleared === 1 ? "pipe" : "pipes"}!`); }
     if (s.phase !== previousPhase) {
@@ -228,10 +265,13 @@ export function createFlappyBird(root) {
     }
     if (s.phase === "gameover" && !retryReady && s.crashAge >= deathTime) { retryReady = true; updateControls(); }
     if (timestamp - hudAt >= 100) { updateHUD(); if (currentPage === "customize") renderer.preview(); hudAt = timestamp; }
-    if (currentPage === "play") renderer.draw(); frameId = requestAnimationFrame(animate);
+    if (currentPage === "play" || editorOnly && settings.view.startsWith("first-person")) drawFlight();
   }
   difficultySelect.value = model.state.difficultyId;
   updateDifficultyNote();
-  updateAppearance(); updateHUD(); applyPageRoute(); persist(); frameId = requestAnimationFrame(animate);
-  return () => { rememberBest(); settleFlight(); audio.destroy(); cancelAnimationFrame(frameId); observer.disconnect(); disposers.forEach(dispose => dispose()); document.title = previousTitle; wrapper.remove(); };
+  const unmountWallet = editorOnly ? () => {} : mountGameWallet(root, "flappy");
+  const unsubscribeWallet = arcadeWallet.subscribe(state => { Object.assign(wallet, flappyWalletView(state)); updateShop(); updateHUD(); });
+  const loop = createFrameLoop(animate);
+  updateAppearance(); updateHUD(); applyPageRoute(); persist(); if (!editorOnly) loop.start();
+  return () => { rememberBest(); settleFlight(); webglDisposed = true; webgl?.dispose(); unsubscribeWallet(); unmountWallet(); audio.destroy(); loop.stop(); observer.disconnect(); disposers.forEach(dispose => dispose()); document.title = previousTitle; wrapper.remove(); };
 }

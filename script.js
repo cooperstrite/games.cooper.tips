@@ -2,6 +2,11 @@ import { createNeonDrift } from "./neon-drift.js";
 import { createSnakeAudio } from "./snake-audio.js";
 import { createAuroraArchery } from "./aurora-archery.js";
 import { createFlappyBird } from "./flappy-bird.js";
+import { characterOptions } from "./arcade/characters.js";
+import { createRewardSession, applyEquippedKit, mountGameWallet } from "./arcade/game-services.js";
+import { getArcadeWallet } from "./arcade/wallet.js";
+import { createArcadeShop, mountArcadeNavigation } from "./arcade/hub.js";
+import { createCharacterLibrary } from "./arcade/editor-hub.js";
 
 const games = [
   {
@@ -406,7 +411,7 @@ const games = [
     description:
       "Guide the snake with arrow keys or WASD. Eat the apples to grow longer and avoid crashing into walls or yourself.",
     logo: "assets/ChatGPT Image Feb 4, 2026, 06_33_02 PM.png",
-    init(root) {
+    init(root, { editorOnly = false, onAppearanceChange } = {}) {
       const config = {
         gridSize: 16,
         startLength: 4,
@@ -426,6 +431,8 @@ const games = [
         { id: "python", label: "Python", note: "Bold saddle spots and curious, catlike eyes." },
         { id: "rattlesnake", label: "Rattlesnake", note: "Diamond markings and a little segmented rattle." },
       ];
+      const sharedSkins = characterOptions("snake");
+      skins.forEach(skin => { skin.label = sharedSkins[skin.id]; });
       const colors = [
         { id: "green", label: "Leaf green", shades: ["#c1e783", "#83c85c", "#55a148", "#367b3d", "#2d6337"] },
         { id: "blue", label: "Ocean blue", shades: ["#c1edff", "#71bfe8", "#438fc4", "#2d6493", "#244b70"] },
@@ -460,7 +467,7 @@ const games = [
       const settingsKey = "snake-garden-settings-v1";
       let saved = {};
       try { saved = JSON.parse(localStorage.getItem(settingsKey)) || {}; } catch { /* Use defaults when storage is unavailable. */ }
-      const settings = {
+      const settings = applyEquippedKit("snake", {
         skin: skins.some((skin) => skin.id === saved.skin) ? saved.skin : "generic",
         color: colors.some((color) => color.id === saved.color) ? saved.color : "green",
         hat: accessories.hat.some((item) => item.id === saved.hat) ? saved.hat : "skin",
@@ -468,8 +475,11 @@ const games = [
         neckwear: accessories.neckwear.some((item) => item.id === saved.neckwear) ? saved.neckwear : "none",
         music: saved.music === true,
         effects: saved.effects !== false,
-      };
+      });
       const audio = createSnakeAudio(settings);
+      let rewardSession = createRewardSession("snake");
+      let rewardedApples = {};
+      const unmountWallet = editorOnly ? () => {} : mountGameWallet(root, "snake");
 
       const directions = {
         up: { x: 0, y: -1 },
@@ -482,6 +492,7 @@ const games = [
 
       const wrapper = document.createElement("div");
       wrapper.className = "snake-game";
+      wrapper.dataset.editorOnly = String(editorOnly);
 
       const header = document.createElement("div");
       header.className = "snake-meta";
@@ -789,6 +800,7 @@ const games = [
         input.addEventListener("change", () => {
           if (!input.checked) return;
           settings.color = input.value;
+          getArcadeWallet().equip(null, "snake");
           applyAppearance();
           persistSettings();
         });
@@ -881,6 +893,11 @@ const games = [
       playArea.append(playfield, customization);
       wrapper.append(header, status, playArea);
       root.appendChild(wrapper);
+      if (!editorOnly) {
+        customization.hidden = true;
+        const link = document.createElement("a"); link.className = "arcade-editor-link"; link.href = "#characters/snake"; link.textContent = "Customize your snake"; controls.append(link);
+        playfield.append(soundGroup);
+      } else boardWrap.tabIndex = -1;
 
       let difficultyId = defaultDifficulty.id;
       let state = createInitialState(getDifficulty(difficultyId));
@@ -950,6 +967,7 @@ const games = [
       });
 
       const handleKeydown = (event) => {
+        if (editorOnly) return;
         if (event.target instanceof Element && event.target.closest("input, select, textarea")) return;
         const key = event.key.toLowerCase();
         const dirKey = {
@@ -1031,6 +1049,19 @@ const games = [
         ].filter(Boolean);
         const accessoryDescription = wornAccessories.length ? `, wearing ${wornAccessories.join(", ")},` : "";
         art.setAttribute("aria-label", `A ${color.label.toLowerCase()} ${skin.label.toLowerCase()} snake${accessoryDescription} hunting a red apple in a garden.`);
+        onAppearanceChange?.({ ...settings, palette: [...color.shades], resolvedHat: hat, portrait2D(host) {
+          const portrait = document.createElement("div"); portrait.className = "snake-game arcade-snake-portrait";
+          for (const name of ["skin", "color", "hat", "eyewear", "neckwear"]) portrait.dataset[name] = wrapper.dataset[name];
+          const sprite = art.cloneNode(true); sprite.querySelector(".snake-apple").remove();
+          sprite.setAttribute("viewBox", "170 210 195 125");
+          sprite.setAttribute("aria-label", `Your customized ${skin.label.toLowerCase()} snake in the game's original artwork`);
+          // Keep the hidden game's gradients separate from the visible portrait.
+          sprite.querySelectorAll("[id]").forEach(node => { node.id = `portrait-${node.id}`; });
+          sprite.querySelectorAll("*").forEach(node => {
+            for (const attr of [...node.attributes]) if (attr.value.includes("url(#")) node.setAttribute(attr.name, attr.value.replace(/url\(#([^)]*)\)/g, "url(#portrait-$1)"));
+          });
+          portrait.append(sprite); host.append(portrait);
+        } });
       }
 
       function handleDirectionInput(dirKey) {
@@ -1113,6 +1144,8 @@ const games = [
       }
 
       function resetGame(autoStart = false) {
+        rewardSession = createRewardSession("snake");
+        rewardedApples = {};
         stopTimer();
         clearCountdown();
         stopAnimation();
@@ -1207,6 +1240,10 @@ const games = [
         const previousScore = state.score;
         const previousDirection = state.direction;
         state = stepState(state, queuedDirection);
+        if (state.score > previousScore) {
+          rewardedApples[state.difficulty] = (rewardedApples[state.difficulty] || 0) + state.score - previousScore;
+          rewardSession.award({ applesByDifficulty: rewardedApples });
+        }
         queuedDirection = state.direction;
         motionFrom = previousVisual.points;
         motionTo = state.snake.map(pointAt);
@@ -1429,6 +1466,7 @@ const games = [
         clearCountdown();
         stopAnimation();
         audio.dispose();
+        unmountWallet();
         window.removeEventListener("keydown", handleKeydown);
         wrapper.remove();
       };
@@ -6679,7 +6717,6 @@ const games = [
 
       return () => {
         clearTimeout(state.aiTimer ?? 0);
-        window.removeEventListener("resize", handleResize);
         wrapper.remove();
       };
     },
@@ -9982,6 +10019,8 @@ let passButton = null;
 let activeId = null;
 let cleanup = null;
 
+mountArcadeNavigation(document.querySelector(".site-header"));
+
 if (appRoot) {
   appRoot.dataset.state = "home";
 }
@@ -10117,6 +10156,20 @@ function renderRoute() {
   const hash = window.location.hash.replace(/^#/, "");
   if (!hash) {
     showHome();
+    return;
+  }
+  const storeRoute = /^store(?:\/(flappy|archery|snake|neondrift))?$/.exec(hash);
+  if (storeRoute) {
+    showGame({ id: hash, name: "The Arcade Shop", description: "Earn coins in one game. Find something you love for another.", init: root => createArcadeShop(root, storeRoute[1] || "all") });
+    return;
+  }
+  if (hash === "flappy/customize") {
+    history.replaceState(null, "", "#characters/flappy"); renderRoute(); return;
+  }
+  const characterRoute = /^characters(?:\/(flappy|archery|snake|neondrift))?$/.exec(hash);
+  if (characterRoute) {
+    if (activeId === "characters") return;
+    showGame({ id: "characters", name: "Your Character Library", description: "Your complete character controls with matching 2D and 3D previews.", init: root => createCharacterLibrary(root, { gameId: characterRoute[1] || "flappy", mountEditor: (id, host, onAppearanceChange) => games.find(game => game.id === id).init(host, { editorOnly: true, onAppearanceChange }) }) });
     return;
   }
   const gameId = /^flappy\/(shop|customize)$/.test(hash) ? "flappy" : hash;

@@ -3,6 +3,8 @@ import {
   normalizeSettings, getPace, getRoadGeometry, getVisibility, createDriveModel,
 } from "./neon-drift-engine.js";
 import { createDriveAudio } from "./neon-drift-audio.js";
+import { createRewardSession, getEquippedKit, mountGameWallet } from "./arcade/game-services.js";
+import { getArcadeWallet } from "./arcade/wallet.js";
 
 const COLORS = [
   { light: "#ffc879", body: "#d88a43", dark: "#75432e" },
@@ -25,10 +27,13 @@ function formatDistance(distance) {
   return distance >= 1000 ? `${(distance / 1000).toFixed(2)} km` : `${Math.round(distance)} m`;
 }
 
-export function createNeonDrift(root) {
+export function createNeonDrift(root, { editorOnly = false, onAppearanceChange } = {}) {
   let saved = {};
   try { saved = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch { /* Use defaults. */ }
   const model = createDriveModel(normalizeSettings(saved.settings));
+  let rewardSession = createRewardSession("neondrift");
+  const customPaint = /^#[0-9a-f]{6}$/i.test(saved.paint) ? { light: "#e9f4eb", body: saved.paint, dark: "#344651" } : null;
+  let collectionPaint = getEquippedKit("neondrift")?.paint || customPaint;
   const state = model.state;
   state.best = Number.isFinite(saved.best) ? Math.max(0, saved.best) : 0;
   const sound = { music: saved.music !== false, effects: saved.effects !== false };
@@ -44,6 +49,7 @@ export function createNeonDrift(root) {
   let roadSamples = [];
 
   const wrapper = element("div", "neondrift");
+  wrapper.dataset.editorOnly = String(editorOnly);
   const setup = element("details", "neondrift-setup");
   setup.open = true;
   const setupSummary = element("summary", "", "Choose your drive");
@@ -84,13 +90,17 @@ export function createNeonDrift(root) {
     input.checked = id === model.settings.car;
     input.setAttribute("aria-label", `${car.name} - ${car.abilityName}`);
     const paint = element("span", "neondrift-car-paint");
-    paint.style.setProperty("--paint", car.color.body);
+    paint.style.setProperty("--paint", collectionPaint?.body || car.color.body);
     paint.setAttribute("aria-hidden", "true");
     label.append(input, paint, element("strong", "", car.name), element("span", "neondrift-car-power", car.abilityName));
     carGrid.append(label);
     carInputs.push(input);
   });
   garage.append(carGrid);
+  garage.hidden = !editorOnly;
+  if (!editorOnly) {
+    const link = element("a", "arcade-editor-link", "Customize your car"); link.href = "#characters/neondrift"; setupBody.append(link);
+  }
   setupBody.append(options, routeNote, garage);
   setup.append(setupSummary, setupBody);
 
@@ -146,6 +156,7 @@ export function createNeonDrift(root) {
   const hint = element("p", "help-text neondrift-hint", "A / D or arrows to steer. Hold Space to boost. Press E for your car's ability.");
   wrapper.append(setup, top, soundRow, metrics, viewport, progressRow, pad, abilityHint, hint);
   root.append(wrapper);
+  const unmountWallet = editorOnly ? () => {} : mountGameWallet(root, "neondrift");
 
   const width = 960;
   const height = 540;
@@ -156,14 +167,15 @@ export function createNeonDrift(root) {
   canvas.width = width * dpr;
   canvas.height = height * dpr;
   const ctx = canvas.getContext("2d");
+  const gameContext = ctx;
   ctx.scale(dpr, dpr);
   const route = () => ROUTES[model.settings.route];
-  const car = () => CARS[model.settings.car];
+  const car = () => collectionPaint ? { ...CARS[model.settings.car], color: collectionPaint } : CARS[model.settings.car];
   const laneX = (lane) => (lane - (route().lanes - 1) / 2) * ROAD.laneWidth;
   const roadHalf = () => route().lanes * ROAD.laneWidth / 2 + 0.65;
 
   function persist() {
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ settings: model.settings, best: state.best, ...sound })); } catch { /* Storage is optional. */ }
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ settings: model.settings, best: state.best, ...sound, paint: saved.paint })); } catch { /* Storage is optional. */ }
   }
 
   function project(x, z, elevation = 0) {
@@ -176,13 +188,14 @@ export function createNeonDrift(root) {
     };
   }
 
-  function polygon(points, color) {
-    ctx.fillStyle = color;
-    ctx.beginPath();
-    points.forEach((point, index) => index ? ctx.lineTo(point.x, point.y) : ctx.moveTo(point.x, point.y));
-    ctx.closePath();
-    ctx.fill();
+  function fillPolygon(context, points, color) {
+    context.fillStyle = color;
+    context.beginPath();
+    points.forEach((point, index) => index ? context.lineTo(point.x, point.y) : context.moveTo(point.x, point.y));
+    context.closePath();
+    context.fill();
   }
+  const polygon = (points, color) => fillPolygon(ctx, points, color);
 
   function quad(left, right, near, far, color, elevation = 0) {
     polygon([project(left, far, elevation), project(right, far, elevation), project(right, near, elevation), project(left, near, elevation)], color);
@@ -383,8 +396,10 @@ export function createNeonDrift(root) {
     ctx.fillText(model.settings.length === "endless" ? "ENDLESS DRIVE" : `${formatDistance(LENGTHS[model.settings.length].distance - state.distance)} TO FINISH`, sign.x + s * 3, sign.y + s * 0.85);
   }
 
-  function drawCar(lane, z, color, kind, player = false, vehicle = null) {
-    const point = project(laneX(lane), z);
+  function drawCar(lane, z, color, kind, player = false, vehicle = null, portrait = null) {
+    const ctx = portrait?.context || gameContext;
+    const polygon = (points, fill) => fillPolygon(ctx, points, fill);
+    const point = portrait?.point || project(laneX(lane), z);
     if (vehicle?.flight) {
       point.x += vehicle.flight.x;
       point.y += vehicle.flight.y;
@@ -656,6 +671,23 @@ export function createNeonDrift(root) {
     setupSummary.textContent = `Drive setup - ${DIFFICULTIES[model.settings.difficulty].name} / ${LENGTHS[model.settings.length].name}`;
     status.textContent = "Ready when you are. Speed and traffic increase with distance.";
     updateHUD(); drawScene(); persist();
+    updateAppearance();
+  }
+
+  function updateAppearance() {
+    const paintInput = garage.querySelector('input[type="color"]');
+    if (paintInput) paintInput.value = car().color.body;
+    onAppearanceChange?.({ car: model.settings.car, color: { ...car().color }, portrait2D(host) {
+      const portrait = document.createElement("canvas"), ratio = Math.min(devicePixelRatio || 1, 2);
+      portrait.width = 480 * ratio; portrait.height = 380 * ratio;
+      portrait.setAttribute("role", "img"); portrait.setAttribute("aria-label", `${car().name} in the game's original 2D artwork`);
+      const context = portrait.getContext("2d"); context.scale(ratio, ratio);
+      const background = context.createRadialGradient(240, 190, 20, 240, 190, 280);
+      background.addColorStop(0, "#35525d"); background.addColorStop(1, "#142c37"); context.fillStyle = background; context.fillRect(0, 0, 480, 380);
+      const scale = Math.min(175, 235 / TRAFFIC[car().kind].height);
+      drawCar(0, ROAD.playerDepth, car().color, car().kind, false, null, { context, point: { x: 240, y: 310, scale } });
+      host.append(portrait);
+    } });
   }
 
   function makeExplosion(event) {
@@ -676,9 +708,11 @@ export function createNeonDrift(root) {
   }
 
   function startRun() {
+    if (editorOnly) return;
     if (startButton.disabled) return;
     if (rafId !== null) window.cancelAnimationFrame(rafId);
     model.start();
+    rewardSession = createRewardSession("neondrift");
     explosion = null; shieldFlash = 0; ejections = [];
     setup.open = false;
     status.textContent = `${route().twist} Press E for ${car().abilityName}.`;
@@ -694,6 +728,7 @@ export function createNeonDrift(root) {
     const delta = Math.min((now - lastFrame) / 1000, 0.12);
     lastFrame = now;
     const events = model.step(delta);
+    rewardSession.award({ distance: state.distance, difficulty: model.settings.difficulty });
     for (const event of events) {
       if (event.type === "crash") {
         makeExplosion(event); audio.stop(); audio.effect("crash"); persist();
@@ -743,6 +778,7 @@ export function createNeonDrift(root) {
   }
 
   const onKeyDown = (event) => {
+    if (editorOnly) return;
     if (event.target instanceof Element && event.target.closest("select, input, summary")) return;
     const key = event.key.toLowerCase();
     if (!["a", "d", "arrowleft", "arrowright", " ", "w", "arrowup", "e", "enter"].includes(key)) return;
@@ -778,12 +814,21 @@ export function createNeonDrift(root) {
   window.addEventListener("keyup", onKeyUp);
   window.addEventListener("blur", onBlur);
   document.addEventListener("visibilitychange", onVisibility);
+  if (editorOnly) {
+    options.hidden = true; routeNote.hidden = true;
+    garage.append(abilityHint);
+    const label = element("label", "neondrift-field"), input = element("input"), resetPaint = element("button", "", "Use original car paint");
+    input.type = "color"; input.value = collectionPaint?.body || car().color.body; input.setAttribute("aria-label", "Car paint color"); label.append(element("span", "", "Car paint color"), input); garage.append(label, resetPaint);
+    input.addEventListener("input", () => { saved.paint = input.value; collectionPaint = { light: "#e9f4eb", body: input.value, dark: "#344651" }; getArcadeWallet().equip(null, "neondrift"); persist(); updateAppearance(); });
+    resetPaint.addEventListener("click", () => { delete saved.paint; collectionPaint = null; getArcadeWallet().equip(null, "neondrift"); input.value = car().color.body; persist(); updateAppearance(); });
+  }
   applySetup();
 
   return () => {
     disposed = true;
     if (rafId !== null) window.cancelAnimationFrame(rafId);
     audio.dispose();
+    unmountWallet();
     window.removeEventListener("keydown", onKeyDown);
     window.removeEventListener("keyup", onKeyUp);
     window.removeEventListener("blur", onBlur);

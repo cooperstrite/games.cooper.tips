@@ -39,7 +39,7 @@ Use **View mode** above the range to switch between Classic side view and **Firs
 
 First Flight teaches the bow. Meadow Breeze gives each arrow a different wind, held steady while you aim and shoot. Lantern Lift moves the target, while Gusty Gorge changes wind continuously, including during flight. Longshot Lake changes distance after each arrow, between 35 and 70 meters, with calm wind. Aim and power stay unchanged when conditions change, so recalibrate before your next shot. Shot history records the distance and wind for comparison. Aurora Finale combines shifting wind with a target moving between 54 and 66 meters.
 
-The customization studio sits below the instructions. Use **Customize archer & bow** to jump straight to it. All appearance choices are cosmetic and save automatically with your best scores and earned stars in this browser.
+Use **Customize archer & bow** below the instructions to open the central character library. It retains every original avatar, bow, and arrow option, alongside matching 2D artwork and a rotatable 3D character. All appearance choices are cosmetic and save automatically with your best scores and earned stars in this browser.
 
 Start with a Trail ranger, Woodland scout, or Aurora knight, then use the Face, Hair, and Outfit tabs. Choose skin and eye colors, face shape, freckles or a scar, seven hairstyles, six facial hair styles, independent hair and beard colors, five headwear options, glasses, an eye patch or an earring, outfit and trim colors, and boots. Headwear has its own color; changing outfits preserves your hair and headwear. Color palettes include a custom color picker. Switch between the full-body preview and a face close-up to see the details.
 
@@ -49,9 +49,71 @@ Flappy Bird controls: tap or click the scene, use the Flap button, or press Spac
 
 Coin rewards are exactly 1 per pipe on Easy, 3 on Medium, 5 on Hard, and 10 on Expert. Coin payouts use actual pipe counts, with no extra coin bonuses. Bronze, Silver, Gold, and Diamond medals recognize 5, 15, 30, and 60 cleared pipes. Zero-pipe flights earn nothing. Coins bank once when the flight ends, including restarting, changing difficulty, or leaving the game. The Sky Shop's ten permanent cosmetic unlocks cost 150-900 coins. Buying equips the item immediately, and owned items can be re-equipped freely. Existing purchases and balances are preserved.
 
-Use Play, Customize, and Shop to open separate pages at `/#flappy`, `/#flappy/customize`, and `/#flappy/shop`. Opening the shop or customizer pauses the current flight. Returning to Play preserves its pipe count, altitude, and score; resume when ready. Browser Back and Forward work between these pages. First-person 3D uses the same flight rules and scoring. Line up its center ring with the dotted circle in the next opening.
+Use Play, Customize, and Shop to open `/#flappy`, the central studio at `/#characters/flappy`, and `/#flappy/shop`. The old `/#flappy/customize` link redirects to the central studio. The Flappy shop pauses and preserves a flight; leaving for the shared library or another game settles its earned coins and starts a fresh flight when you return. Browser Back and Forward work between pages. First-person 3D uses the same flight rules and scoring. Line up its center ring with the dotted circle in the next opening.
 
 Each bird has its own artwork and motion: a fluffy sparrow, crested and striped jay, forward-facing owl, hovering hummingbird, scaled dragon with membrane wings, and glowing phoenix. The first-person wings and beaks match the character. Natural colors applies the selected species' recommended palette; individual colors and accessories remain independently editable. Characters, colors, accessories, views, records, coins, and purchases save in this browser.
+
+## Shared arcade platform
+
+The header opens the shared shop at `/#store` and the character library at `/#characters`. Flappy Bird, Aurora Archery, Snake, and Neon Drift earn the same in-game coins. Flappy's rates remain Easy 1, Medium 3, Hard 5, and Expert 10 per pipe. Archery earns one coin per scored point; Snake earns 1/1/2/3/4 per apple on Sloth/Easy/Classic/Fast/Blitz; Neon Drift earns 1/2/3/5 per 100 meters on Easy/Medium/Hard/Expert. Snake remembers the difficulty of each apple instead of increasing old rewards when the speed changes. Existing Flappy balances and permanent purchases migrate once. Records and appearance settings keep their original save keys.
+
+The shop includes the existing Flappy items and two cosmetic collections that can be applied independently to the four games. Coins cannot buy speed, extra lives, altered hitboxes, or stronger abilities. There are no real-money payments. Progress is local to this browser and origin, without an account or a game backend.
+
+The character library contains each game's complete original customization controls, with character-only previews. Select **2D artwork** to see the actual game painters or SVG, or **3D character** to rotate and zoom the corresponding WebGL model. Both views read the same saved colors, skins, features, accessories, and equipment. Archery also has face and bow/arrow close-ups. The library does not run a game or award coins. Each game links here instead of maintaining a separate visible character editor; its saved appearance is used when you return to play. If WebGL is unavailable, the studio shows the original 2D artwork and keeps all controls working.
+
+The `arcade/` modules form an opt-in platform; games without characters or coins do not need to depend on them:
+
+| Module | Responsibility |
+| --- | --- |
+| `characters.js` | Compatible casts and immutable `GameCharacter` instances built with `CharacterBuilder`; appearance only, with no physics fields. |
+| `runtime.js` | Canvas 2D surfaces, pixel scaling, and disposable frame loops. |
+| `babylon.js` | Lazy-loaded, locally hosted Babylon.js scenes, perspective/orthographic cameras, PBR materials, lighting, and optional soft shadows. |
+| `character-renderers.js` | Compatible WebGL bird, humanoid, snake, and vehicle characters; shares bird models with enhanced Flappy. |
+| `humanoid-mesh.js`, `accessory-mesh.js` | Full archer appearance and creature accessories, including independent hair, outfit, and equipment. |
+| `studio-preview.js`, `studio-2d.js` | Character-only 2D/3D preview, orbit camera, face/equipment focus, and original game artwork adapters. |
+| `editor-hub.js` | Central studio routes that mount the original full customization controls and save through each game's appearance settings. |
+| `flappy-webgl.js` | Flappy's enhanced first-person renderer; reads its existing rules model without advancing or modifying it. |
+| `catalog.js` | Product definitions, prices, supported games, and cosmetic collections. |
+| `wallet.js` | One wallet, shared inventory, migration, incremental reward receipts, subscriptions, and purchase transactions. |
+| `game-services.js` | Per-game earning policies and cosmetic adapters connecting games to the shared services. |
+| `hub.js` | Shared navigation, shop, and collection inventory. |
+
+Composition follows `game controller -> game rules model -> renderer`. Controllers report achievements to reward sessions, which credit only the increase for a run. Purchases and credits read the latest wallet and use the browser's Web Locks API when available to serialize changes between tabs. Renderers receive a model to display; they do not own game rules. Character builders reject incompatible families and unsupported appearance fields, so an archer cannot become a Flappy bird or acquire driving abilities.
+
+```mermaid
+flowchart LR
+  Controller[Game controller] --> Rules[Game's rules model]
+  Rules --> Views[Canvas / WebGL renderer]
+  Characters[Compatible character builder] --> Views
+  Controller --> Rewards[Game's earning policy]
+  Rewards --> Wallet[Shared wallet and inventory]
+  Shop[Shared shop] --> Wallet
+  Wallet --> Cosmetics[Game's cosmetic adapter]
+  Cosmetics --> Views
+```
+
+```js
+import { CharacterBuilder } from "./arcade/characters.js";
+import { createRewardSession } from "./arcade/game-services.js";
+
+const character = new CharacterBuilder("archery", "ranger")
+  .withColors({ body: "#40756a", skin: "#dfae88" })
+  .withFeature("hair", "braids")
+  .build();
+
+// Create one session per run, outside the frame loop.
+const rewards = createRewardSession("archery");
+// Report actual scored progress after a shot. Repeating the same total pays nothing.
+await rewards.award({ score: 10 });
+```
+
+For a new game, register a compatible character family only if it needs characters, define its earning policy only if it should award coins, and add cosmetic adapters that change appearance rather than the rules model. Keep its simulation, collisions, controls, scoring, difficulty, and abilities in its own modules. New rendering adapters can share the runtime and asset/character definitions without inheriting another game's mechanics.
+
+Babylon.js **9.31.0** is pinned under `vendor/babylonjs/`, with its Apache 2.0 license, notice, source URL, and verified package integrity. Its 8.6 MB engine loads only when a WebGL view is requested. No npm install, build step, runtime engine CDN, or backend is required to deploy these static files to GitHub Pages. The runtime supports Canvas 2D, SVG, perspective WebGL, and orthographic WebGL. Flappy's **Enhanced first-person 3D** uses the same engine; the original views remain available, and devices without WebGL fall back to classic rendering.
+
+This is the rendering foundation for higher-fidelity 3D. Current characters and worlds use procedural, stylized artwork. Photorealistic results will also need suitable models, textures, environment lighting, and device-specific performance budgets; selecting an engine does not turn existing drawings into photorealistic assets.
+
+Run `node --test tests/*.test.mjs` for game rules and shared platform checks. `tests/arcade.test.mjs` covers cast compatibility, full studio appearance mapping, cosmetic isolation, migration, cross-game purchases, duplicate rewards, concurrent purchases, unavailable storage, reward policies, and frame-loop cleanup.
 
 ## Getting Started
 

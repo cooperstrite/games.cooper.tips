@@ -1,5 +1,7 @@
 import { LEVELS, QUIVER, getTarget, getWind, starsForScore, createArcheryModel } from "./archery-engine.js";
 import { createArcheryRenderer } from "./archery-renderer.js";
+import { createRewardSession, applyEquippedKit, mountGameWallet } from "./arcade/game-services.js";
+import { getArcadeWallet } from "./arcade/wallet.js";
 import {
   AVATAR_STYLES, BOW_STYLES, OUTFIT_COLORS, SKIN_TONES, BOW_COLORS, GRIP_COLORS,
   HAIR_STYLES, FACIAL_HAIR, HEADWEAR, FACE_SHAPES, FACE_DETAILS, ACCESSORIES,
@@ -30,7 +32,7 @@ function choiceSelect(label, key, choices) {
   return `<label class="archery-gear-select"><span>${label}</span><select aria-label="${label}" data-gear="${key}">${Object.entries(choices).map(([value, name]) => `<option value="${value}">${name}</option>`).join("")}</select></label>`;
 }
 
-export function createAuroraArchery(root) {
+export function createAuroraArchery(root, { editorOnly = false, onAppearanceChange } = {}) {
   let saved = {};
   try { saved = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch { /* Storage is optional. */ }
   const records = {};
@@ -38,14 +40,16 @@ export function createAuroraArchery(root) {
   const gear = {
     design: Object.hasOwn(DESIGNS, saved.design) ? saved.design : "ranger",
     color: COLORS.some(color => color.value === saved.color) ? saved.color : COLORS[0].value,
-    ...readArcheryAppearance(saved),
+    ...applyEquippedKit("archery", readArcheryAppearance(saved)),
   };
   const model = createArcheryModel(saved.level);
+  let rewardSession = createRewardSession("archery");
   const state = model.state;
   let viewMode = saved.viewMode === "first-person" ? "first-person" : "side";
   let focusTarget = saved.focusTarget === true;
   const wrapper = document.createElement("div");
   wrapper.className = "archery-range";
+  wrapper.dataset.editorOnly = String(editorOnly);
   wrapper.innerHTML = `
     <div class="archery-heading">
       <div><p class="archery-eyebrow">THE AURORA TRAILS</p><h3 class="archery-level-title"></h3><p class="archery-goal"></p></div>
@@ -161,7 +165,9 @@ export function createAuroraArchery(root) {
     </section>
     <section class="archery-history" aria-labelledby="archery-history-title"><h4 id="archery-history-title">This quiver</h4><ol class="archery-log"></ol></section>`;
   root.append(wrapper);
+  const unmountWallet = editorOnly ? () => {} : mountGameWallet(root, "archery");
   const $ = selector => wrapper.querySelector(selector);
+  $(".archery-customizer").hidden = !editorOnly;
   const angleInput = $('[aria-label="Bow angle"]');
   const powerInput = $('[aria-label="Draw power"]');
   const shoot = $(".archery-shoot");
@@ -205,6 +211,7 @@ export function createAuroraArchery(root) {
     $(".archery-bow-preview").setAttribute("aria-label", `Bow close-up: ${BOW_STYLES[gear.bowStyle]} in ${bowColor}, with ${colorName(GRIP_COLORS, gear.gripColor).toLowerCase()}`);
     drawBowPreview($(".archery-bow-preview"), gear);
     renderer.draw();
+    onAppearanceChange?.(structuredClone(gear));
   }
   function setPreviewView(view) {
     previewView = view;
@@ -280,6 +287,7 @@ export function createAuroraArchery(root) {
     $(".archery-log").innerHTML = state.shots.length ? state.shots.map(shot => `<li class="${shot.points ? "is-hit" : "is-miss"}"><span>Arrow ${shot.number}</span><strong>${shot.points ? `${shot.points} points` : "Miss"}</strong><small>${shot.reason === "short" ? "Landed short" : Math.abs(shot.offset) < 0.04 ? "Center hit" : `${Math.abs(shot.offset * 100).toFixed(0)} cm ${shot.offset > 0 ? "above" : "below"} center`}</small><small>${shot.targetX.toFixed(0)} m &middot; ${windLabel(shot.wind, viewMode === "first-person")}</small></li>`).join("") : '<li class="archery-empty-log">Six arrows, one fresh target. Your shots will appear here.</li>';
   }
   function onShot() {
+    rewardSession.award({ score: state.score });
     lastShotCount = state.shots.length;
     const shot = state.impact;
     status.className = `archery-status ${shot.points ? "is-hit" : "is-miss"}`;
@@ -307,6 +315,7 @@ export function createAuroraArchery(root) {
     updateControls(); updateHUD();
   }
   function resetLevel(id = state.level.id) {
+    rewardSession = createRewardSession("archery");
     model.reset(id);
     lastShotCount = 0;
     result.hidden = true;
@@ -331,6 +340,7 @@ export function createAuroraArchery(root) {
     updateControls(); updateHUD();
   }
   function onKey(event) {
+    if (editorOnly) return;
     if (event.target instanceof Element && event.target.closest("input, select, textarea, .archery-customizer")) return;
     const key = event.key.toLowerCase();
     if (event.code === "Space") {
@@ -370,8 +380,7 @@ export function createAuroraArchery(root) {
   $('[aria-label="Archery view mode"]').addEventListener("change", event => { viewMode = event.target.value; dragging = false; dragStart = null; updateView(); persist(); });
   $(".archery-focus").addEventListener("click", () => { focusTarget = !focusTarget; updateView(); persist(); });
   $(".archery-customize").addEventListener("click", () => {
-    $(".archery-customizer").scrollIntoView({ block: "start", behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
-    $('[aria-label="Avatar style"]').focus({ preventScroll: true });
+    location.hash = "#characters/archery";
   });
   wrapper.querySelectorAll("[data-preview]").forEach(button => button.addEventListener("click", () => setPreviewView(button.dataset.preview)));
   const avatarTabs = [...wrapper.querySelectorAll("[data-avatar-tab]")];
@@ -392,11 +401,12 @@ export function createAuroraArchery(root) {
   });
   wrapper.querySelectorAll("[data-gear]").forEach(input => input.addEventListener(input.type === "color" ? "input" : "change", () => {
     if (input.type === "radio" && !input.checked) return;
+    if (["outfitColor", "accentColor", "bowColor", "headwearColor"].includes(input.dataset.gear)) getArcadeWallet().equip(null, "archery");
     gear[input.dataset.gear] = input.value;
     updateGear(); persist();
   }));
   scene.addEventListener("pointerdown", event => {
-    if (event.target !== $(".archery-canvas") || state.phase !== "aiming" || state.paused) return;
+    if (editorOnly || event.target !== $(".archery-canvas") || state.phase !== "aiming" || state.paused) return;
     dragging = true; dragStart = { angle: state.angle, y: event.clientY }; scene.setPointerCapture(event.pointerId); scene.focus({ preventScroll: true }); aimFromPointer(event); event.preventDefault();
   });
   scene.addEventListener("pointermove", event => { if (dragging) aimFromPointer(event); });
@@ -407,9 +417,9 @@ export function createAuroraArchery(root) {
   const observer = new ResizeObserver(() => { renderer.resize(); renderer.draw(); });
   observer.observe($(".archery-canvas"));
   updateView(); resetLevel(); renderer.draw();
-  frame = requestAnimationFrame(animate);
+  if (!editorOnly) frame = requestAnimationFrame(animate);
   return () => {
-    disposed = true; cancelAnimationFrame(frame); observer.disconnect();
+    disposed = true; cancelAnimationFrame(frame); observer.disconnect(); unmountWallet();
     window.removeEventListener("keydown", onKey); document.removeEventListener("visibilitychange", onVisibility); wrapper.remove();
   };
 }
