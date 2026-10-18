@@ -4936,6 +4936,9 @@ button:hover {
 .rlgl-view-buttons button { border: 0; border-radius: 10px; background: transparent; color: #b9ceca; padding: .65rem .85rem; font: inherit; font-size: .88rem; cursor: pointer; }
 .rlgl-view-buttons button[aria-pressed="true"] { background: #d0e7d3; color: #1e3c38; box-shadow: 0 3px 10px #0002; }
 .rlgl-view-buttons button:disabled { opacity: .45; cursor: not-allowed; }
+.rlgl-sound { min-height: 44px; padding: .65rem .85rem; font-size: .85rem; cursor: pointer; color: #b9ceca; }
+.rlgl-sound[aria-pressed="true"] { background: #264c413f; border-color: #81d2a64d; color: #d0e7d3; }
+.rlgl-sound:disabled { cursor: not-allowed; opacity: .55; }
 .rlgl-stats { display: flex; gap: .6rem; flex-wrap: wrap; font-variant-numeric: tabular-nums; }
 .rlgl-stage { position: relative; height: clamp(300px, 45vw, 480px); overflow: hidden; isolation: isolate; border-radius: 20px; background: #cde3e7; border: 1px solid #ffffff24; box-shadow: 0 12px 30px #0003; }
 .rlgl-stage canvas { display: block; width: 100%; height: 100%; }

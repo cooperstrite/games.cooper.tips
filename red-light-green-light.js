@@ -4,11 +4,12 @@ import { createRunnerCustomizer } from "./redlight-customizer.js";
 import { createRedlight2D } from "./redlight-renderer.js";
 import { createRedlightWebGL } from "./arcade/redlight-webgl.js";
 import { createFrameLoop } from "./arcade/runtime.js";
+import { createRedlightAudio, readRedlightSound, saveRedlightSound } from "./redlight-audio.js";
 
 export function createRedLightGreenLight(root, { editorOnly = false, onAppearanceChange } = {}) {
   if(editorOnly) return createRunnerCustomizer(root,onAppearanceChange);
   const wrapper=document.createElement("section");wrapper.className="rlgl-game";wrapper.dataset.view="2d";
-  wrapper.innerHTML=`<div class="rlgl-toolbar"><div class="rlgl-view-buttons" role="group" aria-label="Race view"><button type="button" data-view="2d" aria-pressed="true">2D track</button><button type="button" data-view="3d" aria-pressed="false">3D race (Beta)</button></div><a class="arcade-text-link" href="#characters/redlight">Customize runner &rarr;</a></div>
+  wrapper.innerHTML=`<div class="rlgl-toolbar"><div class="rlgl-view-buttons" role="group" aria-label="Race view"><button type="button" data-view="2d" aria-pressed="true">2D track</button><button type="button" data-view="3d" aria-pressed="false">3D race (Beta)</button></div><button type="button" class="rlgl-sound" aria-label="Sound effects" aria-pressed="true">Sound FX: On</button><a class="arcade-text-link" href="#characters/redlight">Customize runner &rarr;</a></div>
     <div class="rlgl-stats" aria-live="off"><span class="badge rlgl-timer">Time: -</span><span class="badge rlgl-distance">Distance: 0 / 100 m</span><span class="badge rlgl-best">Best: -</span></div>
     <div class="rlgl-stage"><canvas class="rlgl-canvas-2d" role="img" aria-label="2D running track with your customized runner"></canvas><canvas class="rlgl-canvas-3d" role="img" aria-label="3D race (Beta), following your customized runner" hidden></canvas>
       <div class="rlgl-stage-label">PARK CIRCUIT <span>2D TRACK</span></div>
@@ -21,6 +22,11 @@ export function createRedLightGreenLight(root, { editorOnly = false, onAppearanc
     <div class="rlgl-instructions"><h3>How to play</h3><ol><li><strong>Green: run.</strong> Hold the run button or the space bar.</li><li><strong>Amber: get ready to stop.</strong> Release before the light turns red.</li><li><strong>Red: freeze.</strong> Moving on red ends the round. Wait for green, then run again.</li></ol><p>Cross the finish line as quickly as you can, or choose Endless to chase your longest run. Both views use the same speed and signal timing. Leaving the window pauses your race.</p></div>`;
   root.append(wrapper);
   const $=selector=>wrapper.querySelector(selector),race=new RedlightRace(),appearance=loadRunnerAppearance();
+  let soundEnabled=readRedlightSound();
+  const audio=createRedlightAudio(soundEnabled),soundButton=$(".rlgl-sound");
+  function syncSoundButton(){soundButton.textContent=audio.supported?`Sound FX: ${soundEnabled?"On":"Off"}`:"Sound FX unavailable";soundButton.setAttribute("aria-pressed",String(audio.supported&&soundEnabled));soundButton.disabled=!audio.supported;}
+  soundButton.addEventListener("click",()=>{soundEnabled=!soundEnabled;audio.setEnabled(soundEnabled);saveRedlightSound(soundEnabled);syncSoundButton();});
+  syncSoundButton();
   wrapper.dataset.appearance=JSON.stringify(appearance);
   const canvas2D=$(".rlgl-canvas-2d"),canvas3D=$(".rlgl-canvas-3d"),painter=createRedlight2D(canvas2D,appearance);
   const run=$(".rlgl-run-btn"),start=$(".rlgl-start"),pause=$(".rlgl-pause"),reset=$(".rlgl-reset"),course=$("select"),light=$(".rlgl-stoplight"),status=$(".rlgl-status"),overlay=$(".rlgl-overlay"),viewStatus=$(".rlgl-view-status");
@@ -28,9 +34,10 @@ export function createRedLightGreenLight(root, { editorOnly = false, onAppearanc
   const bests=readRecords();
   const writeText=(element,text)=>{if(element.textContent!==text)element.textContent=text;};
   function release(){keyDown=false;pointerId=null;race.hold(false);}
-  function updateInput(){race.hold(keyDown||pointerId!==null);sync();}
+  function updateInput(){if(keyDown||pointerId!==null)audio.unlock();race.hold(keyDown||pointerId!==null);sync();}
   function sync(){
     if(disposed)return;
+    audio.update(race);
     const launched=previousPhase==="countdown"&&race.phase==="green";previousPhase=race.phase;
     wrapper.dataset.phase=race.phase;wrapper.dataset.signal=race.signal;wrapper.dataset.paused=String(race.paused);wrapper.dataset.distance=race.distance.toFixed(3);
     light.dataset.state=race.signal;
@@ -61,9 +68,9 @@ export function createRedLightGreenLight(root, { editorOnly = false, onAppearanc
     $(".rlgl-progress span").style.width=`${race.target===Infinity?(race.distance%50)/50*100:race.distance/race.target*100}%`;
   }
   function draw(){if(view==="3d"&&webgl)webgl.draw(race);else painter.draw(race);}
-  function pauseRace(){release();race.pause();sync();draw();}
+  function pauseRace(){audio.silence();release();race.pause();sync();draw();}
   async function setView(next){
-    desiredView=next;release();if(race.active)race.pause();sync();
+    desiredView=next;audio.silence();release();if(race.active)race.pause();sync();
     wrapper.querySelectorAll("[data-view]").forEach(button=>button.setAttribute("aria-pressed",String(button.dataset.view===next)));
     if(next==="2d"){
       view="2d";canvas2D.hidden=false;canvas3D.hidden=true;wrapper.dataset.view=view;$(".rlgl-stage-label span").textContent="2D TRACK";
@@ -78,9 +85,9 @@ export function createRedLightGreenLight(root, { editorOnly = false, onAppearanc
       if(disposed||desiredView!=="3d")return;failed=true;$("[data-view='3d']").disabled=true;setView("2d");
     }).finally(()=>{loading=null;});
   }
-  start.addEventListener("click",()=>{release();outcomeRecorded=false;race.start();sync();});
+  start.addEventListener("click",()=>{audio.unlock();release();outcomeRecorded=false;race.start();sync();});
   reset.addEventListener("click",()=>{release();race.reset();outcomeRecorded=false;sync();draw();});
-  pause.addEventListener("click",()=>{const resuming=race.paused;release();if(resuming)race.resume();else race.pause();sync();if(resuming&&!run.disabled)run.focus({preventScroll:true});});
+  pause.addEventListener("click",()=>{const resuming=race.paused;release();if(resuming){audio.unlock();race.resume();}else race.pause();sync();if(resuming&&!run.disabled)run.focus({preventScroll:true});});
   course.addEventListener("change",()=>{release();race.reset(course.value);outcomeRecorded=false;sync();draw();});
   wrapper.querySelectorAll("[data-view]").forEach(button=>button.addEventListener("click",()=>setView(button.dataset.view)));
   run.addEventListener("pointerdown",event=>{if(run.disabled||pointerId!==null||event.button!==0)return;event.preventDefault();run.focus({preventScroll:true});pointerId=event.pointerId;run.setPointerCapture(event.pointerId);updateInput();});
@@ -96,7 +103,7 @@ export function createRedLightGreenLight(root, { editorOnly = false, onAppearanc
   window.addEventListener("keydown",keydown);window.addEventListener("keyup",keyup);window.addEventListener("blur",pauseRace);document.addEventListener("visibilitychange",visibility);
   const observer=new ResizeObserver(()=>{if(disposed)return;painter.resize();webgl?.resize();draw();});observer.observe($(".rlgl-stage"));
   const loop=createFrameLoop((time,delta)=>{race.step(delta);sync();draw();});loop.start();sync();draw();
-  return ()=>{disposed=true;release();loop.stop();observer.disconnect();window.removeEventListener("keydown",keydown);window.removeEventListener("keyup",keyup);window.removeEventListener("blur",pauseRace);document.removeEventListener("visibilitychange",visibility);webgl?.dispose();painter.dispose();wrapper.remove();};
+  return ()=>{disposed=true;audio.dispose();release();loop.stop();observer.disconnect();window.removeEventListener("keydown",keydown);window.removeEventListener("keyup",keyup);window.removeEventListener("blur",pauseRace);document.removeEventListener("visibilitychange",visibility);webgl?.dispose();painter.dispose();wrapper.remove();};
 }
 
 function readRecords(){
