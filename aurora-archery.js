@@ -1,5 +1,10 @@
 import { LEVELS, QUIVER, getTarget, getWind, starsForScore, createArcheryModel } from "./archery-engine.js";
 import { createArcheryRenderer } from "./archery-renderer.js";
+import {
+  AVATAR_STYLES, BOW_STYLES, OUTFIT_COLORS, SKIN_TONES, BOW_COLORS, GRIP_COLORS,
+  HAIR_STYLES, FACIAL_HAIR, HEADWEAR, FACE_SHAPES, FACE_DETAILS, ACCESSORIES,
+  HAIR_COLORS, EYE_COLORS, BOOT_COLORS, readArcheryAppearance, drawArcherPreview, drawBowPreview,
+} from "./archery-appearance.js";
 
 const COLORS = [
   { name: "Mint green", value: "#8be7ba" }, { name: "Glacier blue", value: "#86ccef" },
@@ -10,10 +15,19 @@ const DESIGNS = { ranger: "Woodcraft", moonsteel: "Moonsteel", aurora: "Aurora c
 const STORAGE_KEY = "aurora-archery-v2";
 const distanceLabel = level => level.shotDistances ? `${Math.min(...level.shotDistances)}-${Math.max(...level.shotDistances)}` : level.motionX ? `${level.distance - level.motionX}-${level.distance + level.motionX}` : String(level.distance);
 const windLabel = wind => Math.abs(wind) < 0.15 ? "calm" : `${Math.abs(wind).toFixed(1)} m/s ${wind > 0 ? "right" : "left"}`;
+const colorName = (choices, value) => choices.find(color => color.value === value)?.name || `Custom ${value.toUpperCase()}`;
 const STAR = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2 3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1Z"/></svg>';
 
 function starsMarkup(count) {
   return [0, 1, 2].map(index => `<span class="${index < count ? "is-earned" : ""}">${STAR}</span>`).join("");
+}
+
+function colorChoices(label, key, choices) {
+  return `<fieldset class="archery-colors"><legend>${label}</legend><div>${choices.map(color => `<label class="archery-color-choice" title="${color.name}"><input type="radio" name="archery-${key}" data-gear="${key}" value="${color.value}" aria-label="${label}: ${color.name}"><span style="--swatch:${color.value}"></span></label>`).join("")}</div><label class="archery-custom-color"><span>Custom color</span><input type="color" data-gear="${key}" aria-label="Custom ${label.toLowerCase()}"></label></fieldset>`;
+}
+
+function choiceSelect(label, key, choices) {
+  return `<label class="archery-gear-select"><span>${label}</span><select aria-label="${label}" data-gear="${key}">${Object.entries(choices).map(([value, name]) => `<option value="${value}">${name}</option>`).join("")}</select></label>`;
 }
 
 export function createAuroraArchery(root) {
@@ -24,6 +38,7 @@ export function createAuroraArchery(root) {
   const gear = {
     design: Object.hasOwn(DESIGNS, saved.design) ? saved.design : "ranger",
     color: COLORS.some(color => color.value === saved.color) ? saved.color : COLORS[0].value,
+    ...readArcheryAppearance(saved),
   };
   const model = createArcheryModel(saved.level);
   const state = model.state;
@@ -61,7 +76,7 @@ export function createAuroraArchery(root) {
       <label class="archery-control"><span>Draw power <output class="archery-power-value">70%</output></span><input type="range" min="25" max="100" step="1" value="70" aria-label="Draw power"><small>Shorter flight <span>Farther flight</span></small></label>
       <div class="archery-fire-controls"><button class="primary-btn archery-shoot" type="button">Shoot arrow</button><button class="archery-pause" type="button">Pause</button><button class="archery-reset" type="button">Reset level</button></div>
     </div>
-    <div class="archery-flight-info" aria-live="off"><label><input type="checkbox" class="archery-guide" checked> Show flight guide</label><button class="archery-help" type="button">How to play</button><span class="archery-flight-time"></span><span class="archery-wind-hint"></span></div>
+    <div class="archery-flight-info" aria-live="off"><label><input type="checkbox" class="archery-guide" checked> Show flight guide</label><button class="archery-customize" type="button">Customize archer &amp; bow</button><button class="archery-help" type="button">How to play</button><span class="archery-flight-time"></span><span class="archery-wind-hint"></span></div>
     <div class="archery-details-grid">
       <section class="archery-instructions" aria-labelledby="archery-how-title">
         <h4 id="archery-how-title">How to play</h4>
@@ -75,19 +90,66 @@ export function createAuroraArchery(root) {
         <div class="archery-ring-key"><span style="--ring:#f6cf5a">9&ndash;10</span><span style="--ring:#ed6572">7&ndash;8</span><span style="--ring:#529eca">5&ndash;6</span><span style="--ring:#293a4c">3&ndash;4</span><span style="--ring:#ecede3">1&ndash;2</span></div>
         <p>Marks show where your arrows hit. The gold center is the bullseye.</p>
       </section>
-      <fieldset class="archery-gear"><legend>Your arrows</legend>
-        <svg class="archery-arrow-preview" viewBox="0 0 220 55" role="img" aria-label="Your selected arrow design">
-          <path class="archery-preview-shaft" d="M28 27H193"/><path d="m36 27-19-17H4l18 17L4 44h13Z" class="archery-preview-feather"/>
-          <path d="m24 15 13 12-13 12" fill="none" stroke="#fff8dc" stroke-width="1" opacity="0.7"/>
-          <path class="archery-preview-head archery-head-ranger" d="m210 27-23-8 5 8-5 8Z"/>
-          <path class="archery-preview-head archery-head-moonsteel" d="m215 27-30-14 6 14-6 14Z"/>
-          <path class="archery-preview-head archery-head-aurora" d="m216 27-19-11-10 11 10 11Z"/>
-        </svg>
-        <label class="archery-gear-select"><span>Arrow design</span><select aria-label="Arrow design">${Object.entries(DESIGNS).map(([value, label]) => `<option value="${value}">${label}</option>`).join("")}</select></label>
-        <fieldset class="archery-colors"><legend>Feather color</legend><div>${COLORS.map(color => `<label class="archery-color-choice" title="${color.name}"><input type="radio" name="archery-arrow-color" value="${color.value}" aria-label="${color.name}"><span style="--swatch:${color.value}"></span></label>`).join("")}</div></fieldset>
-        <p>Every arrow design flies the same. Pick your favorite look.</p>
-      </fieldset>
     </div>
+    <section class="archery-customizer" aria-labelledby="archery-customizer-title">
+      <div class="archery-customizer-heading"><div><p class="archery-eyebrow">YOUR LOOK, YOUR ADVENTURE</p><h4 id="archery-customizer-title">Archer &amp; bow studio</h4></div><p>Changes appear on the range and save automatically.</p></div>
+      <div class="archery-customizer-grid">
+        <figure class="archery-appearance-card">
+          <div class="archery-preview-modes" role="group" aria-label="Character preview view"><button type="button" data-preview="body" aria-pressed="true">Full body</button><button type="button" data-preview="face" aria-pressed="false">Face close-up</button></div>
+          <canvas class="archery-appearance-preview" role="img" aria-label="Your customized archer and bow"></canvas>
+          <figcaption><strong class="archery-avatar-name"></strong><span class="archery-bow-name"></span><small>Ready for your next adventure</small></figcaption>
+        </figure>
+        <fieldset class="archery-gear archery-avatar-gear"><legend>Your avatar</legend>
+          ${choiceSelect("Avatar style", "avatarStyle", AVATAR_STYLES)}
+          ${choiceSelect("Headwear", "headwear", HEADWEAR)}
+          <div class="archery-avatar-tabs" role="tablist" aria-label="Avatar customization">
+            ${["face", "hair", "outfit"].map((tab, index) => `<button type="button" role="tab" id="archery-tab-${tab}" data-avatar-tab="${tab}" aria-selected="${index === 0}" aria-controls="archery-panel-${tab}" tabindex="${index === 0 ? 0 : -1}">${tab[0].toUpperCase() + tab.slice(1)}</button>`).join("")}
+          </div>
+          <div class="archery-avatar-panel" id="archery-panel-face" role="tabpanel" aria-labelledby="archery-tab-face">
+            ${colorChoices("Skin tone", "skinTone", SKIN_TONES)}
+            ${colorChoices("Eye color", "eyeColor", EYE_COLORS)}
+            ${choiceSelect("Face shape", "faceShape", FACE_SHAPES)}
+            ${choiceSelect("Face details", "faceDetail", FACE_DETAILS)}
+            ${choiceSelect("Face accessory", "accessory", ACCESSORIES)}
+          </div>
+          <div class="archery-avatar-panel" id="archery-panel-hair" role="tabpanel" aria-labelledby="archery-tab-hair" hidden>
+            ${choiceSelect("Hairstyle", "hairStyle", HAIR_STYLES)}
+            ${colorChoices("Hair color", "hairColor", HAIR_COLORS)}
+            ${choiceSelect("Facial hair", "facialHair", FACIAL_HAIR)}
+            ${colorChoices("Facial hair color", "facialHairColor", HAIR_COLORS)}
+            <p>Choose No headwear above to see your whole hairstyle. Hair and facial hair can have different colors.</p>
+          </div>
+          <div class="archery-avatar-panel" id="archery-panel-outfit" role="tabpanel" aria-labelledby="archery-tab-outfit" hidden>
+            ${colorChoices("Outfit color", "outfitColor", OUTFIT_COLORS)}
+            ${colorChoices("Outfit trim", "accentColor", BOW_COLORS)}
+            ${colorChoices("Headwear color", "headwearColor", OUTFIT_COLORS)}
+            ${choiceSelect("Boot color", "bootColor", Object.fromEntries(BOOT_COLORS.map(color => [color.value, color.name])))}
+            <p>Outfit changes keep your hair and headwear choices. Mix any outfit with any hairstyle or accessory.</p>
+          </div>
+        </fieldset>
+        <div class="archery-equipment">
+          <fieldset class="archery-gear archery-bow-gear"><legend>Your bow</legend>
+            <canvas class="archery-bow-preview" role="img" aria-label="Close-up of your selected bow"></canvas>
+            <label class="archery-gear-select"><span>Bow design</span><select aria-label="Bow design" data-gear="bowStyle">${Object.entries(BOW_STYLES).map(([value, label]) => `<option value="${value}">${label}</option>`).join("")}</select></label>
+            ${colorChoices("Bow color", "bowColor", BOW_COLORS)}
+            <label class="archery-gear-select"><span>Grip wrap</span><select aria-label="Grip wrap" data-gear="gripColor">${GRIP_COLORS.map(color => `<option value="${color.value}">${color.name}</option>`).join("")}</select></label>
+            <p>Try a classic longbow, a curved recurve, or a glowing crystal bow. Every style has the same aim and power.</p>
+          </fieldset>
+          <fieldset class="archery-gear archery-arrow-gear"><legend>Your arrows</legend>
+            <svg class="archery-arrow-preview" viewBox="0 0 220 55" role="img" aria-label="Your selected arrow design">
+              <path class="archery-preview-shaft" d="M28 27H193"/><path d="m36 27-19-17H4l18 17L4 44h13Z" class="archery-preview-feather"/>
+              <path d="m24 15 13 12-13 12" fill="none" stroke="#fff8dc" stroke-width="1" opacity="0.7"/>
+              <path class="archery-preview-head archery-head-ranger" d="m210 27-23-8 5 8-5 8Z"/>
+              <path class="archery-preview-head archery-head-moonsteel" d="m215 27-30-14 6 14-6 14Z"/>
+              <path class="archery-preview-head archery-head-aurora" d="m216 27-19-11-10 11 10 11Z"/>
+            </svg>
+            <label class="archery-gear-select"><span>Arrow design</span><select aria-label="Arrow design" data-gear="design">${Object.entries(DESIGNS).map(([value, label]) => `<option value="${value}">${label}</option>`).join("")}</select></label>
+            <fieldset class="archery-colors"><legend>Feather color</legend><div>${COLORS.map(color => `<label class="archery-color-choice" title="${color.name}"><input type="radio" name="archery-arrow-color" data-gear="color" value="${color.value}" aria-label="${color.name}"><span style="--swatch:${color.value}"></span></label>`).join("")}</div></fieldset>
+            <p>Every arrow design flies the same. Pick your favorite look.</p>
+          </fieldset>
+        </div>
+      </div>
+    </section>
     <section class="archery-history" aria-labelledby="archery-history-title"><h4 id="archery-history-title">This quiver</h4><ol class="archery-log"></ol></section>`;
   root.append(wrapper);
   const $ = selector => wrapper.querySelector(selector);
@@ -105,6 +167,7 @@ export function createAuroraArchery(root) {
   let lastShotCount = 0;
   let dragging = false;
   let disposed = false;
+  let previewView = "body";
 
   function persist() {
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ records, level: state.level.id, ...gear })); } catch { /* Storage is optional. */ }
@@ -112,9 +175,38 @@ export function createAuroraArchery(root) {
   function updateGear() {
     wrapper.dataset.arrowDesign = gear.design;
     wrapper.style.setProperty("--arrow-color", gear.color);
-    $('[aria-label="Arrow design"]').value = gear.design;
-    wrapper.querySelectorAll('[name="archery-arrow-color"]').forEach(input => { input.checked = input.value === gear.color; });
+    wrapper.querySelectorAll("[data-gear]").forEach(input => {
+      if (input.type === "radio") input.checked = input.value === gear[input.dataset.gear];
+      else input.value = gear[input.dataset.gear];
+    });
     $(".archery-arrow-preview").setAttribute("aria-label", `${DESIGNS[gear.design]} arrow with ${COLORS.find(color => color.value === gear.color).name.toLowerCase()} feathers`);
+    const outfit = colorName(OUTFIT_COLORS, gear.outfitColor).toLowerCase();
+    const skin = colorName(SKIN_TONES, gear.skinTone).toLowerCase();
+    const bowColor = colorName(BOW_COLORS, gear.bowColor).toLowerCase();
+    const hair = gear.hairStyle === "bald" ? "a bald head" : `${colorName(HAIR_COLORS, gear.hairColor).toLowerCase()} hair in a ${HAIR_STYLES[gear.hairStyle].toLowerCase()} style`;
+    const beard = gear.facialHair === "none" ? "clean shaven" : `${FACIAL_HAIR[gear.facialHair].toLowerCase()} in ${colorName(HAIR_COLORS, gear.facialHairColor).toLowerCase()}`;
+    const appearance = `${AVATAR_STYLES[gear.avatarStyle]} with ${skin} skin, ${FACE_SHAPES[gear.faceShape].toLowerCase()} face, ${hair}, ${beard}, and ${colorName(EYE_COLORS, gear.eyeColor).toLowerCase()} eyes, wearing a ${outfit} outfit and holding the ${bowColor} ${BOW_STYLES[gear.bowStyle].toLowerCase()}`;
+    $(".archery-appearance-preview").setAttribute("aria-label", `${previewView === "face" ? "Face close-up" : "Full body"}: ${appearance}. ${HEADWEAR[gear.headwear]}, ${ACCESSORIES[gear.accessory].toLowerCase()} accessory.`);
+    $(".archery-canvas").setAttribute("aria-label", `${appearance} in a mountain landscape. A ringed target, windsock, and dotted flight path show where the arrow will go.`);
+    $(".archery-avatar-name").textContent = AVATAR_STYLES[gear.avatarStyle];
+    $(".archery-bow-name").textContent = `${colorName(BOW_COLORS, gear.bowColor)} ${BOW_STYLES[gear.bowStyle].toLowerCase()}`;
+    drawArcherPreview($(".archery-appearance-preview"), gear, previewView);
+    $(".archery-bow-preview").setAttribute("aria-label", `Bow close-up: ${BOW_STYLES[gear.bowStyle]} in ${bowColor}, with ${colorName(GRIP_COLORS, gear.gripColor).toLowerCase()}`);
+    drawBowPreview($(".archery-bow-preview"), gear);
+    renderer.draw();
+  }
+  function setPreviewView(view) {
+    previewView = view;
+    wrapper.querySelectorAll("[data-preview]").forEach(button => button.setAttribute("aria-pressed", String(button.dataset.preview === view)));
+    updateGear();
+  }
+  function setAvatarTab(tab) {
+    wrapper.querySelectorAll("[data-avatar-tab]").forEach(button => {
+      const active = button.dataset.avatarTab === tab;
+      button.setAttribute("aria-selected", String(active)); button.tabIndex = active ? 0 : -1;
+      $(`#archery-panel-${button.dataset.avatarTab}`).hidden = !active;
+    });
+    setPreviewView(tab === "outfit" ? "body" : "face");
   }
   function updateControls() {
     angleInput.value = String(state.angle);
@@ -215,7 +307,7 @@ export function createAuroraArchery(root) {
     updateControls(); updateHUD();
   }
   function onKey(event) {
-    if (event.target instanceof Element && event.target.closest("input, select, textarea")) return;
+    if (event.target instanceof Element && event.target.closest("input, select, textarea, .archery-customizer")) return;
     const key = event.key.toLowerCase();
     if (event.code === "Space") {
       if (event.target instanceof Element && event.target.closest("button")) return;
@@ -251,14 +343,32 @@ export function createAuroraArchery(root) {
   wrapper.querySelectorAll("[data-level]").forEach(button => button.addEventListener("click", () => resetLevel(button.dataset.level)));
   $('[aria-label="Choose archery level"]').addEventListener("change", event => resetLevel(event.target.value));
   $(".archery-guide").addEventListener("change", event => renderer.showGuide(event.target.checked));
+  $(".archery-customize").addEventListener("click", () => {
+    $(".archery-customizer").scrollIntoView({ block: "start", behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+    $('[aria-label="Avatar style"]').focus({ preventScroll: true });
+  });
+  wrapper.querySelectorAll("[data-preview]").forEach(button => button.addEventListener("click", () => setPreviewView(button.dataset.preview)));
+  const avatarTabs = [...wrapper.querySelectorAll("[data-avatar-tab]")];
+  avatarTabs.forEach((button, index) => {
+    button.addEventListener("click", () => setAvatarTab(button.dataset.avatarTab));
+    button.addEventListener("keydown", event => {
+      if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+      event.preventDefault(); event.stopPropagation();
+      const next = event.key === "Home" ? 0 : event.key === "End" ? avatarTabs.length - 1 : (index + (event.key === "ArrowRight" ? 1 : -1) + avatarTabs.length) % avatarTabs.length;
+      setAvatarTab(avatarTabs[next].dataset.avatarTab); avatarTabs[next].focus({ preventScroll: true });
+    });
+  });
   $(".archery-help").addEventListener("click", () => {
     const instructions = $(".archery-instructions");
     instructions.tabIndex = -1;
     instructions.scrollIntoView({ block: "center", behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
     instructions.focus({ preventScroll: true });
   });
-  $('[aria-label="Arrow design"]').addEventListener("change", event => { gear.design = event.target.value; updateGear(); persist(); });
-  wrapper.querySelectorAll('[name="archery-arrow-color"]').forEach(input => input.addEventListener("change", () => { if (input.checked) { gear.color = input.value; updateGear(); persist(); } }));
+  wrapper.querySelectorAll("[data-gear]").forEach(input => input.addEventListener(input.type === "color" ? "input" : "change", () => {
+    if (input.type === "radio" && !input.checked) return;
+    gear[input.dataset.gear] = input.value;
+    updateGear(); persist();
+  }));
   scene.addEventListener("pointerdown", event => {
     if (event.target !== $(".archery-canvas") || state.phase !== "aiming" || state.paused) return;
     dragging = true; scene.setPointerCapture(event.pointerId); scene.focus({ preventScroll: true }); aimFromPointer(event); event.preventDefault();

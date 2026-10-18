@@ -7,7 +7,7 @@ A playful single-page playground inspired by [neal.fun](https://neal.fun), bundl
 - **Hot & Cold** — Hunt down a mystery number with warmer/colder hints on every guess.
 - **Flash Reflex** — Train your reaction speed by tapping the moment the panel lights up.
 - **Snake** — Glide through the garden and gobble up apples. Customize a Generic, Gardener, Python, or Rattlesnake skin in eight colors, add hats, glasses, and neckwear, and toggle music and sound effects.
-- **Aurora Archery** — Draw a ranger's bow in a mountain landscape, customize your arrows, and explore six trails with moving targets, changing wind, and distances from 20 to 70 meters.
+- **Aurora Archery** — Customize your archer, bow, and arrows in a mountain landscape, and explore six trails with moving targets, changing wind, and distances from 20 to 70 meters.
 - **Runway Glide** — Line up the runway lights and land the plane on target.
 - **Rocket Boost** — Hold boost, stage within the target band, and reach orbit.
 - **Switchyard Signals** — Flip the switch before each train hits the junction.
@@ -34,7 +34,13 @@ Snake controls: arrow keys, WASD, or the on-screen arrows steer; Space pauses an
 
 Aurora Archery is in the main game list. Drag in the range or use the angle and power sliders to aim; Space shoots and P pauses. Up/Down adjusts angle, Left/Right adjusts power. You have six arrows to reach each trail's displayed goal. Gold scores 9-10 points, with lower scores toward the outside and zero for a miss. The dotted flight guide assumes the current wind stays steady: rightward wind pushes arrows farther, while leftward wind slows them down. Lead moving targets by aiming where they will be when the arrow arrives.
 
-First Flight teaches the bow. Meadow Breeze gives each arrow a different wind, held steady while you aim and shoot. Lantern Lift moves the target, while Gusty Gorge changes wind continuously, including during flight. Longshot Lake changes distance after each arrow, between 35 and 70 meters, with calm wind. Aim and power stay unchanged when conditions change, so recalibrate before your next shot. Shot history records the distance and wind for comparison. Aurora Finale combines shifting wind with a target moving between 54 and 66 meters. Woodcraft, Moonsteel, and Aurora crystal arrow designs and six feather colors are cosmetic. Gear, best scores, and earned stars save in this browser.
+First Flight teaches the bow. Meadow Breeze gives each arrow a different wind, held steady while you aim and shoot. Lantern Lift moves the target, while Gusty Gorge changes wind continuously, including during flight. Longshot Lake changes distance after each arrow, between 35 and 70 meters, with calm wind. Aim and power stay unchanged when conditions change, so recalibrate before your next shot. Shot history records the distance and wind for comparison. Aurora Finale combines shifting wind with a target moving between 54 and 66 meters.
+
+The customization studio sits below the instructions. Use **Customize archer & bow** to jump straight to it. All appearance choices are cosmetic and save automatically with your best scores and earned stars in this browser.
+
+Start with a Trail ranger, Woodland scout, or Aurora knight, then use the Face, Hair, and Outfit tabs. Choose skin and eye colors, face shape, freckles or a scar, seven hairstyles, six facial hair styles, independent hair and beard colors, five headwear options, glasses, an eye patch or an earring, outfit and trim colors, and boots. Headwear has its own color; changing outfits preserves your hair and headwear. Color palettes include a custom color picker. Switch between the full-body preview and a face close-up to see the details.
+
+The bow section has a dedicated close-up of the Woodland longbow, Swift recurve, or Aurora crystal bow. Choose six preset colors, a custom color, and three grip wraps. The previews and the archer on the range share the same artwork. Woodcraft, Moonsteel, and Aurora crystal arrows also offer six feather colors.
 
 ## Getting Started
 
@@ -56,7 +62,7 @@ The project is entirely client-side, so functional testing is manual:
 
 Neon Drift's driving rules also have focused automated checks: `node --test tests/neon-drift.test.mjs`. Its simulation, canvas rendering, and Web Audio soundtrack are in `neon-drift-engine.js`, `neon-drift.js`, and `neon-drift-audio.js`; no build step or dependencies are required.
 
-Aurora Archery's flight, scoring, wind, target motion, and round rules have focused checks: `node --test tests/archery.test.mjs`. Its rules, renderer, and controls are in `archery-engine.js`, `archery-renderer.js`, and `aurora-archery.js`.
+Aurora Archery's flight, scoring, wind, target motion, and round rules have focused checks: `node --test tests/archery.test.mjs`. Its rules, renderer, appearance, and controls are in `archery-engine.js`, `archery-renderer.js`, `archery-appearance.js`, and `aurora-archery.js`.
 
 ## Deployment
 

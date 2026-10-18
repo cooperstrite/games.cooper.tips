@@ -1611,7 +1611,7 @@ button:hover {
   accent-color: #9dddba;
 }
 
-.archery-flight-info .archery-help {
+.archery-flight-info button {
   padding: 0.3rem 0.6rem;
   border-radius: 7px;
   color: #c4dfcf;
@@ -1626,7 +1626,7 @@ button:hover {
 
 .archery-details-grid {
   display: grid;
-  grid-template-columns: 1.45fr 0.9fr 1fr;
+  grid-template-columns: 1.45fr 0.9fr;
   gap: 0.9rem;
   align-items: stretch;
 }
@@ -1735,6 +1735,180 @@ button:hover {
 
 .archery-gear p {
   margin: 0;
+}
+
+.archery-customizer {
+  scroll-margin-top: 1.25rem;
+}
+
+.archery-customizer-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 0.5rem 0 0.9rem;
+}
+
+.archery-customizer-heading h4 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.archery-customizer-heading > p {
+  max-width: 32ch;
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  line-height: 1.6;
+}
+
+.archery-customizer-grid {
+  display: grid;
+  grid-template-columns: 0.95fr 1fr 1fr;
+  gap: 0.9rem;
+  align-items: start;
+}
+
+.archery-appearance-card {
+  position: sticky;
+  top: 1rem;
+  display: grid;
+  align-content: center;
+  min-width: 0;
+  margin: 0;
+  border: 1px solid rgba(158,197,177,0.2);
+  border-radius: 15px;
+  overflow: hidden;
+  background: #18323b;
+}
+
+.archery-equipment {
+  display: grid;
+  min-width: 0;
+  gap: 0.9rem;
+}
+
+.archery-bow-preview {
+  display: block;
+  width: 100%;
+  aspect-ratio: 300 / 190;
+  border: 1px solid rgba(158,197,177,0.15);
+  border-radius: 10px;
+}
+
+.archery-appearance-preview {
+  display: block;
+  width: 100%;
+  aspect-ratio: 400 / 340;
+}
+
+.archery-appearance-card figcaption {
+  display: grid;
+  gap: 0.4rem;
+  padding: 1rem;
+  text-align: center;
+}
+
+.archery-appearance-card strong {
+  color: #e0eee1;
+  font-size: 1rem;
+}
+
+.archery-appearance-card span {
+  color: #b3d5c6;
+  font-size: 0.72rem;
+}
+
+.archery-appearance-card small {
+  margin-top: 0.35rem;
+  color: var(--text-muted);
+  font-size: 0.6rem;
+}
+
+.archery-preview-modes, .archery-avatar-tabs {
+  display: flex;
+  gap: 0.25rem;
+  padding: 0.3rem;
+  border-radius: 9px;
+  background: rgba(8,24,33,0.35);
+}
+
+.archery-preview-modes {
+  grid-column: 1 / -1;
+  margin: 0.6rem;
+}
+
+.archery-preview-modes button, .archery-avatar-tabs button {
+  flex: 1;
+  min-width: 0;
+  padding: 0.55rem 0.3rem;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  background: transparent;
+  color: #9cb9af;
+  font: inherit;
+  font-size: 0.7rem;
+  cursor: pointer;
+}
+
+.archery-preview-modes button[aria-pressed="true"], .archery-avatar-tabs button[aria-selected="true"] {
+  border-color: rgba(170,220,193,0.25);
+  background: #34534f;
+  color: #e6f5e7;
+}
+
+.archery-preview-modes button:focus-visible, .archery-avatar-tabs button:focus-visible {
+  outline: 2px solid #a5dfc0;
+  outline-offset: 2px;
+}
+
+.archery-avatar-panel {
+  display: grid;
+  align-content: start;
+  gap: 0.9rem;
+}
+
+.archery-avatar-panel[hidden] {
+  display: none;
+}
+
+.archery-customizer .archery-colors > div {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+.archery-customizer .archery-color-choice {
+  min-height: 44px;
+}
+
+.archery-customizer .archery-color-choice span {
+  width: 26px;
+  height: 26px;
+}
+
+.archery-custom-color {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-top: 0.15rem;
+  color: var(--text-muted);
+  font-size: 0.65rem;
+  cursor: pointer;
+}
+
+.archery-custom-color input {
+  width: 42px;
+  height: 30px;
+  padding: 2px;
+  border: 1px solid rgba(158,197,177,0.3);
+  border-radius: 6px;
+  background: #1b3035;
+  cursor: pointer;
+}
+
+.archery-custom-color input:focus-visible {
+  outline: 2px solid #a5dfc0;
+  outline-offset: 2px;
 }
 
 .archery-arrow-preview {
@@ -1984,12 +2158,24 @@ button:hover {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
-  .archery-details-grid {
+  .archery-customizer-grid {
     grid-template-columns: 1fr 1fr;
   }
 
-  .archery-instructions {
+  .archery-appearance-card {
+    position: static;
     grid-column: 1 / -1;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+  }
+
+  .archery-appearance-preview {
+    max-width: 300px;
+    margin: 0 auto;
+  }
+
+  .archery-appearance-card figcaption {
+    text-align: left;
   }
 
 }
@@ -2081,6 +2267,28 @@ button:hover {
 
   .archery-instructions {
     grid-column: auto;
+  }
+
+  .archery-customizer-heading {
+    display: block;
+  }
+
+  .archery-customizer-heading > p {
+    max-width: none;
+    margin-top: 0.5rem;
+  }
+
+  .archery-customizer-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .archery-appearance-card {
+    grid-column: auto;
+    grid-template-columns: 1fr;
+  }
+
+  .archery-appearance-card figcaption {
+    text-align: center;
   }
 
   .archery-log {

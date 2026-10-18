@@ -1,4 +1,5 @@
 import { LAUNCH, getTarget, getWind, velocityFor, predictFlight, clamp } from "./archery-engine.js";
+import { drawArcher, drawArrow as arrowArt } from "./archery-appearance.js";
 
 const TAU = Math.PI * 2;
 const THEMES = {
@@ -19,41 +20,6 @@ function line(ctx, points, color, width = 2) {
   ctx.lineCap = "round";
   ctx.lineJoin = "round";
   ctx.stroke();
-}
-
-function arrowArt(ctx, x, y, angle, gear, scale = 1) {
-  ctx.save();
-  ctx.translate(x, y);
-  ctx.rotate(angle);
-  ctx.scale(scale, scale);
-  const crystal = gear.design === "aurora";
-  const steel = gear.design === "moonsteel";
-  if (crystal) { ctx.shadowColor = gear.color; ctx.shadowBlur = 13; }
-  line(ctx, [[-55, 0], [-3, 0]], steel ? "#b6d0dc" : crystal ? "#d1fff0" : "#caa16a", 3);
-  line(ctx, [[-48, -0.8], [-6, -0.8]], "#fff4cf", 0.7);
-  ctx.fillStyle = gear.color;
-  ctx.beginPath();
-  ctx.moveTo(-43, -1);
-  ctx.lineTo(-54, -9);
-  ctx.lineTo(-59, -8);
-  ctx.lineTo(-53, 0);
-  ctx.lineTo(-59, 8);
-  ctx.lineTo(-54, 9);
-  ctx.lineTo(-43, 1);
-  ctx.closePath();
-  ctx.fill();
-  line(ctx, [[-55, -6], [-47, -1], [-55, 6]], "rgba(255,255,255,0.5)", 0.8);
-  ctx.fillStyle = crystal ? gear.color : steel ? "#e8f1f3" : "#c0d6d8";
-  ctx.beginPath();
-  ctx.moveTo(8, 0);
-  ctx.lineTo(steel ? -9 : -4, steel ? -7 : -4);
-  ctx.lineTo(crystal ? -10 : -2, 0);
-  ctx.lineTo(steel ? -9 : -4, steel ? 7 : 4);
-  ctx.closePath();
-  ctx.fill();
-  line(ctx, [[7, 0], [-5, 0]], "rgba(255,255,255,0.8)", 0.8);
-  if (steel) line(ctx, [[-26, -1], [-30, 1], [-34, -1]], "#6a97b6", 1.2);
-  ctx.restore();
 }
 
 function targetFace(ctx, x, y, radius, squash = 1) {
@@ -270,43 +236,11 @@ export function createArcheryRenderer(canvas, faceCanvas, model, getGear) {
   }
   function archer(g) {
     const state = model.state;
-    const gear = getGear();
-    const s = height / 590;
     const bow = g.project(LAUNCH.x, LAUNCH.y);
-    const bodyX = bow.x - 49 * s;
-    const ground = g.ground;
     const velocity = velocityFor(state.angle, state.power);
     const angle = -Math.atan2(velocity.y * g.sy, velocity.x * g.sx);
     const release = state.arrow ? Math.max(0, 1 - state.arrow.age / 0.16) : state.impact && state.time - state.impact.time < 0.15 ? 0 : 1;
-    ctx.fillStyle = "rgba(3,17,25,0.38)"; ctx.beginPath(); ctx.ellipse(bodyX, ground + 5, 46 * s, 11 * s, 0, 0, TAU); ctx.fill();
-    ctx.fillStyle = "#6b6551"; ctx.fillRect(bodyX - 52 * s, ground - 3 * s, 102 * s, 9 * s);
-    line(ctx, [[bodyX - 10 * s, ground - 51 * s], [bodyX - 19 * s, ground - 15 * s], [bodyX - 28 * s, ground - 4 * s]], "#384c4c", 13 * s);
-    line(ctx, [[bodyX + 8 * s, ground - 50 * s], [bodyX + 15 * s, ground - 24 * s], [bodyX + 25 * s, ground - 5 * s]], "#465f5a", 13 * s);
-    line(ctx, [[bodyX - 27 * s, ground - 5 * s], [bodyX - 12 * s, ground - 5 * s]], "#2b3839", 9 * s);
-    line(ctx, [[bodyX + 21 * s, ground - 5 * s], [bodyX + 35 * s, ground - 5 * s]], "#2b3839", 9 * s);
-    ctx.fillStyle = "#224e4d";
-    ctx.beginPath(); ctx.moveTo(bodyX - 13 * s, bow.y - 22 * s); ctx.quadraticCurveTo(bodyX - 28 * s, bow.y + 22 * s, bodyX - 31 * s, ground - 41 * s); ctx.lineTo(bodyX + 13 * s, ground - 37 * s); ctx.lineTo(bodyX + 15 * s, bow.y + 6 * s); ctx.closePath(); ctx.fill();
-    ctx.fillStyle = "#40756a"; ctx.beginPath(); ctx.moveTo(bodyX - 10 * s, bow.y - 1 * s); ctx.lineTo(bodyX + 13 * s, bow.y + 1 * s); ctx.lineTo(bodyX + 16 * s, ground - 43 * s); ctx.lineTo(bodyX - 15 * s, ground - 43 * s); ctx.closePath(); ctx.fill();
-    line(ctx, [[bodyX - 13 * s, ground - 51 * s], [bodyX + 16 * s, ground - 51 * s]], "#a47f52", 6 * s);
-    line(ctx, [[bodyX - 12 * s, bow.y - 3 * s], [bodyX + 12 * s, ground - 52 * s]], "#bc9e6d", 4 * s);
-    ctx.fillStyle = "#dfae88"; ctx.beginPath(); ctx.ellipse(bodyX + 2 * s, bow.y - 24 * s, 13 * s, 17 * s, -0.1, 0, TAU); ctx.fill();
-    ctx.fillStyle = "#233f40"; ctx.beginPath(); ctx.moveTo(bodyX - 15 * s, bow.y - 16 * s); ctx.quadraticCurveTo(bodyX - 20 * s, bow.y - 47 * s, bodyX + 5 * s, bow.y - 45 * s); ctx.quadraticCurveTo(bodyX + 19 * s, bow.y - 40 * s, bodyX + 18 * s, bow.y - 27 * s); ctx.lineTo(bodyX + 5 * s, bow.y - 32 * s); ctx.lineTo(bodyX - 4 * s, bow.y - 14 * s); ctx.closePath(); ctx.fill();
-    line(ctx, [[bodyX - 10 * s, bow.y - 36 * s], [bodyX + 8 * s, bow.y - 40 * s]], "#58968a", 2 * s);
-    ctx.fillStyle = "#293f43"; ctx.beginPath(); ctx.arc(bodyX + 10 * s, bow.y - 26 * s, 1.5 * s, 0, TAU); ctx.fill();
-    line(ctx, [[bodyX + 2 * s, bow.y + 7 * s], [bodyX + 22 * s, bow.y + 9 * s], [bow.x - 3 * s, bow.y]], "#689886", 10 * s);
-    line(ctx, [[bodyX + 21 * s, bow.y + 9 * s], [bow.x - 3 * s, bow.y]], "#e0b18c", 6 * s);
-    const pull = (9 + state.power * 0.19) * release * s;
-    const hand = { x: bow.x - Math.cos(angle) * pull, y: bow.y - Math.sin(angle) * pull };
-    line(ctx, [[bodyX - 5 * s, bow.y + 6 * s], [bodyX - 21 * s, bow.y + 19 * s], [hand.x, hand.y]], "#5e8b7b", 9 * s);
-    line(ctx, [[bodyX - 21 * s, bow.y + 19 * s], [hand.x, hand.y]], "#d8a680", 5 * s);
-    ctx.save(); ctx.translate(bow.x, bow.y); ctx.rotate(angle);
-    ctx.strokeStyle = "#d4b47b"; ctx.lineWidth = 4 * s; ctx.lineCap = "round";
-    ctx.beginPath(); ctx.moveTo(-5 * s, -40 * s); ctx.quadraticCurveTo(23 * s, 0, -5 * s, 40 * s); ctx.stroke();
-    line(ctx, [[-5 * s, -40 * s], [-pull, 0], [-5 * s, 40 * s]], "#e4dcc0", 1 * s);
-    line(ctx, [[7 * s, -7 * s], [7 * s, 7 * s]], "#87633f", 5 * s);
-    if (state.phase === "aiming") arrowArt(ctx, 7 * s, 0, 0, gear, s * 0.8);
-    ctx.restore();
-    for (let i = 0; i < Math.min(4, state.arrowsLeft); i++) line(ctx, [[bodyX - 20 * s + i * 3 * s, bow.y + 17 * s], [bodyX - 29 * s + i * 3 * s, bow.y - 13 * s]], gear.color, 2 * s);
+    drawArcher(ctx, getGear(), { x: bow.x, y: bow.y, ground: g.ground, scale: height / 590, angle, power: state.power, release, arrowsLeft: state.arrowsLeft, loaded: state.phase === "aiming" });
   }
   function drawGuide(g) {
     const state = model.state;

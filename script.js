@@ -4438,9 +4438,9 @@ const games = [
   {
     id: "archery",
     name: "Aurora Archery",
-    summary: "Draw your bow, read the wind, and explore six archery trails.",
+    summary: "Customize your archer and bow, then explore six archery trails.",
     description:
-      "Aim your archer's bow, set the power, and follow the arrow into the target. Explore six trails with moving targets, changing wind, and longer distances.",
+      "Make your archer your own, aim the bow, and follow the arrow into the target. Explore six trails with moving targets, changing wind, and longer distances.",
     logo: "assets/archery-cover.png",
     init: createAuroraArchery,
   },
