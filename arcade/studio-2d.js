@@ -1,5 +1,6 @@
 import { drawBirdPreview } from "../flappy-appearance.js";
 import { drawArcherPreview, drawBowPreview, drawArrow } from "../archery-appearance.js";
+import { drawRunnerPreview } from "../redlight-appearance.js";
 
 // The studio uses the same painters/SVG as gameplay, with no game world or input.
 export function createCharacterPortrait(root) {
@@ -7,6 +8,7 @@ export function createCharacterPortrait(root) {
   function draw(time = 0) {
     if (!appearance) return;
     if (gameId === "flappy") drawBirdPreview(canvas, appearance, time);
+    else if (gameId === "redlight") drawRunnerPreview(canvas, appearance, focus);
     else if (gameId === "archery") {
       if (focus === "equipment") {
         drawBowPreview(canvas, appearance);
@@ -21,7 +23,7 @@ export function createCharacterPortrait(root) {
       gameId = id; appearance = next; focus = nextFocus;
       root.replaceChildren(); canvas = null;
       root.dataset.game = id;
-      if (id === "flappy" || id === "archery") {
+      if (id === "flappy" || id === "archery" || id === "redlight") {
         canvas = document.createElement("canvas");
         canvas.setAttribute("role", "img"); canvas.setAttribute("aria-label", "Your customized character in the game's original 2D artwork");
         root.append(canvas); draw();

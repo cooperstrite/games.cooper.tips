@@ -4,8 +4,10 @@ import { buildCharacterMesh, prepareCharacterAssets } from "./character-renderer
 import { lightArcherStudio } from "./archer-materials.js";
 import { createFrameLoop } from "./runtime.js";
 import { createCharacterPortrait } from "./studio-2d.js";
+import { runnerCharacter } from "../redlight-appearance.js";
 
 export function studioCharacter(gameId, appearance) {
+  if (gameId === "redlight") return runnerCharacter(appearance);
   const key = { flappy: appearance.bird, archery: appearance.avatarStyle, snake: appearance.skin, neondrift: appearance.car }[gameId];
   const builder = new CharacterBuilder(gameId, key);
   if (gameId === "flappy") {
@@ -46,8 +48,8 @@ export function createStudioPreview(root) {
     const family = character.family;
     const aspect = Math.max(0.3, canvas.clientWidth / (canvas.clientHeight || 1));
     const narrowScale = Math.max(1, 0.85 / aspect);
-    const targets = { bird: [0, 1.7, -0.1], humanoid: [0.025, 1.94, -0.065], snake: [1.28, 0.75, -0.1], vehicle: [0, 0.8, -0.9] };
-    if (focus === "face") { camera.setTarget(new world.B.Vector3(...targets[family])); camera.radius = { bird: 2, humanoid: 0.67, snake: 1.65, vehicle: 2.7 }[family] * narrowScale; }
+    const targets = { bird: [0, 1.7, -0.1], humanoid: [0.025, 1.94, -0.065], runner: [0, 1.82, -.065], snake: [1.28, 0.75, -0.1], vehicle: [0, 0.8, -0.9] };
+    if (focus === "face") { camera.setTarget(new world.B.Vector3(...targets[family])); camera.radius = { bird: 2, humanoid: 0.67, runner: .7, snake: 1.65, vehicle: 2.7 }[family] * narrowScale; }
     else if (focus === "equipment") { camera.setTarget(new world.B.Vector3(0.55, 1.68, -0.2)); camera.radius = 2.1 * narrowScale; }
     else if (entity) {
       const { B } = world;
@@ -71,14 +73,14 @@ export function createStudioPreview(root) {
   function load3D() {
     if (loading) return loading;
     panel.dataset.ready = "loading";
-    loading = prepareCharacterAssets(character).then(() => createWebGLScene(canvas, { quality: gameId === "archery" ? "high" : "balanced", isCurrent: () => !disposed })).then(next => {
+    loading = prepareCharacterAssets(character).then(() => createWebGLScene(canvas, { quality: ["archery", "redlight"].includes(gameId) ? "high" : "balanced", isCurrent: () => !disposed })).then(next => {
       if (disposed) { next.dispose(); return; }
       world = next; const { B, scene } = world; world.camera.dispose();
       camera = new B.ArcRotateCamera("character-orbit", -Math.PI / 2 - 0.25, Math.PI / 2.6, 4.5, new B.Vector3(0, 1, 0), scene);
       camera.minZ = 0.03; camera.maxZ = 100;
       scene.activeCamera = camera; camera.attachControl(canvas, true); camera.lowerRadiusLimit = 0.45; camera.upperRadiusLimit = 10; camera.lowerBetaLimit = 0.15; camera.upperBetaLimit = Math.PI / 2 + 0.3; camera.wheelDeltaPercentage = 0.01; camera.pinchDeltaPercentage = 0.01; camera.panningSensibility = 0;
       scene.clearColor = B.Color4.FromHexString("#213744ff");
-      if (gameId === "archery") backdrop = lightArcherStudio(world);
+      if (["archery", "redlight"].includes(gameId)) backdrop = lightArcherStudio(world);
       else { const floor = B.MeshBuilder.CreateGround("studio-floor", { width: 24, height: 24 }, scene); floor.material = world.material("#485e62", { roughness: 0.9 }); floor.receiveShadows = true; }
       rebuild(); setMode(mode); panel.dataset.ready = "true";
     }).catch(() => { if (!disposed) { failed = true; panel.dataset.ready = "fallback"; panel.querySelector('[data-mode="3d"]').disabled = true; setMode("2d"); } });
@@ -102,7 +104,7 @@ export function createStudioPreview(root) {
       const next = studioCharacter(gameId, appearance), nextSignature = JSON.stringify(next), changed = signature !== nextSignature;
       character = next; signature = nextSignature; panel.querySelector("strong").textContent = next.name; canvas.setAttribute("aria-label", `3D ${next.name} (Beta), with all your selected colors, features, accessories, and equipment`);
       panel.querySelector('[data-focus="equipment"]').hidden = gameId !== "archery";
-      panel.querySelector('[data-focus="face"]').hidden = gameId !== "archery";
+      panel.querySelector('[data-focus="face"]').hidden = !["archery", "redlight"].includes(gameId);
       // The normalized appearance is available to accessibility/UI checks as well as the renderer.
       panel.dataset.character = next.id; panel.dataset.appearance = nextSignature;
       if (changed) rebuild();

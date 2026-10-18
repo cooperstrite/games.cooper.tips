@@ -3,6 +3,8 @@
 The 3D character is assembled in `arcade/humanoid-mesh.js`. Its clothes, hair,
 facial hair, accessories, bow and arrows are independent, recolorable meshes.
 It is a static aiming pose for the character studio; it does not alter game physics.
+Red Light Green Light's animated runner in `arcade/runner-mesh.js` also reuses
+this head and its skin maps, with its own sports outfits, hair, and accessories.
 
 ## Anatomical head
 
@@ -44,5 +46,6 @@ blender --background --python scripts/build-archer-head.py -- SOURCE_DIR assets/
 
 Blender is an authoring tool only. The published site uses local static assets and
 the bundled Babylon engine, and does not need Blender or a game server. The mesh
-and skin textures are loaded only when the archer's **3D character (Beta)** view is
-selected. The default preview remains the game's original 2D artwork.
+and skin textures are loaded only when an archer or runner **3D character (Beta)**
+view, or the runner's **3D race (Beta)**, is selected. The default character
+preview remains the game's original 2D artwork.

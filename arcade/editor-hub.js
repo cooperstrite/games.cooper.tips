@@ -7,6 +7,7 @@ const STUDIOS = {
   archery: { image: "assets/memory-loop-cover.png", summary: "Your archer's face, hair, outfit, bow, and arrows.", description: "Your full avatar, face, hair, facial hair, outfit, bow, and arrows. Inspect the same look in 2D or turn and zoom it in 3D (Beta)." },
   snake: { image: "assets/ChatGPT Image Feb 4, 2026, 06_33_02 PM.png", summary: "Snake skins, colors, hats, glasses, and neckwear.", description: "All snake skins, colors, hats, eyewear, neckwear, music, and sound effects, with the original live artwork." },
   neondrift: { image: "assets/neon-drift-cover.png", summary: "Choose your car, explore its ability, and pick your paint.", description: "Choose your car, see its original special ability, and customize its paint in 2D or try the 3D preview (Beta)." },
+  redlight: { image: "assets/redlight-cover.png", summary: "Running outfits, hair, facial hair, accessories, and individual colors.", description: "Customize your runner's outfit, body build, skin, hair, facial hair, and accessories. The same saved look appears in the 2D track and 3D race (Beta)." },
 };
 
 // Editors mount the games' original controls and renderers. No reduced copy of a
@@ -41,7 +42,7 @@ export function createCharacterLibrary(root, { gameId = null, mountEditor } = {}
       wrapper.scrollIntoView({ block: "start" });
     }
   }
-  function readRoute() { const match = /^#characters(?:\/(flappy|archery|snake|neondrift))?$/.exec(location.hash); if (match) show(match[1], true); }
+  function readRoute() { const match = /^#characters(?:\/(flappy|archery|snake|neondrift|redlight))?$/.exec(location.hash); if (match) show(match[1], true); }
   window.addEventListener("hashchange", readRoute);
   show(gameId);
   return () => { window.removeEventListener("hashchange", readRoute); cleanup?.(); document.title = previousTitle; wrapper.remove(); };
