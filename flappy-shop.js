@@ -1,14 +1,14 @@
 export const SHOP_ITEMS = [
-  { id: "flower-crown", name: "Flower crown", setting: "hat", value: "flowers", cost: 15, category: "wearables", description: "A little garden to wear in the sky." },
-  { id: "golden-monocle", name: "Golden monocle", setting: "eyewear", value: "monocle", cost: 20, category: "wearables", description: "A polished lens with a golden chain." },
-  { id: "aviator-helmet", name: "Aviator helmet", setting: "hat", value: "aviator", cost: 30, category: "wearables", description: "A classic flight helmet with ear flaps." },
-  { id: "champion-medal", name: "Champion medal", setting: "neckwear", value: "medal", cost: 35, category: "wearables", description: "A shiny medal for a fearless flyer." },
-  { id: "rainbow-trail", name: "Rainbow ribbon", setting: "trail", value: "rainbow", cost: 40, category: "wearables", description: "Leave a flowing rainbow behind you." },
-  { id: "space-helmet", name: "Space helmet", setting: "hat", value: "space", cost: 50, category: "wearables", description: "A glass dome for your next adventure." },
-  { id: "aurora-world", name: "Aurora skies", setting: "background", value: "aurora", cost: 55, category: "worlds", description: "Dance beneath ribbons of northern light." },
-  { id: "golden-pipes", name: "Golden pipes", setting: "pipeStyle", value: "gold", cost: 65, category: "worlds", description: "Engraved pipes with a polished metallic finish." },
-  { id: "volcano-world", name: "Volcanic twilight", setting: "background", value: "volcano", cost: 75, category: "worlds", description: "Fly past distant lava and glowing embers." },
-  { id: "phoenix-bird", name: "Tiny phoenix", setting: "bird", value: "phoenix", cost: 90, category: "birds", description: "A fiery little flyer with flowing tail feathers." },
+  { id: "flower-crown", name: "Flower crown", setting: "hat", value: "flowers", cost: 150, category: "wearables", description: "A little garden to wear in the sky." },
+  { id: "golden-monocle", name: "Golden monocle", setting: "eyewear", value: "monocle", cost: 200, category: "wearables", description: "A polished lens with a golden chain." },
+  { id: "aviator-helmet", name: "Aviator helmet", setting: "hat", value: "aviator", cost: 300, category: "wearables", description: "A classic flight helmet with ear flaps." },
+  { id: "champion-medal", name: "Champion medal", setting: "neckwear", value: "medal", cost: 350, category: "wearables", description: "A shiny medal for a fearless flyer." },
+  { id: "rainbow-trail", name: "Rainbow ribbon", setting: "trail", value: "rainbow", cost: 400, category: "wearables", description: "Leave a flowing rainbow behind you." },
+  { id: "space-helmet", name: "Space helmet", setting: "hat", value: "space", cost: 500, category: "wearables", description: "A glass dome for your next adventure." },
+  { id: "aurora-world", name: "Aurora skies", setting: "background", value: "aurora", cost: 550, category: "worlds", description: "Dance beneath ribbons of northern light." },
+  { id: "golden-pipes", name: "Golden pipes", setting: "pipeStyle", value: "gold", cost: 650, category: "worlds", description: "Engraved pipes with a polished metallic finish." },
+  { id: "volcano-world", name: "Volcanic twilight", setting: "background", value: "volcano", cost: 750, category: "worlds", description: "Fly past distant lava and glowing embers." },
+  { id: "phoenix-bird", name: "Tiny phoenix", setting: "bird", value: "phoenix", cost: 900, category: "birds", description: "A fiery little flyer with flowing tail feathers." },
 ];
 const MAX_COINS = 1000000000;
 export const REWARD_TIERS = [
