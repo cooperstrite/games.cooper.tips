@@ -10169,7 +10169,7 @@ function renderRoute() {
   const characterRoute = /^characters(?:\/(flappy|archery|snake|neondrift))?$/.exec(hash);
   if (characterRoute) {
     if (activeId === "characters") return;
-    showGame({ id: "characters", name: "Your Character Library", description: "Your complete character controls with matching 2D and 3D (Beta) previews.", init: root => createCharacterLibrary(root, { gameId: characterRoute[1] || "flappy", mountEditor: (id, host, onAppearanceChange) => games.find(game => game.id === id).init(host, { editorOnly: true, onAppearanceChange }) }) });
+    showGame({ id: "characters", name: "Your Character Library", description: "Choose your game, then customize its characters, gear, and world.", init: root => createCharacterLibrary(root, { gameId: characterRoute[1], mountEditor: (id, host, onAppearanceChange) => games.find(game => game.id === id).init(host, { editorOnly: true, onAppearanceChange }) }) });
     return;
   }
   const gameId = /^flappy\/(shop|customize)$/.test(hash) ? "flappy" : hash;

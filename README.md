@@ -59,7 +59,9 @@ The header opens the shared shop at `/#store` and the character library at `/#ch
 
 The shop includes the existing Flappy items and two cosmetic collections that can be applied independently to the four games. Coins cannot buy speed, extra lives, altered hitboxes, or stronger abilities. There are no real-money payments. Progress is local to this browser and origin, without an account or a game backend.
 
-The character library contains each game's complete original customization controls, with character-only previews. It opens with **2D artwork**, the original cartoon drawing from the game. Select **3D character (Beta)** to load, rotate, and zoom the corresponding WebGL model. Both views read the same saved colors, skins, features, accessories, and equipment. All 3D options, including the first-person modes in Flappy Bird and Aurora Archery, are labeled **Beta**. Archery also has face and bow/arrow close-ups. The library does not run a game or award coins. Each game links here instead of maintaining a separate visible character editor; its saved appearance is used when you return to play. If WebGL is unavailable, the studio shows the original 2D artwork and keeps all controls working.
+The character library opens with a game-selection page. Pick Flappy Bird, Aurora Archery, Snake, or Neon Drift to open its complete original customization controls, or use **All games** to return to the selection. Direct studio links and each game's Customize button still open the relevant editor. Browser Back and Forward work between the selection and studios.
+
+Each studio starts with **2D artwork**, the original cartoon drawing from the game. Select **3D character (Beta)** to load, rotate, and zoom the corresponding WebGL model. Both views read the same saved colors, skins, features, accessories, and equipment. All 3D options, including the first-person modes in Flappy Bird and Aurora Archery, are labeled **Beta**. Flappy Bird also has a separate **Background & pipes** preview next to its world settings; scenery, pipe style, and pipe color update together using the game's artwork. Archery retains face and bow/arrow close-ups. The library does not run a game or award coins. Each game links here instead of maintaining a separate visible character editor; its saved appearance is used when you return to play. If WebGL is unavailable, the studio shows the original 2D artwork and keeps all controls working.
 
 The `arcade/` modules form an opt-in platform; games without characters or coins do not need to depend on them:
 
@@ -71,7 +73,7 @@ The `arcade/` modules form an opt-in platform; games without characters or coins
 | `character-renderers.js` | Compatible WebGL bird, humanoid, snake, and vehicle characters; shares bird models with enhanced Flappy. |
 | `humanoid-mesh.js`, `accessory-mesh.js` | Full archer appearance and creature accessories, including independent hair, outfit, and equipment. |
 | `studio-preview.js`, `studio-2d.js` | Character-only 2D/3D preview, orbit camera, face/equipment focus, and original game artwork adapters. |
-| `editor-hub.js` | Central studio routes that mount the original full customization controls and save through each game's appearance settings. |
+| `editor-hub.js` | Game-selection page and central studio routes that mount the original full customization controls and save through each game's appearance settings. |
 | `flappy-webgl.js` | Flappy's enhanced first-person renderer; reads its existing rules model without advancing or modifying it. |
 | `catalog.js` | Product definitions, prices, supported games, and cosmetic collections. |
 | `wallet.js` | One wallet, shared inventory, migration, incremental reward receipts, subscriptions, and purchase transactions. |

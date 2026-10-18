@@ -1,6 +1,6 @@
 import { createFlappyModel, DIFFICULTIES, POINTS_PER_PIPE, readFlappyProgress, speedFor } from "./flappy-engine.js";
 import { BIRDS, BIRD_DESIGNS, PIPES, BACKGROUNDS, HATS, EYEWEAR, NECKWEAR, TRAILS, COLOR_FIELDS, PALETTES, readFlappySettings } from "./flappy-appearance.js";
-import { createFlappyRenderer, drawFlappyShopPreview } from "./flappy-renderer.js";
+import { createFlappyRenderer, drawFlappyShopPreview, drawFlappyWorldPreview } from "./flappy-renderer.js";
 import { createFlappyAudio } from "./flappy-audio.js";
 import { SHOP_ITEMS, COIN_MULTIPLIERS, flightReward, canEquip } from "./flappy-shop.js";
 import { getArcadeWallet, flappyWalletView } from "./arcade/wallet.js";
@@ -54,6 +54,11 @@ export function createFlappyBird(root, { editorOnly = false, onAppearanceChange 
     <section class="flappy-shop" aria-labelledby="flappy-shop-title"><div class="flappy-shop-heading"><div><p class="flappy-eyebrow">EARN IT. WEAR IT. FLY IT.</p><h4 id="flappy-shop-title">The sky shop</h4><p>Spend flight coins on new looks. Purchases unlock permanently and equip right away.</p></div><div class="flappy-shop-balance">${coinIcon}<strong class="flappy-wallet">0</strong><span>coins to spend</span></div></div><details class="flappy-coin-guide"><summary>How do I earn coins?</summary><p>Each cleared pipe pair earns ${Object.entries(COIN_MULTIPLIERS).map(([id, coins]) => `<strong>${DIFFICULTIES[id].name}: ${coins} ${coins === 1 ? "coin" : "coins"}</strong>`).join(", ")}. Medal tiers recognize 5, 15, 30, and 60 cleared pipes; the coin rate applies once per pipe, with no extra coin bonuses. Coins are banked when the flight ends, including Restart or leaving the game. Zero pipes earns zero coins.</p></details><div class="flappy-shop-filters" aria-label="Shop categories"><button type="button" data-shop-filter="all" aria-pressed="true">Everything</button><button type="button" data-shop-filter="wearables" aria-pressed="false">Accessories</button><button type="button" data-shop-filter="worlds" aria-pressed="false">Worlds &amp; pipes</button><button type="button" data-shop-filter="birds" aria-pressed="false">Birds</button></div><p class="flappy-shop-status" role="status">Your starter collection is free. Fly to earn your first unlock.</p><div class="flappy-shop-grid">${SHOP_ITEMS.map(item => `<article class="flappy-shop-item" data-item="${item.id}" data-category="${item.category}"><canvas class="flappy-shop-preview" width="264" height="150" role="img" aria-label="${item.name} preview"></canvas><div class="flappy-shop-item-info"><h5>${item.name}</h5><p>${item.description}</p><div class="flappy-shop-item-action"><span class="flappy-shop-price">${coinIcon} ${item.cost}</span><button type="button" data-buy="${item.id}" aria-label="Buy ${item.name} for ${item.cost} coins">Unlock</button></div><small class="flappy-shop-need"></small></div></article>`).join("")}</div></section>`;
   root.append(wrapper);
   const $ = selector => wrapper.querySelector(selector);
+  if (editorOnly) {
+    const worldPreview = document.createElement("figure"); worldPreview.className = "flappy-world-preview";
+    worldPreview.innerHTML = '<figcaption><strong>Background &amp; pipes</strong><span>Preview your scenery, pipe style, and pipe color.</span></figcaption><canvas width="640" height="360" role="img" aria-label="Your customized background and pipes"></canvas><p class="flappy-world-caption"></p>';
+    $('[data-setting="background"]').closest("fieldset").after(worldPreview);
+  }
   $(".flappy-palettes").insertAdjacentHTML("afterbegin", '<button type="button" class="flappy-natural-colors">Natural colors</button>');
   const playPage = document.createElement("section");
   playPage.className = "flappy-play-page";
@@ -151,6 +156,12 @@ export function createFlappyBird(root, { editorOnly = false, onAppearanceChange 
     $(".flappy-preview figcaption > span").textContent = BIRD_DESIGNS[settings.bird].detail;
     $(".flappy-natural-colors").setAttribute("aria-pressed", String(Object.entries(BIRD_DESIGNS[settings.bird].colors).every(([key, color]) => settings.colors[key] === color)));
     const outfit = [HATS[settings.hat], EYEWEAR[settings.eyewear], NECKWEAR[settings.neckwear]].filter(name => name !== "None");
+    if (editorOnly) {
+      const worldCanvas = $(".flappy-world-preview canvas");
+      drawFlappyWorldPreview(worldCanvas, settings);
+      worldCanvas.setAttribute("aria-label", `${BACKGROUNDS[settings.background]} background with ${PIPES[settings.pipeStyle].toLowerCase()} in ${settings.colors.pipe}`);
+      $(".flappy-world-caption").textContent = `${BACKGROUNDS[settings.background]} \u00b7 ${PIPES[settings.pipeStyle]} \u00b7 ${settings.colors.pipe.toUpperCase()}`;
+    }
     previewCanvas.setAttribute("aria-label", `${BIRDS[settings.bird]}${outfit.length ? ` wearing ${outfit.join(", ")}` : ""}, with your custom colors`);
     canvas.setAttribute("aria-label", `${settings.view.startsWith("first-person") ? "First-person 3D (Beta)" : "Side-view"} flight, ${BIRDS[settings.bird]}, ${PIPES[settings.pipeStyle]}, ${BACKGROUNDS[settings.background]}`);
     renderer.preview(); renderer.draw(); updateControls(); updateShop();

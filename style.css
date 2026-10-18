@@ -74,6 +74,16 @@
 .arcade-library-hub { display: grid; gap: 24px; min-width: 0; }
 .arcade-library-hub > .arcade-hero h3 { margin-top: 10px; }
 .arcade-library-hub .arcade-eyebrow { color: #a6d1c3; font-size: .63rem; font-weight: 700; letter-spacing: .15em; }
+.arcade-studio-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.arcade-studio-card { display: flex; flex-direction: column; overflow: hidden; min-width: 0; border: 1px solid #9dbdbb38; border-radius: 16px; background: #ffffff05; color: var(--text); text-decoration: none; transition: border-color var(--transition), background var(--transition); }
+.arcade-studio-card:hover { border-color: #a6d1c3; background: #a6d1c310; }
+.arcade-studio-card > img { display: block; width: 100%; height: auto; aspect-ratio: 2 / 1; object-fit: contain; background: #152733; }
+.arcade-studio-card > div { display: flex; flex-direction: column; flex: 1; gap: 10px; padding: 20px; }
+.arcade-studio-card h4 { margin: 0; font-size: 1.2rem; letter-spacing: -.025em; }
+.arcade-studio-card p { margin: 0; color: #bdcecf; font-size: .8rem; line-height: 1.65; }
+.arcade-studio-card > div > span { margin-top: auto; padding-top: 6px; color: #b5dec9; font-size: .75rem; font-weight: 650; }
+.arcade-library-hub :is(a, button, select, input):focus-visible { outline: 3px solid #b7e5d5; outline-offset: 3px; }
+.arcade-editor-back { justify-self: start; min-height: 44px; display: inline-flex; align-items: center; }
 .arcade-editor-toolbar { display: flex; align-items: center; flex-wrap: wrap; gap: 14px 22px; }
 .arcade-editor-toolbar label { display: grid; gap: 7px; font-size: .75rem; font-weight: 600; min-width: 170px; }
 .arcade-editor-toolbar select { padding: 10px; min-height: 44px; border: 1px solid #ffffff30; border-radius: 9px; background: #1e293b; color: #eff4ed; font: inherit; }
@@ -133,6 +143,7 @@
   .arcade-item-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 520px) {
+  .arcade-studio-grid { grid-template-columns: 1fr; }
   .arcade-editor-toolbar label, .arcade-editor-play { width: 100%; }
   .flappy-game[data-editor-only="true"] .flappy-studio-grid { grid-template-columns: 1fr; }
   .arcade-nav { gap: 6px; }
@@ -1445,7 +1456,12 @@ button:hover {
 .flappy-studio-heading h4 { font-size: 1.4rem; letter-spacing: -0.04em; margin: 0 0 6px; }
 .flappy-studio-heading > p:last-child { margin: 0 0 18px; color: var(--flappy-muted); font-size: 0.82rem; line-height: 1.5; }
 .flappy-studio-grid { display: grid; grid-template-columns: 1.1fr 1fr 1fr; gap: 14px; align-items: start; }
-.flappy-preview { margin: 0; overflow: hidden; border: 1px solid #ced8ca; border-radius: 12px; background: #fffdf5; }
+.flappy-preview, .flappy-world-preview { margin: 0; overflow: hidden; border: 1px solid #ced8ca; border-radius: 12px; background: #fffdf5; }
+.flappy-world-preview canvas { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; }
+.flappy-world-preview figcaption { display: grid; gap: 6px; padding: 14px; }
+.flappy-world-preview strong { font-size: .85rem; }
+.flappy-world-preview span, .flappy-world-caption { font-size: .7rem; line-height: 1.6; color: var(--flappy-muted); }
+.flappy-world-caption { margin: 0; padding: 12px 14px; }
 .flappy-bird-preview { display: block; width: 100%; height: auto; aspect-ratio: 9 / 7; }
 .flappy-preview figcaption { padding: 14px; text-align: center; display: grid; gap: 4px; font-size: 0.85rem; }
 .flappy-preview figcaption span { color: var(--flappy-muted); font-size: 0.7rem; }

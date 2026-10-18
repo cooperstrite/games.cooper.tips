@@ -293,6 +293,20 @@ export function createFlappyRenderer(canvas, previewCanvas, model, getSettings) 
   resize(); return { draw, resize, preview };
 }
 
+// A scenery swatch shares the game's painters without starting a flight.
+export function drawFlappyWorldPreview(canvas, settings) {
+  const width = 640, height = 360, ratio = Math.min(window.devicePixelRatio || 1, 2);
+  canvas.width = width * ratio; canvas.height = height * ratio;
+  const ctx = canvas.getContext("2d"); ctx.scale(ratio, ratio);
+  sky(ctx, width, height, settings, 0, 0);
+  const ground = height * 0.91, theme = THEMES[settings.background];
+  pipe2D(ctx, settings, width * 0.15, height * 0.29, height * 0.65, 46, ground, -20);
+  pipe2D(ctx, settings, width * 0.77, height * 0.39, height * 0.75, 46, ground, -20);
+  ctx.fillStyle = theme.ground; ctx.fillRect(0, ground, width, height - ground);
+  ctx.fillStyle = tint(theme.ground, 0.24); ctx.fillRect(0, ground, width, 5);
+  for (let x = 0; x < width; x += 28) line(ctx, [point(x, ground + 13), point(x + 12, ground + 13)], tint(theme.ground, -0.12), 2);
+}
+
 export function drawFlappyShopPreview(canvas, settings, item) {
   const preview = { ...settings, [item.setting]: item.value }, ctx = canvas.getContext("2d"), w = 264, h = 150;
   const ratio = Math.min(window.devicePixelRatio || 1, 1.5); canvas.width = w * ratio; canvas.height = h * ratio; ctx.scale(ratio, ratio);
