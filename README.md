@@ -7,6 +7,7 @@ A playful single-page playground inspired by [neal.fun](https://neal.fun), bundl
 - **Hot & Cold** — Hunt down a mystery number with warmer/colder hints on every guess.
 - **Flash Reflex** — Train your reaction speed by tapping the moment the panel lights up.
 - **Snake** — Glide through the garden and gobble up apples. Customize a Generic, Gardener, Python, or Rattlesnake skin in eight colors, add hats, glasses, and neckwear, and toggle music and sound effects.
+- **Aurora Archery** — Draw a ranger's bow in a mountain landscape, customize your arrows, and explore six trails with moving targets, changing wind, and distances from 20 to 70 meters.
 - **Runway Glide** — Line up the runway lights and land the plane on target.
 - **Rocket Boost** — Hold boost, stage within the target band, and reach orbit.
 - **Switchyard Signals** — Flip the switch before each train hits the junction.
@@ -31,6 +32,10 @@ Neon Drift controls: A/D or the arrow keys steer, Space boosts, and E activates 
 
 Snake controls: arrow keys, WASD, or the on-screen arrows steer; Space pauses and resumes. Skin, color, and accessory changes apply immediately without restarting. Mix a straw hat, royal crown, party hat, or flower crown with round glasses or sunglasses and a bandana, bow tie, or scarf. Hat's "Match skin" option gives the Gardener a straw hat; "None" removes it. Appearance, Music, and Sound FX preferences are saved in this browser. Music starts with a game, pauses when you pause, and stops when you leave Snake.
 
+Aurora Archery is in the main game list. Drag in the range or use the angle and power sliders to aim; Space shoots and P pauses. Up/Down adjusts angle, Left/Right adjusts power. You have six arrows to reach each trail's displayed goal. Gold scores 9-10 points, with lower scores toward the outside and zero for a miss. The dotted flight guide assumes the current wind stays steady: rightward wind pushes arrows farther, while leftward wind slows them down. Lead moving targets by aiming where they will be when the arrow arrives.
+
+First Flight teaches the bow. Meadow Breeze gives each arrow a different wind, held steady while you aim and shoot. Lantern Lift moves the target, while Gusty Gorge changes wind continuously, including during flight. Longshot Lake changes distance after each arrow, between 35 and 70 meters, with calm wind. Aim and power stay unchanged when conditions change, so recalibrate before your next shot. Shot history records the distance and wind for comparison. Aurora Finale combines shifting wind with a target moving between 54 and 66 meters. Woodcraft, Moonsteel, and Aurora crystal arrow designs and six feather colors are cosmetic. Gear, best scores, and earned stars save in this browser.
+
 ## Getting Started
 
 1. Clone the repository: `git clone https://github.com/<your-user>/games.cooper.tips.git`
@@ -50,6 +55,8 @@ The project is entirely client-side, so functional testing is manual:
 - Optional: enable network throttling or reduced motion in devtools to test accessibility quirks.
 
 Neon Drift's driving rules also have focused automated checks: `node --test tests/neon-drift.test.mjs`. Its simulation, canvas rendering, and Web Audio soundtrack are in `neon-drift-engine.js`, `neon-drift.js`, and `neon-drift-audio.js`; no build step or dependencies are required.
+
+Aurora Archery's flight, scoring, wind, target motion, and round rules have focused checks: `node --test tests/archery.test.mjs`. Its rules, renderer, and controls are in `archery-engine.js`, `archery-renderer.js`, and `aurora-archery.js`.
 
 ## Deployment
 
