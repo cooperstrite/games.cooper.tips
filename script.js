@@ -1,3 +1,6 @@
+import { createBubbleRally } from "./bubble-rally.js";
+import { OPPONENT_LEVELS, createComputerOpponent, createOpponentScheduler } from "./arcade/opponents.js";
+import { nimActions, scoreNimAction, giveNimFirstPlayerAChance, TUG_RULES } from "./arcade/opponent-strategies.js";
 import { createNeonDrift } from "./neon-drift.js";
 import { createSnakeAudio } from "./snake-audio.js";
 import { createAuroraArchery } from "./aurora-archery.js";
@@ -3313,11 +3316,8 @@ const games = [
 
       const RACE_TARGETS = [5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150];
 
-      const AI_DIFFICULTIES = {
-        casual: { label: "Casual", successRate: 0.55 },
-        steady: { label: "Steady", successRate: 0.7 },
-        ruthless: { label: "Ruthless", successRate: 0.85 },
-      };
+      const AI_DIFFICULTIES = Object.fromEntries(OPPONENT_LEVELS.map(level => [level.id, level]));
+      let computer = createComputerOpponent();
 
       const state = {
         chain: null,
@@ -3330,7 +3330,7 @@ const games = [
         raceTarget: null,
         aiStreak: 0,
         raceCompleted: false,
-        aiDifficulty: "steady",
+        aiDifficulty: "medium",
         raceActive: false,
       };
 
@@ -3558,7 +3558,7 @@ const games = [
         submitBtn.disabled = false;
         shuffleBtn.disabled = false;
         if (state.raceTarget) {
-          const difficulty = AI_DIFFICULTIES[state.aiDifficulty] ?? AI_DIFFICULTIES.steady;
+          const difficulty = AI_DIFFICULTIES[state.aiDifficulty] ?? AI_DIFFICULTIES.medium;
           status.textContent = state.raceActive
             ? `Race running: You vs ${difficulty.label} AI. First to ${state.raceTarget}.`
             : `Race ready: first to ${state.raceTarget}. Press Start to face the ${difficulty.label} AI.`;
@@ -3651,7 +3651,7 @@ const games = [
         clearFeedback();
         renderChain();
         if (state.raceActive && state.raceTarget) {
-          const difficulty = AI_DIFFICULTIES[state.aiDifficulty] ?? AI_DIFFICULTIES.steady;
+          const difficulty = AI_DIFFICULTIES[state.aiDifficulty] ?? AI_DIFFICULTIES.medium;
           status.textContent = `Race running: You vs ${difficulty.label} AI. First to ${state.raceTarget}.`;
         } else {
           status.textContent = "Cards rearranged. Keep apex predators high and producers low.";
@@ -3809,7 +3809,7 @@ const games = [
         } else {
           raceBadge.textContent = `Race: first to ${state.raceTarget} (not started)`;
         }
-        const difficulty = AI_DIFFICULTIES[state.aiDifficulty] ?? AI_DIFFICULTIES.steady;
+        const difficulty = AI_DIFFICULTIES[state.aiDifficulty] ?? AI_DIFFICULTIES.medium;
         aiBadge.textContent = `AI streak: ${state.aiStreak} (${difficulty.label})`;
       }
 
@@ -3820,7 +3820,7 @@ const games = [
         hardToggle.textContent = state.hardMode ? "Hard mode on" : "Hard mode off";
         renderChain();
         if (state.raceTarget) {
-          const difficulty = AI_DIFFICULTIES[state.aiDifficulty] ?? AI_DIFFICULTIES.steady;
+          const difficulty = AI_DIFFICULTIES[state.aiDifficulty] ?? AI_DIFFICULTIES.medium;
           status.textContent = state.raceActive
             ? `Race running: You vs ${difficulty.label} AI. First to ${state.raceTarget}.`
             : `Race ready: first to ${state.raceTarget}. Press Start to face the ${difficulty.label} AI.`;
@@ -3867,7 +3867,7 @@ const games = [
           state.raceActive = false;
           resetRaceProgress();
           nextBtn.textContent = "New chain";
-          const difficulty = AI_DIFFICULTIES[state.aiDifficulty] ?? AI_DIFFICULTIES.steady;
+          const difficulty = AI_DIFFICULTIES[state.aiDifficulty] ?? AI_DIFFICULTIES.medium;
           status.textContent = `Race ready: first to ${target}. Press Start to face the ${difficulty.label} AI.`;
           raceSelect.value = String(target);
         } else {
@@ -3904,10 +3904,11 @@ const games = [
       }
 
       function setAIDifficulty(key) {
-        const nextKey = key in AI_DIFFICULTIES ? key : "steady";
+        const nextKey = key in AI_DIFFICULTIES ? key : "medium";
         const previous = state.aiDifficulty;
         if (previous === nextKey) return;
         state.aiDifficulty = nextKey;
+        computer = createComputerOpponent({ difficulty: nextKey });
         aiSelect.value = nextKey;
         const difficulty = AI_DIFFICULTIES[nextKey];
         state.aiStreak = 0;
@@ -3934,8 +3935,8 @@ const games = [
           return;
         }
 
-        const difficulty = AI_DIFFICULTIES[state.aiDifficulty] ?? AI_DIFFICULTIES.steady;
-        const aiSucceeded = Math.random() < difficulty.successRate;
+        const difficulty = AI_DIFFICULTIES[state.aiDifficulty] ?? AI_DIFFICULTIES.medium;
+        const aiSucceeded = computer.attempt();
         state.aiStreak = aiSucceeded ? state.aiStreak + 1 : 0;
         if (aiSucceeded) {
           flashBadge(aiBadge, "ai");
@@ -5926,7 +5927,7 @@ const games = [
     name: "Nim Duel",
     summary: "Empty the piles and leave none for the AI.",
     description:
-      "Take turns removing matches from the piles. Leave the AI with no moves to claim victory—but beware, it plays a perfect endgame!",
+      "Take turns removing matches from the piles. Take the last match to win. Choose from four fair computer difficulties, with a winning opening available in every new round.",
     logo: "assets/nim-duel.svg",
     init(root) {
       const wrapper = document.createElement("div");
@@ -5986,7 +5987,18 @@ const games = [
       resetBtn.type = "button";
       resetBtn.textContent = "New round";
 
-      controls.append(pileLabel, countLabel, takeBtn, resetBtn);
+      const difficultyLabel = document.createElement("label");
+      difficultyLabel.className = "nim-select";
+      const difficultyText = document.createElement("span");
+      difficultyText.textContent = "Computer";
+      const difficultySelect = document.createElement("select");
+      difficultySelect.setAttribute("aria-label", "Computer difficulty");
+      OPPONENT_LEVELS.forEach(level => difficultySelect.add(new Option(level.label, level.id)));
+      difficultySelect.value = "medium";
+      difficultyLabel.append(difficultyText, difficultySelect);
+      let computer = createComputerOpponent();
+      const computerClock = createOpponentScheduler();
+      controls.append(difficultyLabel, pileLabel, countLabel, takeBtn, resetBtn);
 
       const help = document.createElement("p");
       help.className = "help-text";
@@ -5999,7 +6011,6 @@ const games = [
         maxTake: 3,
         pileRange: [3, 6],
         matchesRange: [3, 9],
-        aiDelay: 650,
       };
 
       const state = {
@@ -6009,7 +6020,7 @@ const games = [
         aiWins: 0,
         rounds: 0,
         lastMove: null,
-        aiTimer: null,
+        turn: "player",
       };
 
       pileSelect.addEventListener("change", () => {
@@ -6024,11 +6035,16 @@ const games = [
         startRound();
       });
 
+      difficultySelect.addEventListener("change", () => {
+        computer = createComputerOpponent({ difficulty: difficultySelect.value });
+        startRound();
+      });
       startRound();
 
       function startRound() {
-        clearTimeout(state.aiTimer ?? 0);
+        computerClock.cancel();
         state.running = true;
+        state.turn = "player";
         state.lastMove = null;
         state.piles = buildPiles();
         state.rounds += 1;
@@ -6050,7 +6066,7 @@ const games = [
         if (result.every((count) => count === 0)) {
           result[0] = minMatches;
         }
-        return result;
+        return giveNimFirstPlayerAChance(result, config.maxTake);
       }
 
       function renderStats() {
@@ -6102,7 +6118,9 @@ const games = [
         }
 
         updateCountOptions();
-        takeBtn.disabled = !state.running || !firstEnabled;
+        takeBtn.disabled = !state.running || state.turn !== "player" || !firstEnabled;
+        pileSelect.disabled = state.turn !== "player";
+        countSelect.disabled = state.turn !== "player";
       }
 
       function updateCountOptions() {
@@ -6122,7 +6140,7 @@ const games = [
       }
 
       function playerMove() {
-        if (!state.running) return;
+        if (!state.running || state.turn !== "player") return;
         const pileIndex = Number.parseInt(pileSelect.value, 10);
         const take = Number.parseInt(countSelect.value, 10);
         if (!Number.isInteger(pileIndex) || !Number.isInteger(take)) return;
@@ -6131,6 +6149,7 @@ const games = [
           status.textContent = "Not enough matches in that pile.";
           return;
         }
+        state.turn = "ai";
         applyMove({ pile: pileIndex, amount: take, by: "player" });
         if (isRoundOver()) {
           finishRound("player");
@@ -6138,46 +6157,28 @@ const games = [
         }
         status.textContent = "AI is thinking…";
         takeBtn.disabled = true;
-        state.aiTimer = window.setTimeout(aiMove, config.aiDelay);
+        computerClock.schedule(aiMove, computer.thinkingDelay());
       }
 
       function aiMove() {
-        if (!state.running) return;
+        if (!state.running || state.turn !== "ai") return;
         const move = calculateAiMove();
         applyMove({ ...move, by: "ai" });
         if (isRoundOver()) {
           finishRound("ai");
           return;
         }
-        status.textContent = "Your turn. Aim for a zero nim-sum.";
-        takeBtn.disabled = false;
+        state.turn = "player";
+        status.textContent = "Your turn. Remove 1-3 matches from one pile.";
+        updateControls();
       }
 
       function calculateAiMove() {
-        const maxTake = config.maxTake;
-        const nimSum = state.piles.reduce((acc, pile) => acc ^ pile, 0);
-        if (nimSum === 0) {
-          const pileIndex = state.piles.findIndex((pile) => pile > 0);
-          const amount = Math.min(maxTake, state.piles[pileIndex]);
-          return { pile: pileIndex, amount };
-        }
-        for (let index = 0; index < state.piles.length; index += 1) {
-          const pile = state.piles[index];
-          const target = pile ^ nimSum;
-          if (target < pile) {
-            const amount = pile - target;
-            if (amount >= 1 && amount <= maxTake) {
-              return { pile: index, amount };
-            }
-          }
-        }
-        const fallback = state.piles.findIndex((pile) => pile > 0);
-        return { pile: fallback, amount: Math.min(maxTake, state.piles[fallback]) };
+        return computer.choose(nimActions(state.piles, config.maxTake), action => scoreNimAction(state.piles, action, config.maxTake));
       }
 
       function applyMove({ pile, amount, by }) {
-        clearTimeout(state.aiTimer ?? 0);
-        state.aiTimer = null;
+        computerClock.cancel();
         state.piles[pile] -= amount;
         state.piles[pile] = Math.max(0, state.piles[pile]);
         state.lastMove = { pile, amount, by };
@@ -6195,8 +6196,7 @@ const games = [
       function finishRound(winner) {
         state.running = false;
         takeBtn.disabled = true;
-        clearTimeout(state.aiTimer ?? 0);
-        state.aiTimer = null;
+        computerClock.cancel();
         if (winner === "player") {
           state.playerWins += 1;
           status.textContent = "You win the round!";
@@ -6208,7 +6208,7 @@ const games = [
       }
 
       return () => {
-        clearTimeout(state.aiTimer ?? 0);
+        computerClock.dispose();
         wrapper.remove();
       };
     },
@@ -6216,320 +6216,11 @@ const games = [
   {
     id: "bubble",
     name: "Bubble Rally",
-    summary: "Pop the orb and race around the loop first.",
+    summary: "Boost, shield and pop your way to victory with 2-4 racers.",
     description:
-      "Pulse the bubble roller to dash along the neon track. Time your landing on boosts, dodge slow zones, and bump rivals back to start to win the rally.",
-    logo: "assets/bubble-rally.svg",
-    init(root) {
-      const wrapper = document.createElement("div");
-      wrapper.className = "bubble-game";
-
-      const status = document.createElement("div");
-      status.className = "bubble-status";
-      status.textContent = "Pop the orb to take the first move.";
-
-      const stats = document.createElement("div");
-      stats.className = "bubble-stats";
-
-      const playerBadge = document.createElement("span");
-      playerBadge.className = "badge bubble-player";
-      playerBadge.textContent = "Wins: 0";
-
-      const aiBadge = document.createElement("span");
-      aiBadge.className = "badge bubble-ai";
-      aiBadge.textContent = "AI Wins: 0";
-
-      stats.append(playerBadge, aiBadge);
-
-      const board = document.createElement("div");
-      board.className = "bubble-board";
-
-      const controls = document.createElement("div");
-      controls.className = "bubble-controls";
-
-      const popBtn = document.createElement("button");
-      popBtn.type = "button";
-      popBtn.className = "bubble-pop-btn";
-      popBtn.textContent = "Pop";
-
-      const resetBtn = document.createElement("button");
-      resetBtn.type = "button";
-      resetBtn.textContent = "Reset";
-
-      controls.append(popBtn, resetBtn);
-
-      const help = document.createElement("p");
-      help.className = "help-text";
-      help.textContent = "Rolls go from 1 to 6. Land exactly on the finish to win. Boost tiles push you forward; slowdown tiles tug you back.";
-
-      wrapper.append(status, stats, board, controls, help);
-      root.appendChild(wrapper);
-
-      const track = [
-        { x: 8, y: 8 },
-        { x: 32, y: 8 },
-        { x: 58, y: 8 },
-        { x: 82, y: 10 },
-        { x: 90, y: 28 },
-        { x: 92, y: 48 },
-        { x: 88, y: 68 },
-        { x: 74, y: 84 },
-        { x: 52, y: 90 },
-        { x: 28, y: 86 },
-        { x: 10, y: 74 },
-        { x: 8, y: 54 },
-        { x: 10, y: 34 },
-        { x: 26, y: 24 },
-        { x: 48, y: 24 },
-        { x: 70, y: 26 },
-        { x: 76, y: 46 },
-        { x: 68, y: 64 },
-        { x: 48, y: 70 },
-        { x: 38, y: 52 },
-        { x: 46, y: 36 },
-        { x: 60, y: 44 },
-      ];
-
-      const tileTypes = new Map([
-        [2, "boost"],
-        [5, "slow"],
-        [7, "boost"],
-        [10, "slow"],
-        [13, "boost"],
-        [16, "slow"],
-      ]);
-      const finishIndex = track.length - 1;
-
-      const state = {
-        playerPos: 0,
-        aiPos: 0,
-        playerWins: 0,
-        aiWins: 0,
-        turn: "player",
-        running: true,
-        lastRoll: null,
-        lastMove: null,
-        aiTimer: null,
-      };
-
-      renderBoard();
-      renderStats();
-      updateStatus();
-      updateControls();
-
-      popBtn.addEventListener("click", () => {
-        if (!state.running || state.turn !== "player") return;
-        processRoll("player", rollDie());
-      });
-
-      resetBtn.addEventListener("click", startRound);
-
-      function startRound() {
-        clearTimeout(state.aiTimer ?? 0);
-        state.playerPos = 0;
-        state.aiPos = 0;
-        state.turn = "player";
-        state.running = true;
-        state.lastRoll = null;
-        state.lastMove = null;
-        renderBoard();
-        updateStatus("New rally! Pop the orb to move first.");
-        updateControls();
-      }
-
-      function rollDie() {
-        return Math.floor(Math.random() * 6) + 1;
-      }
-
-      function processRoll(actor, value) {
-        state.lastRoll = value;
-        const startPos = getPosition(actor);
-        let target = startPos + value;
-        if (target > finishIndex) {
-          target = startPos; // overshoot: stay put
-          updateStatus(
-            `${actor === "player" ? "You" : "AI"} rolled ${value} but needs an exact finish.`
-          );
-          concludeTurn(actor);
-          return;
-        }
-
-        setPosition(actor, target);
-        const tileEffect = applyTileEffect(actor);
-        if (!state.running) return;
-        const collisionEffect = handleCollision(actor);
-        renderBoard();
-        if (!state.running) return;
-
-        if (getPosition(actor) === finishIndex) {
-          handleWin(actor);
-          return;
-        }
-
-        const mover = actor === "player" ? "You" : "AI";
-        let message = `${mover} moved ${value} ${value === 1 ? "step" : "steps"}.`;
-        if (tileEffect) {
-          message += ` ${tileEffect}`;
-        }
-        if (collisionEffect) {
-          message += ` ${collisionEffect}`;
-        }
-        updateStatus(message);
-        concludeTurn(actor);
-      }
-
-      function concludeTurn(actor) {
-        if (!state.running) return;
-        if (actor === "player") {
-          state.turn = "ai";
-          updateControls();
-          state.aiTimer = window.setTimeout(() => {
-            processRoll("ai", chooseAiRoll());
-          }, 900);
-        } else {
-          state.turn = "player";
-          updateControls();
-          updateStatus("Your turn. Pop the orb!");
-        }
-      }
-
-      function chooseAiRoll() {
-        const pos = state.aiPos;
-        const remaining = finishIndex - pos;
-        if (remaining <= 6 && remaining > 0) return remaining;
-
-        const safeRolls = [];
-        for (let roll = 1; roll <= 6; roll += 1) {
-          let next = pos + roll;
-          if (next > finishIndex) continue;
-          const type = tileTypes.get(next);
-          if (type !== "slow") {
-            safeRolls.push(roll);
-          }
-        }
-        if (safeRolls.length > 0) {
-          return safeRolls[Math.floor(Math.random() * safeRolls.length)];
-        }
-        return rollDie();
-      }
-
-      function handleWin(actor) {
-        state.running = false;
-        clearTimeout(state.aiTimer ?? 0);
-        state.aiTimer = null;
-        if (actor === "player") {
-          state.playerWins += 1;
-          updateStatus("Victory! You crossed the finish first.");
-        } else {
-          state.aiWins += 1;
-          updateStatus("AI scooped the win. Reset to challenge again.");
-        }
-        renderStats();
-        updateControls();
-      }
-
-      function applyTileEffect(actor) {
-        const pos = getPosition(actor);
-        const type = tileTypes.get(pos);
-        if (!type) return "";
-        if (type === "boost" && pos < finishIndex) {
-          setPosition(actor, Math.min(finishIndex, pos + 1));
-          renderBoard();
-          if (getPosition(actor) === finishIndex) {
-            handleWin(actor);
-            return "Boosted into the finish!";
-          }
-          return "Hit a boost +1!";
-        }
-        if (type === "slow" && pos > 0) {
-          setPosition(actor, Math.max(0, pos - 1));
-          return "Slowed down −1.";
-        }
-        return "";
-      }
-
-      function handleCollision(actor) {
-        const playerPos = state.playerPos;
-        const aiPos = state.aiPos;
-        if (playerPos === aiPos && playerPos !== finishIndex) {
-          if (actor === "player") {
-            state.aiPos = 0;
-            return "Bumped the AI back to start!";
-          }
-          state.playerPos = 0;
-          return "AI bumped you back to start.";
-        }
-        return "";
-      }
-
-      function getPosition(actor) {
-        return actor === "player" ? state.playerPos : state.aiPos;
-      }
-
-      function setPosition(actor, value) {
-        if (actor === "player") {
-          state.playerPos = value;
-        } else {
-          state.aiPos = value;
-        }
-      }
-
-      function renderBoard() {
-        board.textContent = "";
-        track.forEach((coords, index) => {
-          const node = document.createElement("div");
-          node.className = "bubble-node";
-          node.style.setProperty("--x", `${coords.x}%`);
-          node.style.setProperty("--y", `${coords.y}%`);
-          if (tileTypes.has(index)) {
-            node.classList.add(`bubble-${tileTypes.get(index)}`);
-          }
-          if (index === finishIndex) {
-            node.classList.add("bubble-finish");
-          }
-
-          const label = document.createElement("span");
-          label.className = "bubble-node-index";
-          label.textContent = String(index + 1);
-          node.appendChild(label);
-
-          if (state.playerPos === index) {
-            const token = document.createElement("span");
-            token.className = "bubble-token bubble-token-player";
-            node.appendChild(token);
-          }
-          if (state.aiPos === index) {
-            const token = document.createElement("span");
-            token.className = "bubble-token bubble-token-ai";
-            node.appendChild(token);
-          }
-
-          board.appendChild(node);
-        });
-      }
-
-      function renderStats() {
-        playerBadge.textContent = `Wins: ${state.playerWins}`;
-        aiBadge.textContent = `AI Wins: ${state.aiWins}`;
-      }
-
-      function updateControls() {
-        popBtn.disabled = !state.running || state.turn !== "player";
-        resetBtn.disabled = false;
-        popBtn.textContent = state.running && state.turn === "player" ? "Pop" : "Pop";
-      }
-
-      function updateStatus(message) {
-        if (message) {
-          status.textContent = message;
-        }
-      }
-
-      return () => {
-        clearTimeout(state.aiTimer ?? 0);
-        wrapper.remove();
-      };
-    },
+      "Race luminous bubble circuits with up to four human or computer players. Roll fair dice, manage energy, protect your lead and send rivals back to their checkpoint. Every computer has its own difficulty.",
+    logo: "assets/bubble-rally-cover.png",
+    init: createBubbleRally,
   },
   {
     id: "skyport",
@@ -7329,14 +7020,11 @@ const games = [
       const difficultyGroup = document.createElement("div");
       difficultyGroup.className = "spotclash-difficulty";
 
-      const difficulties = {
-        chill: { label: "Chill", reaction: 2300, accuracy: 0.55, cardSize: 4, target: 6 },
-        easy: { label: "Easy", reaction: 2000, accuracy: 0.7, cardSize: 5, target: 7 },
-        medium: { label: "Medium", reaction: 1650, accuracy: 0.82, cardSize: 6, target: 8 },
-        hard: { label: "Hard", reaction: 1300, accuracy: 0.9, cardSize: 7, target: 9 },
-        spicy: { label: "Spicy", reaction: 950, accuracy: 0.95, cardSize: 7, target: 10 },
-        expert: { label: "Expert", reaction: 700, accuracy: 0.98, cardSize: 8, target: 10 },
-      };
+      const difficulties = Object.fromEntries(OPPONENT_LEVELS.map((level, index) => [level.id, {
+        label: level.label, cardSize: 5 + index, target: 7 + index,
+      }]));
+      let computer = createComputerOpponent();
+      const computerClock = createOpponentScheduler();
 
       const difficultyButtons = new Map();
       Object.entries(difficulties).forEach(([key, value]) => {
@@ -7411,7 +7099,7 @@ const games = [
         playerSymbols: [],
         aiSymbols: [],
         winTarget: difficulties.medium.target,
-        aiTimeout: null,
+        aiCorrect: false,
       };
 
       startBtn.addEventListener("click", () => {
@@ -7422,6 +7110,7 @@ const games = [
       function setDifficulty(key) {
         if (!difficulties[key]) return;
         state.difficulty = key;
+        computer = createComputerOpponent({ difficulty: key });
         state.winTarget = difficulties[key].target;
         difficultyButtons.forEach((button, valueKey) => {
           button.setAttribute("aria-pressed", valueKey === key ? "true" : "false");
@@ -7432,8 +7121,7 @@ const games = [
       }
 
       function resetGame(updateStatus = true) {
-        clearTimeout(state.aiTimeout ?? 0);
-        state.aiTimeout = null;
+        computerClock.cancel();
         state.playerScore = 0;
         state.aiScore = 0;
         state.roundActive = false;
@@ -7485,7 +7173,7 @@ const games = [
       }
 
       function startRound() {
-        clearTimeout(state.aiTimeout ?? 0);
+        computerClock.cancel();
         state.roundActive = true;
         const config = difficulties[state.difficulty];
         const { shared, playerCard, aiCard } = buildCards(config.cardSize);
@@ -7523,15 +7211,13 @@ const games = [
         if (!state.roundActive) return;
         if (symbol === state.sharedSymbol) {
           state.roundActive = false;
-          clearTimeout(state.aiTimeout ?? 0);
-          state.aiTimeout = null;
+          computerClock.cancel();
           state.playerScore += 1;
           status.textContent = "You spotted it first!";
           checkForWinner();
         } else {
           state.roundActive = false;
-          clearTimeout(state.aiTimeout ?? 0);
-          state.aiTimeout = null;
+          computerClock.cancel();
           state.aiScore += 1;
           status.textContent = "Wrong symbol—AI scores the point.";
           checkForWinner();
@@ -7539,16 +7225,15 @@ const games = [
       }
 
       function scheduleAiMove() {
-        const config = difficulties[state.difficulty];
-        state.aiTimeout = window.setTimeout(() => {
-          performAiMove();
-        }, config.reaction);
+        const plan = computer.planReaction();
+        state.aiCorrect = plan.correct;
+        computerClock.schedule(performAiMove, plan.delay);
       }
 
       function performAiMove() {
         if (!state.roundActive) return;
         const config = difficulties[state.difficulty];
-        const correct = Math.random() <= config.accuracy;
+        const correct = state.aiCorrect;
         const pick = correct
           ? state.sharedSymbol
           : pickIncorrectSymbol();
@@ -7577,10 +7262,7 @@ const games = [
           state.roundActive = false;
           return;
         }
-        const timeoutId = window.setTimeout(() => {
-          startRound();
-        }, 1100);
-        state.aiTimeout = timeoutId;
+        computerClock.schedule(startRound, 1100);
       }
 
       function shuffle(array) {
@@ -7591,7 +7273,7 @@ const games = [
       }
 
       return () => {
-        clearTimeout(state.aiTimeout ?? 0);
+        computerClock.dispose();
         wrapper.remove();
       };
     },
@@ -7613,19 +7295,15 @@ const games = [
         {
           id: "ai",
           label: "Player vs AI",
-          description: "You control the cats. The dogs respond with adaptive mash speed.",
+          description: "You control the cats. The dogs use the same pull per tap as you, at a pace set by their difficulty.",
         },
       ];
 
-      const aiDifficulties = [
-        { id: "easy", label: "Easy", baseImpulse: 2.8, rateScale: 0.35 },
-        { id: "normal", label: "Normal", baseImpulse: 3.2, rateScale: 0.45 },
-        { id: "hard", label: "Hard", baseImpulse: 3.8, rateScale: 0.6 },
-      ];
+      const aiDifficulties = OPPONENT_LEVELS;
+      let computer = createComputerOpponent();
+      const computerClock = createOpponentScheduler();
 
-      const MAX_PULL = 100;
-      const CLICK_IMPULSE = 4.6;
-      const BASE_RETURN = 0.12;
+      const { maxPull: MAX_PULL, clickImpulse: CLICK_IMPULSE, returnRate: BASE_RETURN } = TUG_RULES;
 
       const wrapper = document.createElement("div");
       wrapper.className = "catsdogs-tug";
@@ -7724,8 +7402,6 @@ const games = [
         dogWins: 0,
         lastTick: 0,
         rafId: null,
-        aiInterval: null,
-        clickWindow: [],
       };
 
       function syncModeFromSelect() {
@@ -7745,6 +7421,7 @@ const games = [
       function syncDifficultyFromSelect() {
         const match = aiDifficulties.find((entry) => entry.id === difficultySelect.value) ?? aiDifficulties[1];
         state.difficulty = match.id;
+        computer = createComputerOpponent({ difficulty: match.id });
         difficultySelect.value = match.id;
       }
 
@@ -7752,7 +7429,6 @@ const games = [
         if (!state.running || state.finished) return;
         if (state.mode === "ai" && side === "dogs") return;
         applyImpulse(side, CLICK_IMPULSE);
-        recordClick(side);
         renderArena();
         checkWinConditions();
       }
@@ -7764,48 +7440,24 @@ const games = [
         if (state.position < -MAX_PULL) state.position = -MAX_PULL;
       }
 
-      function recordClick(side) {
-        const now = performance.now();
-        state.clickWindow.push({ side, time: now });
-        pruneClickWindow();
-      }
-
-      function pruneClickWindow() {
-        const now = performance.now();
-        state.clickWindow = state.clickWindow.filter((entry) => now - entry.time <= 1200);
-      }
-
-      function clickRate(side) {
-        pruneClickWindow();
-        const count = state.clickWindow.filter((entry) => entry.side === side).length;
-        return count / 1.2; // approximate clicks per second
-      }
-
       function startAi() {
         stopAi();
-        state.aiInterval = window.setInterval(() => {
-          if (!state.running || state.finished) return;
-          const rate = clickRate("cats");
-          const config = aiDifficulties.find((entry) => entry.id === state.difficulty) ?? aiDifficulties[1];
-          const impulse = config.baseImpulse + rate * config.rateScale;
-          applyImpulse("dogs", impulse);
-          recordClick("dogs");
+        const tap = () => {
+          if (!state.running || state.finished || state.mode !== "ai") return;
+          applyImpulse("dogs", CLICK_IMPULSE);
           renderArena();
           checkWinConditions();
-        }, 160);
+          if (state.running) computerClock.schedule(tap, computer.nextTapDelay());
+        };
+        computerClock.schedule(tap, computer.nextTapDelay());
       }
 
-      function stopAi() {
-        if (state.aiInterval) {
-          window.clearInterval(state.aiInterval);
-          state.aiInterval = null;
-        }
-      }
+      function stopAi() { computerClock.cancel(); }
 
       function loop(timestamp) {
         if (!state.running) return;
         if (!state.lastTick) state.lastTick = timestamp;
-        const delta = (timestamp - state.lastTick) / 1000;
+        const delta = Math.min(0.05, (timestamp - state.lastTick) / 1000);
         state.lastTick = timestamp;
         if (!state.finished) {
           const pullBack = -state.position * BASE_RETURN * delta;
@@ -7824,7 +7476,6 @@ const games = [
         state.running = true;
         state.finished = false;
         state.lastTick = 0;
-        state.clickWindow = [];
         renderArena();
         renderButtons();
         setStatus(state.mode === "ai" ? "Mash for the cats! The dogs will auto-counter." : "Mash for your side! Cats use A, dogs use L.");
@@ -7896,7 +7547,6 @@ const games = [
         state.running = false;
         state.finished = false;
         state.lastTick = 0;
-        state.clickWindow = [];
         renderArena();
         renderScoreboard();
         renderButtons();
@@ -7953,6 +7603,7 @@ const games = [
 
       return () => {
         stopLoops();
+        computerClock.dispose();
         modeSelect.removeEventListener("change", handleModeChange);
         startBtn.removeEventListener("click", handleStartClick);
         catButton.removeEventListener("click", handleCatClick);

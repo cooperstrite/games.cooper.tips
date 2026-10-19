@@ -17,8 +17,8 @@ A playful single-page playground inspired by [neal.fun](https://neal.fun), bundl
 - **Tower Stack** — Drop moving blocks with precise timing to grow the tallest, straightest tower.
 - **Orbit Dash** — Hold Dash/space to burst outward through the glowing gate, release to reset your orbit, and chain flawless passes for a faster streak.
 - **Pop Dash** — Click bubbles the instant they appear to keep the streak alive before they burst.
-- **Nim Duel** — Choose a pile, remove 1–3 matches, and outthink the flawless AI so it’s forced to take the final stick.
-- **Bubble Rally** — Pop the orb to sprint around the neon loop, riding boosts and dodging slowdowns to win the race.
+- **Nim Duel** — Choose a pile, remove 1–3 matches, and take the final match to win against four computer difficulties.
+- **Bubble Rally** — Race glass bubbles across three ocean circuits with 2-4 human/computer racers. Choose each computer's difficulty, manage energy, raise shields, and pop rivals back to checkpoints.
 - **Skyport Command** — Pick a contract, ensure you have the energy, dispatch a drone, and reinvest the cargo/credits before the 3-minute day ends.
 - **Harmonic Echo** — Master a growing instrument sequence across dynamic difficulty modes.
 - **Spot Clash** — Race an AI rival to find the shared symbol across dueling glyph cards.
@@ -29,7 +29,13 @@ A playful single-page playground inspired by [neal.fun](https://neal.fun), bundl
 - **Food Chain Relay** — Shuffle producers, consumers, and apex predators back into order to prove you understand energy flow.
 - **Neon Drift** — Pick from five routes, four difficulty levels, and four cars with special abilities. Traffic and speed build with distance. Choose a 1 km, 3 km, 8 km, or endless drive, with crash explosions, varied vehicles, music, and sound effects.
 
-Neon Drift controls: A/D or the arrow keys steer, Space boosts, and E activates your car's ability. Comet GT has a nitro surge, Sentinel SUV shields one impact and flings the other car away, Phantom Coupe phases through traffic, and Rally RS slows approaching traffic and improves handling. Country Curves has blind bends and hills; Alpine Pass has fog and crests; Midnight Rain has slippery steering; Canyon Crosswinds has gusts and heavy trucks. Music and Sound FX can be toggled separately, and your choices are saved in this browser.
+Neon Drift controls: A/D or Left/Right arrows steer, Space or W boosts, and E or Up Arrow activates your car's ability. Comet GT has a nitro surge, Sentinel SUV shields one impact and flings the other car away, Phantom Coupe phases through traffic, and Rally RS slows approaching traffic and improves handling. Country Curves has blind bends and hills; Alpine Pass has fog and crests; Midnight Rain has slippery steering; Canyon Crosswinds has gusts and heavy trucks. Music and Sound FX can be toggled separately, and your choices are saved in this browser.
+
+Bubble Rally's **Race setup** supports two, three, or four seats with any mix of humans and computers, including computer-only races to watch. Each computer independently uses Easy, Medium, Hard, or Expert. **Vs computer** and **Local multiplayer** are quick presets; the roster allows mixed groups. Multiplayer is on one device, with no server or room codes. Names, roster, circuit, and sound preference save locally. Setup changes apply to the next race, and the starting seat rotates on rematches.
+
+Roll a fair 1-6 die, then choose **Cruise** (recover 1 energy), **Boost** (spend 2 for +2 tiles), **Brake** (move 2 fewer, minimum 1, recover 1 energy), or **Shield** (spend 2 to block one storm or incoming pop). Energy caps at 6. Landing effects trigger once: currents move forward 2, charge tiles add 2 energy, and storms push back 2 (3 in Tempest Run). Passing tiles 10 and 20 saves a checkpoint. Landing on a rival pops them back to that checkpoint unless shielded; checkpoint tiles allow safe sharing. Reach or pass tile 31 to win. Human moves wait for **Next racer**; computer turns advance automatically. Pause freezes pending rolls, moves, and computer decisions. Hidden tabs pause timers without catch-up bursts, and leaving the game disposes the renderer and opponent clock.
+
+Crystal Lagoon offers gentler hazards, Prism Circuit balances the tile types, and Tempest Run makes shielding more valuable. Move cards show their final destination and provide a highlighted path preview on hover or keyboard focus. The board shares the cover's ocean setting, glass-and-waterfall platforms, and four iridescent bubble sprites, with moving tokens, pop particles, shields, a finish arch, and optional synthesized sound effects. Narrow screens use a taller four-column board; reduced-motion preferences shorten movement animations. Artwork provenance and exact generation prompts are in [assets/bubble-rally-art.json](assets/bubble-rally-art.json).
 
 Snake controls: arrow keys, WASD, or the on-screen arrows steer; Space pauses and resumes. Skin, color, and accessory changes apply immediately without restarting. Mix a straw hat, royal crown, party hat, or flower crown with round glasses or sunglasses and a bandana, bow tie, or scarf. Hat's "Match skin" option gives the Gardener a straw hat; "None" removes it. Appearance, Music, and Sound FX preferences are saved in this browser. Music starts with a game, pauses when you pause, and stops when you leave Snake.
 
@@ -75,6 +81,8 @@ The `arcade/` modules form an opt-in platform; games without characters or coins
 | --- | --- |
 | `characters.js` | Compatible casts and immutable `GameCharacter` instances built with `CharacterBuilder`; appearance only, with no physics fields. |
 | `runtime.js` | Canvas 2D surfaces, pixel scaling, and disposable frame loops. |
+| `opponents.js` | Shared Easy/Medium/Hard/Expert decisions, accuracy, reaction windows, bounded tapping pace, and cancellable/visibility-aware action scheduling. |
+| `opponent-strategies.js` | Game-specific public-state adapters: legal bounded-Nim moves, winning-position evaluation, fair openings, and shared tug rules. |
 | `babylon.js` | Lazy-loaded, locally hosted Babylon.js scenes, perspective/orthographic cameras, PBR materials, lighting, and optional soft shadows. |
 | `character-renderers.js` | Compatible WebGL bird, humanoid, snake, vehicle, and runner characters; shares models between studios and gameplay. |
 | `humanoid-mesh.js`, `accessory-mesh.js` | Full archer appearance and creature accessories, including independent hair, outfit, and equipment. |
@@ -88,6 +96,10 @@ The `arcade/` modules form an opt-in platform; games without characters or coins
 | `hub.js` | Shared navigation, shop, and collection inventory. |
 
 Composition follows `game controller -> game rules model -> renderer`. Controllers report achievements to reward sessions, which credit only the increase for a run. Purchases and credits read the latest wallet and use the browser's Web Locks API when available to serialize changes between tabs. Renderers receive a model to display; they do not own game rules. Character builders reject incompatible families and unsupported appearance fields, so an archer cannot become a Flappy bird or acquire driving abilities.
+
+Bubble Rally, Nim Duel, Food Chain Relay, Spot Clash, and Cats vs Dogs all use the central computer-opponent policy. A game supplies legal actions and a score based on public state; `createComputerOpponent().choose(actions, evaluate)` chooses within that set. Outcome randomness (such as Bubble Rally dice) stays in the game's rules model, separate from computer decision randomness. Reaction games use `planReaction()`, the food-chain race uses `attempt()`, and tug uses `nextTapDelay()` with the same pull per tap as the human. Expert remains fallible, reactions have a 900 ms floor, and tug pace never scales with the human's tapping speed. Nim uses the correct bounded-removal value, XOR of pile counts modulo 4, and starts the human in a position with a winning line. Games retain their own scoring, controls, and victory conditions.
+
+Run `node --test tests/opponents.test.mjs tests/bubble-rally.test.mjs` for legal-action, die-fairness, energy/shield/checkpoint, multiplayer, scheduler, and difficulty checks. A fixed tactical strategy won 428/600 Easy, 367/600 Medium, 330/600 Hard, and 301/600 Expert seeded Bubble Rally matches, alternating starters across all three circuits. These are reproducible calibration results, not predicted human win rates. Additional three- and four-seat simulations finish on every circuit, and a six-taps-per-second tug strategy can overcome expert with normal rope tension.
 
 ```mermaid
 flowchart LR
