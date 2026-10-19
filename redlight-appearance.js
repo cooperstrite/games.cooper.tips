@@ -36,6 +36,15 @@ export function saveRunnerAppearance(appearance, storage) {
   try { (storage || globalThis.localStorage).setItem(RUNNER_STORAGE_KEY, JSON.stringify(readRunnerAppearance(appearance))); return true; } catch { return false; }
 }
 
+// Forward is -Z. Keep elbows bent and each arm opposite its matching leg.
+function runnerArm(side, broad, swing, striding) {
+  const angle=striding?-side*swing*.65:.08,flex=striding?1.3-side*swing*.14:.18;
+  const shoulder=[side*19*broad,107,0];
+  const elbow=[side*25*broad,107-Math.cos(angle)*26,-Math.sin(angle)*26];
+  const hand=[side*24*broad,elbow[1]-Math.cos(angle+flex)*23,elbow[2]-Math.sin(angle+flex)*23];
+  return {shoulder,elbow,hand};
+}
+
 // Original 2D artwork, shared by the race and character studio. Feet sit at y=0.
 export function drawRunner(context, appearance, { x = 0, y = 0, scale = 1, stride = 0, running = false, view = "front" } = {}) {
   const a = appearance, c = a.colors, ctx = context;
@@ -69,11 +78,11 @@ export function drawRunner(context, appearance, { x = 0, y = 0, scale = 1, strid
   else if(view === "front") { ctx.fillStyle="#f4f4ec";ctx.fillRect(-9,-91,18,16);ctx.fillStyle="#253747";ctx.font="bold 11px sans-serif";ctx.textAlign="center";ctx.fillText("01",0,-79); }
   else line([[-12*broad,-105],[0,-101],[12*broad,-105]],2,c.accessory);
   for(const side of [-1,1]) {
-    const elbowX=side*(29*broad+Math.sin(phase)*7), handX=side*(25*broad-swing*9), handY=-68+side*swing*12;
-    line([[side*19*broad,-107],[elbowX,-86],[handX,handY]],long ? 11 : 9,long ? c.body : c.skin);
-    if(!long && a.runner !== "sprinter") line([[side*19*broad,-107],[side*24*broad,-96]],14,c.body);
-    ellipse(handX,handY,5.5,7,c.skin);
-    if(a.wristwear === "bands" || (a.wristwear === "watch" && side === -1)) line([[handX,handY-7],[handX+side*2,handY-10]],a.wristwear === "watch" ? 8 : 10,c.accessory);
+    const {shoulder,elbow,hand}=runnerArm(side,broad,swing,running||stride!==0),front=p=>[p[0],-p[1]];
+    line([shoulder,elbow,hand].map(front),long ? 11 : 9,long ? c.body : c.skin);
+    if(!long && a.runner !== "sprinter") line([front(shoulder),front(shoulder.map((n,i)=>n+(elbow[i]-n)*.4))],14,c.body);
+    ellipse(hand[0],-hand[1],5.5,7,c.skin);
+    if(a.wristwear === "bands" || (a.wristwear === "watch" && side === -1)) line([.72,.88].map(t=>front(elbow.map((n,i)=>n+(hand[i]-n)*t))),a.wristwear === "watch" ? 8 : 10,c.accessory);
   }
   line([[0,-113],[0,-126]],12,c.skin);
   if(view === "back") {
@@ -128,6 +137,65 @@ export function drawRunner(context, appearance, { x = 0, y = 0, scale = 1, strid
   }
   if(a.headwear === "headband") line([[-18,-155],[0,-156],[18,-155]],6,c.headwear);
   if(a.headwear === "cap") { ctx.fillStyle=c.headwear;ctx.beginPath();ctx.ellipse(0,-158,22,17,0,Math.PI,Math.PI*2);ctx.fill();ellipse(5,-158,28,4,c.headwear);line([[-17,-161],[15,-161]],2,c.accessory); }
+  ctx.restore();
+}
+
+// An elevated, orthographic cartoon pose. Size stays constant along the track.
+export function drawRunnerOverhead(context, appearance, {x=0,y=0,scale=1,stride=0,running=false}={}) {
+  const ctx=context,a=appearance,c=a.colors,broad=a.build==="strong"?1.16:a.build==="lean"?.88:1;
+  const striding=running||stride!==0,swing=striding?Math.sin(stride):0,long=a.runner==="tracksuit";
+  const project=p=>[p[0],p[2]*.94-p[1]*.34];
+  const mix=(a,b,t)=>a.map((n,i)=>n+(b[i]-n)*t);
+  ctx.save();ctx.translate(x,y);ctx.scale(scale,scale);
+  function ellipse(x,y,rx,ry,color,angle=0){ctx.fillStyle=color;ctx.beginPath();ctx.ellipse(x,y,rx,ry,angle,0,Math.PI*2);ctx.fill();}
+  function line(points,width,color){ctx.strokeStyle=color;ctx.lineWidth=width;ctx.lineCap="round";ctx.lineJoin="round";ctx.beginPath();points.forEach(([px,py],i)=>i?ctx.lineTo(px,py):ctx.moveTo(px,py));ctx.stroke();}
+  function limb(points,width,color){line(points,width+2,"#30453d70");line(points,width,color);}
+  // A small offset shadow makes the foreshortened limbs readable from above.
+  ellipse(5,-12,27*broad,33,"#332d3438",-.15);
+  for(const side of [-1,1]) {
+    const angle=striding?side*swing*.75:0,bend=striding?-.15-Math.max(0,-side*swing)*1.05:0;
+    const hip=[side*8*broad,57,0],knee=[side*10*broad,57-Math.cos(angle)*25,-Math.sin(angle)*25];
+    const ankle=[side*13*broad,knee[1]-Math.cos(angle+bend)*25,knee[2]-Math.sin(angle+bend)*25];
+    limb([hip,knee,ankle].map(project),long?13:10,long?c.bottoms:c.skin);
+    if(!long)line([hip,mix(hip,knee,a.runner==="trail"?.95:.72)].map(project),16,c.bottoms);
+    const foot=project(ankle);ellipse(foot[0],foot[1]-4,7,12,c.shoes,side*-.06);
+    line([[foot[0]-5,foot[1]+4],[foot[0]+5,foot[1]+4]],2,"#e8eced");
+    line([[foot[0]-3,foot[1]-4],[foot[0]+3,foot[1]-4]],2,c.accessory);
+  }
+  for(const side of [-1,1]) {
+    const {shoulder,elbow,hand}=runnerArm(side,broad,swing,striding);
+    limb([shoulder,elbow,hand].map(project),long?11:9,long?c.body:c.skin);
+    if(!long&&a.runner==="trail")line([shoulder,mix(shoulder,elbow,.4)].map(project),14,c.body);
+    const palm=project(hand);ellipse(palm[0],palm[1],5.5,6.5,c.skin);
+    ctx.strokeStyle="#30453d70";ctx.lineWidth=1;ctx.stroke();
+    if(a.wristwear==="bands"||(a.wristwear==="watch"&&side===-1))line([mix(elbow,hand,.72),mix(elbow,hand,.88)].map(project),8,c.accessory);
+  }
+  ctx.fillStyle=c.body;ctx.beginPath();ctx.moveTo(-17*broad,-18);ctx.quadraticCurveTo(-23*broad,-36,-18*broad,-43);ctx.quadraticCurveTo(0,-53,18*broad,-43);ctx.quadraticCurveTo(23*broad,-36,17*broad,-18);ctx.quadraticCurveTo(0,-12,-17*broad,-18);ctx.fill();
+  line([[-15*broad,-39],[-13*broad,-20]],3,c.accessory);line([[15*broad,-39],[13*broad,-20]],3,c.accessory);
+  if(a.runner==="trail") {
+    ctx.fillStyle=c.bottoms;ctx.beginPath();ctx.roundRect(-13,-44,26,27,8);ctx.fill();
+    line([[-8,-25],[8,-25]],2,c.accessory);line([[0,-40],[0,-32]],2,c.accessory);
+  } else line([[-10*broad,-39],[0,-36],[10*broad,-39]],2,c.accessory);
+  const hy=-52;
+  ellipse(-19,hy+2,4,6,c.skin);ellipse(19,hy+2,4,6,c.skin);ellipse(0,hy-21,4,6,c.skin);
+  ellipse(0,hy,19,23,c.skin);
+  if(a.hair!=="bald") {
+    ellipse(0,hy+1,a.hair==="bob"?21:19,a.hair==="bob"?27:22,c.hair);
+    if(a.hair==="curls")for(let i=0;i<15;i++){const angle=i/15*Math.PI*2;ellipse(Math.cos(angle)*16,hy+Math.sin(angle)*19,6,7,c.hair);}
+    else {ctx.globalAlpha=.12;line([[-9,hy-13],[-12,hy],[-8,hy+14]],2,"#ffffff");ctx.globalAlpha=1;}
+  }
+  if(a.headwear==="headband") {
+    ctx.strokeStyle=c.headwear;ctx.lineWidth=5;ctx.beginPath();ctx.ellipse(0,hy,20,21,0,Math.PI*1.06,Math.PI*1.94);ctx.stroke();
+  }
+  if(a.headwear==="cap") {
+    ellipse(0,hy-21,22,10,c.headwear);ellipse(0,hy,20,23,c.headwear);
+    line([[0,hy-19],[0,hy+17]],1.5,c.accessory);ellipse(0,hy,2.5,2.5,c.accessory);
+  }
+  const sway=striding?Math.sin(stride)*3:0;
+  if(a.hair==="ponytail"){ellipse(sway,hy+26,8,19,c.hair,-sway*.04);line([[-5,hy+13],[5,hy+13]],3,c.accessory);}
+  if(a.hair==="bun")ellipse(0,hy+13,10,9,c.hair);
+  if(a.hair==="braids")for(const side of [-1,1])for(let i=0;i<7;i++)ellipse(side*17+sway*i/7,hy+9+i*4,4,3,c.hair);
+  if(a.eyewear!=="none")for(const side of [-1,1])line([[side*18,hy-7],[side*15,hy-19]],2,c.accessory);
   ctx.restore();
 }
 export function drawRunnerPreview(canvas, appearance, focus = "body") {

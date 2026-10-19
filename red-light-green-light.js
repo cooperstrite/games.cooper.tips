@@ -11,8 +11,8 @@ export function createRedLightGreenLight(root, { editorOnly = false, onAppearanc
   const wrapper=document.createElement("section");wrapper.className="rlgl-game";wrapper.dataset.view="2d";
   wrapper.innerHTML=`<div class="rlgl-toolbar"><div class="rlgl-view-buttons" role="group" aria-label="Race view"><button type="button" data-view="2d" aria-pressed="true">2D track</button><button type="button" data-view="3d" aria-pressed="false">3D race (Beta)</button></div><button type="button" class="rlgl-sound" aria-label="Sound effects" aria-pressed="true">Sound FX: On</button><a class="arcade-text-link" href="#characters/redlight">Customize runner &rarr;</a></div>
     <div class="rlgl-stats" aria-live="off"><span class="badge rlgl-timer">Time: -</span><span class="badge rlgl-distance">Distance: 0 / 100 m</span><span class="badge rlgl-best">Best: -</span></div>
-    <div class="rlgl-stage"><canvas class="rlgl-canvas-2d" role="img" aria-label="2D running track with your customized runner"></canvas><canvas class="rlgl-canvas-3d" role="img" aria-label="3D race (Beta), following your customized runner" hidden></canvas>
-      <div class="rlgl-stage-label">PARK CIRCUIT <span>2D TRACK</span></div>
+    <div class="rlgl-stage"><canvas class="rlgl-canvas-2d" role="img" aria-label="Bird's-eye 2D running track with your customized runner"></canvas><canvas class="rlgl-canvas-3d" role="img" aria-label="3D race (Beta), following your customized runner" hidden></canvas>
+      <div class="rlgl-stage-label">PARK CIRCUIT <span>BIRD'S-EYE 2D</span></div>
       <div class="rlgl-stoplight" role="img" aria-label="Stoplight: ready" data-state="idle"><div class="rlgl-lamps"><i class="rlgl-lamp-red"></i><i class="rlgl-lamp-amber"></i><i class="rlgl-lamp-green"></i></div><strong>READY</strong></div>
       <div class="rlgl-overlay"><strong>Find your moment.</strong><span>Run on green. Freeze on red.</span></div>
       <div class="rlgl-progress"><span></span></div>
@@ -73,7 +73,7 @@ export function createRedLightGreenLight(root, { editorOnly = false, onAppearanc
     desiredView=next;audio.silence();release();if(race.active)race.pause();sync();
     wrapper.querySelectorAll("[data-view]").forEach(button=>button.setAttribute("aria-pressed",String(button.dataset.view===next)));
     if(next==="2d"){
-      view="2d";canvas2D.hidden=false;canvas3D.hidden=true;wrapper.dataset.view=view;$(".rlgl-stage-label span").textContent="2D TRACK";
+      view="2d";canvas2D.hidden=false;canvas3D.hidden=true;wrapper.dataset.view=view;$(".rlgl-stage-label span").textContent="BIRD'S-EYE 2D";
       viewStatus.hidden=!failed;if(failed)viewStatus.textContent="The 3D race (Beta) could not load on this device. You can keep playing in 2D.";painter.resize();draw();return;
     }
     if(webgl){view="3d";wrapper.dataset.view=view;canvas2D.hidden=true;canvas3D.hidden=false;$(".rlgl-stage-label span").textContent="3D RACE (BETA)";viewStatus.hidden=true;webgl.resize();draw();return;}
