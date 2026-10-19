@@ -2,7 +2,12 @@ import { createCanvasSurface, createFrameLoop } from "./arcade/runtime.js";
 import { rallyCourse, tileAt } from "./bubble-rally-model.js";
 
 const TILE_COLORS = { normal: "#6584b3", start: "#62e8ff", charge: "#62f3bc", boost: "#68dfff", storm: "#ff87b7", checkpoint: "#c4a1ff", finish: "#ffe29a" };
-const TILE_LABELS = { start: "START", charge: "+2", boost: ">>", storm: "!", checkpoint: "SAFE", finish: "FINISH" };
+const TILE_LABELS = { start: "START", charge: "E+2", boost: ">>", checkpoint: "SAFE", finish: "FINISH" };
+const SCENERY = {
+  lagoon: { file: "bubble-rally-lagoon.png", colors: ["#64c8e1", "#087b93", "#095261"], tint: "#063d533b" },
+  prism: { file: "bubble-rally-ocean.png", colors: ["#070c25", "#0c2943", "#08152a"], tint: "#06152b35" },
+  tempest: { file: "bubble-rally-tempest.png", colors: ["#211436", "#182956", "#071b37"], tint: "#160c2d48" },
+};
 const clamp = value => Math.max(0, Math.min(1, value));
 const ease = value => value < 0.5 ? 2 * value * value : 1 - (-2 * value + 2) ** 2 / 2;
 
@@ -10,10 +15,17 @@ export function createRallyRenderer(canvas, { getState, getPreview, isPaused, is
   const surface = createCanvasSurface(canvas);
   const ctx = surface.context;
   const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const ocean = new Image(); ocean.src = new URL("./assets/bubble-rally-ocean.png", import.meta.url).href;
+  const backgrounds = new Map();
+  function backgroundFor(course) {
+    if (!backgrounds.has(course.id)) {
+      const image = new Image(); image.src = new URL(`./assets/${SCENERY[course.id].file}`, import.meta.url).href;
+      backgrounds.set(course.id, image);
+    }
+    return backgrounds.get(course.id);
+  }
   const bubbles = new Image(); bubbles.src = new URL("./assets/bubble-rally-bubbles.png", import.meta.url).href;
   const platform = new Image(); platform.src = new URL("./assets/bubble-rally-platform.png", import.meta.url).href;
-  let width = 1000, height = 590, time = 0, animation = null;
+  let width = 1000, height = 590, time = 0, animation = null, celebration = null;
   const resize = () => { const size = surface.resize(); width = size.width; height = size.height; };
   const observer = new ResizeObserver(resize); observer.observe(canvas); resize();
 
@@ -91,19 +103,74 @@ export function createRallyRenderer(canvas, { getState, getPreview, isPaused, is
     }
   }
 
+  function drawCelebration(state, points, radius) {
+    const winner = state.players[celebration.winner], t = celebration.elapsed;
+    const enter = reducedMotion ? 1 : ease(clamp(t / 1.3));
+    const endX = width / 2, endY = height * 0.38, heroRadius = Math.min(width * 0.16, height * 0.16, 100);
+    const origin = points[winner.position];
+    const x = origin.x + (endX - origin.x) * enter;
+    const y = origin.y - radius + (endY - origin.y + radius) * enter;
+    const r = radius + (heroRadius - radius) * enter;
+    ctx.fillStyle = `rgba(3, 12, 30, ${0.79 * enter})`; ctx.fillRect(0, 0, width, height);
+    ctx.save(); ctx.globalAlpha = enter;
+    const halo = ctx.createRadialGradient(endX, endY, 0, endX, endY, heroRadius * 3);
+    halo.addColorStop(0, winner.color + "65"); halo.addColorStop(0.5, "#ffd48813"); halo.addColorStop(1, "#fff3c000");
+    ctx.fillStyle = halo; ctx.fillRect(0, 0, width, height);
+    const podiumY = endY + heroRadius * 1.2, podiumSize = heroRadius * 3.6;
+    if (platform.complete && platform.naturalWidth) ctx.drawImage(platform, endX - podiumSize / 2, podiumY - podiumSize * 0.35, podiumSize, podiumSize);
+    else ellipse(endX, podiumY, heroRadius * 1.45, heroRadius * 0.35, "#70cceca0");
+    ctx.shadowColor = "#ffd782"; ctx.shadowBlur = 16;
+    ctx.strokeStyle = "#ffe6a3"; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.ellipse(endX, podiumY, heroRadius * 1.34, heroRadius * 0.34, 0, 0, Math.PI * 2); ctx.stroke(); ctx.shadowBlur = 0;
+    ctx.restore();
+    bubble(x, y, r, winner.color, winner.id + 1, false, true);
+    // A golden crown rises with the winner; no visual randomness touches the die.
+    ctx.save(); ctx.translate(x, y - r * 1.12); ctx.scale(r / 55, r / 55); ctx.globalAlpha = enter;
+    const gold = ctx.createLinearGradient(0, -21, 0, 3); gold.addColorStop(0, "#fff4bd"); gold.addColorStop(1, "#dfa644");
+    ctx.beginPath(); ctx.moveTo(-22, 0); ctx.lineTo(-27, -23); ctx.lineTo(-11, -13); ctx.lineTo(0, -30); ctx.lineTo(11, -13); ctx.lineTo(27, -23); ctx.lineTo(22, 0); ctx.closePath();
+    ctx.fillStyle = gold; ctx.shadowColor = "#ffe3a0"; ctx.shadowBlur = 12; ctx.fill(); ctx.shadowBlur = 0;
+    ctx.strokeStyle = "#fff4d9"; ctx.lineWidth = 1; ctx.stroke();
+    for (const gemX of [-14, 0, 14]) ellipse(gemX, -5, 2.5, 2.5, winner.color);
+    ctx.restore();
+    if (reducedMotion || t >= 6) return;
+    const colors = [winner.color, "#ffe4a3", "#f6a9d7", "#c4b0ff", "#e1ffff"];
+    for (let burst = 0; burst < 6; burst++) {
+      const age = t - 0.35 - burst * 0.63;
+      if (age < 0 || age > 1.4) continue;
+      const bx = width * (burst % 2 ? 0.76 : 0.24), by = height * (0.18 + (burst % 3) * 0.12);
+      for (let i = 0; i < 22; i++) {
+        const angle = i / 22 * Math.PI * 2, spread = age * heroRadius * (0.8 + i % 3 * 0.2);
+        ctx.globalAlpha = (1 - age / 1.4) * enter;
+        ellipse(bx + Math.cos(angle) * spread, by + Math.sin(angle) * spread + age * age * 15, 1.7, 1.7, colors[(i + burst) % colors.length]);
+      }
+    }
+    for (let i = 0; i < 90; i++) {
+      const age = t - 0.6 - (i % 15) * 0.08;
+      if (age < 0) continue;
+      const px = ((i * 0.618034) % 1) * width + Math.sin(age * 2 + i) * 25;
+      const py = -20 + age * (55 + i % 7 * 12);
+      ctx.save(); ctx.globalAlpha = Math.min(1, 6 - t) * enter;
+      ctx.translate(px, py); ctx.rotate(age * 2 + i); ctx.fillStyle = colors[i % colors.length];
+      ctx.fillRect(-2, -4, 4 * Math.cos(age * 3 + i), 8); ctx.restore();
+    }
+    ctx.globalAlpha = 1;
+  }
+
   function draw(_, delta) {
     const state = getState(); if (!state || !width || !height) return;
     if (!isPaused() && !reducedMotion) time += delta;
     if (animation && !isPaused()) animation.elapsed += delta * 1000;
+    if (celebration && !isPaused()) celebration.elapsed = Math.min(6, celebration.elapsed + delta);
     const course = rallyCourse(state.course);
     const { radius, points } = layout(course.finish + 1);
     const bg = ctx.createLinearGradient(0, 0, width, height);
-    bg.addColorStop(0, "#070c25"); bg.addColorStop(0.5, course.id === "tempest" ? "#201331" : "#0c2943"); bg.addColorStop(1, "#08152a");
+    const scenery = SCENERY[course.id], ocean = backgroundFor(course);
+    scenery.colors.forEach((color, index) => bg.addColorStop(index / 2, color));
     ctx.fillStyle = bg; ctx.fillRect(0, 0, width, height);
     if (ocean.complete && ocean.naturalWidth) {
       const scale = Math.max(width / ocean.naturalWidth, height / ocean.naturalHeight);
       ctx.drawImage(ocean, (width - ocean.naturalWidth * scale) / 2, (height - ocean.naturalHeight * scale) / 2, ocean.naturalWidth * scale, ocean.naturalHeight * scale);
-      ctx.fillStyle = course.id === "tempest" ? "#160c2d5c" : "#06152b35"; ctx.fillRect(0, 0, width, height);
+      ctx.fillStyle = scenery.tint; ctx.fillRect(0, 0, width, height);
     }
     const glow = ctx.createRadialGradient(width * 0.7, height * 0.38, 5, width * 0.7, height * 0.38, width * 0.65);
     glow.addColorStop(0, "#417a9828"); glow.addColorStop(1, "#417a9800"); ctx.fillStyle = glow; ctx.fillRect(0, 0, width, height);
@@ -148,7 +215,7 @@ export function createRallyRenderer(canvas, { getState, getPreview, isPaused, is
       ctx.fillStyle = type === "normal" ? "#c7dae7" : color; ctx.textAlign = "center"; ctx.textBaseline = "middle";
       ctx.font = `800 ${type === "checkpoint" || type === "finish" || type === "start" ? Math.max(8, radius * 0.30) : Math.max(11, radius * 0.43)}px system-ui`;
       ctx.shadowBlur = 5; ctx.shadowColor = "#031024";
-      ctx.fillText(TILE_LABELS[type] || String(index), point.x, point.y);
+      ctx.fillText(type === "storm" ? (course.id === "tempest" ? "-3" : "-2") : TILE_LABELS[type] || String(index), point.x, point.y);
       ctx.shadowBlur = 0;
       if (type !== "normal" && type !== "start" && type !== "finish") {
         ctx.font = "10px system-ui"; ctx.fillStyle = "#f1fbff"; ctx.shadowColor = "#041223"; ctx.shadowBlur = 4; ctx.fillText(String(index), point.x, point.y + radius * 0.77); ctx.shadowBlur = 0;
@@ -168,6 +235,7 @@ export function createRallyRenderer(canvas, { getState, getPreview, isPaused, is
     ctx.strokeStyle = "#15203a"; ctx.setLineDash([5, 5]); ctx.stroke(); ctx.setLineDash([]);
     const progress = animation ? clamp(animation.elapsed / animation.duration) : 1;
     state.players.forEach((player, index) => {
+      if (celebration?.winner === player.id) return;
       let position = player.position;
       if (animation && progress < 1) {
         const from = animation.before.players[index].position;
@@ -202,6 +270,7 @@ export function createRallyRenderer(canvas, { getState, getPreview, isPaused, is
       const p = points[state.players[state.active].position];
       ctx.beginPath(); ctx.arc(p.x, p.y - radius, radius + 12, time * 8, time * 8 + Math.PI * 1.4); ctx.strokeStyle = "#ffffffaa"; ctx.lineWidth = 2; ctx.stroke();
     }
+    if (celebration) drawCelebration(state, points, radius);
   }
   const loop = createFrameLoop(draw);
   const visibility = () => { if (document.hidden) loop.stop(); else loop.start(); };
@@ -212,7 +281,8 @@ export function createRallyRenderer(canvas, { getState, getPreview, isPaused, is
       animation = duration ? { before, elapsed: 0, duration } : null;
       return duration;
     },
-    reset() { animation = null; },
+    celebrate(winner) { celebration = { winner, elapsed: reducedMotion ? 6 : 0 }; },
+    reset() { animation = null; celebration = null; },
     dispose() { loop.stop(); observer.disconnect(); document.removeEventListener("visibilitychange", visibility); surface.dispose(); },
   };
 }

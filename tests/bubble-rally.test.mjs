@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { createRally, rollRally, rallyActions, resolveRallyAction, advanceRally, scoreRallyAction, RALLY_COURSES } from "../bubble-rally-model.js";
 import { OPPONENT_LEVELS, createComputerOpponent } from "../arcade/opponents.js";
+import { rallyMoveDetails } from "../bubble-rally-guide.js";
 
 const players = count => Array.from({ length: count }, (_, i) => ({ name: `Racer ${i + 1}`, kind: i ? "computer" : "human", difficulty: OPPONENT_LEVELS[i].id }));
 const rolled = (n = 2, roll = 2, course = "prism") => rollRally(createRally({ players: players(n), course }), () => (roll - 0.5) / 6);
@@ -57,6 +58,39 @@ test("tiles resolve once, energy caps at six, shields block storms and checkpoin
   const crossed = resolveRallyAction(crossing, "cruise"); assert.equal(crossed.players[0].checkpoint, 10); assert.equal(crossed.players[0].position, 16);
   const tempest = rolled(2, 2, "tempest"); tempest.players[0].position = 20; tempest.players[0].checkpoint = 20;
   assert.equal(resolveRallyAction(tempest, "cruise").players[0].position, 20);
+});
+
+test("braking restores two energy, trades distance for a better landing and respects the cap", () => {
+  const minimum = resolveRallyAction(rolled(2, 1), "brake");
+  assert.equal(minimum.players[0].position, 1); assert.equal(minimum.players[0].energy, 4);
+  const example = rolled(2, 4); example.players[0].position = 3;
+  const cruise = resolveRallyAction(example, "cruise"), brake = resolveRallyAction(example, "brake");
+  assert.equal(cruise.players[0].position, 5); assert.equal(cruise.players[0].energy, 3);
+  assert.equal(brake.players[0].position, 7); assert.equal(brake.players[0].energy, 4);
+  assert.deepEqual(brake.last.events.map(event => event.type), ["boost"]);
+  const full = rolled(2, 5); full.players[0].energy = 5;
+  const capped = resolveRallyAction(full, "brake");
+  assert.equal(capped.players[0].energy, 6); assert.equal(capped.last.energyAfterAction, 6);
+  assert.match(rallyMoveDetails(capped).steps.join(" "), /restored 1 energy.*cap/);
+  assert.match(rallyMoveDetails(capped).steps.join(" "), /Charge tile: no extra energy/);
+});
+
+test("move explanations distinguish spaces and energy and describe actual shield/checkpoint outcomes", () => {
+  const current = rallyMoveDetails(resolveRallyAction(rolled(2, 5), "cruise"));
+  assert.match(current.result, /Current \+2 spaces/);
+  assert.match(current.steps.join(" "), /from tile 5 to 7.*does not trigger/);
+  const charge = rallyMoveDetails(resolveRallyAction(rolled(2, 3), "cruise"));
+  assert.match(charge.result, /5\/6 energy.*Charge \+2 energy/);
+  const storm = rolled(2, 2, "tempest"); storm.players[0].position = 20; storm.players[0].checkpoint = 20;
+  const setback = rallyMoveDetails(resolveRallyAction(storm, "cruise"));
+  assert.match(setback.steps.join(" "), /back 2 spaces to tile 20.*checkpoint at 20 stops the 3-space setback/);
+  const shield = rallyMoveDetails(resolveRallyAction(storm, "shield"));
+  assert.match(shield.steps.join(" "), /spent 2 energy.*shield raised.*blocked the storm and broke.*tile 22/);
+  const collision = rolled(3, 4); collision.players[1].position = 4; collision.players[2].position = 4; collision.players[2].shield = true;
+  const popped = rallyMoveDetails(resolveRallyAction(collision, "cruise"));
+  assert.match(popped.steps.join(" "), /Racer 2 was popped back to checkpoint 0/);
+  assert.match(popped.steps.join(" "), /Racer 3's shield blocked the pop and broke/);
+  assert.equal(rallyMoveDetails(createRally({ players: players(2) })), null);
 });
 
 test("four-player collisions pop all unshielded rivals; checkpoints and shielded rivals are safe", () => {

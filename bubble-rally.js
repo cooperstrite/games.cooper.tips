@@ -2,6 +2,7 @@ import { OPPONENT_LEVELS, createComputerOpponent, createOpponentScheduler } from
 import { createRally, rollRally, rallyActions, resolveRallyAction, advanceRally, scoreRallyAction,
   RALLY_COURSES, RALLY_ACTIONS, RACER_COLORS, rallyCourse, MAX_ENERGY } from "./bubble-rally-model.js";
 import { createRallyRenderer } from "./bubble-rally-renderer.js";
+import { rallyMoveDetails } from "./bubble-rally-guide.js";
 
 const SETTINGS_KEY = "bubble-rally-setup-v2";
 const el = (tag, className, text) => {
@@ -32,22 +33,32 @@ export function createBubbleRally(root) {
     <div class="rally-arena">
       <div class="rally-arena-header"><span class="rally-course-name"></span><span class="rally-round"></span></div>
       <canvas class="rally-canvas" role="img" aria-label="Bubble race board. Racer positions and resources are listed above."></canvas>
+      <div class="rally-finale" hidden>
+        <span class="rally-eyebrow">CIRCUIT CHAMPION</span><h3 class="rally-winner-name"></h3><p class="rally-winner-detail"></p>
+        <div class="rally-finale-controls"></div>
+      </div>
       <div class="rally-arena-footer"><span>START</span><span>Checkpoints 10 / 20</span><span>FINISH 31</span></div>
     </div>
     <div class="rally-turn-panel">
       <div class="rally-turn-heading"><div><span class="rally-eyebrow rally-turn-label">READY TO RALLY</span><p class="rally-status" role="status" aria-live="polite"></p></div><div class="rally-die" aria-label="No roll yet">?</div></div>
       <div class="rally-turn-controls"></div><div class="rally-actions" aria-label="Choose your move"></div>
       <p class="rally-preview-note">Roll first, then choose how to use it.</p>
+      <ol class="rally-move-details" aria-label="Move breakdown" hidden></ol>
     </div>
     <div class="rally-rules">
       <h3>How to rally</h3>
-      <ol><li><strong>Roll, then choose.</strong> Every racer rolls the same fair 1-6 die. Cruise to recover energy, boost for extra distance, brake to land precisely, or raise a shield. Energy is capped at 6.</li>
-      <li><strong>Use the track.</strong> Your landing tile triggers once. Passing tile 10 or 20 saves a checkpoint. You can share a checkpoint safely.</li>
-      <li><strong>Pop the competition.</strong> Finish your move on a rival to send them to their checkpoint. A shield blocks one incoming pop or storm, then breaks. You can still pop a rival while shielded.</li>
-      <li><strong>Reach tile 31 first.</strong> You can roll past the finish. The starting racer rotates each rematch. Human players take turns on this device.</li></ol>
+      <p class="rally-rule-goal">Be the first bubble to reach tile 31. Overshooting counts!</p>
+      <ol><li><strong>Roll once, then choose a move.</strong> Every racer uses the same fair 1-6 die. Cruise moves that many spaces and restores 1 energy. Boost spends 2 energy for 2 extra spaces. Brake moves 2 fewer spaces (at least 1) and restores <strong>2 energy</strong>. Shield spends 2 energy, moves your roll, and protects you until it blocks one hit.</li>
+      <li><strong>Check where you will land.</strong> Each move card shows your final tile and energy, including the tile's effect. Hover or keyboard-focus a card for a path preview and full breakdown. Energy starts at 2 and cannot exceed 6.</li>
+      <li><strong>Resolve the landing tile, then any rivals.</strong> Only the first tile you land on triggers an effect. Passing over currents, charge tiles or storms does nothing. A current or storm moving you onto another special tile does not trigger it again.</li>
+      <li><strong>Pop rivals and keep your progress.</strong> End your move on a rival to send them back to their latest checkpoint (or START). A shield blocks one incoming pop or storm, then breaks; you can still pop others while shielded. Reaching or passing 10 or 20 saves a checkpoint. Nobody can be popped at START, a checkpoint, or FINISH.</li>
+      <li><strong>Pass the turn.</strong> Humans press Next racer; computers play automatically. Rematches rotate the starting racer. Pause stops the race for everyone.</li></ol>
+      <div class="rally-brake-tip"><strong>Why brake?</strong> Trade some distance now for 2 energy to use on a later Boost or Shield. You can also avoid a bad landing: on Prism Circuit, from tile 3 with a roll of 4, Cruise lands on storm 7 and pushes you back to 5. Brake lands on current 5, which carries you to 7 instead, and restores 2 energy. The storm does not trigger after the current.</div>
       <div class="rally-legend">
-        <span data-tile="boost"><b>&gt;&gt;</b> Current: forward 2</span><span data-tile="charge"><b>+2</b> Charge: 2 energy</span>
-        <span data-tile="storm"><b>!</b> Storm: back 2 (Tempest: 3)</span><span data-tile="checkpoint"><b>SAFE</b> Checkpoint: no popping</span>
+        <div data-tile="boost"><b>&gt;&gt;</b><div><strong>Current: +2 spaces</strong><p>Land here and move forward 2 more spaces. This does not give energy.</p></div></div>
+        <div data-tile="charge"><b>E+2</b><div><strong>Charge: +2 energy</strong><p>Stay on this tile and recharge, up to 6 energy. This does not move you.</p></div></div>
+        <div data-tile="storm"><b class="rally-storm-symbol">-2</b><div><strong class="rally-storm-title">Storm: back 2 spaces</strong><p>Land here and get pushed back, never behind your checkpoint. A shield absorbs the storm and breaks.</p></div></div>
+        <div data-tile="checkpoint"><b>SAFE</b><div><strong>Checkpoint: tiles 10 and 20</strong><p>Reach or pass one to save your progress. Racers can share these tiles without being popped.</p></div></div>
       </div>
       <p class="rally-fair-note">Computer racers use the same dice, energy and legal moves. Difficulty changes their decisions. Even expert can make mistakes.</p>
     </div>
@@ -95,13 +106,15 @@ export function createBubbleRally(root) {
   const readPlayers = () => seats.slice(0, Number(count.select.value)).map(seat => ({ name: seat.input.value, kind: seat.kind.value, difficulty: seat.difficulty.value }));
   let state = createRally({ players: readPlayers(), course: course.select.value, firstPlayer });
   const renderer = createRallyRenderer(find("canvas"), { getState: () => state, getPreview: () => preview, isPaused: () => paused || document.hidden, isRolling: () => rolling });
-  find(".rally-turn-controls").append(rollButton, nextButton, pauseButton, soundButton, rematchButton);
+  find(".rally-turn-controls").append(rollButton, nextButton, pauseButton, soundButton);
+  find(".rally-finale-controls").append(rematchButton);
   const actionButtons = RALLY_ACTIONS.map(action => {
     const node = button("", "rally-action"); node.dataset.action = action.id;
-    node.append(el("span", "rally-action-title", action.name), el("span", "rally-action-cost", action.cost ? `${action.cost} energy` : "+1 energy"), el("small", "", action.description), el("strong", "rally-action-result", "Roll first"));
+    node.append(el("span", "rally-action-title", action.name), el("span", "rally-action-cost", action.cost ? `Spend ${action.cost} energy` : `+${action.gain} energy`), el("small", "", action.description), el("strong", "rally-action-result", "Roll first"), el("span", "rally-action-effects"));
     const showPreview = () => {
       if (node.disabled) return; preview = resolveRallyAction(state, action.id);
-      find(".rally-preview-note").textContent = describeMove(preview);
+      find(".rally-preview-note").textContent = `Preview: ${rallyMoveDetails(preview).summary}`;
+      showMoveDetails(preview);
     };
     node.addEventListener("pointerenter", showPreview); node.addEventListener("focus", showPreview);
     node.addEventListener("pointerleave", clearPreview); node.addEventListener("blur", clearPreview);
@@ -141,11 +154,19 @@ export function createBubbleRally(root) {
     } catch { /* Gameplay works without audio. */ }
   }
   soundButton.addEventListener("click", () => { sound = !sound; saveSetup(); render(); });
-  function clearPreview() { preview = null; find(".rally-preview-note").textContent = "Hover or focus a move to preview its landing. White ring = final tile."; }
+  function showMoveDetails(next) {
+    const list = find(".rally-move-details"), details = next && rallyMoveDetails(next);
+    list.hidden = !details;
+    list.replaceChildren(...(details?.steps || []).map(step => el("li", "", step)));
+  }
+  function clearPreview() {
+    preview = null;
+    find(".rally-preview-note").textContent = moving ? "Your move is resolving. Follow each step below." : state.phase === "choose" ? "Cards include tile effects. Hover or focus a move for a breakdown. White ring = final tile." : state.phase === "resolved" ? "Move complete. Here is what happened:" : state.phase === "finished" ? "Race complete! Start a rematch from the winner's podium." : "Roll first, then choose how to use it.";
+    showMoveDetails(state.phase === "resolved" || state.phase === "finished" ? state : null);
+  }
   function describeMove(next) {
-    const move = next.last, player = next.players[move.player];
-    const events = move.events.map(event => ({ boost: "current +2", charge: "charge +2 energy", storm: "storm setback", "blocked-storm": "shield blocked the storm", checkpoint: `checkpoint ${event.position} saved`, pop: `${next.players[event.player]?.name} popped`, "blocked-pop": `${next.players[event.player]?.name}'s shield broke` })[event.type]).filter(Boolean);
-    return `${player.name}: ${RALLY_ACTIONS.find(action => action.id === move.action).name}, roll ${move.roll}. Tile ${move.from} to ${move.to}. ${player.energy}/${MAX_ENERGY} energy${events.length ? ". " + events.join("; ") : ""}.`;
+    const details = rallyMoveDetails(next);
+    return `${details.summary} ${details.steps.join(" ")}`;
   }
   function startRace(rematch = false) {
     clock.cancel(); clock.resume(); paused = false; rolling = false; moving = false; preview = null; history = []; renderer.reset();
@@ -179,7 +200,7 @@ export function createBubbleRally(root) {
     playSound(next.last.events.some(event => event.type === "pop") ? "pop" : "move");
     clock.schedule(() => {
       moving = false; history.unshift(describeMove(state)); history = history.slice(0, 20);
-      if (state.winner !== null) playSound("win");
+      if (state.winner !== null) { renderer.celebrate(state.winner); playSound("win"); }
       render();
       if (state.winner === null && state.players[state.active].kind === "computer") clock.schedule(nextTurn, 900);
     }, duration + 60);
@@ -206,6 +227,9 @@ export function createBubbleRally(root) {
       card.append(line, identity, position, meter, resources); return card;
     }));
     find(".rally-course-name").textContent = rallyCourse(state.course).name;
+    const stormStrength = state.course === "tempest" ? 3 : 2;
+    find(".rally-storm-symbol").textContent = `-${stormStrength}`;
+    find(".rally-storm-title").textContent = `Storm: back ${stormStrength} spaces${state.course === "tempest" ? " on Tempest Run" : ""}`;
     find(".rally-round").textContent = live ? `Turn ${state.turn}` : "Choose your racers";
     find(".rally-turn-label").textContent = state.winner !== null && !moving ? "RALLY CHAMPION" : live ? `RACER ${player.id + 1} / ${player.kind === "human" ? "HUMAN" : computers[player.id]?.level.label.toUpperCase() + " COMPUTER"}` : "READY TO RALLY";
     let message = "Choose your racers above, then start the race.";
@@ -214,7 +238,7 @@ export function createBubbleRally(root) {
       else if (moving) message = `${player.name} is moving...`;
       else if (state.winner !== null) message = `${player.name} wins! First to the finish in ${state.turn} turns.`;
       else if (rolling) message = `${player.name} is rolling...`;
-      else if (state.phase === "resolved") message = describeMove(state);
+      else if (state.phase === "resolved") message = rallyMoveDetails(state).summary;
       else if (player.kind === "computer") message = `${player.name} is ${state.phase === "roll" ? "getting ready to roll" : "choosing a move"}...`;
       else message = state.phase === "roll" ? `${player.name}, your turn. Roll the bubble!` : `${player.name} rolled ${state.roll}. Choose your move.`;
     }
@@ -229,19 +253,29 @@ export function createBubbleRally(root) {
     pauseButton.hidden = !live || (state.winner !== null && !moving); pauseButton.textContent = paused ? "Resume" : "Pause"; pauseButton.setAttribute("aria-pressed", String(paused));
     soundButton.textContent = sound ? "Sound on" : "Sound off"; soundButton.setAttribute("aria-pressed", String(sound));
     rematchButton.hidden = state.winner === null || moving;
+    const finished = live && state.winner !== null && !moving;
+    find(".rally-finale").hidden = !finished;
+    if (finished) {
+      find(".rally-winner-name").textContent = `${state.players[state.winner].name} wins!`;
+      find(".rally-winner-name").classList.toggle("is-long", state.players[state.winner].name.length > 12);
+      find(".rally-winner-detail").textContent = `${rallyCourse(state.course).name} / ${state.turn} turns`;
+    }
     startButton.textContent = live ? "Start new race" : "Start race";
     const legal = rallyActions(state);
     actionButtons.forEach((node, index) => {
       const action = RALLY_ACTIONS[index];
       node.disabled = !live || paused || moving || player.kind !== "human" || !legal.includes(action);
       const result = node.querySelector(".rally-action-result");
+      const effects = node.querySelector(".rally-action-effects"); effects.textContent = "";
       if (state.phase === "choose" && legal.includes(action)) {
         const next = resolveRallyAction(state, action.id);
-        result.textContent = next.winner !== null ? "Reach the finish!" : `Land on ${next.players[state.active].position}`;
+        const details = rallyMoveDetails(next);
+        result.textContent = details.destination; effects.textContent = details.result;
       } else result.textContent = player.energy < action.cost ? "Need 2 energy" : action.id === "shield" && player.shield ? "Shield already active" : "Roll first";
     });
     const log = find(".rally-history ol"); log.replaceChildren(...history.map(entry => el("li", "", entry)));
     if (!history.length) log.append(el("li", "", "Your moves will appear here."));
+    if (!preview) clearPreview();
     wrapper.classList.toggle("is-paused", paused);
   }
   syncSetup();

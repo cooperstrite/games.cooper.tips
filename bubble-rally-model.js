@@ -12,8 +12,8 @@ export const RALLY_COURSES = Object.freeze([
 ]);
 export const RALLY_ACTIONS = Object.freeze([
   { id: "cruise", name: "Cruise", cost: 0, gain: 1, delta: 0, description: "Move your roll. Recover 1 energy." },
-  { id: "boost", name: "Boost", cost: 2, gain: 0, delta: 2, description: "Spend 2 energy to move 2 extra tiles." },
-  { id: "brake", name: "Brake", cost: 0, gain: 1, delta: -2, description: "Move 2 fewer tiles (at least 1). Recover 1 energy." },
+  { id: "boost", name: "Boost", cost: 2, gain: 0, delta: 2, description: "Spend 2 energy to move 2 extra spaces." },
+  { id: "brake", name: "Brake", cost: 0, gain: 2, delta: -2, description: "Move 2 fewer spaces (at least 1). Recover 2 energy." },
   { id: "shield", name: "Shield", cost: 2, gain: 0, delta: 0, description: "Move your roll. Block one storm or incoming pop." },
 ]);
 
@@ -60,7 +60,9 @@ export function resolveRallyAction(state, actionId) {
   const steps = Math.max(1, state.roll + action.delta);
   const landing = Math.min(course.finish, from + steps);
   const events = [];
+  const energyBefore = player.energy;
   player.energy = Math.min(MAX_ENERGY, player.energy - action.cost + action.gain);
+  const energyAfterAction = player.energy;
   if (action.id === "shield") player.shield = true;
   player.position = landing;
   const tile = tileAt(course, landing);
@@ -90,7 +92,8 @@ export function resolveRallyAction(state, actionId) {
   }
   const winner = player.position === course.finish ? player.id : null;
   return { ...state, players, phase: winner === null ? "resolved" : "finished", winner,
-    last: { player: player.id, action: action.id, roll: state.roll, from, landing, to: player.position, events } };
+    last: { player: player.id, action: action.id, roll: state.roll, from, landing, to: player.position,
+      energyBefore, energyAfterAction, events } };
 }
 
 export function advanceRally(state) {

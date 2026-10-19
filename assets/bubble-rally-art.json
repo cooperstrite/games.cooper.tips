@@ -8,7 +8,7 @@
     },
     {
       "path": "assets/bubble-rally-ocean.png",
-      "use": "Playable board background",
+      "use": "Prism Circuit moonlit board background",
       "prompt": "Use case: stylized-concept\nAsset type: landscape background painting for the playable board of the attached Bubble Rally game, 1536 by 1024.\nPrimary request: create a matching in-game environment asset based on the cover's beautiful ocean, luminous mist, and sculpted rocky islands. This is a scenery asset that will sit beneath a separately rendered interactive board.\nInput image: reference for materials, lighting, color and polish only.\nScene: breathtaking midnight blue open ocean, turquoise and sapphire caustic reflections, tall thin craggy islands far around the edges, luminous waterfalls down a few rock faces, thin low drifting mist, distant mountains on the upper edge, warm glints reflecting from the water. Elevated camera looking down toward the ocean so most of the view is richly textured open water.\nStyle: same high-end cinematic stylized 3D as the reference. Crisp real material depth, sparkling water, layered atmosphere, cyan illumination and subtle lavender shadows.\nComposition: clean broad dark ocean throughout the central 85 percent, scenery mainly around the outer edges. Wide landscape. The actual track and racers will be drawn in code over this background.\nConstraints: absolutely no lettering, title, logo, UI, track, path, platforms, bubbles, spheres, arrows, or numbers. No central island. Do not copy the title from the reference. Full bleed scenery."
     },
     {
@@ -20,6 +20,18 @@
       "path": "assets/bubble-rally-platform.png",
       "use": "Transparent glass-and-waterfall stepping stone",
       "prompt": "Use case: stylized-concept\nAsset type: one transparent game sprite for the stepping-stone platforms in Bubble Rally, square.\nPrimary request: a single gorgeous circular glass racing platform, on a small jagged rocky island pedestal with luminous waterfalls, matching the platforms in the attached Bubble Rally cover.\nInput image: reference for material, color, and quality only.\nSubject: a wide thick circular polished cyan glass disc, viewed from a moderately elevated front camera so the top is an ellipse. The glass has magical refractive inner turquoise and violet caustics, bright gold and cyan rim lights, and tiny sparkles. Under it a detailed dark stone island tapers downward, with two fine waterfalls cascading down its sides and wisps of mist at the base.\nComposition: one isolated object centered with generous transparent margin. The glass disc spans about 80% of image width. Its top elliptical surface centered near 35% of image height; pedestal and waterfalls extend to about 85% height. All rock and water stay beneath the disc. Clear large empty top surface for a game tile number to be drawn later.\nStyle: same beautiful high-end stylized 3D materials and lighting as the reference cover.\nConstraints: genuinely transparent background, no environment, ocean, horizon, text, numbers, icons, title, logo, other platforms, bubbles or characters. One platform only. No clipped edges."
+    },
+    {
+      "path": "assets/bubble-rally-lagoon.png",
+      "use": "Crystal Lagoon sunny circuit background",
+      "reference": "assets/bubble-rally-ocean.png",
+      "prompt": "Create a premium game environment illustration for Bubble Rally: a magical SUNLIT CRYSTAL LAGOON, landscape 1536x1024. Use the reference only for the polished painterly 3D game-art style and spacious composition. Replace the night sky with a brilliant pale aqua sky, warm peach sunlight, wispy white clouds, distant emerald tropical islands and light waterfalls at the far left and right edges. Shimmering clear turquoise water, luminous underwater coral and subtle crystal reflections. The central 85 percent is calm open water with a gentle perspective into a low distant horizon, for a race board to be drawn over it. Keep all islands, large rocks, flowers and detail near the edges. Luxurious translucent materials, rich atmospheric depth and gorgeous soft cinematic lighting, high-end family game aesthetic, colorful but readable. No bubbles, racers, race track, platforms, UI, lettering, logos or words. This is the sunny easy-course counterpart of the reference, visually unmistakable as daytime."
+    },
+    {
+      "path": "assets/bubble-rally-tempest.png",
+      "use": "Tempest Run storm circuit background",
+      "reference": "assets/bubble-rally-ocean.png",
+      "prompt": "Create a premium game environment illustration for Bubble Rally: a dramatic magical TEMPEST OCEAN, landscape 1536x1024. Use the reference only for the polished painterly 3D game-art style and spacious composition. Replace the peaceful night scene with deep violet and navy storm clouds, silver-blue lightning in the far upper corners, wind-swept ocean, stormlit crystal cliffs at the far edges. Glowing electric turquoise reflections and warm rose storm-light accents. Keep the central 85 percent open dark teal water with small ripples and clear visibility, for a race board to be drawn over it; low distant horizon, cloud bank high in frame. All tall cliffs, lightning and large waves stay around the perimeter. Luxurious glassy materials, rich atmospheric depth, cinematic storm lighting, exciting high-end family game aesthetic rather than frightening. Distinct from the reference's peaceful moonlit scenery. No bubbles, racers, race track, platforms, UI, lettering, logos or words."
     }
   ]
 }
