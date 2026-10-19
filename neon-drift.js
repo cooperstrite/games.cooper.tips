@@ -153,7 +153,7 @@ export function createNeonDrift(root, { editorOnly = false, onAppearanceChange }
   const abilityTime = element("small");
   abilityButton.append(abilityName, abilityTime);
   const rightButton = control("Move right", "\u2192");
-  const hint = element("p", "help-text neondrift-hint", "A / D or arrows to steer. Hold Space to boost. Press E for your car's ability.");
+  const hint = element("p", "help-text neondrift-hint", "A / D or Left / Right arrows to steer. Hold Space or W to boost. Press E or Up Arrow for your car's ability.");
   wrapper.append(setup, top, soundRow, metrics, viewport, progressRow, pad, abilityHint, hint);
   root.append(wrapper);
   const unmountWallet = editorOnly ? () => {} : mountGameWallet(root, "neondrift");
@@ -649,7 +649,7 @@ export function createNeonDrift(root, { editorOnly = false, onAppearanceChange }
     abilityButton.style.setProperty("--charge", `${(1 - state.abilityCooldown / car().recharge) * 100}%`);
     abilityName.textContent = car().abilityName;
     abilityTime.textContent = !running ? "Press Start" : state.abilityRemaining > 0 ? `Active ${state.abilityRemaining.toFixed(1)}s`
-      : state.abilityCooldown > 0 ? `${Math.ceil(state.abilityCooldown)}s recharge` : "Ready - E";
+      : state.abilityCooldown > 0 ? `${Math.ceil(state.abilityCooldown)}s recharge` : "Ready - E / Up Arrow";
     abilityButton.setAttribute("aria-label", `Activate ${car().abilityName}`);
     abilityHint.textContent = `${car().name}: ${car().description}`;
     musicButton.textContent = `Music: ${sound.music ? "On" : "Off"}`;
@@ -715,7 +715,7 @@ export function createNeonDrift(root, { editorOnly = false, onAppearanceChange }
     rewardSession = createRewardSession("neondrift");
     explosion = null; shieldFlash = 0; ejections = [];
     setup.open = false;
-    status.textContent = `${route().twist} Press E for ${car().abilityName}.`;
+    status.textContent = `${route().twist} Press E or Up Arrow for ${car().abilityName}.`;
     audio.start(model.settings.route);
     lastFrame = performance.now(); lastHUD = 0;
     updateHUD(); drawScene();
@@ -786,12 +786,12 @@ export function createNeonDrift(root, { editorOnly = false, onAppearanceChange }
     if (event.repeat) return;
     if (key === "a" || key === "arrowleft") model.changeLane(-1);
     else if (key === "d" || key === "arrowright") model.changeLane(1);
-    else if (key === " " || key === "w" || key === "arrowup") setBoost(true);
-    else if (key === "e") ability();
+    else if (key === " " || key === "w") setBoost(true);
+    else if (key === "e" || key === "arrowup") ability();
     else if (key === "enter" && state.phase !== "running") startRun();
   };
   const onKeyUp = (event) => {
-    if ([" ", "w", "arrowup"].includes(event.key.toLowerCase())) setBoost(false);
+    if ([" ", "w"].includes(event.key.toLowerCase())) setBoost(false);
   };
   const onBlur = () => setBoost(false);
   const onVisibility = () => {
