@@ -158,7 +158,7 @@ export function createRallyRenderer(canvas, { getState, getPreview, isPaused, is
   }
 
   function draw(_, delta) {
-    const state = getState(); if (!state || !width || !height) return;
+    const state = getState(); if (!state || !width || !height || canvas.hidden) return;
     if (!isPaused() && !reducedMotion) time += delta;
     if (animation && !isPaused()) animation.elapsed += delta * 1000;
     if (celebration && !isPaused()) celebration.elapsed = Math.min(6, celebration.elapsed + delta);

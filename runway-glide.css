@@ -1,0 +1,202 @@
+.site-main:has(.rg-game), .game-card:has(.rg-game), .game-root:has(.rg-game) { min-width: 0; }
+#app:has(.rg-game) { grid-template-columns: minmax(0,1fr); }
+#app:has(.rg-game) .site-header { min-width: 0; }
+#app:has(.rg-game) .title-group h1 { overflow-wrap: anywhere; }
+.game-card:has(.rg-game) { max-width: 1260px; width: 100%; grid-template-columns: minmax(0,1fr); backdrop-filter: none; }
+.game-root:has(.rg-game) { grid-template-columns: minmax(0,1fr); }
+.rg-game { --rg-ink: #102b38; --rg-soft: #52707b; --rg-line: #d3e1e4; --rg-accent: #067b7b; font-family: Inter, system-ui, sans-serif; color: var(--rg-ink); text-align: left; width: 100%; background: #f7faf8; padding: 22px; border-radius: 13px; }
+.rg-game *, .rg-game *::before, .rg-game *::after { box-sizing: border-box; }
+.rg-game, .rg-game > *, .rg-game canvas, .rg-game select, .rg-game label { min-width: 0; }
+.rg-game [hidden] { display: none !important; }
+.rg-game button, .rg-game select { font: inherit; }
+.rg-game button { min-height: 42px; padding: 10px 14px; border: 1px solid #c8dade; border-radius: 7px; background: #fff; color: var(--rg-ink); cursor: pointer; font-size: 12px; font-weight: 600; transition: background .15s, border-color .15s; box-shadow: none; }
+.rg-game button:hover:not(:disabled) { background: #edf6f6; border-color: #7bafb5; transform: none; }
+.rg-game button:disabled { opacity: .45; cursor: default; }
+.rg-game :focus-visible { outline: 3px solid #e6a74a; outline-offset: 3px; }
+.rg-game select { color: var(--rg-ink); background: #fff; border: 1px solid var(--rg-line); padding: 10px 26px 10px 10px; border-radius: 6px; font-size: 12px; max-width: 100%; }
+.rg-game .rg-primary { background: var(--rg-accent); border-color: var(--rg-accent); color: #fff; }
+.rg-game .rg-primary:hover:not(:disabled) { background: #075e64; border-color: #075e64; }
+.rg-game kbd { display: inline-block; border: 1px solid #96b5bd60; border-radius: 3px; font: 10px ui-monospace, monospace; padding: 2px 4px; margin-left: 5px; opacity: .75; white-space: nowrap; }
+.rg-topline { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin: 8px 0 14px; }
+.rg-brand { display: flex; align-items: center; gap: 9px; font-size: 10px; font-weight: 700; letter-spacing: .18em; }
+.rg-brand-mark { display: grid; place-items: center; width: 31px; height: 31px; color: #fff; background: var(--rg-ink); letter-spacing: -.06em; font-size: 14px; border-radius: 5px; }
+.rg-beta { font: 10px ui-monospace, monospace; color: var(--rg-soft); letter-spacing: .1em; border: 1px solid var(--rg-line); padding: 7px 9px; border-radius: 4px; }
+.rg-stage { position: relative; height: clamp(440px, 53vw, 650px); min-height: 420px; overflow: hidden; isolation: isolate; background: #8daab6; border-radius: 12px 12px 0 0; color: #f0f9f7; }
+.rg-stage:fullscreen { width: 100vw; height: 100vh; border-radius: 0; }
+.rg-game:fullscreen { height: 100vh; width: 100vw; overflow: auto; border-radius: 0; }
+.rg-game:fullscreen .rg-stage { height: 65vh; min-height: 350px; }
+.rg-stage.rg-expanded { height: 85vh; }
+.rg-canvas { display: block; width: 100%; height: 100%; touch-action: none; outline: none; }
+.rg-flight-header { position: absolute; inset: 0 0 auto; display: flex; align-items: flex-start; justify-content: space-between; padding: 22px 24px; gap: 14px; background: linear-gradient(#102d48b3, #102d4800); pointer-events: none; text-shadow: 0 1px 8px #092131; }
+.rg-flight-header > div { display: grid; gap: 7px; }
+.rg-micro { font-size: 10px; letter-spacing: .11em; font-weight: 600; text-transform: uppercase; line-height: 1.5; }
+.rg-flight-header .rg-micro { opacity: .85; }
+.rg-callout { font-size: 15px; font-weight: 600; letter-spacing: .06em; }
+.rg-view-label { font: 9px ui-monospace, monospace; padding: 7px 9px; border: 1px solid #e2f8f04a; border-radius: 4px; background: #0d293f33; white-space: nowrap; }
+.rg-instruments { position: absolute; top: 29%; display: grid; gap: 20px; background: linear-gradient(90deg,#0c263e82,#0c263e00); padding: 16px 18px; text-shadow: 0 1px 4px #102333; min-width: 135px; pointer-events: none; border-left: 2px solid #d7f6ea60; }
+.rg-instruments-left { left: 20px; }
+.rg-instruments-right { right: 20px; text-align: right; background: linear-gradient(-90deg,#0c263e82,#0c263e00); border-left: 0; border-right: 2px solid #d7f6ea60; }
+.rg-instruments > div { display: grid; gap: 6px; }
+.rg-instruments span { font-size: 10px; font-weight: 600; letter-spacing: .1em; }
+.rg-instruments strong { font: 500 clamp(22px,3vw,36px) ui-monospace, monospace; line-height: 1; letter-spacing: -.04em; }
+.rg-instruments small { font: 9px ui-monospace, monospace; letter-spacing: .06em; opacity: .9; }
+.rg-instruments strong.rg-caution { color: #ffd27a; }
+.rg-weather { position: absolute; bottom: 22px; left: 22px; display: flex; align-items: center; gap: 9px; font: 10px ui-monospace, monospace; color: #e2f5ef; text-shadow: 0 1px 5px #092533; background: #0d293f70; padding: 9px; border-radius: 4px; pointer-events: none; }
+.rg-wind-arrow { display: inline-block; font-size: 23px; line-height: 1; color: #96e9d6; }
+.rg-attitude-strip { position: absolute; bottom: 22px; right: 22px; display: flex; gap: 16px; font: 10px ui-monospace, monospace; background: #0d293f70; padding: 12px 10px; border-radius: 4px; pointer-events: none; }
+.rg-flight-director { position: absolute; bottom: 86px; left: 50%; transform: translateX(-50%); display: grid; justify-items: center; gap: 6px; padding: 9px 13px; border-radius: 5px; background: #0d293f78; pointer-events: none; }
+.rg-director-label, .rg-director-text { font: 9px ui-monospace, monospace; letter-spacing: .09em; }
+.rg-director-track { width: 100px; height: 12px; border-bottom: 1px solid #c3e3db86; display: grid; place-items: center; position: relative; }
+.rg-director-track::before { content: ""; height: 12px; border-left: 1px solid #fff; position: absolute; left: 50%; }
+.rg-director-pip { width: 7px; height: 7px; background: #8ff6d7; border-radius: 2px; margin-top: 4px; }
+.rg-aim { position: absolute; display: flex; gap: 8px; align-items: center; left: 50%; top: 50%; transform: translate(-50%,-50%); pointer-events: none; }
+.rg-aim-wing { width: 35px; height: 2px; background: #d4ffe0; box-shadow: 0 0 4px #112d24; }
+.rg-aim-dot { width: 8px; height: 8px; border: 2px solid #d4ffe0; border-radius: 50%; box-shadow: 0 0 4px #112d24; }
+.rg-cockpit { position: absolute; inset: 0; pointer-events: none; }
+.rg-cockpit-frame { position: absolute; inset: -17% 14% 0; border: 11px solid #1e3038; border-bottom: 0; border-radius: 45% 45% 0 0; box-shadow: 0 0 0 3px #607782, inset 0 0 0 3px #0b1821; }
+.rg-cockpit-panel { position: absolute; bottom: -18px; left: 15%; right: 15%; height: 90px; background: linear-gradient(#334854,#112531); border: 3px solid #101d24; border-radius: 70% 70% 0 0 / 55% 55% 0 0; display: flex; align-items: center; justify-content: center; gap: 22px; padding: 20px 25px 5px; color: #8dbaa9; font: 8px ui-monospace,monospace; }
+.rg-attitude { background: #082c33; border: 4px solid #0c1820; color: #a0eed7; padding: 12px; white-space: nowrap; font-size: 10px; }
+.rg-paused, .rg-loading { position: absolute; inset: 0; display: flex; flex-direction: column; gap: 14px; align-items: center; justify-content: center; z-index: 6; background: #102b3dba; backdrop-filter: blur(5px); padding: 28px; text-align: center; }
+.rg-loading span, .rg-paused span { font-size: 12px; line-height: 1.7; max-width: 380px; }
+.rg-loading strong, .rg-paused strong { font-size: 23px; }
+.rg-loader { width: 38px; height: 38px; border: 2px solid #8cbbb938; border-top-color: #abf3d9; border-radius: 50%; animation: rg-spin 1s linear infinite; }
+@keyframes rg-spin { to { transform: rotate(360deg); } }
+.rg-result { position: absolute; inset: 50% auto auto 50%; transform: translate(-50%,-50%); width: min(490px,92%); padding: 30px; background: #0e2938ec; border: 1px solid #91cdbb5c; border-radius: 12px; backdrop-filter: blur(14px); z-index: 5; box-shadow: 0 25px 90px #0a223b66; }
+.rg-result .rg-micro { color: #96dfcb; }
+.rg-result h3 { font-size: 28px; margin: 10px 0; letter-spacing: -.03em; color: #f2f9f7; }
+.rg-result-reason { font-size: 13px; line-height: 1.7; margin: 0; color: #c0d6d9; }
+.rg-result-metrics { display: flex; flex-wrap: wrap; gap: 25px; margin: 24px 0; }
+.rg-result-metrics div { display: grid; gap: 7px; }
+.rg-result-metrics span { font: 9px ui-monospace, monospace; color: #99b6bc; }
+.rg-result-metrics strong { font: 19px ui-monospace, monospace; }
+.rg-result-actions { display: flex; gap: 9px; }
+.rg-tower { background: #102e3d; color: #d8ede9; border-radius: 0 0 10px 10px; display: flex; align-items: center; gap: 15px; padding: 17px 22px; min-height: 92px; }
+.rg-tower-icon { display: grid; place-items: center; min-width: 36px; height: 36px; border: 1px solid #77bdb95c; color: #91d4c5; border-radius: 50%; font: 10px ui-monospace, monospace; }
+.rg-tower .rg-micro { color: #78aaa9; }
+.rg-voice-status { font-size: 8px; letter-spacing: .03em; margin-left: 8px; }
+.rg-caption { font-size: 13px; line-height: 1.6; margin: 6px 0 0; }
+.rg-toolbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 16px 0; border-bottom: 1px solid var(--rg-line); }
+.rg-camera-label { margin-left: auto; font-size: 11px; display: flex; align-items: center; gap: 9px; }
+.rg-flight-controls { display: grid; grid-template-columns: minmax(150px,1fr) minmax(0,2.5fr); gap: 24px; align-items: center; padding: 18px 0; }
+.rg-throttle { display: grid; grid-template-columns: 1fr auto; font-size: 11px; font-weight: 600; gap: 8px; }
+.rg-throttle output { font: 11px ui-monospace,monospace; color: var(--rg-accent); }
+.rg-throttle input { grid-column: 1 / -1; width: 100%; margin: 0; accent-color: var(--rg-accent); cursor: pointer; height: 22px; }
+.rg-throttle > span { grid-column: 1 / -1; display: flex; justify-content: space-between; font: 8px ui-monospace,monospace; color: var(--rg-soft); }
+.rg-switches { display: flex; gap: 8px; justify-content: flex-end; flex-wrap: wrap; }
+.rg-switches button { font-size: 10px; min-height: 43px; }
+.rg-switches button[aria-pressed="true"] { border-color: #78aaa5; background: #edf6f2; }
+.rg-game .is-held { background: #0c7478; color: #fff; border-color: #0c7478; }
+.rg-touch-controls { display: flex; justify-content: space-between; gap: 18px; padding: 0 0 22px; align-items: center; }
+.rg-touch-controls > div:first-child { display: flex; gap: 6px; }
+.rg-game [data-hold] { touch-action: none; user-select: none; -webkit-user-select: none; }
+.rg-pad { display: grid; grid-template-columns: repeat(3,100px); gap: 5px; }
+.rg-pad button:first-child { grid-column: 2; grid-row: 1; }
+.rg-pad button:nth-child(2) { grid-column: 1; grid-row: 2; }
+.rg-pad button:nth-child(3) { grid-column: 3; grid-row: 2; }
+.rg-pad button:last-child { grid-column: 2; grid-row: 2; }
+.rg-control-preferences { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 20px; padding: 13px 16px; margin: 0 0 24px; border: 1px solid var(--rg-line); border-radius: 7px; background: #eef5f2; }
+.rg-control-preferences label { display: flex; align-items: center; gap: 8px; min-height: 30px; font-size: 12px; font-weight: 600; cursor: pointer; }
+.rg-control-preferences input { width: 16px; height: 16px; accent-color: var(--rg-accent); }
+.rg-pitch-help { flex: 1 1 230px; margin: 0; font-size: 11px; line-height: 1.6; color: var(--rg-soft); }
+.rg-setup { border-top: 1px solid var(--rg-line); padding-top: 28px; }
+.rg-section-heading { display: flex; justify-content: space-between; gap: 16px; align-items: end; margin: 0 0 20px; }
+.rg-section-heading .rg-micro { color: var(--rg-accent); }
+.rg-section-heading h3 { font-size: 23px; letter-spacing: -.035em; line-height: 1.3; margin: 8px 0 0; color: var(--rg-ink); }
+.rg-setup-hint { color: var(--rg-soft); font-size: 11px; max-width: 150px; line-height: 1.6; }
+.rg-aircraft-grid { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 11px; }
+.rg-game .rg-aircraft-card { position: relative; display: flex; flex-direction: column; align-items: flex-start; padding: 18px; text-align: left; min-height: 185px; background: linear-gradient(130deg,#f8fbfa,#edf3f3); border: 1px solid var(--rg-line); border-radius: 8px; overflow: hidden; }
+.rg-game .rg-aircraft-card[aria-pressed="true"] { border-color: var(--rg-accent); box-shadow: inset 0 0 0 1px var(--rg-accent); background: #edf7f2; }
+.rg-aircraft-card .rg-micro { font-size: 8px; color: var(--rg-soft); margin-top: 48px; }
+.rg-aircraft-card strong { font-size: 18px; margin: 7px 0 4px; font-weight: 600; letter-spacing: -.03em; }
+.rg-aircraft-card > span:not(.rg-micro):not(.rg-plane-silhouette) { font-size: 11px; color: var(--rg-soft); font-weight: 400; }
+.rg-aircraft-card small { font: 9px ui-monospace, monospace; color: #477c7c; margin-top: 16px; }
+.rg-plane-silhouette { position: absolute; right: 20px; top: 9px; width: 82px; height: 55px; color: #24596b; opacity: .7; transform: rotate(20deg); line-height: 1; }
+.rg-plane-silhouette svg { display: block; width: 100%; height: 100%; }
+.rg-silhouette-cargo { color: #926833; font-size: 53px; transform: rotate(-15deg); }
+.rg-silhouette-bush { color: #a95740; font-size: 70px; }
+.rg-silhouette-military { color: #5c6d7e; font-size: 68px; }
+.rg-aircraft-detail { padding: 18px 0 30px; font-size: 12px; line-height: 1.7; }
+.rg-aircraft-detail strong { font-weight: 600; }
+.rg-aircraft-detail p { margin: 5px 0; color: var(--rg-soft); }
+.rg-aircraft-landing { color: #47766d; font-size: 11px; }
+.rg-section-heading label { display: grid; gap: 6px; font-size: 10px; color: var(--rg-soft); }
+.rg-mission-panel { display: grid; grid-template-columns: 175px minmax(0,1fr); gap: 24px; background: #f3f7f7; border: 1px solid var(--rg-line); border-radius: 9px; overflow: hidden; }
+.rg-mission-art { position: relative; min-height: 225px; background: linear-gradient(135deg,#396769,#143b4e); overflow: hidden; display: flex; flex-direction: column; align-items: center; padding-top: 27px; color: #e1eedd; }
+.rg-mission-art::before, .rg-mission-art::after { content: ""; position: absolute; top: 25px; bottom: 30px; width: 2px; background: #dbf7ed80; transform: rotate(18deg); }
+.rg-mission-art::before { left: 42px; }
+.rg-mission-art::after { right: 42px; }
+.rg-mission-number { font: 42px ui-monospace,monospace; z-index: 1; transform: rotate(18deg); margin-left: 10px; }
+.rg-mission-lines { height: 84px; border-left: 4px dashed #d1e8d5b0; transform: rotate(18deg); }
+.rg-mission-badge { position: absolute; bottom: 17px; font: 9px ui-monospace,monospace; letter-spacing: .15em; background: #09233070; padding: 6px 9px; }
+.rg-mission-art[data-scenery="carrier"] { background: linear-gradient(120deg,#153e55,#358390); }
+.rg-mission-art[data-scenery="storm"], .rg-mission-art[data-scenery="night"] { background: linear-gradient(120deg,#102132,#4b5d78); }
+.rg-mission-art[data-scenery="forest"], .rg-mission-art[data-scenery="alpine"] { background: linear-gradient(120deg,#254d3c,#74977c); }
+.rg-mission-art[data-scenery="coast"] { background: linear-gradient(120deg,#187b83,#6daab1); }
+.rg-mission-brief { padding: 22px 24px 20px 0; }
+.rg-mission-location { color: #4f8187; font-size: 9px; }
+.rg-mission-title { font-size: 24px; letter-spacing: -.03em; margin: 8px 0; }
+.rg-mission-tip { color: var(--rg-soft); font-size: 12px; line-height: 1.7; margin: 0 0 12px; }
+.rg-mission-facts { display: flex; flex-wrap: wrap; gap: 6px; }
+.rg-mission-facts span { border: 1px solid #cddfe0; background: #fff9; padding: 5px 7px; border-radius: 4px; font-size: 9px; color: #44636d; }
+.rg-record { color: #3f7573; font: 9px ui-monospace,monospace; letter-spacing: .05em; margin: 14px 0 0; }
+.rg-instructions { margin-top: 26px; border: 1px solid var(--rg-line); border-radius: 8px; padding: 18px 20px; }
+.rg-instructions summary { font-size: 16px; font-weight: 600; cursor: pointer; }
+.rg-instructions summary span { font-size: 11px; color: var(--rg-soft); margin-left: 10px; font-weight: 400; }
+.rg-lesson-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 25px; margin-top: 25px; }
+.rg-lesson-grid > div { display: grid; grid-template-columns: 24px 1fr; gap: 10px; align-content: start; }
+.rg-lesson-grid b { font: 13px ui-monospace,monospace; color: #15847b; }
+.rg-lesson-grid strong { font-size: 13px; }
+.rg-lesson-grid p { grid-column: 1 / -1; font-size: 11px; line-height: 1.8; color: var(--rg-soft); margin: 0; }
+.rg-keyboard { display: flex; flex-wrap: wrap; gap: 9px 17px; border-top: 1px solid var(--rg-line); margin-top: 22px; padding-top: 20px; }
+.rg-keyboard span { font-size: 10px; color: var(--rg-soft); }
+.rg-keyboard kbd { margin: 0 5px 0 0; color: var(--rg-ink); opacity: 1; }
+.rg-school-note { font-size: 11px; line-height: 1.8; color: var(--rg-soft); margin: 17px 0 0; }
+.rg-options { display: flex; gap: 12px 20px; align-items: center; flex-wrap: wrap; font-size: 11px; padding: 23px 0 8px; }
+.rg-options label { display: flex; align-items: center; gap: 7px; cursor: pointer; min-height: 28px; }
+.rg-options input { accent-color: var(--rg-accent); }
+.rg-save-note { margin-left: auto; font-size: 9px; color: var(--rg-soft); }
+.rg-voice-options { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 13px; padding-top: 17px; border-top: 1px solid var(--rg-line); }
+.rg-voice-options label { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font-size: 11px; min-width: 0; max-width: 100%; }
+.rg-voice-options select { max-width: 270px; }
+.rg-voice-note { font-size: 10px; color: var(--rg-soft); }
+@media (max-width: 760px) {
+  #app:has(.rg-game) .title-group h1 { font-size: clamp(1.6rem,6.4vw,2.5rem); }
+  .rg-game { padding: 14px; }
+  .rg-stage { height: 480px; }
+  .rg-flight-header { padding: 17px 14px; }
+  .rg-callout { font-size: 12px; }
+  .rg-flight-header .rg-micro { font-size: 8px; }
+  .rg-view-label { display: none; }
+  .rg-instruments { padding: 12px 9px; min-width: 96px; gap: 18px; top: 26%; }
+  .rg-instruments-left { left: 10px; }.rg-instruments-right { right: 10px; }
+  .rg-instruments span { font-size: 8px; }.rg-instruments small { font-size: 8px; }.rg-instruments strong { font-size: 27px; }
+  .rg-weather { bottom: 51px; left: 14px; font-size: 8px; padding: 6px; }
+  .rg-attitude-strip { left: 14px; right: auto; bottom: 13px; font-size: 9px; padding: 9px; }
+  .rg-flight-director { bottom: 110px; }
+  .rg-tower { padding: 14px; gap: 12px; }.rg-caption { font-size: 12px; }.rg-tower .rg-micro { font-size: 8px; }
+  .rg-toolbar { gap: 7px; }.rg-game button { padding: 10px 11px; font-size: 11px; }.rg-camera-label { margin-left: 0; }
+  .rg-flight-controls { grid-template-columns: 1fr; gap: 17px; }.rg-switches { justify-content: flex-start; }
+  .rg-aircraft-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }.rg-aircraft-card { min-height: 170px !important; }
+  .rg-section-heading { align-items: start; flex-wrap: wrap; }.rg-section-heading h3 { font-size: 20px; }.rg-setup-hint { display: none; }
+  .rg-mission-panel { grid-template-columns: 95px minmax(0,1fr); gap: 15px; }.rg-mission-art { min-height: 260px; }.rg-mission-art::before { left: 15px; }.rg-mission-art::after { right: 15px; }
+  .rg-mission-number { font-size: 33px; }.rg-mission-badge { font-size: 7px; padding: 6px; }.rg-mission-brief { padding: 18px 15px 18px 0; }.rg-mission-title { font-size: 21px; }.rg-mission-tip { font-size: 11px; }
+  .rg-lesson-grid { grid-template-columns: 1fr; gap: 20px; }.rg-lesson-grid p { grid-column: 2; }.rg-instructions { padding: 16px; }
+  .rg-touch-controls { gap: 8px; }.rg-touch-controls > div:first-child { flex-direction: column; }.rg-pad { grid-template-columns: repeat(3,75px); }.rg-pad button { padding: 9px 4px; font-size: 10px; }
+  .rg-cockpit-frame { inset: -8% 10% 0; border-width: 8px; }.rg-cockpit-panel { left: 7%; right: 7%; }.rg-cockpit-panel > span:not(.rg-attitude) { display: none; }
+  .rg-save-note { margin-left: 0; width: 100%; }
+  .rg-game:is([data-phase="flying"],[data-phase="rollout"],[data-phase="goaround"]) { padding-bottom: 240px; }
+  .rg-game:is([data-phase="flying"],[data-phase="rollout"],[data-phase="goaround"]) .rg-touch-controls { position: fixed; z-index: 42; left: 0; right: 0; bottom: 0; height: 104px; padding: 8px 16px; background: #f7faf8f5; border-top: 1px solid #cfdfdf; }
+  .rg-game:is([data-phase="flying"],[data-phase="rollout"],[data-phase="goaround"]) .rg-flight-controls { position: fixed; z-index: 42; left: 0; right: 0; bottom: 104px; min-height: 85px; padding: 10px 16px; grid-template-columns: 105px minmax(0,1fr); gap: 12px; background: #f7faf8f5; border-top: 1px solid #cfdfdf; box-shadow: 0 -8px 24px #102b3826; }
+  .rg-game:is([data-phase="flying"],[data-phase="rollout"],[data-phase="goaround"]) .rg-switches { gap: 5px; justify-content: flex-end; }
+  .rg-game:is([data-phase="flying"],[data-phase="rollout"],[data-phase="goaround"]) .rg-switches button { padding: 7px; font-size: 9px; min-height: 32px; }
+  .rg-game:is([data-phase="flying"],[data-phase="rollout"],[data-phase="goaround"]) .rg-switches kbd { display: none; }
+}
+@media (max-width: 440px) {
+  .rg-game { padding: 10px; }
+  .game-card:has(.rg-game) { padding: 13px; }.rg-stage { height: 435px; }.rg-brand { font-size: 8px; letter-spacing: .12em; }.rg-beta { font-size: 8px; padding: 6px; }
+  .rg-instruments { top: 29%; min-width: 88px; }.rg-instruments strong { font-size: 24px; }.rg-instruments small { font-size: 7px; }.rg-weather { max-width: calc(100% - 28px); }
+  .rg-pad { grid-template-columns: repeat(3,64px); }.rg-aircraft-grid { gap: 8px; }.rg-game .rg-aircraft-card { padding: 14px; }.rg-aircraft-card strong { font-size: 17px; }
+  .rg-result { padding: 22px; }.rg-result h3 { font-size: 24px; }.rg-result-metrics { gap: 14px; }.rg-result-metrics strong { font-size: 16px; }
+  .rg-instructions summary span { display: none; }.rg-voice-status { display: block; margin-left: 0; }
+}
+@media (prefers-reduced-motion: reduce) { .rg-loader { animation: none; }.rg-game button { transition: none; } }

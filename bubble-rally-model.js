@@ -101,6 +101,23 @@ export function advanceRally(state) {
   return { ...state, active: (state.active + 1) % state.players.length, turn: state.turn + 1, roll: null, phase: "roll" };
 }
 
+// The race ends at its first finisher. Remaining places use final positions,
+// with competition ranks for ties (for example: 1st, 2nd, 2nd, 4th).
+export function rallyStandings(state) {
+  if (state.winner === null) return [];
+  const racers = [...state.players].sort((a, b) => {
+    if (a.id === state.winner) return -1;
+    if (b.id === state.winner) return 1;
+    return b.position - a.position || a.id - b.id;
+  });
+  let place = 1;
+  const standings = racers.map((racer, index) => {
+    if (index && (racers[index - 1].id === state.winner || racer.position !== racers[index - 1].position)) place = index + 1;
+    return { ...racer, place };
+  });
+  return standings.map(racer => ({ ...racer, tied: standings.filter(other => other.place === racer.place).length > 1 }));
+}
+
 export function scoreRallyAction(state, action) {
   const next = resolveRallyAction(state, action.id);
   const before = state.players[state.active], after = next.players[state.active];

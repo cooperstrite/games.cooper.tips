@@ -1,0 +1,13 @@
+{
+  "asset": "runway-glide-cover.png",
+  "purpose": "AI-generated promotional cover artwork for Runway Glide; not a software screenshot.",
+  "generation": {
+    "tool": "image_gen.imagegen",
+    "mode": "built-in",
+    "date": "2026-10-22",
+    "transparent_background": false,
+    "source_file": "/Users/cooper/.codex/generated_images/01a163d4-23eb-7202-9c60-200afaaf8493/exec-d87ae929-8987-49c4-bc10-90a0466c925b.png",
+    "prompt": "Use case: stylized-concept\nAsset type: square promotional cover artwork for the Runway Glide landing-simulator mini-game, readable as a small square game icon.\nPrimary request: a realistic, glossy high-end flight-simulator style 3D image of a commercial twin-engine passenger jet on short final to a coastal airport.\nScene/backdrop: a detailed asphalt runway runs from the near lower foreground toward distant coastal mountains; brilliant blue sea is visible alongside the runway and beyond the coastal airport. Illuminated runway edge lights and clear white centerline and threshold markings guide the eye into the scene. Warm late-afternoon sun, atmospheric mountain distance, a few soft clouds.\nSubject: one believable modern commercial twinjet with white unbranded fuselage, clean dark blue tail and engine accents, seen from behind and slightly above, perfectly aligned for landing. Landing gear fully extended, trailing-edge flaps deployed, two engines beneath the swept wings, convincing aviation proportions. The plane is the bold central focal point and its silhouette is immediately clear.\nStyle/medium: premium flight-simulation promotional key art; realistic detailed 3D rendering with polished physically plausible materials, convincing perspective, subtle reflections, crisp aircraft details, warm sunlight and natural cinematic atmosphere.\nComposition/framing: square 1:1 canvas; elevated rear chase-camera view; full airplane comfortably within the frame with room around both wing tips, fuselage pointing toward the distant runway, runway vanishing point near the upper center. The aircraft occupies roughly two thirds of the image width. Strong clear large-scale forms that remain recognizable as a compact game-cover thumbnail.\nConstraints: one airplane only; commercial civil aviation; no airline branding or logos, no text, no runway numbers or letters, no UI, no borders, no watermark, no weapons, no fantasy geometry. Do not present this as an actual screenshot; it is cover artwork."
+  },
+  "review": "Visually inspected square cover: unbranded commercial twinjet on final approach, extended landing gear and flaps, illuminated coastal runway, mountain backdrop and warm afternoon light. No overlaid text, UI, logo, watermark, or weapons."
+}

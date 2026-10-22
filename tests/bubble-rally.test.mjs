@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { createRally, rollRally, rallyActions, resolveRallyAction, advanceRally, scoreRallyAction, RALLY_COURSES } from "../bubble-rally-model.js";
+import { createRally, rollRally, rallyActions, resolveRallyAction, advanceRally, scoreRallyAction, rallyStandings, RALLY_COURSES } from "../bubble-rally-model.js";
 import { OPPONENT_LEVELS, createComputerOpponent } from "../arcade/opponents.js";
 import { rallyMoveDetails } from "../bubble-rally-guide.js";
 
@@ -108,6 +108,33 @@ test("overshooting finishes the race once and prevents subsequent moves", () => 
   const state = rolled(4, 6); state.players[0].position = 29;
   const next = resolveRallyAction(state, "boost"); assert.equal(next.winner, 0); assert.equal(next.players[0].position, 31);
   assert.equal(next.phase, "finished"); assert.equal(advanceRally(next), next); assert.deepEqual(rallyActions(next), []);
+});
+
+test("final placements retain each winner's identity and sort all other racers by final position", () => {
+  for (const count of [2, 3, 4]) for (let winner = 0; winner < count; winner++) {
+    const state = rolled(count, 6); state.active = winner;
+    state.players.forEach((racer, index) => { racer.position = index === winner ? 29 : 4 + index * 5; });
+    state.players[winner].name = "Comet & friends";
+    const finished = resolveRallyAction(state, "cruise"), snapshot = JSON.stringify(finished);
+    const places = rallyStandings(finished);
+    assert.equal(places.length, count); assert.equal(places[0].id, winner);
+    assert.equal(places[0].name, "Comet & friends"); assert.equal(places[0].color, finished.players[winner].color);
+    assert.deepEqual(places.map(racer => racer.place), Array.from({ length: count }, (_, index) => index + 1));
+    assert.ok(places.every((racer, index) => !index || racer.position < places[index - 1].position));
+    assert.equal(JSON.stringify(finished), snapshot);
+  }
+  assert.deepEqual(rallyStandings(createRally({ players: players(4) })), []);
+});
+
+test("racers on the same tile share their placement regardless of energy or controller", () => {
+  const state = createRally({ players: players(4) }); state.winner = 3; state.phase = "finished";
+  [20, 8, 20, 31].forEach((position, index) => { state.players[index].position = position; });
+  state.players[0].energy = 0; state.players[2].energy = 6;
+  assert.deepEqual(rallyStandings(state).map(({ id, place, tied }) => ({ id, place, tied })), [
+    { id: 3, place: 1, tied: false }, { id: 0, place: 2, tied: true }, { id: 2, place: 2, tied: true }, { id: 1, place: 4, tied: false },
+  ]);
+  state.players[1].position = 20;
+  assert.deepEqual(rallyStandings(state).map(racer => racer.place), [1, 2, 2, 2]);
 });
 
 test("seeded matches finish in all circuits and seat counts; every difficulty can win and lose", () => {

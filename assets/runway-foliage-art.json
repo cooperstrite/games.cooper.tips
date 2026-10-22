@@ -1,0 +1,42 @@
+{
+  "asset": "runway-foliage.png",
+  "purpose": "Photorealistic transparent two-cell foliage atlas for layered 3D branch cards in Runway Glide.",
+  "dimensions": {
+    "width": 1774,
+    "height": 887,
+    "cellWidth": 887,
+    "cellHeight": 887,
+    "format": "RGBA PNG"
+  },
+  "generation": {
+    "tool": "image_gen.imagegen",
+    "mode": "built-in",
+    "date": "2026-10-22",
+    "transparent_background": true,
+    "initial_source_file": "/Users/cooper/.codex/generated_images/01a163d4-23eb-7202-9c60-200afaaf8493/exec-3ee6431f-ffd6-4a16-8c96-e8c41d298f42.png",
+    "initial_prompt": "Use case: product-mockup\nAsset type: photorealistic transparent foliage texture atlas for layered branch cards on 3D trees in a realistic flight-simulator scene.\nPrimary request: create a wide 2:1 transparent PNG atlas with precisely two equal square cells placed side by side. The left half contains ONE detailed broadleaf branch spray. The right half contains ONE detailed pine bough. Each branch is individually isolated and centered in its own half with generous transparent margins on every side. Nothing may cross the center dividing line. Do not draw cell borders or a dividing line.\nLeft half subject: a believable irregular spreading spray of fine woody twigs carrying many small mature olive/oak-like green leaves; natural variation between rich olive green, muted sage and deeper green, with a few subtly sunlit tips. Fine branch forks connect the leaves into a coherent branch, with many visible small and medium transparent holes between leaf groups. Asymmetric gently spreading silhouette, organic leaf size and orientation, readable individual leaves rather than a solid mass.\nRight half subject: a believable natural irregular pine bough with slender woody stems and several branching sprays of dense dark green needles, subtly warm needle tips and realistic delicate needle bundles. Clearly visible gaps and transparent negative spaces between sprays, finely detailed needle edges. A spreading branch silhouette rather than a conical miniature tree.\nStyle/medium: realistic botanical texture photography with exceptionally crisp natural edges, photoreal surface detail, plausible leaf veins and fine twigs, high-end 3D environment texture quality. Orthographic straight-on view of two mostly planar branches; no perspective scene or dramatic depth of field. Both subjects have consistent scale and light direction.\nLighting: soft warm sunlight from upper-left, balanced soft fill, natural restrained contrast. No cast shadows outside the foliage.\nComposition: exactly two equal halves, left broadleaf and right pine; each silhouette centered in its own square cell and contained within the inner 76 percent of that cell, leaving at least 12 percent transparent margin along all four cell edges and a clear transparent gap at the middle. Show entire branching tips without cropping. Keep branch silhouettes irregular and detailed with holes.\nBackground: genuinely transparent alpha, including the negative spaces inside the foliage and all margins. No visible checkerboard or colored backdrop.\nAvoid: no whole trees, trunks, cone shapes, spherical bushes, dense opaque leaf blobs, ground, scenery, background color, contact shadows, drop shadows, borders, frames, text, labels, logos, watermark, additional objects or extra branch specimens.",
+    "final_source_file": "/Users/cooper/.codex/generated_images/01a163d4-23eb-7202-9c60-200afaaf8493/exec-226db4d6-0e86-42a9-88ad-549eb23b3327.png",
+    "final_edit_prompt": "Use case: precise-object-edit\nEdit target: the supplied transparent two-cell foliage atlas.\nPrimary request: improve the transparent padding and separation while preserving the two branch specimens and their photorealistic detail. Keep the final canvas wide 2:1, two equal square halves. Scale BOTH branch specimens down substantially: each must fit entirely inside the central 68 percent width AND height of its own square half, leaving a clearly visible fully transparent border of about 16 percent of cell size on every cell edge. Keep the broadleaf branch on the LEFT and the pine bough on the RIGHT, independently centered. There must be a wide empty transparent gap between them; no pixels may touch or cross the center division. Do not draw any border or dividing line. Keep the full irregular silhouettes, natural fine twigs, individual leaves and needles, internal holes, soft warm top-left lighting, and consistent scale. Preserve the realistic photographic material detail. The outer borders and internal holes must have clean transparent alpha with no colored fringe, stray colored specks, red or bright neon green artifacts, or visible background. No whole trees, trunks, cone-shaped silhouettes, additional subjects, text, shadows, logos, watermark, checkerboard, or solid backdrop. Output a true RGBA transparent PNG."
+  },
+  "atlas": {
+    "left": "Broadleaf branch; u = 0.0 to 0.5",
+    "right": "Pine bough; u = 0.5 to 1.0",
+    "boundsAtAlphaGreaterThan16": {
+      "note": "Bounds use local cell pixels, with exclusive right and bottom values.",
+      "broadleaf": [
+        226,
+        171,
+        802,
+        743
+      ],
+      "pine": [
+        146,
+        180,
+        704,
+        752
+      ]
+    }
+  },
+  "review": "Visually inspected both generated versions. Final atlas preserves irregular branch silhouettes, detailed leaves and needles, natural twigs, internal transparent gaps, warm top-left lighting, and substantial space between the two cells. No trunk, whole tree, backdrop, cast shadow, text, or borders.",
+  "limitations": "Broadleaf is slightly right of its cell center; its narrowest visible margin is 85 pixels. Alpha values of 1 occur sparsely in otherwise empty margins and the center divider, and isolated colored edge artifacts have alpha no greater than 4. Alpha testing above 4/255 removes this nearly transparent residue. Visible branch silhouettes remain fully separated."
+}

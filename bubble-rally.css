@@ -41,30 +41,18 @@
 .rally-setup-footer { display: flex; gap: 15px; align-items: center; margin-top: 2px; }
 .rally-setup-footer > span { color: var(--rally-muted); font-size: 11px; line-height: 1.6; }
 .rally-setup-footer button { flex-shrink: 0; }
-.rally-finish-customizer { border: 1px solid #98d8ed38; border-radius: 16px; background: linear-gradient(120deg, #12334788, #17203b88); overflow: hidden; }
-.rally-finish-body { padding: 0 20px 18px; }
-.rally-finish-body > p { margin: 0 0 14px; font-size: 12px; color: var(--rally-muted); line-height: 1.65; }
-.rally-finish-names { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
-.rally-finish-color { min-width: 0; padding: 12px; border: 1px solid #a9c7df29; border-top: 2px solid var(--racer-color); border-radius: 12px; background: #07182b70; }
-.rally-finish-label { display: flex; align-items: center; gap: 8px; color: #e9f6ff; }
-.rally-finish-color button { width: 100%; margin-top: 10px; font-size: 12px; }
-.rally-finish-body .rally-finish-cheats { margin: 14px 0 0; color: #b7e5e8; }
-.rally-finish-cheats kbd { display: inline-block; border: 1px solid #a2cee744; border-radius: 4px; padding: 1px 5px; font: 700 11px system-ui; color: #fff0ce; }
 .rally-clip-dialog { width: min(1100px, calc(100vw - 28px)); max-width: none; max-height: calc(100dvh - 28px); padding: 0; border: 1px solid #b7e4f254; border-radius: 20px; background: #0a192b; color: #e9f7ff; overflow: auto; box-shadow: 0 25px 100px #0009; }
 .rally-clip-dialog::backdrop { background: #010816ce; backdrop-filter: blur(8px); }
-.rally-clip-header { display: flex; justify-content: space-between; gap: 15px; align-items: center; padding: 16px 22px; }
-.rally-clip-title { font-size: 18px; margin: 5px 0 0; color: var(--clip-color); }
+.rally-clip-dialog, .rally-clip-dialog::backdrop { transition: opacity 450ms ease, transform 450ms ease; }
+.rally-clip-dialog.is-finishing { opacity: 0; transform: scale(1.015); }
+.rally-clip-dialog.is-finishing::backdrop { opacity: 0; }
 .rally-clip-stage { position: relative; aspect-ratio: 16 / 9; background: #041127; container-type: inline-size; }
 .rally-clip-video, .rally-clip-poster { display: block; width: 100%; height: 100%; object-fit: contain; }
 .rally-clip-caption { position: absolute; inset: auto 0 7%; text-align: center; padding: 0 20px; pointer-events: none; text-shadow: 0 3px 15px #02071e, 0 1px 3px #02071e; }
 .rally-clip-caption > span { font-size: clamp(8px, 1.2cqw, 13px); letter-spacing: 0.22em; color: #ffe2a0; font-weight: 800; }
 .rally-clip-name { color: #fff4df; font-size: clamp(20px, 4.6cqw, 52px); letter-spacing: -0.035em; line-height: 1.1; margin: 7px 0 0; overflow-wrap: anywhere; }
 .rally-clip-name.is-long { font-size: clamp(14px, 3.2cqw, 36px); }
-.rally-clip-footer { display: flex; align-items: flex-end; flex-wrap: wrap; gap: 13px 18px; padding: 18px 22px; }
-.rally-clip-name-field { flex: 1 1 220px; }
-.rally-clip-buttons { display: flex; flex-wrap: wrap; gap: 8px; }
-.rally-clip-buttons button, .rally-clip-close { font-size: 12px; }
-.rally-clip-status { flex-basis: 100%; margin: 0; font-size: 11px; line-height: 1.6; color: #acc8d9; }
+.rally-clip-status { position: absolute; inset: auto 0 0; text-align: center; margin: 0; padding: 12px; background: #06172bc9; color: #d3e8f1; font-size: 12px; }
 .rally-clip-status:empty { display: none; }
 .rally-scoreboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(145px, 1fr)); gap: 9px; }
 .rally-racer-card { border: 1px solid #98bdd525; border-radius: 13px; background: #13243b65; padding: 12px; min-width: 0; position: relative; }
@@ -83,13 +71,42 @@
 .rally-course-name { font-weight: 700; color: #dbf4ff; letter-spacing: 0.02em; }
 .rally-arena-footer { font-size: 9px; letter-spacing: 0.08em; border-top: 1px solid #98bdd514; }
 .rally-canvas { display: block; width: 100%; aspect-ratio: 1.7; }
-.rally-finale { position: absolute; inset: 44px 0 39px; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; padding: 0 20px clamp(20px, 5cqw, 56px); text-align: center; pointer-events: none; text-shadow: 0 3px 18px #020816; }
-.rally-finale .rally-eyebrow { color: #ffe4a3; font-size: clamp(9px, 1.2cqw, 12px); letter-spacing: 0.24em; }
-.rally-winner-name { max-width: 100%; overflow-wrap: anywhere; font-size: clamp(24px, 4.4cqw, 46px); line-height: 1.05; letter-spacing: -0.04em; color: #fff4da; margin: 8px 0; }
-.rally-winner-name.is-long { font-size: clamp(18px, 3cqw, 32px); }
-.rally-winner-detail { margin: 0 0 16px; color: #c3d9e8; font-size: 12px; }
-.rally-finale-controls { pointer-events: auto; }
-.rally-finale:not([hidden]) { animation: rally-champion 750ms ease-out both; }
+.rally-finale { position: relative; padding: 32px 24px 26px; text-align: center; background: linear-gradient(#04172bd9, #06132bba 45%, #051526f5), url("assets/bubble-rally-ocean.png") center / cover; }
+.rally-finale .rally-eyebrow { color: #ffe4a3; font-size: 10px; letter-spacing: 0.24em; }
+.rally-winner-name { max-width: 100%; overflow-wrap: anywhere; font-size: clamp(25px, 4.4cqw, 46px); line-height: 1.1; letter-spacing: -0.04em; color: #fff4da; margin: 10px 0; }
+.rally-winner-name.is-long { font-size: clamp(22px, 3cqw, 32px); }
+.rally-winner-detail { margin: 0; color: #c3d9e8; font-size: 12px; }
+.rally-podium { --island-size: clamp(100px, 19cqw, 200px); --orb-size: clamp(54px, 10cqw, 106px); display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: end; gap: 12px; max-width: 900px; margin: 55px auto 24px; padding: 0; list-style: none; }
+.rally-podium[data-count="2"] { grid-template-columns: repeat(2, minmax(0, 235px)); justify-content: center; }
+.rally-podium:not([data-count="2"]) { --island-size: clamp(100px, 16cqw, 160px); --orb-size: clamp(54px, 9cqw, 88px); grid-template-columns: repeat(2, minmax(0, 235px)); justify-content: center; align-items: stretch; row-gap: 38px; }
+.rally-podium[data-count="4"] { grid-template-columns: repeat(3, minmax(0, 235px)); }
+.rally-podium:not([data-count="2"]) .rally-podium-racer:first-child { grid-column: 1 / -1; justify-self: center; width: calc((100% - 12px) / 2); }
+.rally-podium[data-count="4"] .rally-podium-racer:first-child { width: calc((100% - 24px) / 3); }
+.rally-podium:not([data-count="2"]) .rally-podium-racer { display: flex; flex-direction: column; }
+.rally-podium:not([data-count="2"]) .rally-podium-art { flex-shrink: 0; }
+.rally-podium:not([data-count="2"]) .rally-podium-info { flex: 1; min-height: 98px; padding: 12px 8px; }
+.rally-podium:not([data-count="2"]) .rally-podium-place { line-height: 1.1; font-size: clamp(19px, 2.8cqw, 27px); }
+.rally-podium:not([data-count="2"]) .rally-podium-name { margin: 6px 0 7px; }
+.rally-podium-racer { order: var(--podium-order); min-width: 0; position: relative; }
+.rally-podium-art { position: relative; height: calc(var(--island-size) * 0.87); }
+.rally-podium-island { position: absolute; width: var(--island-size); max-width: none; left: 50%; top: 0; transform: translateX(-50%); }
+.rally-podium-orb { display: block; position: absolute; z-index: 1; width: var(--orb-size); height: var(--orb-size); top: calc(var(--island-size) * 0.35 - var(--orb-size) * 0.88); left: 50%; transform: translateX(-50%); background-image: url("assets/bubble-rally-bubbles.png"); background-size: 200% 200%; filter: drop-shadow(0 0 14px var(--racer-color)); }
+.rally-podium-crown { position: absolute; z-index: 2; top: calc(var(--island-size) * 0.35 - var(--orb-size) * 0.88 - 25px); left: 50%; transform: translateX(-50%); width: 44px; height: 29px; background: linear-gradient(#fff8d2, #ffc96b); clip-path: polygon(5% 10%, 30% 45%, 50% 0, 70% 45%, 95% 10%, 85% 100%, 15% 100%); }
+.rally-podium-info { position: relative; min-height: calc(94px + var(--pedestal-height)); padding: 18px 8px; border: 1px solid #9cebf842; border-top: 2px solid var(--racer-color); border-radius: 12px 12px 7px 7px; background: linear-gradient(150deg, #285c7070, #0a1c3399); box-shadow: inset 0 1px 24px #97edff0a, 0 15px 30px #0003; }
+.rally-podium-racer[data-place="1"] .rally-podium-info { border-color: #f6d4937a; background: linear-gradient(150deg, #7d674b55, #18344299); }
+.rally-podium-place { display: block; color: #e8f5ff; font-size: clamp(19px, 3cqw, 30px); font-weight: 900; letter-spacing: -0.035em; }
+.rally-podium-racer[data-place="1"] .rally-podium-place { color: #ffe7a8; }
+.rally-podium-name { font-size: clamp(12px, 1.7cqw, 18px); color: #f3fbff; margin: 8px 0 9px; overflow-wrap: anywhere; line-height: 1.25; }
+.rally-podium-position { font-size: 9px; letter-spacing: 0.05em; line-height: 1.5; color: #add1de; }
+.rally-podium-note { max-width: 510px; margin: 0 auto 18px; color: #acc8d9; font-size: 11px; line-height: 1.6; }
+.rally-finale:not([hidden]) { animation: rally-champion 650ms ease-out both; }
+.rally-test-panel { padding: 0 18px 16px; border: 1px dashed #ffc86666; border-radius: 14px; background: #7d633615; }
+.rally-test-panel summary { padding-left: 0; color: #ffe3a8; }
+.rally-test-panel p { margin: 0 0 14px; color: var(--rally-muted); font-size: 12px; line-height: 1.6; }
+.rally-test-racers { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.rally-test-racer { min-width: 0; }
+.rally-test-racer button { margin-top: 8px; width: 100%; font-size: 11px; padding: 8px; border-color: var(--racer-color); }
+.rally-test-play { display: flex; align-items: center; gap: 8px; font-size: 12px; margin-top: 14px; }
 .rally-turn-panel { border: 1px solid #90c6e432; background: linear-gradient(120deg, #1734488c, #18233b8c); border-radius: 16px; padding: 20px; }
 .rally-turn-heading { display: flex; gap: 18px; align-items: center; justify-content: space-between; }
 .rally-turn-heading > div:first-child { min-width: 0; }
@@ -132,7 +149,7 @@
   .rally-canvas { aspect-ratio: 0.68; }
 }
 @media (max-width: 700px) {
-  .rally-finish-names { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .rally-test-racers { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .rally-scoreboard { grid-template-columns: repeat(2, 1fr); }
   .rally-actions { grid-template-columns: repeat(2, 1fr); }
   .rally-seat { grid-template-columns: 24px 1fr 1fr; gap: 9px; }
@@ -140,14 +157,16 @@
   .rally-seat > .rally-field:nth-of-type(3) { grid-template-columns: 1fr 1fr; align-items: center; }
 }
 @media (max-width: 540px) {
-  .rally-finish-body { padding: 0 12px 14px; }
-  .rally-finish-color { padding: 10px; }
   .rally-clip-dialog { width: calc(100vw - 16px); max-height: calc(100dvh - 16px); border-radius: 14px; }
-  .rally-clip-header, .rally-clip-footer { padding: 13px; }
-  .rally-clip-title { font-size: 16px; }
-  .rally-clip-header .rally-eyebrow { font-size: 8px; letter-spacing: 0.08em; }
-  .rally-clip-buttons { width: 100%; }
-  .rally-clip-buttons button { flex: 1; padding: 9px; }
+  .rally-finale { padding: 26px 14px 20px; }
+  .rally-podium { gap: 7px; margin-top: 45px; }
+  .rally-podium:not([data-count="2"]) { --island-size: min(100px, 24cqw); --orb-size: min(54px, 14cqw); row-gap: 30px; }
+  .rally-podium:not([data-count="2"]) .rally-podium-racer:first-child { --island-size: min(140px, 38cqw); --orb-size: min(80px, 22cqw); width: min(200px, 64%); }
+  .rally-podium[data-count="4"] .rally-podium-racer:first-child { width: min(200px, 64%); }
+  .rally-podium-info { padding: 12px 5px; }
+  .rally-podium-position { font-size: 8px; letter-spacing: 0; }
+  .rally-podium-place { font-size: 18px; }
+  .rally-podium-crown { width: 31px; height: 22px; top: calc(var(--island-size) * 0.35 - var(--orb-size) * 0.88 - 19px); }
   .game-card:has(.rally-game) { padding: 13px; }
   .rally-game { gap: 13px; }
   .rally-intro { gap: 13px; }
