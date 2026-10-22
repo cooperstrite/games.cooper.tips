@@ -2490,9 +2490,11 @@ const games = [
     init(root) {
       const wrapper = document.createElement("div");
       wrapper.className = "tower-game";
+      wrapper.dataset.phase = "ready";
 
       const status = document.createElement("div");
       status.className = "tower-status";
+      status.setAttribute("role", "status");
       status.textContent = "Click start to build your tower.";
 
       const stats = document.createElement("div");
@@ -2510,6 +2512,24 @@ const games = [
 
       const field = document.createElement("div");
       field.className = "tower-field";
+      field.setAttribute("aria-label", "Tower building area. Tap to drop the moving block.");
+      const scenery = document.createElement("div");
+      scenery.className = "tower-scenery";
+      scenery.setAttribute("aria-hidden", "true");
+      scenery.innerHTML = `<div class="tower-sun"></div><div class="tower-cloud tower-cloud-one"></div><div class="tower-cloud tower-cloud-two"></div><svg class="tower-skyline" viewBox="0 0 600 180" preserveAspectRatio="none"><path fill="#679394" opacity=".22" d="M0 180V100H30V70H55V105H90V40H115V75H140V115H170V80H195V130H230V95H260V120H295V55H320V90H355V35H380V110H410V65H440V95H470V45H495V115H530V85H565V105H600V180Z"/><path fill="#406f79" opacity=".22" d="M0 180V140H45V115H75V155H125V125H155V150H210V110H240V145H290V130H335V155H375V120H410V145H460V105H490V150H545V130H575V155H600V180Z"/></svg>`;
+      const fieldHeading = document.createElement("div");
+      fieldHeading.className = "tower-field-heading";
+      fieldHeading.innerHTML = '<span>BUILD YOUR SKYLINE</span><strong>One block at a time.</strong>';
+      const preview = document.createElement("div");
+      preview.className = "tower-preview";
+      preview.setAttribute("aria-hidden", "true");
+      for (let i = 0; i < 6; i++) {
+        const slab = document.createElement("i");
+        slab.className = "tower-block";
+        slab.style.cssText = `--block-hue:${195-i*14};width:${78-i*7}%;left:${11+i*3.5}%;bottom:${i*28}px`;
+        preview.appendChild(slab);
+      }
+      field.append(scenery, fieldHeading, preview);
 
       const tower = document.createElement("div");
       tower.className = "tower-stack";
@@ -2596,7 +2616,7 @@ const games = [
 
       const help = document.createElement("p");
       help.className = "help-text";
-      help.textContent = "Press Drop or hit space to lock the moving block in place.";
+      help.innerHTML = '<kbd>SPACE</kbd><span>Press Space, tap the scene, or use Drop. Only the overlapping part stays.</span>';
 
       wrapper.append(status, stats, field, controls, help);
       root.appendChild(wrapper);
@@ -2710,6 +2730,8 @@ const games = [
         syncSpeedFromSelect();
         measureField();
         state.running = true;
+        wrapper.dataset.phase = "playing";
+        fieldHeading.innerHTML = '<span>FIND YOUR RHYTHM</span><strong>Line up. Drop. Repeat.</strong>';
         state.speed = speedPresets[state.speedMode].speed;
         startBtn.textContent = "Restart";
         dropBtn.disabled = false;
@@ -2734,6 +2756,8 @@ const games = [
         state.direction = 1;
         state.lastTimestamp = 0;
         state.viewOffset = 0;
+        wrapper.dataset.phase = "ready";
+        fieldHeading.innerHTML = '<span>BUILD YOUR SKYLINE</span><strong>One block at a time.</strong>';
         tower.textContent = "";
         tower.style.setProperty("--tower-offset", "0px");
         measureField();
@@ -2818,11 +2842,15 @@ const games = [
           handleFail();
           return;
         }
+        showOffcut(active, activeLeft, overlapLeft - activeLeft, -1);
+        showOffcut(active, overlapRight, activeRight - overlapRight, 1);
+        const cleanDrop = active.widthRatio - overlap < .006;
         active.widthRatio = overlap;
         active.leftRatio = overlapLeft;
         updateBlockVisuals(active);
         active.element.classList.remove("is-active");
         active.element.classList.add("is-locked");
+        if (cleanDrop) active.element.classList.add("is-perfect");
         state.stack.push(active);
         state.activeBlock = null;
         updateTowerView();
@@ -2837,7 +2865,7 @@ const games = [
           Math.max(targetSpeed, state.speed + config.speedIncrement)
         );
         state.speed = nextSpeed;
-        status.textContent = currentHeight % 4 === 0 ? "Stack looks sharp!" : "Nice drop!";
+        status.textContent = cleanDrop ? "Perfect alignment. Keep that rhythm!" : currentHeight % 4 === 0 ? "Stack looks sharp!" : "Nice drop!";
         if (Number.isFinite(state.maxLayers) && currentHeight >= state.maxLayers) {
           handleVictory();
           return;
@@ -2849,6 +2877,8 @@ const games = [
       }
 
       function handleFail() {
+        wrapper.dataset.phase = "failed";
+        fieldHeading.innerHTML = '<span>A LITTLE TOO FAR</span><strong>Another skyline awaits.</strong>';
         state.running = false;
         state.activeBlock = null;
         state.readyForDrop = false;
@@ -2862,6 +2892,8 @@ const games = [
       }
 
       function handleVictory() {
+        wrapper.dataset.phase = "complete";
+        fieldHeading.innerHTML = '<span>TOWER COMPLETE</span><strong>A beautiful balance.</strong>';
         state.running = false;
         state.activeBlock = null;
         state.readyForDrop = false;
@@ -2942,6 +2974,7 @@ const games = [
       function createBlock({ widthRatio, leftRatio, bottom }) {
         const block = document.createElement("div");
         block.className = "tower-block";
+        block.style.setProperty("--block-hue", String((195 - (bottom / config.blockHeight) * 9 + 360) % 360));
         tower.appendChild(block);
         const data = {
           element: block,
@@ -2953,6 +2986,16 @@ const games = [
         return data;
       }
 
+      function showOffcut(active, leftRatio, widthRatio, direction) {
+        if (widthRatio * state.fieldWidth < 1) return;
+        const piece = document.createElement("div");
+        piece.className = "tower-block tower-offcut";
+        piece.style.cssText = `width:${widthRatio*state.fieldWidth}px;left:${leftRatio*state.fieldWidth}px;bottom:${active.bottom}px;--block-hue:${active.element.style.getPropertyValue("--block-hue")};--cut-drift:${direction*42}px;--cut-turn:${direction*24}deg`;
+        piece.setAttribute("aria-hidden", "true");
+        tower.appendChild(piece);
+        piece.addEventListener("animationend", () => piece.remove(), { once: true });
+      }
+
       function updateBlockVisuals(block) {
         const width = block.widthRatio * state.fieldWidth;
         block.element.style.width = `${width}px`;
@@ -2962,8 +3005,8 @@ const games = [
 
       function renderStats() {
         const height = state.stack.length - 1;
-        heightBadge.textContent = `Height: ${Math.max(0, height)}`;
-        bestBadge.textContent = `Best: ${state.bestHeight}`;
+        heightBadge.innerHTML = `<span>TOWER HEIGHT</span><strong>${Math.max(0, height)}<small> blocks</small></strong>`;
+        bestBadge.innerHTML = `<span>SESSION BEST</span><strong>${state.bestHeight}<small> blocks</small></strong>`;
       }
 
       return () => {
