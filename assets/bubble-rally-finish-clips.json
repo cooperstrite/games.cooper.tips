@@ -1,0 +1,22 @@
+{
+  "generator": "Project Canvas cinematic, frame-by-frame Chromium WebCodecs encoding and FFmpeg muxing",
+  "source": "scripts/bubble-rally-cinematic.js",
+  "audioSource": "scripts/bubble-rally-cinematic-audio.mjs",
+  "sharedFinishArt": "bubble-rally-art.js",
+  "durationSeconds": 7,
+  "finishCrossingSeconds": 3.07,
+  "width": 1280,
+  "height": 720,
+  "framesPerSecond": 60,
+  "format": "H.264 MP4, yuv420p, 8 Mbps source, faststart, AAC stereo 128 kbps",
+  "audio": "Original synthesized water, rolling, jumps, glass landings, fanfare and confetti sparkles; follows saved sound preference",
+  "scene": "Original glass landing artwork beneath the former road, the same checkered arch as the board, animated ocean and waterfalls, centered rolling orbs, six smooth hops",
+  "artSources": ["assets/bubble-rally-ocean.png", "assets/bubble-rally-bubbles.png", "assets/bubble-rally-platform.png"],
+  "editableText": "Winner names are rendered as HTML over the video, never baked into the asset.",
+  "clips": [
+    { "color": "cyan", "video": "assets/bubble-rally-finish-cyan.mp4", "poster": "assets/bubble-rally-finish-cyan.jpg" },
+    { "color": "coral", "video": "assets/bubble-rally-finish-coral.mp4", "poster": "assets/bubble-rally-finish-coral.jpg" },
+    { "color": "amber", "video": "assets/bubble-rally-finish-amber.mp4", "poster": "assets/bubble-rally-finish-amber.jpg" },
+    { "color": "violet", "video": "assets/bubble-rally-finish-violet.mp4", "poster": "assets/bubble-rally-finish-violet.jpg" }
+  ]
+}

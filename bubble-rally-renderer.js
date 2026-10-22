@@ -1,5 +1,6 @@
 import { createCanvasSurface, createFrameLoop } from "./arcade/runtime.js";
 import { rallyCourse, tileAt } from "./bubble-rally-model.js";
+import { drawRallyFinishArch } from "./bubble-rally-art.js";
 
 const TILE_COLORS = { normal: "#6584b3", start: "#62e8ff", charge: "#62f3bc", boost: "#68dfff", storm: "#ff87b7", checkpoint: "#c4a1ff", finish: "#ffe29a" };
 const TILE_LABELS = { start: "START", charge: "E+2", boost: ">>", checkpoint: "SAFE", finish: "FINISH" };
@@ -225,14 +226,7 @@ export function createRallyRenderer(canvas, { getState, getPreview, isPaused, is
         ctx.strokeStyle = "#ffffff"; ctx.lineWidth = 2; ctx.stroke();
       }
     });
-    const finish = points[points.length - 1], archRadius = radius * 1.03;
-    ctx.beginPath(); ctx.moveTo(finish.x - archRadius, finish.y - 5);
-    ctx.lineTo(finish.x - archRadius, finish.y - archRadius * 0.65);
-    ctx.bezierCurveTo(finish.x - archRadius, finish.y - archRadius * 2.2, finish.x + archRadius, finish.y - archRadius * 2.2, finish.x + archRadius, finish.y - archRadius * 0.65);
-    ctx.lineTo(finish.x + archRadius, finish.y - 5);
-    ctx.strokeStyle = "#ffce7f"; ctx.lineWidth = width < 520 ? 6 : 9; ctx.shadowColor = "#ffc868"; ctx.shadowBlur = 12; ctx.stroke(); ctx.shadowBlur = 0;
-    ctx.strokeStyle = "#fff6d9"; ctx.lineWidth = width < 520 ? 4 : 6; ctx.stroke();
-    ctx.strokeStyle = "#15203a"; ctx.setLineDash([5, 5]); ctx.stroke(); ctx.setLineDash([]);
+    drawRallyFinishArch(ctx, points[points.length - 1], radius, { lineWidth: width < 520 ? 6 : 9, highlightWidth: width < 520 ? 4 : 6 });
     const progress = animation ? clamp(animation.elapsed / animation.duration) : 1;
     state.players.forEach((player, index) => {
       if (celebration?.winner === player.id) return;

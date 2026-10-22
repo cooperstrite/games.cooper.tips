@@ -3,8 +3,11 @@ import { createRally, rollRally, rallyActions, resolveRallyAction, advanceRally,
   RALLY_COURSES, RALLY_ACTIONS, RACER_COLORS, rallyCourse, MAX_ENERGY } from "./bubble-rally-model.js";
 import { createRallyRenderer } from "./bubble-rally-renderer.js";
 import { rallyMoveDetails } from "./bubble-rally-guide.js";
+import { createRallyFinishPlayer, RALLY_FINISHES } from "./bubble-rally-finish.js";
 
 const SETTINGS_KEY = "bubble-rally-setup-v2";
+// Temporary review shortcuts. Turn off after the four finish clips are approved.
+const ENABLE_FINISH_PREVIEWS = true;
 const el = (tag, className, text) => {
   const node = document.createElement(tag); if (className) node.className = className;
   if (text !== undefined) node.textContent = text; return node;
@@ -29,6 +32,7 @@ export function createBubbleRally(root) {
       <div><span class="rally-eyebrow">THE GLASS CIRCUITS</span><h3>Small bubbles. Big rivalries.</h3><p>2-4 racers / Shared screen / Your choice of opponents</p></div>
     </div>
     <details class="rally-setup" open><summary>Race setup</summary><div class="rally-setup-body"></div></details>
+    <details class="rally-finish-customizer" open><summary>Finish clips &amp; character names</summary><div class="rally-finish-body"><p>Choose the name shown when each color wins. Leave a name blank to use its racer name.</p><div class="rally-finish-names"></div><p class="rally-finish-cheats" hidden>Temporary previews: press <kbd>1</kbd> Cyan, <kbd>2</kbd> Coral, <kbd>3</kbd> Amber, or <kbd>4</kbd> Violet. Your race waits while you watch. <kbd>Esc</kbd> closes the clip.</p></div></details>
     <div class="rally-scoreboard" aria-label="Racer positions and energy"></div>
     <div class="rally-arena">
       <div class="rally-arena-header"><span class="rally-course-name"></span><span class="rally-round"></span></div>
@@ -102,10 +106,12 @@ export function createBubbleRally(root) {
   const soundEnabled = saved.sound !== false;
   let sound = soundEnabled, audio = null, live = false, paused = false, rolling = false, moving = false, disposed = false;
   let preview = null, computers = [], history = [], firstPlayer = Math.floor(Math.random() * Number(count.select.value));
+  let finishPlayer = null;
+  const finishNames = RALLY_FINISHES.map((_, index) => String(saved.finishNames?.[index] || "").slice(0, 32));
   const clock = createOpponentScheduler();
   const readPlayers = () => seats.slice(0, Number(count.select.value)).map(seat => ({ name: seat.input.value, kind: seat.kind.value, difficulty: seat.difficulty.value }));
   let state = createRally({ players: readPlayers(), course: course.select.value, firstPlayer });
-  const renderer = createRallyRenderer(find("canvas"), { getState: () => state, getPreview: () => preview, isPaused: () => paused || document.hidden, isRolling: () => rolling });
+  const renderer = createRallyRenderer(find("canvas"), { getState: () => state, getPreview: () => preview, isPaused: () => paused || document.hidden || finishPlayer?.isOpen, isRolling: () => rolling });
   find(".rally-turn-controls").append(rollButton, nextButton, pauseButton, soundButton);
   find(".rally-finale-controls").append(rematchButton);
   const actionButtons = RALLY_ACTIONS.map(action => {
@@ -122,12 +128,43 @@ export function createBubbleRally(root) {
     actions.append(node); return node;
   });
 
+  const finishName = index => finishNames[index].trim() || state.players[index]?.name || seats[index].input.value.trim() || RALLY_FINISHES[index].name;
+  const finishInputs = RALLY_FINISHES.map((finish, index) => {
+    const card = el("div", "rally-finish-color"); card.style.setProperty("--racer-color", finish.color);
+    const label = el("label", "rally-field"), input = el("input"); input.type = "text"; input.maxLength = 32;
+    input.value = finishNames[index]; input.placeholder = seats[index].input.value; input.setAttribute("aria-label", `${finish.name} finish name`);
+    const title = el("span", "rally-finish-label"); title.append(el("i", "rally-mini-bubble", String(index + 1)), el("strong", "", finish.name));
+    label.append(title, input); card.append(label);
+    input.addEventListener("input", () => { finishNames[index] = input.value; saveSetup(); });
+    if (ENABLE_FINISH_PREVIEWS) {
+      const previewButton = button(`Preview ${index + 1}`); previewButton.setAttribute("aria-label", `Preview ${finish.name} finish clip`);
+      previewButton.addEventListener("click", () => finishPlayer.show(index, { preview: true })); card.append(previewButton);
+    }
+    find(".rally-finish-names").append(card); return input;
+  });
+  find(".rally-finish-cheats").hidden = !ENABLE_FINISH_PREVIEWS;
+  finishPlayer = createRallyFinishPlayer(wrapper, {
+    getName: finishName,
+    setName(index, value) { finishNames[index] = value.slice(0, 32); finishInputs[index].value = finishNames[index]; saveSetup(); },
+    getSound: () => sound,
+    setSound(enabled) { sound = enabled; saveSetup(); render(); },
+    onOpen() { clock.pause(); },
+    onClose() { if (!paused) clock.resume(); if (!disposed) render(); },
+  });
+  const previewShortcut = event => {
+    if (!ENABLE_FINISH_PREVIEWS || event.repeat || event.altKey || event.ctrlKey || event.metaKey || !/^[1-4]$/.test(event.key)) return;
+    if (event.target.isContentEditable || event.target.closest?.("input, textarea, select")) return;
+    event.preventDefault(); finishPlayer.show(Number(event.key) - 1, { preview: true });
+  };
+  document.addEventListener("keydown", previewShortcut);
+
   function saveSetup() {
-    try { localStorage.setItem(SETTINGS_KEY, JSON.stringify({ count: Number(count.select.value), course: course.select.value, sound, players: seats.map(seat => ({ name: seat.input.value, kind: seat.kind.value, difficulty: seat.difficulty.value })) })); } catch { /* Storage is optional. */ }
+    try { localStorage.setItem(SETTINGS_KEY, JSON.stringify({ count: Number(count.select.value), course: course.select.value, sound, finishNames, players: seats.map(seat => ({ name: seat.input.value, kind: seat.kind.value, difficulty: seat.difficulty.value })) })); } catch { /* Storage is optional. */ }
   }
   function syncSetup() {
     seats.forEach((seat, index) => { seat.row.hidden = index >= Number(count.select.value); seat.sync(); });
     courseNote.textContent = rallyCourse(course.select.value).note;
+    finishInputs.forEach((input, index) => { input.placeholder = seats[index].input.value; });
     if (!live) { state = createRally({ players: readPlayers(), course: course.select.value, firstPlayer }); render(); }
     saveSetup();
   }
@@ -200,7 +237,7 @@ export function createBubbleRally(root) {
     playSound(next.last.events.some(event => event.type === "pop") ? "pop" : "move");
     clock.schedule(() => {
       moving = false; history.unshift(describeMove(state)); history = history.slice(0, 20);
-      if (state.winner !== null) { renderer.celebrate(state.winner); playSound("win"); }
+      if (state.winner !== null) { renderer.celebrate(state.winner); finishPlayer.show(state.winner); }
       render();
       if (state.winner === null && state.players[state.active].kind === "computer") clock.schedule(nextTurn, 900);
     }, duration + 60);
@@ -256,8 +293,8 @@ export function createBubbleRally(root) {
     const finished = live && state.winner !== null && !moving;
     find(".rally-finale").hidden = !finished;
     if (finished) {
-      find(".rally-winner-name").textContent = `${state.players[state.winner].name} wins!`;
-      find(".rally-winner-name").classList.toggle("is-long", state.players[state.winner].name.length > 12);
+      find(".rally-winner-name").textContent = `${finishName(state.winner)} wins!`;
+      find(".rally-winner-name").classList.toggle("is-long", finishName(state.winner).length > 12);
       find(".rally-winner-detail").textContent = `${rallyCourse(state.course).name} / ${state.turn} turns`;
     }
     startButton.textContent = live ? "Start new race" : "Start race";
@@ -279,5 +316,5 @@ export function createBubbleRally(root) {
     wrapper.classList.toggle("is-paused", paused);
   }
   syncSetup();
-  return () => { disposed = true; clock.dispose(); renderer.dispose(); audio?.close().catch(() => {}); wrapper.remove(); };
+  return () => { disposed = true; document.removeEventListener("keydown", previewShortcut); finishPlayer.dispose(); clock.dispose(); renderer.dispose(); audio?.close().catch(() => {}); wrapper.remove(); };
 }
