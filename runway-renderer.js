@@ -7,6 +7,7 @@ import { DEG, deckAt, flightInstruments, trafficAt, clamp } from "./runway-engin
 export async function createRunwayRenderer(canvas, { isCurrent = () => true } = {}) {
   const gfx = await createWebGLScene(canvas, { quality: "high", isCurrent });
   const { B, scene, camera, sun, material, shadows } = gfx;
+  const aircraftLayer = 0x10000000, sceneryLayers = camera.layerMask;
   const panoramaUrl=new URL("./assets/runway-environment.png",import.meta.url).href;
   const environment=await new Promise(resolve=>{
     let texture;
@@ -325,6 +326,7 @@ export async function createRunwayRenderer(canvas, { isCurrent = () => true } = 
     fill.intensity=night?.35:storm?.65:.45;fill.groundColor=B.Color3.FromHexString(night?"#102239":"#455649");sun.intensity=night?.45:storm?.8:2.6;scene.environmentIntensity=night?.12:storm?.45:.95;
     buildSky(night,storm);if(["coast","carrier"].includes(level.scenery))buildWater();if(level.id!=="carrier")buildLand();buildRunway();buildGuides(s);if(storm)buildRain();
     aircraft=buildAircraft(gfx,s.aircraft.id);aircraft.root.parent=world;
+    for(const mesh of aircraft.root.getChildMeshes())mesh.layerMask=aircraftLayer;
     traffic=trafficAt(s).map(t=>{const model=buildAircraft(gfx,t.aircraft,{traffic:true});model.root.parent=world;return{...t,model};});
     glow=new B.GlowLayer("runway-light-bloom",scene,{mainTextureRatio:.4,blurKernelSize:32});glow.intensity=night?.7:.25;
     for(const mesh of world.getChildMeshes()){
@@ -352,7 +354,8 @@ export async function createRunwayRenderer(canvas, { isCurrent = () => true } = 
     const rotation=B.Matrix.RotationYawPitchRoll(s.heading*DEG,-s.pitch*DEG,-s.bank*DEG);
     const lift=-Math.min(...contacts.map(point=>B.Vector3.TransformCoordinates(V(...point),rotation).y));
     aircraft.root.position.set(s.x,s.y+lift,s.z);aircraft.root.rotation.set(-s.pitch*DEG,s.heading*DEG,-s.bank*DEG);aircraft.update(s,step);
-    aircraft.root.setEnabled(view!=="cockpit");
+    // Hide the model from the cockpit camera while retaining its shadow pass.
+    camera.layerMask=view==="cockpit"?sceneryLayers:sceneryLayers|aircraftLayer;
     const instrument=flightInstruments(s), scale=currentAircraft.length/36;
     const behind=Math.max(19,58*scale), up=Math.max(3,5.5*scale);
     const heading=s.heading*DEG;

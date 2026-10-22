@@ -27,7 +27,7 @@ export function createRunwayGlide(root) {
   const audio=createRunwayAudio(settings);
   const wrapper=document.createElement("section");wrapper.className="rg-game";wrapper.setAttribute("aria-label","Runway Glide flight simulator");wrapper.setAttribute("aria-live","off");
   wrapper.innerHTML=`
-    <div class="rg-topline"><span class="rg-brand"><span class="rg-brand-mark" aria-hidden="true">RG</span> FLIGHT OPERATIONS</span><span class="rg-beta">3D FLIGHT / BETA</span></div>
+    <div class="rg-topline"><span class="rg-brand"><span class="rg-brand-mark" aria-hidden="true">RG</span> FLIGHT OPERATIONS</span><span class="rg-beta">3D FLIGHT</span></div>
     <div class="rg-stage" tabindex="0" aria-label="3D flight view. W and S change pitch; A and D bank. Full controls below.">
       <canvas class="rg-canvas" aria-label="Your aircraft on final approach"></canvas>
       <div class="rg-loading" role="status"><span class="rg-loader"></span><strong>Preparing the approach</strong><span>Loading aircraft and airfield...</span></div>
@@ -110,6 +110,7 @@ export function createRunwayGlide(root) {
   }
   function equipment(name) {
     if(!["ready","flying"].includes(state.phase)||paused)return;
+    if(name==="gear"&&state.aircraft.fixedGear)return;
     if(name==="gear")state.gear=!state.gear;
     if(name==="flaps")state.flaps=(state.flaps+1)%3;
     if(name==="hook"&&state.aircraft.id==="military")state.hook=!state.hook;
@@ -146,10 +147,13 @@ export function createRunwayGlide(root) {
     $(".rg-mission-select").disabled=active;$$("[data-aircraft]").forEach(button=>{button.disabled=active;});
     throttle.value=Math.round(state.throttle*100);$(".rg-throttle output").textContent=`${Math.round(state.throttle*100)}%`;
     throttle.disabled=paused||["complete","crashed","goaround"].includes(state.phase);
-    $("[data-toggle=gear]").innerHTML=`Gear ${state.gear?"DOWN":"UP"} <kbd>G</kbd>`;$("[data-toggle=gear]").setAttribute("aria-pressed",String(state.gear));
+    const gearButton=$("[data-toggle=gear]");
+    gearButton.innerHTML=state.aircraft.fixedGear?"Gear DOWN / FIXED":`Gear ${state.gear?"DOWN":"UP"} <kbd>G</kbd>`;
+    gearButton.setAttribute("aria-pressed",String(state.gear));
+    gearButton.title=state.aircraft.fixedGear?"The bush plane has fixed landing gear. Its wheels stay down.":"Toggle landing gear (G)";
     $("[data-toggle=flaps]").innerHTML=`Flaps ${["UP","APPROACH","LAND"][state.flaps]} <kbd>F</kbd>`;$("[data-toggle=flaps]").setAttribute("aria-pressed",String(state.flaps>0));
     $("[data-toggle=hook]").innerHTML=`Hook ${state.hook?"DOWN":"UP"} <kbd>H</kbd>`;$("[data-toggle=hook]").setAttribute("aria-pressed",String(state.hook));
-    $$("[data-toggle]").forEach(button=>{button.disabled=paused||!["ready","flying"].includes(state.phase);});
+    $$("[data-toggle]").forEach(button=>{button.disabled=paused||!["ready","flying"].includes(state.phase)||(button.dataset.toggle==="gear"&&state.aircraft.fixedGear);});
     $$("[data-hold]").forEach(button=>{button.disabled=paused||!active;});
     $(".rg-brake").classList.toggle("is-held",state.braking);
   }

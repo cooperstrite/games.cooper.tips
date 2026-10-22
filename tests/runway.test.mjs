@@ -51,6 +51,20 @@ test("bush touchdown needs its three-point attitude and limited bank/drift",()=>
   s.pitch=9;s.bank=6;assert.match(assessTouchdown(s,.7).reason,/wing/);
   s.bank=0;s.lateralSpeed=3;assert.match(assessTouchdown(s,.7).reason,/sideways/);
 });
+test("the bush plane has fixed gear through setup, flight, and go-around",()=>{
+  const bush=createFlight("bush");
+  assert.equal(bush.aircraft.fixedGear,true);
+  for(const phase of ["ready","flying","rollout","goaround"]){
+    bush.phase=phase;bush.gear=false;advanceFlight(bush,{},0);assert.equal(bush.gear,true);
+  }
+  const touchdown=landing("bush","forest");touchdown.gear=false;
+  assert.equal(assessTouchdown(touchdown,.7).safe,true);
+  assert.notEqual(towerGuidance(touchdown).key,"gear");
+  for(const type of ["passenger","cargo","military"]){
+    const s=createFlight(type);s.gear=false;advanceFlight(s,{},0);
+    assert.equal(s.gear,false,"Retractable gear must still work on the other planes");
+  }
+});
 test("retracted gear, hard impacts, excessive speed, and missed pavement fail with actionable instructions",()=>{
   for(const [change,impact,message] of [[{gear:false},.5,/landing gear/i],[{},8,/descent/],[{speed:110},.5,/speed/],[{z:-1},.5,/landing surface/],[{x:40},.5,/centerline/],[{pitch:17},.5,/attitude/]]){
     const s=Object.assign(landing(),change);const result=assessTouchdown(s,impact);assert.equal(result.safe,false);assert.match(result.reason,message);

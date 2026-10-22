@@ -10,3 +10,7 @@
 [ 3358692ms] [LOG] BJS - [12:12:17]: Babylon.js v9.31.0 - WebGL2 - Parallel shader compilation @ http://127.0.0.1:4173/vendor/babylonjs/babylon.js:0
 [ 3362911ms] [LOG] BJS - [12:12:21]: Babylon.js v9.31.0 - WebGL2 - Parallel shader compilation @ http://127.0.0.1:4173/vendor/babylonjs/babylon.js:0
 [ 3723610ms] [LOG] BJS - [12:18:22]: Babylon.js v9.31.0 - WebGL2 - Parallel shader compilation @ http://127.0.0.1:4173/vendor/babylonjs/babylon.js:0
+[ 4301588ms] [LOG] BJS - [12:28:00]: Babylon.js v9.31.0 - WebGL2 - Parallel shader compilation @ http://127.0.0.1:4173/vendor/babylonjs/babylon.js:0
+[ 4499143ms] [LOG] BJS - [12:31:17]: Babylon.js v9.31.0 - WebGL2 - Parallel shader compilation @ http://127.0.0.1:4173/vendor/babylonjs/babylon.js:0
+[ 4610987ms] [LOG] BJS - [12:33:09]: Babylon.js v9.31.0 - WebGL2 - Parallel shader compilation @ http://127.0.0.1:4173/vendor/babylonjs/babylon.js:0
+[ 5868296ms] [LOG] BJS - [12:54:07]: Babylon.js v9.31.0 - WebGL2 - Parallel shader compilation @ http://127.0.0.1:4173/vendor/babylonjs/babylon.js:0

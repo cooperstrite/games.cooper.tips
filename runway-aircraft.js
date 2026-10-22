@@ -124,11 +124,13 @@ export function buildAircraft(gfx, type, { traffic = false } = {}) {
     const positions = [], indices = [];
     for (const x of [-thickness / 2, thickness / 2]) for (const [y, z] of coords) positions.push(x, y, z);
     const n = coords.length;
-    for (let j = 1; j < n - 1; j++) { indices.push(0, j + 1, j, n, n + j, n + j + 1); }
-    for (let j = 0; j < n; j++) { const k = (j + 1) % n; indices.push(j, k, n + k, j, n + k, n + j); }
+    for (let j = 1; j < n - 1; j++) { indices.push(0, j, j + 1, n, n + j + 1, n + j); }
+    for (let j = 0; j < n; j++) { const k = (j + 1) % n; indices.push(j, n + k, k, j, n + j, n + k); }
     const data = new B.VertexData(); data.positions = positions; data.indices = indices; data.normals = [];
     B.VertexData.ComputeNormals(positions, indices, data.normals);
-    const m = new B.Mesh(name, scene); data.applyToMesh(m); return finish(m, mat);
+    const m = new B.Mesh(name, scene); data.applyToMesh(m);
+    // A thin fin has flat outer faces, not normals averaged across its edges.
+    m.convertToFlatShadedMesh(); return finish(m, mat);
   }
   function panel(name, points, mat, parent = root) {
     const positions=[...points.flat(),...points.flat()],indices=[],n=points.length;
@@ -390,7 +392,7 @@ export function buildAircraft(gfx, type, { traffic = false } = {}) {
   for (const side of [-1, 1]) landingLights.push(sphere("landing-light", [type === "bush" ? .16 : .32, .16, .12], [side * (type === "bush" ? 1.4 : 2), -.55, type === "bush" ? 1.6 : 3.2], bright));
   return { root, parts,
     update(state, dt) {
-      gear.setEnabled(state.gear);
+      gear.setEnabled(type === "bush" || state.gear);
       for (const flap of flapPivots) flap.rotation.x = -.22 * state.flaps;
       for (const prop of propellers) prop.rotation.z += dt * (18 + state.power * 75);
       for (const fan of fans) fan.rotation.z += dt * (8 + state.power * 65);
