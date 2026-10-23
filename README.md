@@ -23,6 +23,7 @@ A playful single-page playground inspired by [neal.fun](https://neal.fun), bundl
 - **Harmonic Echo** — Master a growing instrument sequence across dynamic difficulty modes.
 - **Spot Clash** — Race an AI rival to find the shared symbol across dueling glyph cards.
 - **Cats vs Dogs** — Lead the feline squad in a tile-by-tile tug-of-war to control Meadow Park.
+- **Haunted Harvest** — Gather candy across three haunted paths, solve riddles and ordered spells, manage fright, and carve glowing jack-o'-lanterns in a drawing workshop.
 - **Lights Down** — A compact Lights Out puzzle; toggle tiles (and their neighbors) to dim the board.
 - **Submerged Explorer** — Glide through ocean zones, collect samples, and finish mission objectives in a retro submarine.
 - **Spotlight** — Compare two vibrant scenes and spot every subtle difference against the clock.
@@ -72,6 +73,20 @@ Coin rewards are exactly 1 per pipe on Easy, 3 on Medium, 5 on Hard, and 10 on E
 Use Play, Customize, and Shop to open `/#flappy`, the central studio at `/#characters/flappy`, and `/#flappy/shop`. The old `/#flappy/customize` link redirects to the central studio. The Flappy shop pauses and preserves a flight; leaving for the shared library or another game settles its earned coins and starts a fresh flight when you return. Browser Back and Forward work between pages. First-person 3D (Beta) uses the same flight rules and scoring. Line up its center ring with the dotted circle in the next opening.
 
 Each bird has its own artwork and motion: a fluffy sparrow, crested and striped jay, forward-facing owl, hovering hummingbird, scaled dragon with membrane wings, and glowing phoenix. The first-person wings and beaks match the character. Natural colors applies the selected species' recommended palette; individual colors and accessories remain independently editable. Characters, colors, accessories, views, records, coins, and purchases save in this browser.
+
+## Haunted Harvest
+
+Complete Moonlight Grove, Witchwood, and Hollow Manor by meeting BOTH each path's candy offering (9, 12, then 15) and lantern goal (1, 1, then 2). The optional guided start teaches an actual pumpkin puzzle, wax collection, and lantern carving with the clock paused. A live **What to do next** card explains your next action, missing supplies, or urgent fright. **How to play** pauses the harvest and opens an illustrated explanation; the full rules remain available below the orchard.
+
+Difficulty changes the puzzles as well as timing: **Cozy** has gentle logic, number patterns, and three-rune ordering spells, with longer nights and eight fright. **Eerie** has deduction, multi-step reasoning, and four-rune spells, with six fright. **Wicked** has expert logic, typed numerical answers, five-rune spells, shorter nights, and five fright. Each mode uses its own shuffled puzzle bank; numbers and rune arrangements vary. Generated rune clues always have exactly one solution. Select an answer or build a rune order, then explicitly check it; mistakes can be corrected before submission. An optional hint reduces a correct answer's candy reward by one. Every answer includes an explanation.
+
+Sweet pumpkins give three candy and a carving pumpkin; cursed pumpkins give five and a pumpkin. Wrong answers add one or two fright respectively. Every third consecutive correct answer adds two bonus candy. Green candle wisps supply wax. Touching an unprotected ghost costs two candy and adds two fright; a lantern shield instead banishes it for two candy. The calming bell spends three candy from the offering, clears ghosts, and removes two fright, with a ten-second cooldown. Supplies and shields carry into the next path; its offering and lantern goals reset, and two fright fades. Clocks and spirit lifetimes pause during puzzles, carving, instructions, and the guided start. Pause/P and changing tabs also pause the hunt.
+
+**Carve a lantern** opens a precision drawing workshop. Freehand traces an outline and cuts out its enclosed shape on release; **Point to point** places exact corners and closes with Enter, a double-click, the first point, or **Cut out shape**. **Patch** replaces a clicked piece. Undo/Redo and an undoable reset repair mistakes. Zoom to 150% or 200%, then use **Move view** to pan. Arrow keys move the crosshair (Alt for half-pixel steps, Shift for larger steps), Space places a corner, and Enter makes the cut. Escape cancels an outline. Ctrl/Cmd+Z and Shift+Ctrl/Cmd+Z undo and redo.
+
+Cuts are stored as subpixel vector outlines, independent of screen size and zoom. Optional face guides never grade or restrict a design. Make an eye-sized opening, choose amber/jade/violet candlelight, preview with or without a candle, and name the result. Lighting spends one pumpkin and one wax and grants three candy, a shield (up to three), and two less fright. Canceling costs nothing. The separate **Carving studio** is untimed and saves artwork without harvest rewards. Your last six lanterns, audio preferences, lesson preference, and per-difficulty best scores save locally; older grid-based lanterns are converted when loaded.
+
+The game uses the shared canvas surface/frame loop and has no backend. Rules, puzzle generation, vector geometry, the carving workshop, artwork, audio, and UI live in separate `haunted-harvest-*.js` modules. Run `node --test tests/haunted-harvest*.test.mjs` for campaign, reward, puzzle uniqueness, precision, migration, and save validation checks.
 
 ## Runway Glide
 
