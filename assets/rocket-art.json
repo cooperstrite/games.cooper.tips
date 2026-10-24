@@ -1,0 +1,6 @@
+{
+  "cover": "rocket-boost-cover.png",
+  "tool": "image_gen.imagegen",
+  "prompt": "Square photorealistic game cover. A white brushed-metal multi-stage liquid-fuel rocket launching from a coastal Earth launch complex at sunrise, dark capsule windows, an orange service tower, believable engine nozzles, brilliant exhaust and rolling steam, blue Atlantic ocean and green land, navy sky and a subtle curved Earth horizon. Cinematic physically based materials, fine panel seams, blue stripes. No text, logos, people, or weapons.",
+  "earth": {"file": "rocket-earth-nasa.png", "credit": "NASA Visible Earth, Blue Marble: Land Surface, Ocean Color and Sea Ice (2002)", "source": "https://visibleearth.nasa.gov/images/57730/the-blue-marble-land-surface-ocean-color-and-sea-ice", "download": "https://eoimages.gsfc.nasa.gov/images/imagerecords/57000/57730/land_ocean_ice_2048.png"}
+}

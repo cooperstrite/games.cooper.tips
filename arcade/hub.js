@@ -4,6 +4,8 @@ import { GAME_PROFILES } from "./characters.js";
 import { EARNING_RULES } from "./game-services.js";
 import { readFlappySettings } from "../flappy-appearance.js";
 import { drawFlappyShopPreview } from "../flappy-renderer.js";
+import { readRocketSave, writeRocketSave } from "../rocket-config.js";
+import { drawRocketShopPreview } from "../rocket-art.js";
 
 const gameOptions = (compatible = Object.keys(GAME_PROFILES).filter(id => ARCADE_ITEMS.some(item => item.games.includes(id)))) => Object.entries(GAME_PROFILES).filter(([id]) => compatible.includes(id)).map(([id, game]) => `<option value="${id}">${game.name}</option>`).join("");
 const KEYS = { flappy: "cooper-flappy-bird-v1", archery: "aurora-archery-v2", snake: "snake-garden-settings-v1", neondrift: "neondrift-drive-v2" };
@@ -35,13 +37,14 @@ export function createArcadeShop(root, initialGame = "all") {
     const items = ARCADE_ITEMS.filter(item => (filter.value === "all" || item.games.includes(filter.value)) && (!onlyOwned.checked || state.owned.includes(item.id)));
     for (const item of items) {
       const owned = state.owned.includes(item.id), card = document.createElement("article"); card.className = "arcade-item"; card.dataset.item = item.id; card.dataset.owned = String(owned);
-      card.innerHTML = `${item.kind === "flappy" ? '<canvas class="arcade-item-art" role="img"></canvas>' : `<div class="arcade-collection-art" style="--collection-body:${STYLE_KITS[item.kit].body};--collection-wing:${STYLE_KITS[item.kit].wing};--collection-accent:${STYLE_KITS[item.kit].accent}"><span class="arcade-collection-orb"></span><span class="arcade-collection-orb"></span><span class="arcade-collection-orb"></span><strong>FOUR WORLDS.<br>ONE COLLECTION.</strong></div>`}
-        <div class="arcade-item-body"><small>${item.kind === "collection" ? "FLAPPY BIRD / ARCHERY / SNAKE / NEON DRIFT" : "FLAPPY BIRD"}</small><h4>${item.name}</h4><p>${item.description}</p><div class="arcade-price"><strong>${owned ? "In your collection" : `${money(item.cost)} coins`}</strong><button type="button" data-buy="${item.id}" ${owned || state.coins < item.cost || busy ? "disabled" : ""}>${owned ? "Owned" : "Unlock"}</button></div>${owned ? item.kind === "collection" ? `<label>Use this collection in<select aria-label="Use ${item.name} in">${gameOptions(item.games)}</select></label><button type="button" data-equip="${item.id}">Apply collection &amp; play</button>` : `<button type="button" data-use="${item.id}">Use in Flappy Bird</button>` : `<small>${Math.max(0, item.cost - state.coins) ? `${money(item.cost - state.coins)} more coins to unlock` : "Ready to unlock"}</small>`}</div>`;
+      card.innerHTML = `${item.kind === "flappy" || item.kind === "rocket" ? '<canvas class="arcade-item-art" role="img"></canvas>' : `<div class="arcade-collection-art" style="--collection-body:${STYLE_KITS[item.kit].body};--collection-wing:${STYLE_KITS[item.kit].wing};--collection-accent:${STYLE_KITS[item.kit].accent}"><span class="arcade-collection-orb"></span><span class="arcade-collection-orb"></span><span class="arcade-collection-orb"></span><strong>FOUR WORLDS.<br>ONE COLLECTION.</strong></div>`}
+        <div class="arcade-item-body"><small>${item.kind === "collection" ? "FLAPPY BIRD / ARCHERY / SNAKE / NEON DRIFT" : item.kind === "rocket" ? "ROCKET BOOST / COSMETICS" : "FLAPPY BIRD"}</small><h4>${item.name}</h4><p>${item.description}</p><div class="arcade-price"><strong>${owned ? "In your collection" : `${money(item.cost)} coins`}</strong><button type="button" data-buy="${item.id}" ${owned || state.coins < item.cost || busy ? "disabled" : ""}>${owned ? "Owned" : "Unlock"}</button></div>${owned ? item.kind === "collection" ? `<label>Use this collection in<select aria-label="Use ${item.name} in">${gameOptions(item.games)}</select></label><button type="button" data-equip="${item.id}">Apply collection &amp; play</button>` : `<button type="button" data-use="${item.id}">Use in ${item.kind === "rocket" ? "Rocket Boost" : "Flappy Bird"}</button>` : `<small>${Math.max(0, item.cost - state.coins) ? `${money(item.cost - state.coins)} more coins to unlock` : "Ready to unlock"}</small>`}</div>`;
       grid.append(card);
       if (item.kind === "flappy") { const canvas = card.querySelector("canvas"); canvas.setAttribute("aria-label", `${item.name} preview`); drawFlappyShopPreview(canvas, readFlappySettings(readSettings("flappy")), item); }
+      if (item.kind === "rocket") { const canvas = card.querySelector("canvas"); canvas.setAttribute("aria-label", `${item.name} preview`); drawRocketShopPreview(canvas, item); }
       if (owned && item.kind === "collection" && filter.value !== "all") card.querySelector("select").value = filter.value;
     }
-    if (!items.length) { const empty = document.createElement("p"); empty.className = "arcade-empty"; empty.textContent = "Your collection starts here. Play any of the four connected games to earn coins."; grid.append(empty); }
+    if (!items.length) { const empty = document.createElement("p"); empty.className = "arcade-empty"; empty.textContent = "Your collection starts here. Play any connected game to earn coins."; grid.append(empty); }
   }
   const unsubscribe = wallet.subscribe(render);
   filter.addEventListener("change", () => { render(); const hash = filter.value === "all" ? "#store" : `#store/${filter.value}`; history.replaceState(null, "", hash); });
@@ -58,6 +61,7 @@ export function createArcadeShop(root, initialGame = "all") {
     } else {
       const item = ARCADE_ITEMS.find(entry => entry.id === button.dataset.use);
       if (!item || !wallet.getState().owned.includes(item.id)) return;
+      if (item.kind === "rocket") { const saved = readRocketSave(); saved.design[item.setting] = item.value; if (writeRocketSave(saved)) location.hash = "#characters/rocket"; else status.textContent = "Your browser could not save the look."; return; }
       if (writeSettings("flappy", { ...readSettings("flappy"), [item.setting]: item.value })) location.hash = "#flappy/customize";
       else status.textContent = "Your browser could not save the look. You can equip it in Flappy Bird's studio.";
     }

@@ -5,6 +5,7 @@ export const GAME_PROFILES = Object.freeze({
   snake: Object.freeze({ name: "Snake", family: "snake", route: "#snake" }),
   neondrift: Object.freeze({ name: "Neon Drift", family: "vehicle", route: "#neondrift" }),
   redlight: Object.freeze({ name: "Red Light Green Light", family: "runner", route: "#redlight" }),
+  rocket: Object.freeze({ name: "Rocket Boost", family: "astronaut", route: "#rocket" }),
 });
 
 const definitions = [
@@ -17,6 +18,7 @@ const definitions = [
   ["vehicle", "comet", "Comet GT"], ["vehicle", "sentinel", "Sentinel SUV"],
   ["vehicle", "phantom", "Phantom Coupe"], ["vehicle", "rally", "Rally RS"],
   ["runner", "sprinter", "Sprint runner"], ["runner", "tracksuit", "Track runner"], ["runner", "trail", "Trail runner"],
+  ["astronaut", "flight", "Flight suit"], ["astronaut", "explorer", "Explorer suit"], ["astronaut", "retro", "Heritage suit"],
 ];
 export const CHARACTERS = Object.freeze(definitions.map(([family, key, name]) => Object.freeze({
   id: `${family}:${key}`, key, name, family,
@@ -26,6 +28,7 @@ const SLOTS = {
   humanoid: { hair: ["short", "bob", "ponytail", "braids", "curls", "bun", "bald"], facialHair: ["none", "stubble", "mustache", "goatee", "beard", "full"], headwear: ["none", "hood", "headband", "helmet", "cap"], faceShape: ["oval", "round", "angular"], faceDetail: ["none", "freckles", "scar"], faceAccessory: ["none", "glasses", "eyepatch", "earring"], bowStyle: ["longbow", "recurve", "crystal"], arrowDesign: ["ranger", "moonsteel", "aurora"] },
   snake: { hat: ["none", "skin", "straw", "crown", "party", "flowers"], eyewear: ["none", "round", "shades"], neckwear: ["none", "bandana", "bow", "scarf"] },
   vehicle: {},
+  astronaut: { build: ["lean", "athletic", "strong"], hair: ["short", "bob", "ponytail", "braids", "curls", "bun", "bald"], facialHair: ["none", "stubble", "mustache", "goatee", "beard"] },
   runner: { build: ["lean", "athletic", "strong"], hair: ["short", "bob", "ponytail", "braids", "curls", "bun", "bald"], facialHair: ["none", "stubble", "mustache", "goatee", "beard"], headwear: ["none", "headband", "cap"], eyewear: ["none", "glasses", "sunglasses"], wristwear: ["none", "watch", "bands"] },
 };
 const COLOR_SLOTS = {
@@ -33,6 +36,7 @@ const COLOR_SLOTS = {
   humanoid: ["body", "skin", "hair", "eyes", "accessory", "facialHair", "headwear", "boots", "bow", "grip", "arrow"],
   snake: ["body", "belly", "accessory", "dark"], vehicle: ["body", "accessory", "light", "dark"],
   runner: ["body", "bottoms", "skin", "hair", "eyes", "facialHair", "shoes", "accessory", "headwear"],
+  astronaut: ["body", "skin", "hair", "eyes", "facialHair", "accessory", "gloves", "boots", "helmet", "visor"],
 };
 
 export function charactersForGame(gameId) {

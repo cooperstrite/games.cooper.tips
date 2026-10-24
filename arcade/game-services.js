@@ -1,17 +1,20 @@
 import { getArcadeWallet } from "./wallet.js";
 import { COIN_MULTIPLIERS } from "../flappy-shop.js";
 import { findArcadeItem, STYLE_KITS } from "./catalog.js";
+import { MISSIONS } from "../rocket-config.js";
 
 export const EARNING_RULES = Object.freeze({
   flappy: "Each pipe: Easy 1, Medium 3, Hard 5, Expert 10 coins. Banked when the flight ends.",
   archery: "Earn 1 coin per scored point. Misses earn no coins.",
   snake: "Earn coins for each apple: Sloth 1, Easy 1, Classic 2, Fast 3, Blitz 4.",
   neondrift: "Each 100 meters: Easy 1, Medium 2, Hard 3, Expert 5 coins.",
+  rocket: "Complete missions for 20, 35, 60, 85, 110, or 140 coins. Free play earns no coins. All rocket hardware is free; shop items are visual only.",
 });
 const safeCount = value => Number.isSafeInteger(value) && value >= 0 ? value : 0;
 const rate = (rates, key) => typeof key === "string" && Object.hasOwn(rates, key) ? rates[key] : 1;
 export function rewardTotal(gameId, progress = {}) {
   let total = 0;
+  if (gameId === "rocket" && progress.mode === "mission" && progress.success === true) total = MISSIONS.find(mission => mission.id === progress.mission)?.coins || 0;
   if (gameId === "flappy") total = safeCount(progress.pipes) * (Object.hasOwn(COIN_MULTIPLIERS, progress.difficulty) ? COIN_MULTIPLIERS[progress.difficulty] : 1);
   if (gameId === "archery") total = Math.min(60, safeCount(progress.score));
   if (gameId === "snake") {
