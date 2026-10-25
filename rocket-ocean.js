@@ -85,12 +85,12 @@ void main(){
   vec3 wave=waves(p);
   float dx=(ripple(p+vec2(.5,0.))-ripple(p-vec2(.5,0.)))*fine;
   float dz=(ripple(p+vec2(0.,.5))-ripple(p-vec2(0.,.5)))*fine;
-  vec3 normal=normalize(vUp-vEast*(wave.y*detail+dx)*shoreAttenuation-vNorth*(wave.z*detail+dz)*shoreAttenuation);
+  vec3 normal=normalize(vUp-vEast*(wave.y*.65*detail+dx*.8)*shoreAttenuation-vNorth*(wave.z*.65*detail+dz*.8)*shoreAttenuation);
   vec3 view=normalize(eye-vPosition);
-  float fresnel=.035+.73*pow(1.-max(0.,dot(normal,view)),4.);
+  float fresnel=.035+.55*pow(1.-max(0.,dot(normal,view)),4.);
   vec3 reflection=reflect(-view,normal);
   float reflectedAltitude=clamp(dot(reflection,vUp),0.,1.);
-  vec3 sky=mix(vec3(.58,.70,.73),vec3(.11,.30,.48),sqrt(reflectedAltitude));
+  vec3 sky=mix(vec3(.36,.53,.63),vec3(.09,.25,.42),sqrt(reflectedAltitude));
   float shallows=(1.-smoothstep(25.,430.,shore))*coastal;
   float shoalTexture=.86+.14*noise(p/32.);
   vec3 deep=vec3(.018,.105,.161);
@@ -99,23 +99,21 @@ void main(){
   water=mix(water,sky,fresnel);
   vec3 light=normalize(vec3(.5,.7,-.45));
   vec3 halfVector=normalize(view+light);
-  float glint=pow(max(0.,dot(normal,halfVector)),150.)*1.15*detail;
-  float sunPath=pow(max(0.,dot(normal,halfVector)),12.)*.09;
+  float glint=pow(max(0.,dot(normal,halfVector)),210.)*.26*detail;
+  float sunPath=pow(max(0.,dot(normal,halfVector)),18.)*.025;
   water+=vec3(1.,.80,.56)*(glint+sunPath);
 
-  // Breakers follow the same curved shoreline as the sandy beach mesh.
+  // White water belongs only to breaking waves at the beach. Open water and
+  // the recovery surface keep their blue swell without offshore foam flecks.
   float broken=noise(p/8.+vec2(-clock*.075,clock*.025));
-  float wash=sin(shore*.22-clock*1.0471975512+noise(p/32.)*2.2);
-  float surfBand=(1.-smoothstep(34.,86.,shore))*smoothstep(-3.,7.,shore)*coastal;
-  float breaker=smoothstep(.50,.91,wash)*smoothstep(.20,.65,broken)*surfBand;
-  float beachWash=(1.-smoothstep(2.,15.,abs(shore-5.-sin(clock*.5235987756+vSurface.y*.025)*3.)))*coastal;
-  float foam=breaker*.85+beachWash*(.20+broken*.35);
-  // Broken white caps sit on the traveling wave crests, never on a static grid.
-  float crest=smoothstep(.37,.50,wave.x/max(.2,swell));
+  float alongShore=noise(vec2(vSurface.y/32.,clock*.035));
+  float wash=sin(shore*.26-clock*1.0471975512+alongShore*3.+noise(p/8.)*.7);
+  float surfBand=(1.-smoothstep(38.,60.,shore))*smoothstep(0.,6.,shore)*coastal;
+  float breaker=smoothstep(.48,.91,wash)*(.25+.75*smoothstep(.18,.72,broken))*surfBand;
+  float washDistance=abs(shore-4.5-sin(clock*.5235987756+alongShore*4.)*2.5);
+  float beachWash=(1.-smoothstep(1.5,9.,washDistance))*smoothstep(0.,2.,shore)*coastal;
   float foamGrain=mix(.62,smoothstep(.22,.72,noise(p/2.-clock*.035)),fine);
-  float caps=crest*smoothstep(.47,.72,noise(p/8.-clock*.02))*detail*foamGrain;
-  caps*=mix(.48,.95,clamp((swell-.8)/1.2,0.,1.));
-  foam=max(foam*(.72+.28*foamGrain),caps*shoreAttenuation);
+  float foam=(breaker*.96+beachWash*(.25+broken*.3))*(.64+.36*foamGrain);
   foam*=1.-smoothstep(4000.,18000.,distanceToEye);
   water=mix(water,vec3(.83,.89,.86),clamp(foam,0.,.92));
   water=mix(water,vec3(.33,.48,.56),smoothstep(6500.,45000.,distanceToEye)*.72);

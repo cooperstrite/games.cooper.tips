@@ -297,7 +297,8 @@ export function createRocketScenery(w, { ground }) {
       if (!state) return;
       const h = Math.max(0, state.altitude || 0), fullHeight = state.stats?.height || state.height || 75;
       if (fullHeight !== previousGantryHeight) { gantry.scaling.y = fullHeight / 75 * 1.05; previousGantryHeight = fullHeight; }
-      serviceArms.position.x = -smooth(0, 3, state.phase === 'ready' ? 0 : state.time || 0) * 6;
+      const sequenceTime = state.phase === 'ready' ? 0 : state.phase === 'countdown' ? (state.countdownTotal || 6) - state.countdown : (state.countdownTotal || 6) + (state.time || 0);
+      serviceArms.position.x = -smooth(2, 5, sequenceTime) * 6;
       if (Math.abs(h - previousAltitude) > 20 || previousAltitude < 0) {
         previousAltitude = h;
         terrain.visibility = 1 - smooth(28000, 55000, h);

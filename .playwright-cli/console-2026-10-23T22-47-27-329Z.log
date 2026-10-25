@@ -10,3 +10,5 @@
 [ 9034852ms] [LOG] BJS - [21:18:02]: Babylon.js v9.31.0 - WebGL2 - Parallel shader compilation @ http://127.0.0.1:4173/vendor/babylonjs/babylon.js:0
 [49489022ms] [LOG] BJS - [08:32:16]: Babylon.js v9.31.0 - WebGL2 - Parallel shader compilation @ http://127.0.0.1:4173/vendor/babylonjs/babylon.js:0
 [49946124ms] [LOG] BJS - [08:39:53]: Babylon.js v9.31.0 - WebGL2 - Parallel shader compilation @ http://127.0.0.1:4173/vendor/babylonjs/babylon.js:0
+[163245313ms] [LOG] BJS - [16:08:12]: Babylon.js v9.31.0 - WebGL2 - Parallel shader compilation @ http://127.0.0.1:4173/vendor/babylonjs/babylon.js:0
+[163527861ms] [WARNING] [.WebGL-0x10c00494000] GL_INVALID_OPERATION: glDrawElements: Mismatch between texture format and sampler type (signed/unsigned/float/shadow). @ http://127.0.0.1:4173/?rocket-work=refinements#rocket:0

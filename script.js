@@ -7840,7 +7840,7 @@ const listTemplate = document.getElementById("game-list-item-template");
 const backButton = document.querySelector(".back-button");
 
 const LOCK_PASSWORD = "1108";
-const LOCKED_GAME_IDS = new Set(["memory", "skyport", "orbit", "spotdiff"]);
+const LOCKED_GAME_IDS = new Set(["memory", "skyport", "orbit", "spotdiff", "rocket"]);
 let lockedUnlocked = false;
 lockedUnlocked = false;
 

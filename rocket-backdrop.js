@@ -98,7 +98,9 @@ export function createRocketBackdrop(w,{studio=false}={}){
  eye.minZ=.1;eye.maxZ=2000;
  const material=new B.ShaderMaterial('planet-and-atmosphere',scene,{vertexSource:VERTEX,fragmentSource:FRAGMENT},{attributes:['position'],uniforms:['worldViewProjection','observer','sunDirection','altitude','night','clock','studio'],samplers:['earthMap']});
  material.backFaceCulling=false;material.disableDepthWrite=true;
- material.setTexture('earthMap',new B.Texture(new URL('./assets/rocket-earth-nasa.png',import.meta.url).href,scene));
+ // Longitude wraps at atan's branch cut. Implicit mip gradients across that
+ // seam sample the whole atlas and leave dark dashes on the planet.
+ material.setTexture('earthMap',new B.Texture(new URL('./assets/rocket-earth-nasa.png',import.meta.url).href,scene,true,true,B.Texture.BILINEAR_SAMPLINGMODE));
  material.setVector3('sunDirection',w.sun.direction.negate().normalize());
  material.setFloat('studio',studio?1:0);
  const dome=B.MeshBuilder.CreateSphere('analytic-Earth-and-sky',{diameter:2000,segments:24},scene);
