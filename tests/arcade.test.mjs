@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { CharacterBuilder, GameCharacter, charactersForGame, GAME_PROFILES } from "../arcade/characters.js";
 import { ARCADE_ITEMS } from "../arcade/catalog.js";
+import { ARCADE_GAMES } from "../arcade/games.js";
 import { createArcadeWallet, readArcadeState, flappyWalletView, ARCADE_STORAGE_KEY } from "../arcade/wallet.js";
 import { rewardTotal, createRewardSession } from "../arcade/game-services.js";
 import { createFrameLoop } from "../arcade/runtime.js";
@@ -143,5 +144,5 @@ test("frame loops cap background time, stop cleanly, and resume without advancin
 
 test("all shop products have unique ids, integer prices, and registered compatible games", () => {
   assert.equal(new Set(ARCADE_ITEMS.map(item => item.id)).size, ARCADE_ITEMS.length);
-  for (const item of ARCADE_ITEMS) { assert.ok(Number.isInteger(item.cost) && item.cost > 0); for (const game of item.games) assert.ok(Object.hasOwn(GAME_PROFILES, game)); }
+  for (const item of ARCADE_ITEMS) { assert.ok(Number.isInteger(item.cost) && item.cost > 0); for (const game of item.games) assert.ok(Object.hasOwn(ARCADE_GAMES, game)); }
 });

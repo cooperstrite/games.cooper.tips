@@ -10,10 +10,10 @@ A playful single-page playground inspired by [neal.fun](https://neal.fun), bundl
 - **Snake** — Glide through the garden and gobble up apples. Customize a Generic, Gardener, Python, or Rattlesnake skin in eight colors, add hats, glasses, and neckwear, and toggle music and sound effects.
 - **Aurora Archery** — Customize your archer, bow, and arrows in a mountain landscape, and explore six trails with moving targets, changing wind, and distances from 20 to 70 meters.
 - **Runway Glide** — Fly four distinct aircraft through eight 3D landing approaches, with wind, traffic, spoken tower guidance, and an extreme aircraft-carrier landing.
-- **Rocket Boost** — Build and fly a multi-stage rocket from Earth to space in 3D (Beta), with six missions, crew or payload flights, orbital delivery, re-entry, and a free-play assembly bay. Temporarily available in the main games list.
+- **Rocket Boost** — Build and fly a multi-stage rocket from Earth to space in 3D (Beta), with six missions, crew or payload flights, orbital delivery, re-entry, and a free-play assembly bay. Currently in Coming Soon.
 - **Switchyard Signals** — Dispatch passenger trains across six cartoon railway districts, set junctions and signals, avoid explosive collisions, and ride inside any train in first-person 3D (Beta). Temporarily available in the main games list.
 - **Red Light Green Light** — Hold to sprint toward the finish while freezing the instant the signal turns red.
-- **Memory Loop** — Flip cards to match every pair, tuning the tile count to dial up the difficulty.
+- **Memory Loop** — Match illustrated cards across five layouts. Play solo, with 2-4 friends on one device, or against four computer levels; earn shared coins and collect new picture sets and card backs. Available in the main games list.
 - **Tower Stack** — Drop moving blocks with precise timing to grow the tallest, straightest tower.
 - **Orbit Dash** — Hold Dash/space to burst outward through the glowing gate, release to reset your orbit, and chain flawless passes for a faster streak.
 - **Pop Dash** — Click bubbles the instant they appear to keep the streak alive before they burst.
@@ -73,6 +73,20 @@ Coin rewards are exactly 1 per pipe on Easy, 3 on Medium, 5 on Hard, and 10 on E
 Use Play, Customize, and Shop to open `/#flappy`, the central studio at `/#characters/flappy`, and `/#flappy/shop`. The old `/#flappy/customize` link redirects to the central studio. The Flappy shop pauses and preserves a flight; leaving for the shared library or another game settles its earned coins and starts a fresh flight when you return. Browser Back and Forward work between pages. First-person 3D (Beta) uses the same flight rules and scoring. Line up its center ring with the dotted circle in the next opening.
 
 Each bird has its own artwork and motion: a fluffy sparrow, crested and striped jay, forward-facing owl, hovering hummingbird, scaled dragon with membrane wings, and glowing phoenix. The first-person wings and beaks match the character. Natural colors applies the selected species' recommended palette; individual colors and accessories remain independently editable. Characters, colors, accessories, views, records, coins, and purchases save in this browser.
+
+## Memory Loop
+
+Choose **Solo**, **You vs computer**, or **Friends / same device**, then **Deal new game**. The original 8, 12, 16, 20, and 24 card arrangements remain available; larger boards reflow to four columns on narrow phones. Enter names for up to four local players. Setup and collection changes take effect on the next deal, keeping the current round intact.
+
+Turn over two cards. A matching picture scores one pair and keeps your turn; a mismatch stays visible for a consistent 1.7 seconds from the second tap, then both cards rotate back before play passes to the next seat. The player with the most pairs wins, with shared wins for ties. Solo play keeps the turn after a miss. The clock is informational and starts at the first flip. Pause hides the table and preserves pending flips, computer decisions, and elapsed time; leaving the tab also pauses. Sound on/off controls locally synthesized card, match, and finish effects.
+
+Easy, Medium, Hard, and Expert opponents use the shared computer policy through `arcade/memory-opponent.js`. They observe only publicly revealed cards, have progressively greater recall, and can make mistakes at every level. No computer reads the hidden deck. A human begins each duel.
+
+Solo earns **1 coin per pair**. Computer duels pay **1 / 2 / 3 / 4 coins per human pair** on Easy / Medium / Hard / Expert. A win on a 16-card board adds **6 / 12 / 20 / 30 coins**; other board sizes scale that bonus by pair count, rounded to the nearest coin. Ties and losses retain match coins without a win bonus. Local multiplayer awards no coins. Each match banks immediately in the shared wallet, and repeat callbacks cannot claim the same reward again.
+
+Pocket Wonders and Gilded Atlas are free. At `/#store/memory`, unlock Tidepool (240 coins), Starlight (420), Coral Current backs (120), or Lunar Velvet backs (200). All items are cosmetic, and card backs remain identical within a round. **Use in Memory Loop** equips the purchase; owned sets and backs can be mixed independently in the game's collection controls. Choices, names, purchases, and coins save in this browser. A separate arcade game registry lets card games share the wallet and shop without appearing as characters in the character library.
+
+The card faces use local illustrated atlases generated with the built-in image tool; exact prompts and asset provenance are in [assets/memory-art.json](assets/memory-art.json). Rules, settings/rewards, art, audio, and UI are separate `memory-*.js` modules. `node --test tests/memory.test.mjs tests/arcade.test.mjs tests/opponents.test.mjs` checks deals, legal turns, ties, reward receipts, purchases, and fair computer recall.
 
 ## Haunted Harvest
 

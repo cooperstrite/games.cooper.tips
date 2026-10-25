@@ -2,8 +2,10 @@ import { getArcadeWallet } from "./wallet.js";
 import { COIN_MULTIPLIERS } from "../flappy-shop.js";
 import { findArcadeItem, STYLE_KITS } from "./catalog.js";
 import { MISSIONS } from "../rocket-config.js";
+import { memoryRewardTotal } from "../memory-config.js";
 
 export const EARNING_RULES = Object.freeze({
+  memory: "Solo: 1 coin per pair. Against the computer: Easy 1, Medium 2, Hard 3, Expert 4 per pair you match. Winning an 8-pair board adds 6/12/20/30 coins; other sizes scale the win bonus. Local multiplayer awards no coins.",
   flappy: "Each pipe: Easy 1, Medium 3, Hard 5, Expert 10 coins. Banked when the flight ends.",
   archery: "Earn 1 coin per scored point. Misses earn no coins.",
   snake: "Earn coins for each apple: Sloth 1, Easy 1, Classic 2, Fast 3, Blitz 4.",
@@ -14,6 +16,7 @@ const safeCount = value => Number.isSafeInteger(value) && value >= 0 ? value : 0
 const rate = (rates, key) => typeof key === "string" && Object.hasOwn(rates, key) ? rates[key] : 1;
 export function rewardTotal(gameId, progress = {}) {
   let total = 0;
+  if (gameId === "memory") total = memoryRewardTotal(progress);
   if (gameId === "rocket" && progress.mode === "mission" && progress.success === true) total = MISSIONS.find(mission => mission.id === progress.mission)?.coins || 0;
   if (gameId === "flappy") total = safeCount(progress.pipes) * (Object.hasOwn(COIN_MULTIPLIERS, progress.difficulty) ? COIN_MULTIPLIERS[progress.difficulty] : 1);
   if (gameId === "archery") total = Math.min(60, safeCount(progress.score));

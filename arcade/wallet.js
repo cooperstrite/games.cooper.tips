@@ -1,5 +1,5 @@
 import { findArcadeItem, ARCADE_ITEMS } from "./catalog.js";
-import { GAME_PROFILES } from "./characters.js";
+import { ARCADE_GAMES } from "./games.js";
 
 export const ARCADE_STORAGE_KEY = "cooper-arcade-v1";
 const LIMIT = 1000000000;
@@ -56,7 +56,7 @@ export function createArcadeWallet({ storage, locks, events } = {}) {
     getState: read,
     subscribe(callback) { subscribers.add(callback); callback(read()); return () => subscribers.delete(callback); },
     claim(gameId, runId, totalCoins) {
-      if (!Object.hasOwn(GAME_PROFILES, gameId) || typeof runId !== "string" || runId.length > 150 || !runId || !Number.isSafeInteger(totalCoins) || totalCoins < 0) return Promise.resolve({ changed: false, coins: 0 });
+      if (!Object.hasOwn(ARCADE_GAMES, gameId) || typeof runId !== "string" || runId.length > 150 || !runId || !Number.isSafeInteger(totalCoins) || totalCoins < 0) return Promise.resolve({ changed: false, coins: 0 });
       return transaction(state => {
         const key = `${gameId}:${runId}`, previous = state.rewards[key] || 0, total = amount(totalCoins);
         const coins = Math.max(0, Math.min(LIMIT - state.coins, total - previous));
@@ -78,7 +78,7 @@ export function createArcadeWallet({ storage, locks, events } = {}) {
     },
     equip(id, gameId) {
       return transaction(state => {
-        if (!Object.hasOwn(GAME_PROFILES, gameId)) return { changed: false, ok: false };
+        if (!Object.hasOwn(ARCADE_GAMES, gameId)) return { changed: false, ok: false };
         if (id === null) { delete state.equipped[gameId]; return { changed: true, ok: true }; }
         const item = findArcadeItem(id);
         if (!item?.games.includes(gameId) || !state.owned.includes(id) || item.kind !== "collection") return { changed: false, ok: false };
