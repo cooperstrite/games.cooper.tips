@@ -80,9 +80,22 @@ Choose **Solo**, **You vs computer**, or **Friends / same device**, then **Deal 
 
 Turn over two cards. A matching picture scores one pair and keeps your turn; a mismatch stays visible for a consistent 1.7 seconds from the second tap, then both cards rotate back before play passes to the next seat. The player with the most pairs wins, with shared wins for ties. Solo play keeps the turn after a miss. The clock is informational and starts at the first flip. Pause hides the table and preserves pending flips, computer decisions, and elapsed time; leaving the tab also pauses. Sound on/off controls locally synthesized card, match, and finish effects.
 
-Easy, Medium, Hard, and Expert opponents use the shared computer policy through `arcade/memory-opponent.js`. They observe only publicly revealed cards, have progressively greater recall, and can make mistakes at every level. No computer reads the hidden deck. A human begins each duel.
+Easy, Medium, Hard, and Expert opponents use the shared computer policy through `arcade/memory-opponent.js`. They observe only publicly revealed cards from both players, have progressively greater recall, and can make mistakes at every level. Remembered matches use that public memory; blind picks draw uniformly from the eligible positions, without difficulty weighting, hidden-picture checks, or rerolls. A note by the board identifies each computer flip as a remembered pair/partner, an equal-chance blind pick, or the only remaining card. Genuine lucky matches are possible at every level. A human begins each duel.
 
-Solo earns **1 coin per pair**. Computer duels pay **1 / 2 / 3 / 4 coins per human pair** on Easy / Medium / Hard / Expert. A win on a 16-card board adds **6 / 12 / 20 / 30 coins**; other board sizes scale that bonus by pair count, rounded to the nearest coin. Ties and losses retain match coins without a win bonus. Local multiplayer awards no coins. Each match banks immediately in the shared wallet, and repeat callbacks cannot claim the same reward again.
+One **pair** is two cards with the same picture. Only pairs you personally match earn coins for you.
+
+| Mode | Coins per pair you match | Extra coins for winning a 16-card game |
+| --- | ---: | ---: |
+| Solo | 1 | None |
+| Easy computer | 1 | 6 |
+| Medium computer | 2 | 12 |
+| Hard computer | 3 | 20 |
+| Expert computer | 4 | 30 |
+| Friends on one device | 0 | None |
+
+To receive a computer win bonus, finish the entire board with more pairs than the computer. Ties and losses keep your pair coins but receive no bonus. On other board sizes, only the win bonus changes: multiply the 16-card bonus by the card count divided by 16 and round to the nearest whole coin. The top coin banner updates immediately when you select a mode, difficulty, or board size; it says **Next deal** until you apply changes with **Deal new game**. The current game's **How you earn coins** guide and earnings continue to use the current round's rules. The shop's board-size selector also shows exact amounts.
+
+For example, on Medium with 16 cards, your five pairs beat the computer's three. Your pairs earn 5 x 2 = 10 coins, and the win adds 12, for **22 coins total**. Each pair banks immediately, even if you leave before the board is cleared. Misses cost nothing; speed does not affect coins. Results itemize your pair earnings and win bonus. **Coins this game** counts only the current round; the shared wallet is your spendable balance across games. Repeat callbacks cannot claim a reward twice.
 
 Pocket Wonders and Gilded Atlas are free. At `/#store/memory`, unlock Tidepool (240 coins), Starlight (420), Coral Current backs (120), or Lunar Velvet backs (200). All items are cosmetic, and card backs remain identical within a round. **Use in Memory Loop** equips the purchase; owned sets and backs can be mixed independently in the game's collection controls. Choices, names, purchases, and coins save in this browser. A separate arcade game registry lets card games share the wallet and shop without appearing as characters in the character library.
 

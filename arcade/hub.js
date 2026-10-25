@@ -8,6 +8,7 @@ import { readRocketSave, writeRocketSave } from "../rocket-config.js";
 import { drawRocketShopPreview } from "../rocket-art.js";
 import { readMemorySettings, writeMemorySettings } from "../memory-config.js";
 import { memoryShopArt } from "../memory-art.js";
+import { memoryShopCoinGuide, memoryShopCoinTable } from "../memory-coin-guide.js";
 
 const gameOptions = (compatible = Object.keys(ARCADE_GAMES).filter(id => ARCADE_ITEMS.some(item => item.games.includes(id)))) => Object.entries(ARCADE_GAMES).filter(([id]) => compatible.includes(id)).map(([id, game]) => `<option value="${id}">${game.name}</option>`).join("");
 const KEYS = { flappy: "cooper-flappy-bird-v1", archery: "aurora-archery-v2", snake: "snake-garden-settings-v1", neondrift: "neondrift-drive-v2" };
@@ -28,7 +29,7 @@ export function createArcadeShop(root, initialGame = "all") {
   wrapper.innerHTML = `<div class="arcade-hero"><div><p class="arcade-eyebrow">ONE ARCADE. MORE POSSIBILITIES.</p><h3>A little play goes a long way.</h3><p>Your coins travel between games. Pick a look for one adventure, or a collection for several.</p></div><div class="arcade-balance"><span>YOUR COINS</span><strong>0</strong><small>Shared across your arcade</small></div></div>
     <div class="arcade-toolbar"><label>Find something for<select aria-label="Shop game"><option value="all">All games</option>${gameOptions()}</select></label><label class="arcade-owned-filter"><input type="checkbox" aria-label="Show owned items only"> My collection</label><a href="#characters">Open character library &rarr;</a></div>
     <p class="arcade-shop-status" role="status">All items change appearance. Your game abilities stay the same.</p><div class="arcade-item-grid"></div>
-    <details class="arcade-earning-guide"><summary>How to earn coins</summary><div>${Object.entries(EARNING_RULES).map(([id, note]) => `<p><a href="${ARCADE_GAMES[id].route}">${ARCADE_GAMES[id].name}</a><span>${note}</span></p>`).join("")}</div><p>Coins and unlocks save in this browser. Existing Flappy Bird coins and purchases are carried over automatically.</p></details>`;
+    <details class="arcade-earning-guide"><summary>How to earn coins</summary><div>${Object.entries(EARNING_RULES).map(([id, note]) => `<p><a href="${ARCADE_GAMES[id].route}">${ARCADE_GAMES[id].name}</a><span>${note}</span></p>`).join("")}</div>${memoryShopCoinGuide(readMemorySettings(wallet.getState().owned).tiles)}<p>Coins and unlocks save in this browser. Existing Flappy Bird coins and purchases are carried over automatically.</p></details>`;
   root.append(wrapper);
   const filter = wrapper.querySelector("select"), onlyOwned = wrapper.querySelector("input"), grid = wrapper.querySelector(".arcade-item-grid"), status = wrapper.querySelector(".arcade-shop-status");
   filter.value = initialGame; let disposed = false, busy = false;
@@ -49,6 +50,9 @@ export function createArcadeShop(root, initialGame = "all") {
     if (!items.length) { const empty = document.createElement("p"); empty.className = "arcade-empty"; empty.textContent = "Your collection starts here. Play any connected game to earn coins."; grid.append(empty); }
   }
   const unsubscribe = wallet.subscribe(render);
+  wrapper.querySelector('[aria-label="Memory Loop reward board size"]').addEventListener("change", event => {
+    wrapper.querySelector(".ml-shop-coin-table").innerHTML = memoryShopCoinTable(Number(event.target.value));
+  });
   filter.addEventListener("change", () => { render(); const hash = filter.value === "all" ? "#store" : `#store/${filter.value}`; history.replaceState(null, "", hash); });
   onlyOwned.addEventListener("change", render);
   wrapper.addEventListener("click", async event => {

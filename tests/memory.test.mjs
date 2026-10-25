@@ -145,6 +145,47 @@ test("higher levels recall more revealed pairs but even expert sometimes makes m
   assert.ok(results[3] < 1800);
 });
 
+test("blind picks give every unknown position equal odds at every difficulty", () => {
+  for (const size of [7, 15, 23]) {
+    const legal = Array.from({ length: size }, (_, i) => i * 3 + 2), countsByLevel = [];
+    for (const difficulty of Object.keys(MEMORY_REWARDS)) {
+      const counts = Array(size).fill(0), draw = rng(95623), cpu = createMemoryOpponent({ difficulty, random: rng(41), guessRandom: draw });
+      // The caller alone knows where any hidden partner is. Its location and
+      // the first picture cannot reach the positional random draw.
+      for (let attempt = 0; attempt < 23000; attempt++) {
+        cpu.thinkingDelay();
+        const choice = cpu.choose(legal, { index: 0, id: attempt % 2 ? "fox" : "whale" });
+        counts[legal.indexOf(choice)]++;
+        assert.equal(cpu.lastDecision.kind, "guess");
+        assert.equal(cpu.lastDecision.options, size);
+      }
+      const expected = 23000 / size;
+      for (const count of counts) assert.ok(Math.abs(count - expected) < expected * .12, `${difficulty}: ${counts}`);
+      countsByLevel.push(counts);
+    }
+    for (const counts of countsByLevel.slice(1)) assert.deepEqual(counts, countsByLevel[0]);
+  }
+});
+
+test("choice explanations require public memories and distinguish forced choices", () => {
+  const cpu = createMemoryOpponent({ difficulty: "expert", random: () => 0, guessRandom: () => .5 });
+  cpu.observe({ index: 0, id: "fox" });
+  cpu.observe({ index: 1, id: "whale" });
+  assert.equal(cpu.choose([1, 2, 3, 4], { index: 0, id: "fox" }), 3);
+  assert.deepEqual(cpu.lastDecision, { index: 3, kind: "guess", options: 3 });
+  // Only after a public reveal can a hidden partner be recalled.
+  cpu.observe({ index: 3, id: "fox" });
+  assert.equal(cpu.choose([0, 1, 2, 3, 4]), 0);
+  assert.equal(cpu.lastDecision.kind, "remembered-pair");
+  assert.equal(cpu.choose([1, 2, 3, 4], { index: 0, id: "fox" }), 3);
+  assert.equal(cpu.lastDecision.kind, "remembered-match");
+  cpu.remove([0, 3]);
+  cpu.choose([1, 2, 4]); assert.equal(cpu.lastDecision.kind, "guess");
+  assert.equal(cpu.choose([4], { index: 2, id: "whale" }), 4);
+  assert.equal(cpu.lastDecision.kind, "only-card");
+  assert.equal(cpu.choose([]), null); assert.equal(cpu.lastDecision, null);
+});
+
 test("a player using only remembered public cards can beat every computer level", () => {
   const wins = {};
   for (const difficulty of Object.keys(MEMORY_REWARDS)) {

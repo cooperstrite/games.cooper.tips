@@ -42,7 +42,30 @@
 .ml-rules ol { padding-left: 16px; margin: 14px 0; display: grid; gap: 9px; font-size: .65rem; color: var(--ml-dim); line-height: 1.65; }
 .ml-rules li::marker { color: var(--ml-gold); }
 .ml-rules p { font-size: .64rem; line-height: 1.75; color: var(--ml-dim); margin: 10px 0 0; }
-.ml-rules .ml-reward-note { color: #d9c89f; padding-top: 10px; border-top: 1px solid #e6cc8d25; }
+.ml-next-coins { color: #ead29d; border-left: 2px solid #d6bd84; padding-left: 10px; margin: 0; font-size: .65rem; line-height: 1.7; }
+.ml-coin-guide { border: 1px solid #d3b77b55; background: #d3b77b08; border-radius: 12px; padding: 16px; }
+.ml-coin-guide summary { cursor: pointer; font-size: .78rem; color: #f0dbac; font-weight: 600; }
+.ml-coin-guide h4 { font-size: .85rem; margin: 18px 0 6px; }
+.ml-coin-guide p, .ml-live-coin-breakdown, .ml-result-coins { font-size: .7rem; line-height: 1.8; color: #bed1c5; }
+.ml-coin-guide .ml-coin-context { font-size: .62rem; color: #b9c5b3; margin: 0 0 14px; }
+.ml-coin-rates { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 0 0 16px; }
+.ml-coin-rates > div { padding: 12px; background: #e6c9910a; border: 1px solid #dac18d33; border-radius: 8px; }
+.ml-coin-rates dt { font-size: .62rem; color: #c7d5c8; }
+.ml-coin-rates dd { margin: 6px 0 0; color: #f2dbab; font-size: 1.1rem; font-weight: 600; }
+.ml-live-coin-breakdown { margin: 0; text-align: center; }
+.ml-coin-example, .ml-result-coins { padding: 12px; border-radius: 8px; background: #e1c8920d; color: #e9d7af; }
+.ml-shop-coin-guide { border-top: 1px solid #dac18d33; padding-top: 18px; }
+.ml-shop-coin-guide h4 { font-size: 1rem; margin: 0 0 10px; }
+.ml-shop-coin-guide p { margin: 12px 0; }
+.ml-shop-coin-guide label { max-width: 340px; }
+.ml-shop-coin-guide table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+.ml-shop-coin-guide caption { text-align: left; padding-bottom: 10px; font-weight: 600; color: #e5d2aa; }
+.ml-shop-coin-guide :is(th, td) { text-align: left; padding: 10px 8px; border-bottom: 1px solid #e1c89222; font-size: .68rem; }
+.ml-shop-coin-guide thead { color: #e8d4a5; }
+@media (max-width: 480px) {
+  .ml-shop-coin-guide :is(th, td) { font-size: .6rem; padding: 9px 4px; }
+  .ml-coin-rates > div { padding: 9px; }
+}
 .ml-play-area { min-width: 0; display: grid; gap: 16px; }
 .ml-table-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
 .ml-table-top .ml-eyebrow { font-size: .52rem; margin-bottom: 6px; }
@@ -61,6 +84,7 @@
 .ml-player.is-active small { color: var(--player-color); }
 .ml-turn-status { display: flex; gap: 10px; align-items: center; min-height: 42px; font-size: .73rem; line-height: 1.5; color: #d4e0d9; }
 .ml-turn-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; background: var(--player-color, #a4dcc6); box-shadow: 0 0 12px #a4dcc633; }
+.ml-computer-read { margin: -8px 0 0; padding: 9px 12px; border-left: 2px solid #c9ad7c; border-radius: 0 7px 7px 0; background: #e1c89209; color: #dbc9a8; font-size: .65rem; line-height: 1.65; }
 .ml-table { position: relative; border-radius: 17px; border: 1px solid #b5cdb828; background: radial-gradient(ellipse at 50% 0%, #23464a, #10292f 70%); box-shadow: inset 0 0 50px #07181d80, 0 16px 35px #030d1133; padding: clamp(12px, 2vw, 22px); }
 .ml-grid { display: grid; grid-template-columns: repeat(var(--memory-columns), minmax(0, 1fr)); gap: clamp(8px, 1.15vw, 13px); width: 100%; max-width: 560px; margin: auto; }
 .ml-grid[data-tiles="20"], .ml-grid[data-tiles="24"] { max-width: 700px; }
