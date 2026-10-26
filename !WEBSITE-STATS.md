@@ -2,39 +2,40 @@
 
 A little scoreboard for games.cooper.tips.
 
-**Updated:** October 26, 2026 at 03:51 PM EDT  
+**Updated:** October 26, 2026 at 04:55 PM EDT
+
 **Visibility:** Project files only. This report is excluded from the published website.
 
 ## The big numbers
 
 | Stat | Total |
 | --- | ---: |
-| Lines in our source files | **32,599** |
-| Nonblank source lines | 30,494 |
-| Source files written for this project | 145 |
-| Image files | **151** |
-| Total project files | **325** |
+| Lines in our source files | **32,841** |
+| Nonblank source lines | 30,735 |
+| Source files written for this project | 147 |
+| Image files | **152** |
+| Total project files | **329** |
 | Games | **28** |
 | Games on the main list | 25 |
 | Games in Coming Soon | 3 |
 | Test files | 22 |
-| Project size on disk | 117.3 MiB |
-| Image collection size | 79.3 MiB |
+| Project size on disk | 117.9 MiB |
+| Image collection size | 79.9 MiB |
 
-At 50 lines per printed page, our source would fill **652 pages**.
+At 50 lines per printed page, our source would fill **657 pages**.
 
 ## Where the lines live
 
 | Area | Files | Lines |
 | --- | ---: | ---: |
 | Development tools | 4 | 415 |
-| Tests | 22 | 2,852 |
-| Website and games | 119 | 29,332 |
+| Tests | 22 | 2,864 |
+| Website and games | 121 | 29,562 |
 
 | Language | Files | Lines |
 | --- | ---: | ---: |
-| JavaScript | 132 | 24,767 |
-| CSS | 9 | 6,086 |
+| JavaScript | 134 | 24,924 |
+| CSS | 9 | 6,171 |
 | HTML | 2 | 1,543 |
 | Python | 2 | 203 |
 
@@ -45,7 +46,7 @@ At 50 lines per printed page, our source would fill **652 pages**.
 | WEBP | 50 |
 | SVG | 42 |
 | PNG | 37 |
-| JPG | 21 |
+| JPG | 22 |
 | AVIF | 1 |
 
 ## Biggest source files
@@ -62,13 +63,13 @@ At 50 lines per printed page, our source would fill **652 pages**.
 
 | Type | Files |
 | --- | ---: |
-| `.js` | 111 |
+| `.js` | 113 |
 | `.webp` | 50 |
 | `.svg` | 42 |
 | `.png` | 37 |
 | `.mjs` | 23 |
-| `.jpg` | 21 |
-| `.json` | 13 |
+| `.jpg` | 22 |
+| `.json` | 14 |
 | `.css` | 9 |
 | `.md` | 7 |
 | `.mp4` | 4 |

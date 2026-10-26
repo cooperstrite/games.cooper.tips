@@ -4,4 +4,5 @@ import { GAME_PROFILES } from "./characters.js";
 export const ARCADE_GAMES = Object.freeze({
   ...GAME_PROFILES,
   memory: Object.freeze({ name: "Memory Loop", route: "#memory" }),
+  spotdiff: Object.freeze({ name: "Spotlight", route: "#spotdiff" }),
 });

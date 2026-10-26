@@ -57,7 +57,7 @@ image_bytes = sum(path.stat().st_size for path in images)
 stamp = datetime.now(ZoneInfo("America/New_York")).strftime("%B %d, %Y at %I:%M %p %Z")
 
 rows = ["# Website stats", "", "A little scoreboard for games.cooper.tips.", "",
-        f"**Updated:** {stamp}  ",
+        f"**Updated:** {stamp}", "",
         "**Visibility:** Project files only. This report is excluded from the published website.", "",
         "## The big numbers", "", "| Stat | Total |", "| --- | ---: |",
         f"| Lines in our source files | **{total_lines:,}** |",
