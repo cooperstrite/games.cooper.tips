@@ -1,0 +1,31 @@
+{
+  "generator": "OpenAI built-in image generation",
+  "description": "Original arena backdrops, transparent animal sprites and cover art for the Cats vs Dogs Paw Pull Championship.",
+  "assets": [
+    {
+      "id": "park",
+      "path": "assets/cats-dogs-park-v2.jpg",
+      "prompt": "Use case: stylized-concept. Asset type: background for a polished browser game called Cats vs Dogs, a friendly animal tug-of-war. Landscape 1536x1024. Premium animated-film environment, rich painterly 3D illustration, warmly lit sunny neighborhood park, lush layered rounded trees, wildflowers, little wood spectator benches and pastel bunting in the distant sides. A broad clear flat oval of short soft green grass fills the foreground and lower half, with open uncluttered space at center for two animal characters and a horizontal rope that will be drawn separately. Eye-level side-view camera very slightly looking down, distant park path and leafy canopy frame top and sides. Depth, soft ambient occlusion, beautiful material texture, warm sunlight. No animals, people, rope, signs, text, logos, UI, borders or watermark. Scene must be horizontal and suitable for cropping top/bottom to 16:9, with grass floor at 80 percent of image height."
+    },
+    {
+      "id": "beach",
+      "path": "assets/cats-dogs-beach-v2.jpg",
+      "prompt": "Use case: stylized-concept. Asset type: background for a polished friendly animal tug-of-war browser game. Landscape 1536x1024. Premium animated-film environment, rich painterly 3D illustration, beautiful sunset beach playground, peach and pale lavender sky over a calm turquoise sea, sun low behind distant dunes, seagrass and smooth boulders at far sides, soft bunting at distant sides. A broad clear flat stretch of fine warm sand fills the lower half, with open uncluttered central space for two animal characters and a horizontal rope to be drawn separately. Eye-level side-view camera very slightly looking down. Gorgeous lighting, dimensional texture, soft shadows. No characters, people, animals, rope, signs, text, logos, UI, borders or watermark. Suitable for cropping to 16:9 with sand floor at 80 percent of image height."
+    },
+    {
+      "id": "cat",
+      "path": "assets/cats-dogs-cat-v2.png",
+      "prompt": "Use case: stylized-concept. Asset type: transparent full-body game character sprite. One adorable athletic orange tabby cat captain for a friendly tug-of-war game, a premium animated movie character with plush finely detailed fur, big expressive green eyes, cream muzzle and belly, distinct tabby stripes, little coral red neckerchief. Full body entirely visible, centered with at least 8 percent empty margin. SIDE VIEW facing RIGHT, feet planted far apart, body leaning backward to the LEFT as if pulling a rope, two front paws together extended toward the RIGHT at chest height, gripping an INVISIBLE rope. Both hind paws on the same horizontal ground line, curled tail behind. The cat is standing upright in a friendly stylized anthropomorphic pose, determined cheeky expression, no aggression, no bared fangs. Soft warm studio light from upper left, gentle ambient occlusion, beautiful high quality sculpted cartoon illustration, coherent anatomy. Genuinely transparent background, no ground plane, no cast shadow, no rope, no text, no logo, no other objects. Square 1024x1024."
+    },
+    {
+      "id": "dog",
+      "path": "assets/cats-dogs-dog-v2.png",
+      "prompt": "Use case: stylized-concept. Asset type: transparent full-body game character sprite. One adorable athletic golden retriever dog captain for a friendly tug-of-war game, a premium animated movie character with plush finely detailed golden fur, floppy brown ears, big expressive warm brown eyes, cream muzzle and chest, little teal blue neckerchief. Full body entirely visible, centered with at least 8 percent empty margin. SIDE VIEW facing LEFT, feet planted far apart, body leaning backward to the RIGHT as if pulling a rope, two front paws together extended toward the LEFT at chest height, gripping an INVISIBLE rope. Both hind paws on the same horizontal ground line, happy curved tail behind. The dog is standing upright in a friendly stylized anthropomorphic pose, determined happy expression, no aggression, no bared fangs. Soft warm studio light from upper left, gentle ambient occlusion, beautiful high quality sculpted cartoon illustration, coherent anatomy. Genuinely transparent background, no ground plane, no cast shadow, no rope, no text, no logo, no other objects. Square 1024x1024."
+    },
+    {
+      "id": "cover",
+      "path": "assets/cats-dogs-cover-v2.jpg",
+      "prompt": "Use case: stylized-concept. Asset type: square premium browser game cover for Cats vs Dogs. An adorable orange tabby cat with a coral neckerchief on the left and a golden retriever with a teal neckerchief on the right, pulling opposite ends of a chunky cream tug-of-war rope in a friendly grassy park championship. Both full-body animals with expressive determined smiles, soft detailed plush fur, animated movie quality, cinematic warm sunshine and vibrant teal green foliage, slight action lean and grass motes, orange versus teal visual balance. Center of rope has a tiny red ribbon. Bold readable cream display title near top: \"CATS vs DOGS\". Small tasteful bottom title: \"PAW PULL CHAMPIONSHIP\". Polished dimensional illustration with strong clear silhouette at thumbnail size, focused composition, rich texture. No aggressive fighting, no teeth-baring, no UI, no photo border, no watermarks. 1024x1024 square."
+    }
+  ]
+}
