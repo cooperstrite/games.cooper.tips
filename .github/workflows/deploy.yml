@@ -22,10 +22,20 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Prepare public website
+        run: |
+          mkdir -p "$RUNNER_TEMP/site"
+          rsync -a \
+            --exclude '/.git/' \
+            --exclude '/.github/' \
+            --exclude '/.vscode/' \
+            --exclude '/!WEBSITE-STATS.md' \
+            ./ "$RUNNER_TEMP/site/"
+
       - name: Upload static site
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: ${{ runner.temp }}/site
 
   deploy:
     needs: build
