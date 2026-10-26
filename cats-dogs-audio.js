@@ -22,6 +22,7 @@ export function createTugAudio() {
     play(kind) {
       if (!enabled) return;
       if (kind === "beat") { tone(690, .07, .035, "sine"); return; }
+      if (kind === "gadget") { tone(420,.18,.055,"triangle",0,1100);tone(980,.12,.035,"sine",.12,240);return; }
       if (kind === "pull") { tone(185, .12, .06, "triangle", 0, 92); return; }
       if (kind === "perfect") { tone(660, .12, .055); tone(990, .16, .04, "sine", .045); return; }
       if (kind === "burst") { [523,659,784,1046].forEach((f,i) => tone(f,.22,.045,"triangle",i*.055)); return; }

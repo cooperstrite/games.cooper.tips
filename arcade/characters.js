@@ -1,5 +1,6 @@
 // Character identity and cosmetics belong here. Physics and abilities belong to games.
 export const GAME_PROFILES = Object.freeze({
+  catsdogs: Object.freeze({ name: "Cats vs. Dogs", family: "pet", route: "#catsdogs" }),
   flappy: Object.freeze({ name: "Flappy Bird", family: "bird", route: "#flappy" }),
   archery: Object.freeze({ name: "Aurora Archery", family: "humanoid", route: "#archery" }),
   snake: Object.freeze({ name: "Snake", family: "snake", route: "#snake" }),
@@ -9,6 +10,8 @@ export const GAME_PROFILES = Object.freeze({
 });
 
 const definitions = [
+  ["pet", "tabby", "Orange tabby"], ["pet", "siamese", "Siamese"], ["pet", "calico", "Calico"],
+  ["pet", "golden", "Golden retriever"], ["pet", "labrador", "Labrador retriever"], ["pet", "pitbull", "Pit bull"],
   ["bird", "sparrow", "Sunny sparrow"], ["bird", "jay", "Blue jay"],
   ["bird", "owl", "Little owl"], ["bird", "hummingbird", "Hummingbird"],
   ["bird", "dragon", "Baby dragon"], ["bird", "phoenix", "Tiny phoenix"],
@@ -24,6 +27,7 @@ export const CHARACTERS = Object.freeze(definitions.map(([family, key, name]) =>
   id: `${family}:${key}`, key, name, family,
 })));
 const SLOTS = {
+  pet: { hat: ["none", "cap", "crown", "wizard", "flowers"], eyewear: ["none", "round", "shades"], charm: ["none", "bow", "medal"] },
   bird: { hat: ["none", "cap", "crown", "wizard", "party", "flowers", "aviator", "space"], eyewear: ["none", "glasses", "shades", "goggles", "monocle"], neckwear: ["none", "scarf", "bowtie", "bandana", "medal"], trail: ["none", "feathers", "stars", "bubbles", "fire", "rainbow"] },
   humanoid: { hair: ["short", "bob", "ponytail", "braids", "curls", "bun", "bald"], facialHair: ["none", "stubble", "mustache", "goatee", "beard", "full"], headwear: ["none", "hood", "headband", "helmet", "cap"], faceShape: ["oval", "round", "angular"], faceDetail: ["none", "freckles", "scar"], faceAccessory: ["none", "glasses", "eyepatch", "earring"], bowStyle: ["longbow", "recurve", "crystal"], arrowDesign: ["ranger", "moonsteel", "aurora"] },
   snake: { hat: ["none", "skin", "straw", "crown", "party", "flowers"], eyewear: ["none", "round", "shades"], neckwear: ["none", "bandana", "bow", "scarf"] },
@@ -32,6 +36,7 @@ const SLOTS = {
   runner: { build: ["lean", "athletic", "strong"], hair: ["short", "bob", "ponytail", "braids", "curls", "bun", "bald"], facialHair: ["none", "stubble", "mustache", "goatee", "beard"], headwear: ["none", "headband", "cap"], eyewear: ["none", "glasses", "sunglasses"], wristwear: ["none", "watch", "bands"] },
 };
 const COLOR_SLOTS = {
+  pet: ["body", "belly", "dark", "eyes", "accessory"],
   bird: ["body", "wing", "belly", "beak", "accessory", "trail"],
   humanoid: ["body", "skin", "hair", "eyes", "accessory", "facialHair", "headwear", "boots", "bow", "grip", "arrow"],
   snake: ["body", "belly", "accessory", "dark"], vehicle: ["body", "accessory", "light", "dark"],

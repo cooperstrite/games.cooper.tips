@@ -5,8 +5,13 @@ import { lightArcherStudio } from "./archer-materials.js";
 import { createFrameLoop } from "./runtime.js";
 import { createCharacterPortrait } from "./studio-2d.js";
 import { runnerCharacter } from "../redlight-appearance.js";
+import { TUG_BREEDS } from "../cats-dogs-customization.js";
 
 export function studioCharacter(gameId, appearance) {
+  if (gameId === "catsdogs") {
+    const breed=TUG_BREEDS[appearance.breed];
+    return new CharacterBuilder(gameId,appearance.breed).withColors({body:breed.coat,belly:breed.light,dark:breed.dark,eyes:breed.eyes,accessory:appearance.accent}).withFeature("hat",appearance.hat).withFeature("eyewear",appearance.eyewear).withFeature("charm",appearance.charm).build();
+  }
   if (gameId === "redlight") return runnerCharacter(appearance);
   const key = { flappy: appearance.bird, archery: appearance.avatarStyle, snake: appearance.skin, neondrift: appearance.car }[gameId];
   const builder = new CharacterBuilder(gameId, key);
@@ -73,7 +78,7 @@ export function createStudioPreview(root) {
   function load3D() {
     if (loading) return loading;
     panel.dataset.ready = "loading";
-    loading = prepareCharacterAssets(character).then(() => createWebGLScene(canvas, { quality: ["archery", "redlight"].includes(gameId) ? "high" : "balanced", isCurrent: () => !disposed })).then(next => {
+    loading = prepareCharacterAssets(character).then(() => createWebGLScene(canvas, { quality: ["archery", "redlight", "catsdogs"].includes(gameId) ? "high" : "balanced", isCurrent: () => !disposed })).then(next => {
       if (disposed) { next.dispose(); return; }
       world = next; const { B, scene } = world; world.camera.dispose();
       camera = new B.ArcRotateCamera("character-orbit", -Math.PI / 2 - 0.25, Math.PI / 2.6, 4.5, new B.Vector3(0, 1, 0), scene);

@@ -4,8 +4,10 @@ import { findArcadeItem, STYLE_KITS } from "./catalog.js";
 import { MISSIONS } from "../rocket-config.js";
 import { memoryRewardTotal } from "../memory-config.js";
 import { spotlightRewardTotal } from "../spotlight-config.js";
+import { tugRewardTotal } from "../cats-dogs-customization.js";
 
 export const EARNING_RULES = Object.freeze({
+  catsdogs: "Computer matches: Easy 3, Medium 5, Hard 8, Expert 12 coins per round you win, plus 8 / 16 / 28 / 45 for a match win. Maximums: 14 / 26 / 44 / 69. Rewards bank only at match end after at least 4 pulls. Local matches and abandoned matches earn nothing. All devices are free; shop items are cosmetic.",
   spotdiff: "Ten shuffled challenges per difficulty in every scene. Find unhinted differences: Easy 1, Medium 2, Hard 3, Expert 4 coins each. Finishing adds 4, 8, 15, or 24 coins. Maximums per challenge: 8, 20, 33, 56. Each challenge has its own rewards; retries only pay improvements. Relaxed and custom puzzles earn no coins.",
   memory: "Solo pays 1 coin per pair you match. Computer games pay 1 on Easy, 2 on Medium, 3 on Hard, or 4 on Expert per pair YOU match, plus a bonus if you win. Games with friends pay no coins. See the Memory Loop table below for exact win bonuses.",
   flappy: "Each pipe: Easy 1, Medium 3, Hard 5, Expert 10 coins. Banked when the flight ends.",
@@ -18,6 +20,7 @@ const safeCount = value => Number.isSafeInteger(value) && value >= 0 ? value : 0
 const rate = (rates, key) => typeof key === "string" && Object.hasOwn(rates, key) ? rates[key] : 1;
 export function rewardTotal(gameId, progress = {}) {
   let total = 0;
+  if (gameId === "catsdogs") total = tugRewardTotal(progress);
   if (gameId === "memory") total = memoryRewardTotal(progress);
   if (gameId === "spotdiff") total = spotlightRewardTotal(progress);
   if (gameId === "rocket" && progress.mode === "mission" && progress.success === true) total = MISSIONS.find(mission => mission.id === progress.mission)?.coins || 0;

@@ -1,0 +1,22 @@
+{
+  "mode": "Built-in image generation",
+  "purpose": "Breed variants for the shared Cats vs. Dogs wardrobe and gameplay",
+  "assets": [
+    {
+      "file": "assets/cats-dogs-siamese.png",
+      "prompt": "Edit this transparent cartoon game cat sprite into a friendly Siamese cat: cream fur, brown face mask, brown ears and paws, blue eyes. Keep the exact same full body pose, framing, lighting, scale and red scarf as the reference. Keep the background transparent. No text."
+    },
+    {
+      "file": "assets/cats-dogs-calico.png",
+      "prompt": "Use case: precise-object-edit. Edit target: the attached transparent cat sprite. Asset type: transparent full-body game character. Change ONLY the breed appearance to a calico cat with beautiful distinct irregular orange, ink black, and ivory white patches, green eyes and pink nose. Distinct natural patchwork fur, not tabby stripes. Preserve the exactly same body pose. Keep premium animated-film quality, beautiful fur, warm polished lighting and playful expression. CRITICAL: preserve exact square framing, character scale, head placement, paw contact positions, two front paws extended toward the right holding an invisible tug rope, wide planted hind paws, and coral red neckerchief unchanged. No rope or props. No additional accessories. Whole body, ears, feet and tail must be visible with transparent padding. Actual transparent background, not a painted checkerboard. No text. The output must drop into the same game's scene without changing sprite anchors."
+    },
+    {
+      "file": "assets/cats-dogs-labrador.png",
+      "prompt": "Use case: precise-object-edit. Edit target: the attached transparent dog sprite. Asset type: transparent full-body game character. Change ONLY the breed appearance to a chocolate Labrador Retriever with sleek chocolate brown short fur, natural floppy ears, broad friendly muzzle, amber eyes and an otter tail. It should be distinctly a Labrador, not a long haired golden retriever. Preserve the exactly same body pose. Keep premium animated-film quality, beautiful fur, warm polished lighting and playful expression. CRITICAL: preserve exact square framing, character scale, head placement, paw contact positions, two front paws extended toward the left holding an invisible tug rope, wide planted hind paws, and teal neckerchief unchanged. No rope or props. No additional accessories. Whole body, ears, feet and tail must be visible with transparent padding. Actual transparent background, not a painted checkerboard. No text. The output must drop into the same game's scene without changing sprite anchors."
+    },
+    {
+      "file": "assets/cats-dogs-pitbull.png",
+      "prompt": "Use case: precise-object-edit. Edit target: the attached transparent dog sprite. Asset type: transparent full-body game character. Change ONLY the breed appearance to a friendly blue gray and white pit bull with a broad smooth expressive muzzle, natural soft folded uncropped ears, short blue gray coat, a white chest and paws, amber eyes, and a strong but cute compact build. Preserve the exactly same body pose. Keep premium animated-film quality, beautiful fur, warm polished lighting and playful expression. CRITICAL: preserve exact square framing, character scale, head placement, paw contact positions, two front paws extended toward the left holding an invisible tug rope, wide planted hind paws, and teal neckerchief unchanged. No rope or props. No additional accessories. Whole body, ears, feet and tail must be visible with transparent padding. Actual transparent background, not a painted checkerboard. No text. The output must drop into the same game's scene without changing sprite anchors."
+    }
+  ]
+}

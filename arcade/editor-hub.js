@@ -2,6 +2,7 @@ import { GAME_PROFILES } from "./characters.js";
 import { createStudioPreview } from "./studio-preview.js";
 
 const STUDIOS = {
+  catsdogs: { image: "assets/cats-dogs-cover-v2.jpg", summary: "Six cat and dog breeds, names, hats, glasses, and accessories.", description: "Dress your cat and dog separately. All six breeds are free; special accessories unlock for both pets in the shared shop. Preview the original artwork or try the 3D character (Beta)." },
   rocket: { image: "assets/rocket-boost-cover.png", summary: "Build your rocket and customize up to three astronauts.", description: "Rocket families, stages, all vehicle parts, colors, and your crew's faces, hair, pressure suits, and equipment. Preview the whole rocket or each astronaut in 2D or 3D (Beta)." },
   flappy: { image: "assets/flappy-bird-cover.svg", summary: "Birds, dragons, accessories, colors, backgrounds, and pipes.", description: "Every bird, accessory, trail, and individual color, plus a preview of your background and pipes." },
   // The original Aurora Archery cover retains its legacy Memory Loop filename.
@@ -47,7 +48,7 @@ export function createCharacterLibrary(root, { gameId = null, mountEditor } = {}
       wrapper.scrollIntoView({ block: "start" });
     }
   }
-  function readRoute() { const match = /^#characters(?:\/(flappy|archery|snake|neondrift|redlight|rocket))?$/.exec(location.hash); if (match) show(match[1], true); }
+  function readRoute() { const match = /^#characters(?:\/(flappy|archery|snake|neondrift|redlight|rocket|catsdogs))?$/.exec(location.hash); if (match) show(match[1], true); }
   window.addEventListener("hashchange", readRoute);
   show(gameId);
   return () => { window.removeEventListener("hashchange", readRoute); cleanup?.(); document.title = previousTitle; wrapper.remove(); };

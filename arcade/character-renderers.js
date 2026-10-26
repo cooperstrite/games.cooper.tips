@@ -3,12 +3,14 @@ import { buildArcherMesh, prepareArcherAssets } from "./humanoid-mesh.js";
 import { buildCreatureAccessories } from "./accessory-mesh.js";
 import { BIRD_DESIGNS } from "../flappy-bird-art.js";
 import { buildRunnerMesh, prepareRunnerAssets } from "./runner-mesh.js";
+import { buildPetMesh } from "./pet-mesh.js";
 export function prepareCharacterAssets(character) {
   return character.family === "humanoid" ? prepareArcherAssets() : character.family === "runner" ? prepareRunnerAssets() : Promise.resolve();
 }
 
 export function buildCharacterMesh(world, character) {
   if (!(character instanceof GameCharacter)) throw new TypeError("Build a GameCharacter before rendering it");
+  if (character.family === "pet") return buildPetMesh(world, character);
   const { B, scene, material } = world, root = new B.TransformNode(character.id, scene), wings = [], trailParts = [];
   let archer, runner;
   const natural = BIRD_DESIGNS[character.key]?.colors || {};

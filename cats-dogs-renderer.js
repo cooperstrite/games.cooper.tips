@@ -1,12 +1,14 @@
 import { TUG_ARENAS, TUG_MATCH_RULES } from "./cats-dogs-engine.js";
+import { drawTugPet, loadTugPet } from "./cats-dogs-pet-art.js";
+import { normalizeTugPet } from "./cats-dogs-customization.js";
 
-export function createTugRenderer(canvas, { reducedMotion = false } = {}) {
+export function createTugRenderer(canvas, { reducedMotion = false, wardrobe = { cats: normalizeTugPet("cats"), dogs: normalizeTugPet("dogs") } } = {}) {
   const context = canvas.getContext("2d"), images = {}, W = 1200, H = 675;
   let disposed = false, drift = 0, pulse = 0, clock = 0, victoryAge = 0, previousPhase = "ready";
-  const sources = { park: "assets/cats-dogs-park-v2.jpg", beach: "assets/cats-dogs-beach-v2.jpg", cats: "assets/cats-dogs-cat-v2.png", dogs: "assets/cats-dogs-dog-v2.png" };
-  const ready = Promise.all(Object.entries(sources).map(([key, src]) => new Promise(resolve => {
+  const sources = { park: "assets/cats-dogs-park-v2.jpg", beach: "assets/cats-dogs-beach-v2.jpg" };
+  const ready = Promise.all([...Object.values(wardrobe).filter(p=>p?.breed).map(p=>loadTugPet(p.breed).ready.then(Boolean)), ...Object.entries(sources).map(([key, src]) => new Promise(resolve => {
     const img = new Image(); img.onload = () => { if (!disposed) images[key] = img; resolve(true); }; img.onerror = () => resolve(false); img.src = src;
-  })));
+  }))]);
   function ellipse(x, y, rx, ry, fill) { context.fillStyle = fill; context.beginPath(); context.ellipse(x,y,rx,ry,0,0,Math.PI*2); context.fill(); }
   function roundRect(x,y,w,h,r,fill) { context.fillStyle=fill; context.beginPath();context.roundRect(x,y,w,h,r);context.fill(); }
   function cover(img) {
@@ -45,11 +47,15 @@ export function createTugRenderer(canvas, { reducedMotion = false } = {}) {
     context.strokeStyle="#513e2a77";context.lineWidth=16;ropePath();context.stroke();context.strokeStyle="#d8b783";context.lineWidth=11;ropePath();context.stroke();context.strokeStyle="#fff0c9";context.lineWidth=3;context.setLineDash([5,9]);ropePath();context.stroke();context.setLineDash([]);
     context.save();context.translate(center,pawY+13);context.rotate(reducedMotion?0:Math.sin(clock*2)*.06);context.fillStyle="#ed7959";context.beginPath();context.moveTo(-10,-10);context.lineTo(10,-10);context.lineTo(12,58);context.lineTo(0,46);context.lineTo(-12,58);context.closePath();context.fill();context.restore();
     for(const [side,x] of [["cats",catX],["dogs",dogX]]) {
-      const img=images[side],p=side==="cats"?catPose:dogPose;
+      const p=side==="cats"?catPose:dogPose;
       context.save();context.translate(p.x,p.y);context.rotate(p.lean);
-      if(img) { if(s.arena==="moon")context.filter="brightness(.88) saturate(.88)";context.drawImage(img,-225,-420,450,450); }
-      else { ellipse(0,-120,75,105,side==="cats"?"#dd8a45":"#b9824d");ellipse(0,-220,80,70,"#edc18c"); }
+      if(s.arena==="moon")context.filter="brightness(.88) saturate(.88)";
+      drawTugPet(context,wardrobe[side]);
       context.restore();
+      if(s.sides[side].shield){context.strokeStyle="#abe9eecc";context.lineWidth=4;context.fillStyle="#a7e5ed18";context.beginPath();context.ellipse(x,355,150,205,0,0,Math.PI*2);context.fill();context.stroke();}
+      if(s.sides[side].mud)for(let i=0;i<9;i++)ellipse(x-95+i*25,546+Math.sin(i*4)*8,13+i%3*4,6,"#79523cd9");
+      const effect=s.lastBeat?.effects?.find(e=>e.side===side);
+      if(effect&&pulse>0){context.save();context.globalAlpha=pulse;context.font="bold 24px system-ui";context.textAlign="center";context.fillStyle=effect.kind==="blocked"?"#c8fbff":"#fff2c6";context.fillText(({mud:"SPLAT!",squeak:"SQUEAK! -22",blocked:"BLOCKED!",shield:"SHIELD UP"})[effect.kind],x,135-(1-pulse)*25);context.restore();}
       if (s.sides[side].streak===3) { context.strokeStyle="#ffdf83";context.lineWidth=3;context.beginPath();context.ellipse(x,549,111,21,0,0,Math.PI*2);context.stroke(); }
     }
     // Slow drifting pollen / fireflies keep the backdrop alive without obscuring play.

@@ -2,6 +2,7 @@ import { SHOP_ITEMS } from "../flappy-shop.js";
 import { ROCKET_COSMETICS } from "../rocket-config.js";
 import { MEMORY_ITEMS } from "../memory-config.js";
 import { SPOTLIGHT_ITEMS } from "../spotlight-config.js";
+import { TUG_ITEMS } from "../cats-dogs-customization.js";
 
 export const STYLE_KITS = Object.freeze({
   aurora: {
@@ -16,6 +17,7 @@ export const STYLE_KITS = Object.freeze({
   },
 });
 export const ARCADE_ITEMS = Object.freeze([
+  ...TUG_ITEMS,
   ...SPOTLIGHT_ITEMS,
   ...MEMORY_ITEMS,
   ...ROCKET_COSMETICS.map(item => Object.freeze({ ...item, kind: "rocket", games: ["rocket"], category: "rocket" })),

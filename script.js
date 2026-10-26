@@ -6113,7 +6113,7 @@ const games = [
     id: "catsdogs",
     name: "Cats vs Dogs",
     summary: "Catch the beat. Win the tug. Rule the park.",
-    description: "Lead Team Whiskers or Team Woof in a playful tug-of-war championship. Time your pulls, manage your stamina, and land a super pull. Face the computer or a friend on the same device.",
+    description: "Personalize your cat and dog, then fight for the park. Hit moving targets, counter sabotage, and win a best-of-three tug championship against a computer or a friend.",
     logo: "assets/cats-dogs-cover-v2.jpg",
     init: createCatsDogs,
   },
@@ -6743,7 +6743,7 @@ function renderRoute() {
     showHome();
     return;
   }
-  const storeRoute = /^store(?:\/(flappy|archery|snake|neondrift|rocket|memory|spotdiff))?$/.exec(hash);
+  const storeRoute = /^store(?:\/(flappy|archery|snake|neondrift|rocket|memory|spotdiff|catsdogs))?$/.exec(hash);
   if (storeRoute) {
     showGame({ id: hash, name: "The Arcade Shop", description: "Earn coins in one game. Find something you love for another.", init: root => createArcadeShop(root, storeRoute[1] || "all") });
     return;
@@ -6751,7 +6751,7 @@ function renderRoute() {
   if (hash === "flappy/customize") {
     history.replaceState(null, "", "#characters/flappy"); renderRoute(); return;
   }
-  const characterRoute = /^characters(?:\/(flappy|archery|snake|neondrift|redlight|rocket))?$/.exec(hash);
+  const characterRoute = /^characters(?:\/(flappy|archery|snake|neondrift|redlight|rocket|catsdogs))?$/.exec(hash);
   if (characterRoute) {
     if (activeId === "characters") return;
     showGame({ id: "characters", name: "Your Character Library", description: "Choose your game, then customize its characters, gear, and world.", init: root => createCharacterLibrary(root, { gameId: characterRoute[1], mountEditor: (id, host, onAppearanceChange) => games.find(game => game.id === id).init(host, { editorOnly: true, onAppearanceChange }) }) });
