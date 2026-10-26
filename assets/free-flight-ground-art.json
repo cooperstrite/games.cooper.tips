@@ -1,0 +1,12 @@
+{
+  "asset": "free-flight-ground.png",
+  "tool": "Built-in image_gen",
+  "purpose": "Four photographic material tiles blended on live 3D Free Flight terrain.",
+  "layout": [
+    "top-left: meadow grass",
+    "top-right: woodland canopy",
+    "bottom-left: rock",
+    "bottom-right: sand"
+  ],
+  "prompt": "Use case: stylized-concept. Asset type: photorealistic terrain material texture atlas for a real-time 3D flight simulator. Generate one square image divided exactly into four equal square texture tiles in a 2x2 arrangement, no gaps, borders, labels or text. All tiles are strictly top-down orthographic natural surface textures with soft even diffuse daylight, no horizon, no perspective, no directional cast shadows, no buildings, roads or vehicles. Top-left quadrant: richly detailed natural green meadow grass, irregular subtle dry olive grass and brown soil mottling, tiny stones, not neon. Top-right quadrant: aerial view straight down on dense mixed woodland canopy, many irregular overlapping deep green tree crowns of varying shapes, natural organic texture and depth, not a geometric grid. Bottom-left quadrant: rugged gray-brown granite and weathered exposed rock, fine fractures, ridges, mineral mottling and sparse moss, neutral medium gray. Bottom-right quadrant: pale warm beige coastal sand with delicate irregular wind ripples, tiny pebbles, subtly damp patches, no water. Each quadrant must be usable as a seamless repeating texture on its own, with consistent colors and density at its opposite edges. Highly detailed realistic photographic material scans, restrained colors, no artistic brush strokes. Square 2048x2048 texture-atlas composition."
+}

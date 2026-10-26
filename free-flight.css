@@ -1,0 +1,56 @@
+/* Free Flight extends the shared flight presentation without changing Runway Glide. */
+.ff-game { --rg-accent: #147b72; background: #f6f8f2; }
+.ff-intro { display: flex; align-items: end; justify-content: space-between; gap: 22px; margin: 24px 0; }
+.ff-intro h3 { margin: 0; font: 400 clamp(25px,3vw,38px) Georgia,serif; letter-spacing: -.04em; color: #173d45; }
+.ff-intro p { font-size: 12px; line-height: 1.8; color: #597571; max-width: 360px; margin: 0; }
+.ff-stage { height: clamp(460px,54vw,680px); border-radius: 12px 12px 0 0; }
+.ff-compass { position: absolute; top: 24px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 14px; padding: 9px 16px; border: 1px solid #deeed938; border-radius: 6px; background: #0d293f75; pointer-events: none; font: 10px ui-monospace,monospace; }
+.ff-compass strong { font-size: 21px; font-weight: 500; }
+.ff-navigation { position: absolute; bottom: 72px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; justify-content: center; gap: 10px; width: max-content; max-width: 85%; background: #133c49c9; border: 1px solid #d3f2d72b; border-radius: 7px; padding: 10px 15px; pointer-events: none; }
+.ff-nav-text { font: 10px ui-monospace,monospace; line-height: 1.6; }
+.ff-nav-arrow { display: inline-block; color: #d3efb4; font-size: 22px; }
+.ff-message { font-size: 12px; line-height: 1.7; padding: 15px 19px; color: #315c59; background: #e6eee4; border: 1px solid #d1dfd4; border-top: 0; border-radius: 0 0 9px 9px; min-height: 52px; }
+.ff-game .rg-instruments { top: 31%; }
+.ff-game .rg-instruments-right { min-width: 148px; }
+.ff-game .rg-toolbar { flex-wrap: wrap; }
+.ff-game .ff-sound { margin-left: auto; }
+.ff-trip { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 14px; border-top: 1px solid var(--rg-line); border-bottom: 1px solid var(--rg-line); padding: 18px 3px; margin: 0 0 26px; color: #667c70; font-size: 11px; }
+.ff-trip strong { font: 600 16px ui-monospace,monospace; color: #214e49; margin-right: 4px; }
+.ff-navigation-panel { display: grid; grid-template-columns: 1.25fr 1fr; gap: 28px; padding: 23px; border: 1px solid #cfdfd4; background: #edf3ea; border-radius: 10px; margin-bottom: 30px; }
+.ff-chart-heading { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 14px; color: #42675e; }
+.ff-chart-heading label { display: flex; align-items: center; gap: 8px; font-size: 10px; }
+.ff-chart { display: block; width: 100%; aspect-ratio: 3 / 2; background: #214339; border: 1px solid #aac1ac; border-radius: 6px; cursor: crosshair; }
+.ff-chart-key { display: flex; flex-wrap: wrap; gap: 8px 14px; color: #5b7367; font-size: 9px; line-height: 1.6; margin: 10px 0 0; }
+.ff-nearby h4 { font: 400 26px Georgia,serif; color: #244d48; margin: 8px 0 12px; letter-spacing: -.03em; }
+.ff-nearby > p { color: #5c7467; font-size: 11px; line-height: 1.8; margin: 0 0 14px; }
+.ff-airfield-list { display: grid; gap: 7px; }
+.ff-game .ff-airfield-list button { display: grid; gap: 5px; text-align: left; background: #f8faf4; padding: 11px 13px; }
+.ff-airfield-list strong { font-size: 12px; }
+.ff-airfield-list span { font: 9px ui-monospace,monospace; color: #60766a; }
+.ff-game .ff-airfield-list button[aria-pressed=true] { border-color: #ad914e; background: #f4efd9; }
+.ff-game .ff-clear-marker { margin-top: 10px; font-size: 10px; }
+.ff-planning { padding: 10px 0 25px; }
+.ff-aircraft-grid { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 10px; }
+.ff-game .ff-aircraft { display: grid; gap: 11px; text-align: left; padding: 22px 16px; border-top: 3px solid #587b80; background: linear-gradient(130deg,#fff,#edf1e7); }
+.ff-aircraft[data-aircraft=cargo] { border-top-color: #bb954f; }.ff-aircraft[data-aircraft=bush] { border-top-color: #c56d4e; }.ff-aircraft[data-aircraft=military] { border-top-color: #7b8b9c; }
+.ff-aircraft strong { font-size: 18px; letter-spacing: -.035em; }.ff-aircraft > span:last-child { color: #61786c; font-weight: 400; font-size: 10px; line-height: 1.6; }
+.ff-game .ff-aircraft[aria-pressed=true] { border-color: #218774; background: #eaf4e6; box-shadow: inset 0 0 0 1px #218774; }
+.ff-aircraft-detail, .ff-location-description { color: #567468; font-size: 12px; line-height: 1.8; margin: 17px 0; }
+.ff-departure-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 16px; margin-top: 25px; }
+.ff-departure-grid label { display: grid; gap: 8px; font-size: 11px; color: #45675e; }.ff-departure-grid select { width: 100%; }
+.ff-pitch-help { color: #5b7668; font-size: 11px; line-height: 1.8; margin: 0; flex: 1 1 260px; }
+.ff-footnote { color: #587366; font-size: 11px; line-height: 1.9; margin-bottom: 0; }
+.ff-result-stats { font: 11px ui-monospace,monospace; line-height: 1.8; color: #d4e1d2; margin: 18px 0; }
+.ff-game .rg-result button { margin: 0 6px 8px 0; }.ff-game .rg-paused button { background: #e9f2df; color: #214c48; }
+.ff-game:fullscreen .ff-stage { height: 70vh; }.ff-game:fullscreen .ff-intro,.ff-game:fullscreen .ff-planning,.ff-game:fullscreen .ff-instructions { display: none; }
+.ff-game.ff-expanded .ff-stage { height: 85vh; }
+@media(max-width:760px) {
+  .ff-game[data-phase="parked"] { padding-bottom: 240px; }
+  .ff-game[data-phase="parked"] .rg-touch-controls { position: fixed; z-index: 42; left: 0; right: 0; bottom: 0; height: 104px; padding: 8px 16px; background: #f7faf8f5; border-top: 1px solid #cfdfdf; }
+  .ff-game[data-phase="parked"] .rg-flight-controls { position: fixed; z-index: 42; left: 0; right: 0; bottom: 104px; min-height: 85px; padding: 10px 16px; grid-template-columns: 105px minmax(0,1fr); gap: 12px; background: #f7faf8f5; border-top: 1px solid #cfdfdf; box-shadow: 0 -8px 24px #102b3826; }
+  .ff-game[data-phase="parked"] .rg-switches { gap: 5px; justify-content: flex-end; }
+  .ff-game[data-phase="parked"] .rg-switches button { padding: 7px; font-size: 9px; min-height: 32px; }
+  .ff-game[data-phase="parked"] .rg-switches kbd { display: none; }
+}
+@media(max-width:900px) { .ff-intro { display: block; }.ff-intro p { margin-top: 12px; max-width: none; }.ff-compass { top: 80px; }.ff-aircraft-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }.ff-navigation-panel { grid-template-columns: 1fr; }.ff-chart { max-height: 300px; }.ff-trip { justify-content: flex-start; gap: 15px 25px; } }
+@media(max-width:560px) { .ff-stage { height: 485px; }.ff-game .rg-instruments { min-width: 0; top: 35%; padding: 10px 8px; gap: 22px; }.ff-game .rg-instruments-left { left: 8px; }.ff-game .rg-instruments-right { right: 8px; }.ff-game .rg-instruments strong { font-size: 24px; }.ff-game .rg-instruments span { font-size: 8px; }.ff-game .rg-instruments small { font-size: 8px; }.ff-game .rg-flight-header { padding: 15px 12px; }.ff-game .rg-callout { font-size: 11px; max-width: 170px; }.ff-game .rg-view-label { font-size: 8px; padding: 5px; }.ff-navigation { bottom: 80px; padding: 8px; width: 88%; }.ff-nav-text { font-size: 8px; }.ff-game .rg-weather { left: 8px; bottom: 17px; }.ff-game .rg-attitude-strip { right: 8px; bottom: 17px; gap: 8px; font-size: 8px; }.ff-message { padding: 13px 12px; font-size: 11px; }.ff-navigation-panel { padding: 14px; }.ff-chart-heading { align-items: start; flex-direction: column; }.ff-chart-key { font-size: 8px; }.ff-departure-grid { grid-template-columns: 1fr; }.ff-aircraft-grid { gap: 7px; }.ff-game .ff-aircraft { padding: 16px 10px; }.ff-aircraft strong { font-size: 15px; }.ff-aircraft .rg-micro { font-size: 8px; }.ff-game .ff-sound { margin-left: 0; }.ff-trip { font-size: 10px; }.ff-trip strong { font-size: 13px; } }

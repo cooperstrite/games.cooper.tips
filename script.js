@@ -2,6 +2,7 @@ import { createRocketBoost } from "./rocket-boost.js";
 import { createBubbleRally } from "./bubble-rally.js";
 import { createMemoryLoop } from "./memory-loop.js";
 import { createRunwayGlide } from "./runway-glide.js";
+import { createFreeFlightGame } from "./free-flight.js";
 import { createHauntedHarvest } from "./haunted-harvest.js";
 import { createSwitchyardSignals } from "./switchyard-signals.js";
 import { OPPONENT_LEVELS, createComputerOpponent, createOpponentScheduler } from "./arcade/opponents.js";
@@ -1489,6 +1490,15 @@ const games = [
       "Take the controls of a passenger jet, cargo aircraft, bush plane, or military fighter. Follow tower guidance through crosswinds, night arrivals, and an extreme aircraft-carrier landing.",
     logo: "assets/runway-glide-cover.png",
     init: createRunwayGlide,
+  },
+  {
+    id: "freeflight",
+    name: "Free Flight",
+    summary: "Open skies, endless exploring. Fly your own way.",
+    description:
+      "Fly a passenger jet, cargo aircraft, bush plane, or fighter through an open 3D world of coastlines, forests, and mountains. Find optional runways, stop for a while, and take off again. No missions. No time limit.",
+    logo: "assets/free-flight-cover.png",
+    init: createFreeFlightGame,
   },
   {
     id: "rocket",
