@@ -1,5 +1,6 @@
-import { SPOTLIGHT_LEVELS, SPOTLIGHT_SCENES, SPOTLIGHT_FRAMES, spotlightImage, spotlightUnlocked, readSpotlightSettings, writeSpotlightSettings, spotlightRewardKey, spotlightCoinGuide } from "./spotlight-config.js";
+import { SPOTLIGHT_CHALLENGE_COUNT, SPOTLIGHT_LEVELS, SPOTLIGHT_SCENES, SPOTLIGHT_FRAMES, spotlightImage, spotlightUnlocked, readSpotlightSettings, writeSpotlightSettings, spotlightRewardKey, spotlightCoinGuide } from "./spotlight-config.js";
 import { spotlightTargets } from "./spotlight-puzzles.js";
+import { createSpotlightRotation } from "./spotlight-rotation.js";
 import { createSpotlightRound, startSpotlight, tickSpotlight, tapSpotlight, hintSpotlight, spotlightProgress } from "./spotlight-engine.js";
 import { getArcadeWallet } from "./arcade/wallet.js";
 import { mountGameWallet, rewardTotal } from "./arcade/game-services.js";
@@ -12,7 +13,7 @@ const loadImage = src => new Promise((resolve, reject) => { const image = new Im
 const clamp = (v, low, high) => Math.max(low, Math.min(high, v));
 
 export function createSpotlight(root) {
-  const wallet = getArcadeWallet(), events = new AbortController();
+  const wallet = getArcadeWallet(), events = new AbortController(), rotation = createSpotlightRotation();
   let settings = readSpotlightSettings(wallet.getState().owned), game, disposed = false, loading = false, imageError = false, generation = 0, earned = 0, custom = null;
   let zoom = 1, pan = { x: 0, y: 0 }, cursor = null, drag = null, lastTick = performance.now(), finishShown = false;
   const audio = createSpotlightAudio(() => settings.sound);
@@ -24,12 +25,12 @@ export function createSpotlight(root) {
     <p class="sl-level-note"></p><div class="sl-gallery-heading"><h4>Your picture collection</h4><a href="#store/spotdiff">Discover more in the shop &nearr;</a></div><div class="sl-gallery" role="group" aria-label="Picture scenes"></div>
     <div class="sl-workspace"><section class="sl-desk" data-frame="gallery"><div class="sl-topbar"><div class="sl-title"><p class="sl-eyebrow sl-scene-number"></p><h4></h4><p class="sl-scene-subtitle"></p></div><div class="sl-stats" aria-label="Puzzle progress"><div><span>Differences</span><strong class="sl-count">0 / 4</strong></div><div><span class="sl-clock-label">Time left</span><strong class="sl-time">3:00</strong></div><div><span>This attempt</span><strong class="sl-earned">+0 coins</strong></div></div></div>
       <div class="sl-board-wrap"><div class="sl-board">${["A", "B"].map((letter, i) => `<figure class="sl-picture"><div class="sl-viewport" data-side="${i}"></div><figcaption><b>IMAGE ${letter}</b><span>${i ? "FIND THE CHANGES" : "THE ORIGINAL"}</span></figcaption></figure>`).join("")}</div><div class="sl-cover"><div><p class="sl-eyebrow">A MOMENT TO LOOK CLOSER</p><h4></h4><p class="sl-cover-note"></p><button type="button" class="sl-primary sl-start">Start looking</button></div></div></div>
-      <div class="sl-utility"><div class="sl-utility-group" aria-label="Picture zoom"><button class="sl-tool sl-zoom-out" type="button" aria-label="Zoom out">&minus;</button><span class="sl-zoom-label">1&times;</span><button class="sl-tool sl-zoom-in" type="button" aria-label="Zoom in">+</button><button class="sl-tool sl-center" type="button">Reset view</button><button class="sl-tool sl-expand" type="button" aria-pressed="false">Expand</button></div><div class="sl-utility-group"><button class="sl-tool sl-hint" type="button">Hint (2)</button><button class="sl-tool sl-pause" type="button">Pause</button><button class="sl-tool sl-restart" type="button">Restart</button></div></div>
+      <div class="sl-utility"><div class="sl-utility-group" aria-label="Picture zoom"><button class="sl-tool sl-zoom-out" type="button" aria-label="Zoom out">&minus;</button><span class="sl-zoom-label">1&times;</span><button class="sl-tool sl-zoom-in" type="button" aria-label="Zoom in">+</button><button class="sl-tool sl-center" type="button">Reset view</button><button class="sl-tool sl-expand" type="button" aria-pressed="false">Expand</button></div><div class="sl-utility-group"><button class="sl-tool sl-hint" type="button">Hint (2)</button><button class="sl-tool sl-pause" type="button">Pause</button><button class="sl-tool sl-restart" type="button">Retry this challenge</button><button class="sl-tool sl-next" type="button">New challenge</button></div></div>
       <p class="sl-interaction-note">Tap a change in either picture. Zoom moves both pictures together; drag to explore when zoomed. Keyboard: focus a picture, arrows move the pointer, Enter checks it.</p><p class="sl-status" role="status" aria-live="polite"></p><ol class="sl-found-list" aria-label="Differences found"></ol>
-      <section class="sl-results" hidden><div class="sl-result-stars" aria-hidden="true"></div><p class="sl-eyebrow">YOUR OBSERVATION REPORT</p><h4 tabindex="-1"></h4><p class="sl-result-detail"></p><p class="sl-result-coins"></p><div class="sl-result-actions"><button type="button" class="sl-primary sl-again">Try again</button><button type="button" class="sl-tool sl-answers">Show remaining changes</button><a href="#store/spotdiff">Visit the shared shop &rarr;</a></div></section>
+      <section class="sl-results" hidden><div class="sl-result-stars" aria-hidden="true"></div><p class="sl-eyebrow">YOUR OBSERVATION REPORT</p><h4 tabindex="-1"></h4><p class="sl-result-detail"></p><p class="sl-result-coins"></p><div class="sl-result-actions"><button type="button" class="sl-primary sl-again">Next challenge</button><button type="button" class="sl-tool sl-retry">Retry this challenge</button><button type="button" class="sl-tool sl-answers">Show remaining changes</button><a href="#store/spotdiff">Visit the shared shop &rarr;</a></div></section>
     </section></div>
-    <div class="sl-bottom"><section class="sl-rules"><h4>How to play</h4><ol><li>Choose a scene and a difficulty, then press <b>Start looking</b>.</li><li>Compare Image A with Image B. Tap any changed detail in either picture. It is marked in both.</li><li>Find every change before the clock runs out. A wrong tap costs <b>5 seconds</b>; an already-found spot has no penalty.</li><li>Two hints reveal a change each. That change earns no coins. Use Relaxed to explore without a clock or rewards.</li></ol><p>Pause hides the pictures and stops the clock. Changing scene, level, or play style starts a fresh puzzle.</p></section>
-    <section class="sl-rewards"><h4>A good eye earns a little gold.</h4><div class="sl-reward-grid">${Object.entries(SPOTLIGHT_LEVELS).map(([id, l]) => `<div class="sl-reward-cell" data-reward-level="${id}"><span>${l.label}</span><b>${l.count * l.find + l.bonus}</b><span>maximum coins</span></div>`).join("")}</div><p class="sl-reward-detail"></p><p>Each scene and difficulty has its own reward limit. Replaying can improve your best reward, but never pays the same coins twice. Coins go directly to your shared wallet.</p></section></div>
+    <div class="sl-bottom"><section class="sl-rules"><h4>How to play</h4><ol><li>Choose a scene and a difficulty, then press <b>Start looking</b>.</li><li>Compare Image A with Image B. Tap any changed detail in either picture. It is marked in both.</li><li>Find every change before the clock runs out. A wrong tap costs <b>5 seconds</b>; an already-found spot has no penalty.</li><li>Two hints reveal a change each. That change earns no coins. Use Relaxed to explore without a clock or rewards.</li></ol><p>Each scene has <b>ten challenges per difficulty</b>, shuffled without repeats until all ten have appeared. Medium and Hard have separate sets. Choose <b>Next challenge</b> after a round, or <b>New challenge</b> to skip ahead. <b>Retry this challenge</b> keeps the same differences.</p><p>Your rotation is saved on this browser. Pause hides the pictures and stops the clock. Changing play style restarts the current challenge.</p></section>
+    <section class="sl-rewards"><h4>A good eye earns a little gold.</h4><div class="sl-reward-grid">${Object.entries(SPOTLIGHT_LEVELS).map(([id, l]) => `<div class="sl-reward-cell" data-reward-level="${id}"><span>${l.label}</span><b>${l.count * l.find + l.bonus}</b><span>coins per challenge</span></div>`).join("")}</div><p class="sl-reward-detail"></p><p>Each of the ten challenges has its own reward limit for that scene and difficulty. Retrying can improve your best reward, but never pays the same coins twice. Coins go directly to your shared wallet.</p></section></div>
     <div class="sl-preferences"><label class="sl-frame-label">Picture frame<select class="sl-frame" aria-label="Picture frame"></select></label><button class="sl-tool sl-sound" type="button" aria-pressed="true">Sound on</button></div>
     <details class="sl-custom"><summary>Make a puzzle with your own pictures</summary><p>Upload two versions of the same picture. On Image B below, mark the center of each difference, then play. Your pictures stay on this device. Custom puzzles are untimed and earn no coins.</p><div class="sl-custom-form"><label>Puzzle name<input type="text" class="sl-custom-name" maxlength="45" placeholder="My picture puzzle"></label><span></span><label>Image A / original<input type="file" class="sl-custom-file" data-file="0" accept="image/png,image/jpeg,image/webp"></label><label>Image B / changed<input type="file" class="sl-custom-file" data-file="1" accept="image/png,image/jpeg,image/webp"></label></div><div class="sl-custom-preview" hidden></div><div class="sl-custom-actions"><button type="button" class="sl-tool sl-custom-undo">Undo last mark</button><button type="button" class="sl-primary sl-custom-play" disabled>Play my puzzle</button><span class="sl-custom-status">Choose two pictures to begin.</span></div></details>`;
   root.append(wrapper);
@@ -37,7 +38,7 @@ export function createSpotlight(root) {
   const on = (node, type, fn, options = {}) => node.addEventListener(type, fn, { ...options, signal: events.signal });
   const unmountWallet = mountGameWallet(wrapper, "spotdiff"), banner = $(".arcade-game-wallet > span"), desk = $(".sl-desk"), cover = $(".sl-cover"), result = $(".sl-results");
   const finale = createSpotlightFinale(wrapper, {
-    onReplay: async () => { await newRound(); if (!disposed) $(".sl-start").focus(); },
+    onReplay: async () => { await newRound({ fresh: true }); if (!disposed) $(".sl-start").focus(); },
     onInspect: reveal => {
       audio.stop();
       if (reveal && game.phase === "failed") { game.revealed = true; drawMarkers(); update(); say("The remaining changes are outlined in amber. Try again whenever you like."); }
@@ -51,17 +52,17 @@ export function createSpotlight(root) {
   function say(message, miss = false) { $(".sl-status").textContent = message; $(".sl-status").classList.toggle("is-miss", miss); }
   const sound = kind => audio.play(kind);
   function toggleSound() { settings.sound = !settings.sound; if (!settings.sound) audio.stop(); $(".sl-sound").textContent = settings.sound ? "Sound on" : "Sound off"; $(".sl-sound").setAttribute("aria-pressed", String(settings.sound)); finale.setSound(settings.sound); writeSpotlightSettings(settings); }
-  function banked() { return custom ? 0 : wallet.getState().rewards[`spotdiff:${spotlightRewardKey(settings.scene, settings.difficulty)}`] || 0; }
+  function banked() { return custom || !game ? 0 : wallet.getState().rewards[`spotdiff:${spotlightRewardKey(game.scene, game.difficulty, game.challenge)}`] || 0; }
   function refreshCoins() {
-    const guide = custom ? "Custom pictures: untimed practice, with no coin rewards." : spotlightCoinGuide(settings, banked());
+    const guide = custom ? "Custom pictures: untimed practice, with no coin rewards." : spotlightCoinGuide({ ...settings, challenge: game?.challenge || 0 }, banked());
     banner.textContent = guide; $(".sl-reward-detail").textContent = guide;
     $$("[data-reward-level]").forEach(el => el.setAttribute("aria-current", String(el.dataset.rewardLevel === settings.difficulty)));
   }
   function collection() {
     const owned = wallet.getState().owned;
-    $(".sl-gallery").innerHTML = SPOTLIGHT_SCENES.map((scene, i) => {
+    $(".sl-gallery").innerHTML = SPOTLIGHT_SCENES.map(scene => {
       const unlocked = spotlightUnlocked("scene", scene.id, owned);
-      return `<button type="button" class="sl-scene" data-scene="${scene.id}" data-locked="${!unlocked}" aria-pressed="${!custom && settings.scene === scene.id}" aria-label="${scene.title}${unlocked ? "" : `, locked, ${scene.cost} coins in shop`}"><img src="${spotlightImage(scene.id)}" alt="" loading="lazy">${unlocked ? "" : `<span class="sl-scene-badge">${scene.cost} COINS</span>`}<strong>${scene.title}</strong><small>${unlocked ? `SCENE ${String(i + 1).padStart(2, "0")} / FOUR LEVELS` : "UNLOCK IN THE SHOP"}</small></button>`;
+      return `<button type="button" class="sl-scene" data-scene="${scene.id}" data-locked="${!unlocked}" aria-pressed="${!custom && settings.scene === scene.id}" aria-label="${scene.title}${unlocked ? "" : `, locked, ${scene.cost} coins in shop`}"><img src="${spotlightImage(scene.id)}" alt="" loading="lazy">${unlocked ? "" : `<span class="sl-scene-badge">${scene.cost} COINS</span>`}<strong>${scene.title}</strong><small>${unlocked ? "10 CHALLENGES / LEVEL" : "UNLOCK IN THE SHOP"}</small></button>`;
     }).join("");
     $(".sl-frame").innerHTML = SPOTLIGHT_FRAMES.map(frame => `<option value="${frame.id}" ${spotlightUnlocked("frame", frame.id, owned) ? "" : "disabled"}>${frame.name}${spotlightUnlocked("frame", frame.id, owned) ? "" : ` / ${frame.cost} coins`}</option>`).join("");
     $(".sl-frame").value = settings.frame;
@@ -113,12 +114,12 @@ export function createSpotlight(root) {
       $(".sl-result-stars").textContent = complete ? "\u2726 \u2726 \u2726" : "\u2726";
       $(".sl-results h4").textContent = complete ? "Nothing gets past you." : "A few secrets remain.";
       $(".sl-result-detail").textContent = `${game.found.size} of ${game.targets.length} found in ${time(game.elapsed)}. ${game.mistakes} wrong tap${game.mistakes === 1 ? "" : "s"}. ${game.hinted.size} hint${game.hinted.size === 1 ? "" : "s"} used.`;
-      $(".sl-result-coins").textContent = game.mode === "relaxed" ? "A little time well spent. Practice does not earn coins." : `${earned} new coins added to your shared wallet this attempt. ${banked()} coins banked for this scene and level in total. ${complete && !earned ? "This result was already rewarded; a better unhinted result can still earn any remaining coins." : ""}`;
-      $(".sl-answers").hidden = complete || game.revealed; $(".sl-again").textContent = complete ? "Look again" : "Try again";
+      $(".sl-result-coins").textContent = game.mode === "relaxed" ? "A little time well spent. Practice does not earn coins." : `${earned} new coins added to your shared wallet this attempt. ${banked()} coins banked for this challenge in total. ${complete && !earned ? "This result was already rewarded; a better unhinted result can still earn any remaining coins." : ""}`;
+      $(".sl-answers").hidden = complete || game.revealed; $(".sl-again").textContent = custom ? "Play again" : "Next challenge";
       result.dataset.outcome = complete ? "win" : "loss";
       if (!finishShown) {
         finishShown = true;
-        finale.play({ won: complete, found: game.found.size, total: game.targets.length, elapsed: time(game.elapsed), scene: $(".sl-title h4").textContent, level: custom ? "Your own puzzle" : level.label, coins: earned, practice: game.mode === "relaxed", sound: settings.sound });
+        finale.play({ won: complete, found: game.found.size, total: game.targets.length, elapsed: time(game.elapsed), scene: $(".sl-title h4").textContent, level: custom ? "Your own puzzle" : `${level.label} / challenge ${game.challenge + 1}`, coins: earned, practice: game.mode === "relaxed", sound: settings.sound, rotating: !custom });
         sound(complete ? "win" : "lose");
       }
       finale.updateCoins(earned);
@@ -127,20 +128,23 @@ export function createSpotlight(root) {
   async function award(round = game) {
     if (round.mode !== "challenge" || round.custom) return;
     const token = generation, total = rewardTotal("spotdiff", spotlightProgress(round));
-    const response = await wallet.claim("spotdiff", spotlightRewardKey(round.scene, round.difficulty), total);
+    const response = await wallet.claim("spotdiff", spotlightRewardKey(round.scene, round.difficulty, round.challenge), total);
     if (disposed || token !== generation) return;
     earned += response.coins || 0; refreshCoins(); update();
   }
-  async function newRound() {
+  async function newRound({ reuse = false, fresh = false } = {}) {
     finale.reset(); audio.stop(); finishShown = false;
     const token = ++generation; loading = true; imageError = false; earned = 0; zoom = 1; pan = { x: 0, y: 0 }; cursor = null; drag = null;
     wrapper.dataset.ready = "loading";
     releaseUnusedCustomUrls();
-    game = createSpotlightRound({ ...settings, custom: !!custom, targets: custom ? custom.targets : spotlightTargets(settings.scene, settings.difficulty) });
+    const challenge = custom ? 0 : reuse && game && !game.custom && game.scene === settings.scene && game.difficulty === settings.difficulty ? game.challenge : rotation.prepare(settings.scene, settings.difficulty, { fresh });
+    game = createSpotlightRound({ ...settings, challenge, custom: !!custom, targets: custom ? custom.targets : spotlightTargets(settings.scene, settings.difficulty, challenge) });
+    wrapper.dataset.challenge = String(challenge);
     const scene = SPOTLIGHT_SCENES.find(s => s.id === settings.scene);
     $(".sl-title h4").textContent = custom ? custom.title : scene.title;
     $(".sl-scene-number").textContent = custom ? "YOUR OWN COLLECTION" : `${String(SPOTLIGHT_SCENES.indexOf(scene) + 1).padStart(2, "0")} / THE SPOTLIGHT COLLECTION`;
-    $(".sl-scene-subtitle").textContent = custom ? "A puzzle made by you." : scene.subtitle;
+    $(".sl-scene-subtitle").textContent = custom ? "A puzzle made by you." : `${scene.subtitle} / Challenge ${String(challenge + 1).padStart(2, "0")} of ${SPOTLIGHT_CHALLENGE_COUNT}`;
+    $(".sl-next").hidden = !!custom; $(".sl-retry").hidden = !!custom; $(".sl-restart").textContent = custom ? "Restart" : "Retry this challenge";
     $(".sl-level-note").textContent = custom ? "Your own pictures / untimed practice / no coins." : `${SPOTLIGHT_LEVELS[settings.difficulty].note} ${SPOTLIGHT_LEVELS[settings.difficulty].count} differences. ${settings.mode === "challenge" ? time(SPOTLIGHT_LEVELS[settings.difficulty].seconds) + " on the clock." : "No time limit."}`;
     $$("[data-level]").forEach(button => button.setAttribute("aria-pressed", String(button.dataset.level === settings.difficulty && !custom)));
     $$(".sl-viewport").forEach((viewport, side) => { viewport.style.aspectRatio = String(custom?.aspect || 1.5); viewport.innerHTML = frameArt(side); });
@@ -154,8 +158,8 @@ export function createSpotlight(root) {
   }
   function pause(value = !game.paused) { if (game.phase !== "playing") return; game.paused = value; lastTick = performance.now(); drag = null; update(); drawCursor(); }
   function begin() {
-    if (loading) return; if (imageError) { newRound(); return; }
-    if (game.paused) pause(false); else if (startSpotlight(game)) { lastTick = performance.now(); sound("start"); update(); say("Take a good look. You can tap either picture."); }
+    if (loading) return; if (imageError) { newRound({ reuse: true }); return; }
+    if (game.paused) pause(false); else if (startSpotlight(game)) { if (!custom) rotation.start(game.scene, game.difficulty, game.challenge); lastTick = performance.now(); sound("start"); update(); say("Take a good look. You can tap either picture."); }
   }
   function foundOutcome(outcome) {
     if (outcome.type === "found") { if (game.phase !== "complete") sound("found"); say(`Found: ${outcome.target.label}. ${game.targets.length - game.found.size} left.`); drawMarkers(); award(); }
@@ -171,14 +175,15 @@ export function createSpotlight(root) {
   }
   on(wrapper, "click", event => {
     const level = event.target.closest("[data-level]"), scene = event.target.closest("[data-scene]");
-    if (level) { settings.difficulty = level.dataset.level; custom = null; newRound(); }
-    if (scene) { if (!spotlightUnlocked("scene", scene.dataset.scene, wallet.getState().owned)) { location.hash = "#store/spotdiff"; return; } settings.scene = scene.dataset.scene; custom = null; newRound(); }
+    if (level) { const fresh = !custom && settings.difficulty === level.dataset.level; settings.difficulty = level.dataset.level; custom = null; newRound({ fresh }); }
+    if (scene) { if (!spotlightUnlocked("scene", scene.dataset.scene, wallet.getState().owned)) { location.hash = "#store/spotdiff"; return; } const fresh = !custom && settings.scene === scene.dataset.scene; settings.scene = scene.dataset.scene; custom = null; newRound({ fresh }); }
   });
-  on($(".sl-mode select"), "change", e => { settings.mode = e.target.value; custom = null; newRound(); });
+  on($(".sl-mode select"), "change", e => { settings.mode = e.target.value; custom = null; newRound({ reuse: true }); });
   on($(".sl-frame"), "change", e => { if (!spotlightUnlocked("frame", e.target.value, wallet.getState().owned)) return; settings.frame = e.target.value; desk.dataset.frame = settings.frame; writeSpotlightSettings(settings); });
   on($(".sl-sound"), "click", toggleSound);
   on($(".sl-start"), "click", begin); on($(".sl-pause"), "click", () => pause());
-  for (const selector of [".sl-restart", ".sl-again"]) on($(selector), "click", newRound);
+  for (const selector of [".sl-restart", ".sl-retry"]) on($(selector), "click", () => newRound({ reuse: true }));
+  for (const selector of [".sl-next", ".sl-again"]) on($(selector), "click", () => newRound({ fresh: true }));
   on($(".sl-hint"), "click", () => { const target = hintSpotlight(game); if (!target) return; if (zoom > 1) { pan = { x: -(target.x + target.w / 2 - 50) * zoom, y: -(target.y + target.h / 2 - 50) * zoom }; transform(); } say(`Hint: ${target.label}. Marked in both pictures; this find earns no coins.`); if (game.phase !== "complete") sound("hint"); drawMarkers(); award(); update(); });
   on($(".sl-answers"), "click", () => { if (game.phase !== "failed") return; game.revealed = true; drawMarkers(); update(); say("The remaining changes are outlined in amber. Try again whenever you like."); });
   function changeZoom(step) { zoom = clamp(zoom + step, 1, 3); cursor = null; transform(); drawCursor(); }

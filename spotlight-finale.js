@@ -45,7 +45,7 @@ export function createSpotlightFinale(host, { onReplay, onInspect, onToggleSound
     $(".sl-finale-coins").textContent = `+${coins}`;
     $(".sl-finale-coins").classList.toggle("has-coins", coins > 0);
   }
-  function play({ won, found, total, elapsed, scene, level, coins, practice, sound }) {
+  function play({ won, found, total, elapsed, scene, level, coins, practice, sound, rotating = false }) {
     if (disposed) return;
     shownCoins = -1; dialog.returnValue = "inspect";
     dialog.dataset.outcome = won ? "win" : "loss";
@@ -56,7 +56,7 @@ export function createSpotlightFinale(host, { onReplay, onInspect, onToggleSound
     $(".sl-finale-found").textContent = `${found} / ${total}`;
     $(".sl-finale-time").textContent = elapsed;
     $(".sl-finale-coin-note").textContent = practice ? "A little practice. A sharper eye. No coins in this mode." : won ? "Newly earned coins are saved to your shared wallet. Replays reward improvements." : "Your earned coins are safe. Take another look and try again.";
-    $(".sl-finale-replay").textContent = won ? "Play again" : "Try again";
+    $(".sl-finale-replay").textContent = rotating ? "Next challenge" : won ? "Play again" : "Try again";
     $(".sl-finale-review").textContent = won ? "Admire your finds" : "Reveal the differences";
     $(".sl-finale-progress").innerHTML = Array.from({ length: total }, (_, i) => `<i class="${i < found ? "is-found" : ""}" style="--dot-delay:${i * 65}ms"></i>`).join("");
     const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;

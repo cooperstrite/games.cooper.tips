@@ -6,7 +6,7 @@ import { memoryRewardTotal } from "../memory-config.js";
 import { spotlightRewardTotal } from "../spotlight-config.js";
 
 export const EARNING_RULES = Object.freeze({
-  spotdiff: "Find unhinted differences: Easy 1, Medium 2, Hard 3, Expert 4 coins each. Finishing adds 4, 8, 15, or 24 coins. Maximums per scene and level: 8, 20, 33, 56. Only improvements to your best reward pay again. Relaxed and custom puzzles earn no coins.",
+  spotdiff: "Ten shuffled challenges per difficulty in every scene. Find unhinted differences: Easy 1, Medium 2, Hard 3, Expert 4 coins each. Finishing adds 4, 8, 15, or 24 coins. Maximums per challenge: 8, 20, 33, 56. Each challenge has its own rewards; retries only pay improvements. Relaxed and custom puzzles earn no coins.",
   memory: "Solo pays 1 coin per pair you match. Computer games pay 1 on Easy, 2 on Medium, 3 on Hard, or 4 on Expert per pair YOU match, plus a bonus if you win. Games with friends pay no coins. See the Memory Loop table below for exact win bonuses.",
   flappy: "Each pipe: Easy 1, Medium 3, Hard 5, Expert 10 coins. Banked when the flight ends.",
   archery: "Earn 1 coin per scored point. Misses earn no coins.",

@@ -1,8 +1,8 @@
 import { SPOTLIGHT_LEVELS, spotlightRewardTotal } from "./spotlight-config.js";
 
-export function createSpotlightRound({ scene = "glasshouse", difficulty = "easy", mode = "challenge", targets = [], custom = false } = {}) {
+export function createSpotlightRound({ scene = "glasshouse", difficulty = "easy", challenge = 0, mode = "challenge", targets = [], custom = false } = {}) {
   const level = Object.hasOwn(SPOTLIGHT_LEVELS, difficulty) ? SPOTLIGHT_LEVELS[difficulty] : SPOTLIGHT_LEVELS.easy;
-  return { scene, difficulty: Object.hasOwn(SPOTLIGHT_LEVELS, difficulty) ? difficulty : "easy", mode: custom || mode === "relaxed" ? "relaxed" : "challenge", custom,
+  return { scene, difficulty: Object.hasOwn(SPOTLIGHT_LEVELS, difficulty) ? difficulty : "easy", challenge, mode: custom || mode === "relaxed" ? "relaxed" : "challenge", custom,
     targets: targets.map(t => ({ ...t })), found: new Set(), hinted: new Set(), phase: "ready", paused: false,
     remaining: level.seconds, elapsed: 0, mistakes: 0, hints: 2, lastMiss: -1, revealed: false };
 }
@@ -33,6 +33,6 @@ export function hintSpotlight(s) {
   s.hints--; s.hinted.add(target.id); s.found.add(target.id); finish(s); return target;
 }
 export function spotlightProgress(s) {
-  return { scene: s.custom ? "custom" : s.scene, difficulty: s.difficulty, mode: s.mode, found: s.found.size, hinted: s.hinted.size, complete: s.phase === "complete" };
+  return { scene: s.custom ? "custom" : s.scene, difficulty: s.difficulty, challenge: s.challenge, mode: s.mode, found: s.found.size, hinted: s.hinted.size, complete: s.phase === "complete" };
 }
 export const spotlightRoundCoins = s => spotlightRewardTotal(spotlightProgress(s));
