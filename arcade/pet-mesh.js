@@ -37,7 +37,7 @@ export function buildPetMesh(world, character) {
   const tailPath=cat?[[0,0,0],[.3,.02,.13],[.58,.16,.15],[.73,.43,.1],[.63,.69,.1]]:[[0,0,0],[.25,.08,.2],[.52,.26,.23],[.65,.46,.18]];
   const smoothTail=B.Curve3.CreateCatmullRomSpline(tailPath.map(p=>new B.Vector3(...p)),12).getPoints().map(p=>[p.x,p.y,p.z]);
   tube("tail-coat",smoothTail,fluffy?.18:cat?.085:character.key==="golden"||character.key==="husky"?.15:.09,seal?c.dark:c.body,tail);
-  const band=cone("bandana",[0,1.43,-.01],.12,.63,.61,cat?"#cf7455":"#428e96");band.scaling.z=.85;
+  const band=cone("bandana",[0,1.43,-.01],.12,.63,.61,c.bandana||(cat?"#cf7455":"#428e96"));band.scaling.z=.85;
   if(f.hat==="cap"){ell("cap",[0,.36,.02],[.73,.23,.66],c.accessory,head);ell("cap-brim",[0,.30,-.33],[.82,.06,.45],c.accessory,head);}
   if(f.hat==="crown"){cone("gold-crown",[0,.46,.03],.18,.62,.66,"#e7b956",head);for(let i=0;i<7;i++){const a=i/7*Math.PI*2;cone("crown-tip",[Math.cos(a)*.28,.63,Math.sin(a)*.28+.03],.25,.16,.01,"#f1cd70",head);}ell("crown-jewel",[0,.46,-.312],[.10,.12,.04],c.accessory,head);}
   if(f.hat==="wizard"){ell("wizard-brim",[0,.36,.03],[.95,.06,.85],c.accessory,head);cone("wizard-hat",[0,.69,.03],.72,.63,0,c.accessory,head);ell("hat-star",[0,.6,-.24],[.1,.12,.03],"#f4d381",head);}

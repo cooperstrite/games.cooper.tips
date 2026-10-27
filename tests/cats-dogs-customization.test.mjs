@@ -6,6 +6,8 @@ import { CharacterBuilder } from "../arcade/characters.js";
 import { rewardTotal, createRewardSession } from "../arcade/game-services.js";
 import { createArcadeWallet } from "../arcade/wallet.js";
 import { studioCharacter } from "../arcade/studio-preview.js";
+import { endingAppearance, endingSource, endingRig } from "../cats-dogs-ending-poses.js";
+import { existsSync } from "node:fs";
 const storage=()=>{const v=new Map();return{getItem:k=>v.get(k)||null,setItem:(k,x)=>v.set(k,x)};};
 test("all ten breeds are free and cannot cross cat/dog teams",()=>{
   for(const [breed,b] of Object.entries(TUG_BREEDS)){assert.equal(normalizeTugPet(b.side,{breed}).breed,breed);assert.notEqual(normalizeTugPet(b.side==="cats"?"dogs":"cats",{breed}).breed,breed);}
@@ -74,4 +76,33 @@ test("a match reward is banked once and buys cosmetics through the shared wallet
   await wallet.claim("archery","other-game",60);await wallet.claim("archery","another-game",60);
   const result=await wallet.purchase("catsdogs:medal");assert.equal(result.ok,true);assert.equal(wallet.getState().coins,9);assert.ok(wallet.getState().owned.includes("catsdogs:medal"));
   assert.equal(createArcadeWallet({storage:store}).getState().coins,9);
+});
+test("independent coat pigments and bandanas migrate, save, and reach the 3D character without recoloring accessories",()=>{
+  const store=storage(),wardrobe=readTugWardrobe([],store);
+  for(const side of ["cats","dogs"]){
+    for(const key of ["secondaryColor","patternColor","bandanaColor"])assert.equal(wardrobe[side][key],null);
+    wardrobe[side]=normalizeTugPet(side,{...wardrobe[side],coatColor:"#446677",secondaryColor:"#FFEEDD",patternColor:"#443322",bandanaColor:"#AABBCC",accent:"#229955"});
+    const mesh=studioCharacter("catsdogs",wardrobe[side]);
+    assert.equal(mesh.colors.body,"#446677");assert.equal(mesh.colors.belly,"#ffeedd");assert.equal(mesh.colors.dark,"#443322");assert.equal(mesh.colors.bandana,"#aabbcc");assert.equal(mesh.colors.accessory,"#229955");
+    const invalid=normalizeTugPet(side,{secondaryColor:"red",patternColor:"url(bad)",bandanaColor:{}});
+    assert.equal(invalid.secondaryColor,null);assert.equal(invalid.patternColor,null);assert.equal(invalid.bandanaColor,null);
+  }
+  writeTugWardrobe(wardrobe,store);assert.deepEqual(readTugWardrobe([],store),wardrobe);
+  const mainOnly=studioCharacter("catsdogs",normalizeTugPet("dogs",{breed:"husky",coatColor:"#ff5500"}));
+  assert.equal(mainOnly.colors.belly,TUG_BREEDS.husky.light);assert.equal(mainOnly.colors.dark,TUG_BREEDS.husky.dark);
+});
+test("every ending pose keeps the selected coat and cosmetics without changing saved markings",()=>{
+  for(const [breed,b] of Object.entries(TUG_BREEDS))for(const coat of tugCoats(breed)){
+    const pet=normalizeTugPet(b.side,{breed,coat:coat.id,name:"Peanut",hat:"cap",eyewear:"round",bandanaColor:"#668899",coatColor:"#aabbcc",secondaryColor:"#ddeeff",patternColor:"#445566",markings:petPattern(b.side,"splotches","#664422")});
+    const saved=JSON.stringify(pet),poses=["win","sad"].map(pose=>endingAppearance(pet,pose));
+    for(const posed of poses){
+      for(const key of ["breed","coat","name","hat","eyewear","bandanaColor","coatColor","secondaryColor","patternColor"])assert.equal(posed[key],pet[key]);
+      assert.ok(existsSync(new URL("../"+endingSource(posed),import.meta.url)));
+      assert.equal(posed.markings.length,pet.markings.length);assert.notEqual(posed.markings,pet.markings);
+      posed.markings.forEach((m,i)=>{assert.equal(m.color,pet.markings[i].color);assert.ok(m.x>=0&&m.x<=1&&m.y>=0&&m.y<=1&&m.size>0);});
+      const rig=endingRig(posed);for(const point of [...rig.eyes,rig.nose,rig.hat,rig.neck])assert.ok(point[0]>0&&point[0]<1&&point[1]>0&&point[1]<1);
+    }
+    assert.notDeepEqual(endingRig(poses[0]).eyes,endingRig(poses[1]).eyes);
+    assert.equal(JSON.stringify(pet),saved);
+  }
 });

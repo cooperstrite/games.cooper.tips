@@ -10,8 +10,7 @@ import { tugCoat } from "../cats-dogs-customization.js";
 export function studioCharacter(gameId, appearance) {
   if (gameId === "catsdogs") {
     const breed=tugCoat(appearance),tint=appearance.coatColor;
-    const shade=(hex,scale)=>"#"+[1,3,5].map(i=>Math.min(255,Math.round(parseInt(hex.slice(i,i+2),16)*scale)).toString(16).padStart(2,"0")).join("");
-    return new CharacterBuilder(gameId,appearance.breed).withColors({body:tint||breed.coat,belly:tint?shade(tint,1.16):breed.light,dark:tint?shade(tint,.58):breed.dark,eyes:breed.eyes,accessory:appearance.accent}).withFeature("hat",appearance.hat).withFeature("eyewear",appearance.eyewear).withFeature("charm",appearance.charm).withMarkings(appearance.markings||[]).build();
+    return new CharacterBuilder(gameId,appearance.breed).withColors({body:tint||breed.coat,belly:appearance.secondaryColor||breed.light,dark:appearance.patternColor||breed.dark,eyes:breed.eyes,accessory:appearance.accent,bandana:appearance.bandanaColor||(breed.side==="cats"?"#cf7455":"#428e96")}).withFeature("hat",appearance.hat).withFeature("eyewear",appearance.eyewear).withFeature("charm",appearance.charm).withMarkings(appearance.markings||[]).build();
   }
   if (gameId === "redlight") return runnerCharacter(appearance);
   const key = { flappy: appearance.bird, archery: appearance.avatarStyle, snake: appearance.skin, neondrift: appearance.car }[gameId];

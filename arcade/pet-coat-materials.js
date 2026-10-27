@@ -1,4 +1,5 @@
 import { tracePetPatch } from "../cats-dogs-coat.js";
+import { furVariation } from "../cats-dogs-fur.js";
 
 // Project the same saved sprite-space markings onto corresponding body parts.
 // Projection wraps to both sides; eyes, mouth, nose and clothing use separate materials.
@@ -21,7 +22,9 @@ export function paintPetMesh(world,root,character,cat) {
     const color=mesh.material.albedoColor.toHexString();
     if(!materials.has(color)){
       const texture=new B.DynamicTexture(`pet-markings-${color}`,{width:768,height:768},scene,true),c=texture.getContext();c.fillStyle=color;c.fillRect(0,0,768,768);
-      for(const spot of character.markings){tracePetPatch(c,spot,768);c.fillStyle=spot.color;c.fill();}texture.update(true);texture.wrapU=texture.wrapV=B.Texture.CLAMP_ADDRESSMODE;texture.anisotropicFilteringLevel=4;textures.push(texture);
+      for(const spot of character.markings){tracePetPatch(c,spot,768);c.fillStyle=spot.color;c.fill();}
+      const pixels=c.getImageData(0,0,768,768);for(let i=0;i<pixels.data.length;i+=4){const k=i/4,v=furVariation(k%768,Math.floor(k/768));for(let ch=0;ch<3;ch++)pixels.data[i+ch]=pixels.data[i+ch]*v.shade+v.warmth*[1,.25,-.65][ch];}c.putImageData(pixels,0,0);
+      texture.update(true);texture.wrapU=texture.wrapV=B.Texture.CLAMP_ADDRESSMODE;texture.anisotropicFilteringLevel=4;textures.push(texture);
       const mat=new B.PBRMaterial(`pet-painted-${color}`,scene);mat.albedoTexture=texture;mat.albedoColor=B.Color3.White();mat.roughness=.9;mat.metallic=0;materials.set(color,mat);
     }
     mesh.computeWorldMatrix(true);const positions=mesh.getVerticesData(B.VertexBuffer.PositionKind),coords=[];

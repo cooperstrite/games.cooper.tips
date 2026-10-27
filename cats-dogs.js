@@ -2,6 +2,7 @@ import { OPPONENT_LEVELS } from "./arcade/opponents.js";
 import { TUG_ARENAS, TUG_MATCH_RULES, TUG_GADGETS, createTugMatch, startTugMatch, nextTugRound, queueTugPull, queueTugGadget, createTugComputer, tickTugMatch, tugSecondsLeft, tugPeriod, tugTarget } from "./cats-dogs-engine.js";
 import { createTugRenderer } from "./cats-dogs-renderer.js";
 import { createTugAudio } from "./cats-dogs-audio.js";
+import { tugPresentation } from "./cats-dogs-ending.js";
 import { readTugWardrobe, TUG_REWARDS } from "./cats-dogs-customization.js";
 import { createTugStudio } from "./cats-dogs-studio.js";
 import { createRewardSession, mountGameWallet } from "./arcade/game-services.js";
@@ -35,6 +36,8 @@ export function createCatsDogs(root, { editorOnly = false, onAppearanceChange } 
   <section class="cd-instructions"><div><p class="cd-eyebrow">THE GAME PLAN</p><h4>Timing beats tiny tantrums.</h4><p>Reach your flag or lead after 24 beats. Win two rounds to take the cup. A championship lasts no more than three rounds.</p></div><ol><li><b>Catch the gold.</b> Tap your team's button when the marker crosses gold. The thin gold zone moves between beats, and the beat speeds up. A hit nearer its center pulls harder, even against another perfect hit. Mint still gives a good pull. Each team gets one try per beat.</li><li><b>Take a breather.</b> Pulling uses 20 stamina and gives 8 back. Skip a beat to recover <span class="cd-rest-amount">30</span>. Below 20, your pull is much weaker. Resting keeps your combo.</li><li><b>Make it super.</b> Three perfect pulls charge your paw meter. Your next perfect pull has double power. An off-beat or good pull resets the combo.</li><li><b>Make a little mischief.</b> Each team gets 2 devices per round. Mud weakens their pulls for 2 beats by 35%; a squeaky toy takes 22 stamina. Attacks give a full beat of warning. Use a shield during that warning to block the attack, clear mud, and protect yourself for 3 beats. Devices are free, with one device in flight at a time.</li><li><b>Break a tie.</b> An exactly tied round ends with a final pull. Wait for GO, then be the first to pull. An early pull loses the round. If neither team reacts within 3 seconds, the round ends without a point; it never repeats forever.</li></ol><p class="cd-key-note"></p><p class="cd-record"></p></section>`;
   root.append(wrapper);
   const $=selector=>wrapper.querySelector(selector), $$=selector=>[...wrapper.querySelectorAll(selector)];
+  const skip=document.createElement("button");skip.type="button";skip.className="cd-ending-skip";skip.textContent="Show result";skip.hidden=true;$(".cd-stage").append(skip);
+  const resultPanel=document.createElement("section");resultPanel.className="cd-ending-result";resultPanel.hidden=true;resultPanel.setAttribute("aria-label","Match result");resultPanel.innerHTML='<div><p class="cd-result-kicker"></p><h4 class="cd-result-title"></h4><p class="cd-result-detail"></p></div><button type="button" class="cd-replay">Play another match</button>';$(".cd-stage").after(resultPanel);
   $(".cd-match").setAttribute("aria-live","off");
   const on=(node,event,fn)=>node.addEventListener(event,fn,{signal:events.signal});
   const renderer=createTugRenderer($("canvas"),{reducedMotion:reduced.matches,wardrobe});
@@ -77,8 +80,10 @@ export function createCatsDogs(root, { editorOnly = false, onAppearanceChange } 
       panel.querySelectorAll("[data-gadget]").forEach(b=>b.disabled=!playing||!human||!pet.charges||!!pet.gadget||!!pet.incoming);
       const feedback=panel.querySelector(".cd-feedback");feedback.textContent=pet.feedback;feedback.dataset.kind=pet.feedbackKind;
     }
-    $(".cd-pause").disabled=!["countdown","playing","showdown"].includes(state.phase);text(".cd-pause",state.paused?"Resume":"Pause");
-    const overlay=$(".cd-stage-overlay");overlay.hidden=playing;overlay.dataset.kind=state.paused?"paused":state.phase;
+    $(".cd-pause").disabled=!["countdown","playing","showdown","matchEnd"].includes(state.phase);text(".cd-pause",state.paused?"Resume":"Pause");
+    const ending=state.phase==="matchEnd",presentation=tugPresentation(state);
+    wrapper.dataset.result=ending?presentation.kind:"";resultPanel.hidden=!ending||!renderer.endingComplete||state.paused;skip.hidden=!ending||renderer.endingComplete||state.paused;
+    const overlay=$(".cd-stage-overlay");overlay.hidden=playing||ending&&!state.paused;overlay.dataset.kind=state.paused?"paused":state.phase;
     $(".cd-main-action").hidden=["countdown","showdown"].includes(state.phase)&&!state.paused;$(".cd-main-action").disabled=!loaded;
     if(state.paused) {text(".cd-overlay-kicker","PAWS FOR A MOMENT");text(".cd-overlay-title","Take a breather.");text(".cd-overlay-detail","The rope, rhythm, and computer are paused.");text(".cd-main-action","Resume match");}
     else if(state.phase==="ready") {text(".cd-overlay-kicker","A FRIENDLY LITTLE SHOWDOWN");text(".cd-overlay-title","Who rules the park?");text(".cd-overlay-detail","Catch the gold. Save your stamina. First to two wins.");text(".cd-main-action",loaded?"Start match":"Getting the park ready...");}
@@ -90,6 +95,11 @@ export function createCatsDogs(root, { editorOnly = false, onAppearanceChange } 
       text(".cd-overlay-title",winner?`${names[winner]} ${match?"wins the cup!":"takes the round!"}`:"An even match!");
       const score=`${state.scores.cats} - ${state.scores.dogs}`;
       text(".cd-overlay-detail",match&&winner?`${score} / ${state.totals[winner].perfect} perfect pulls and ${state.totals[winner].bursts} super pulls.`:winner?`${score}. ${state.finishReason}. Fresh stamina and devices next round.`:match?"No contest. Three rounds complete. No more overtime.":`${state.finishReason}. No point awarded; one round used.`);text(".cd-main-action",match?"Play another match":"Next round");
+      if(match){
+        text(".cd-result-kicker",presentation.kind==="lose"?"YOU LOST THIS MATCH":winner?"CHAMPIONSHIP COMPLETE":"MATCH COMPLETE");
+        text(".cd-result-title",presentation.kind==="lose"?`${names[winner]} took the cup.`:winner?`${names[winner]} wins the cup!`:"An even match!");
+        text(".cd-result-detail",$(".cd-overlay-detail").textContent+(presentation.kind==="lose"?" Rest a beat to rebuild stamina, then try for a comeback.":""));
+      }
     }
   }
   function process(outcomes) {
@@ -101,7 +111,7 @@ export function createCatsDogs(root, { editorOnly = false, onAppearanceChange } 
       if(event.type==="go") {audio.play("burst");say("GO! First pull wins the round!");}
       if(event.type==="start") say("Go! Tap once in the gold zone, or skip a beat to rest.");
       if(event.type==="finish") {
-        const victory=event.winner&&(state.mode==="local"||event.winner===state.team);audio.play(victory?"win":"lose");
+        const victory=event.winner&&(state.mode==="local"||event.winner===state.team);audio.play(event.match?(event.winner?victory?"matchWin":"matchLose":"draw"):victory?"win":"lose");
         if(event.match&&!paid){paid=true;const current=reward,progress={mode:state.mode,difficulty:state.difficulty,finished:true,won:state.winner===state.team,roundsWon:state.scores[state.team],pulls:state.totals[state.team].pulls};current.award(progress).then(result=>{if(!disposed&&reward===current)text(".cd-earned",result.coins?`+${result.coins} coins banked in your shared wallet.`:state.mode==="local"?"Friendly match / no coins earned.":"No coins earned this match. Win a round and finish the match to earn coins.");}).catch(()=>{if(!disposed&&reward===current)text(".cd-earned","Your browser could not save the coin reward.");});}
         if(event.match&&state.mode==="ai"&&event.winner===state.team){wins++;configure();}
         say(event.winner?`${names[event.winner]} ${event.match?"wins the championship":"wins the round"}. ${state.scores.cats} to ${state.scores.dogs}.`:state.phase==="matchEnd"?"Match complete. No contest.":"No point awarded. Continue to the next round.");
@@ -114,7 +124,7 @@ export function createCatsDogs(root, { editorOnly = false, onAppearanceChange } 
     if(state.phase==="playing"&&!state.paused&&state.beatTime/tugPeriod(state)>=tugTarget(state)-TUG_MATCH_RULES.perfectWindow&&beatCue!==state.beat){audio.play("beat");beatCue=state.beat;}
     return dt;
   }
-  function loop(now){if(disposed)return;const dt=advance(now);update();renderer.draw(state,dt);frame=requestAnimationFrame(loop);}
+  function loop(now){if(disposed)return;const dt=advance(now);renderer.draw(state,dt);update();frame=requestAnimationFrame(loop);}
   function pull(side) {
     if(state.mode==="ai"&&side!==state.team)return;
     audio.unlock();advance(performance.now());const outcome=queueTugPull(state,side);
@@ -123,10 +133,12 @@ export function createCatsDogs(root, { editorOnly = false, onAppearanceChange } 
     update();
   }
   function gadget(side,id){if(state.mode==="ai"&&side!==state.team)return;audio.unlock();advance(performance.now());if(queueTugGadget(state,side,id))process([{type:"gadget",side,gadget:id}]);update();}
-  function pause(value=!state.paused){if(!["countdown","playing","showdown"].includes(state.phase))return;state.paused=value;last=performance.now();audio.stop();update();say(value?"Match paused.":"Match resumed.");}
+  function pause(value=!state.paused){if(!["countdown","playing","showdown","matchEnd"].includes(state.phase))return;state.paused=value;last=performance.now();audio.stop();update();say(value?"Match paused.":"Match resumed.");}
   function reset(changes={}) { audio.stop();state=createTugMatch({...state,...changes});reward=createRewardSession("catsdogs");paid=false;text(".cd-earned","");computer=createTugComputer({difficulty:state.difficulty});beatCue=-1;last=performance.now();configure();update();say("Choose your team and arena, then start the match."); }
   on($(".cd-main-action"),"click",()=>{audio.unlock();if(state.paused)pause(false);else if(state.phase==="roundEnd")nextTugRound(state);else{if(state.phase==="matchEnd")reset();startTugMatch(state);}last=performance.now();beatCue=-1;update();$(".cd-match").scrollIntoView({block:"start",behavior:"instant"});});
   on($(".cd-pause"),"click",()=>{audio.unlock();pause();});on($(".cd-reset"),"click",()=>reset());
+  on(skip,"click",()=>{renderer.skipEnding();renderer.draw(state,0);update();$(".cd-replay").focus({preventScroll:true});});
+  on($(".cd-replay"),"click",()=>$(".cd-main-action").click());
   on($(".cd-mode"),"change",e=>reset({mode:e.target.value}));on($(".cd-team"),"change",e=>reset({team:e.target.value}));on($(".cd-difficulty"),"change",e=>reset({difficulty:e.target.value}));
   $$('[data-arena]').forEach(b=>on(b,"click",()=>reset({arena:b.dataset.arena})));
   $$('[data-pull]').forEach(b=>{on(b,"pointerdown",e=>{if(e.button>0||b.disabled)return;e.preventDefault();pull(b.dataset.pull);});on(b,"click",e=>{if(e.detail===0)pull(b.dataset.pull);});});

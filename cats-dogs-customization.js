@@ -55,7 +55,8 @@ export function normalizeTugPet(side, raw = {}, owned = []) {
   const breed = Object.hasOwn(TUG_BREEDS, raw.breed) && TUG_BREEDS[raw.breed].side === side ? raw.breed : side === "cats" ? "tabby" : "golden";
   const pet = { breed, name: typeof raw.name === "string" ? raw.name.replace(/[\x00-\x1f<>]/g, "").trim().slice(0, 20) : "", accent: /^#[0-9a-f]{6}$/i.test(raw.accent) ? raw.accent : side === "cats" ? "#cf7455" : "#428e96" };
   const coats=tugCoats(breed);pet.coat=coats.some(c=>c.id===raw.coat)?raw.coat:coats[0].id;
-  pet.coatColor=petHex(raw.coatColor);pet.markings=normalizePetMarkings(raw.markings);
+  for(const key of ["coatColor","secondaryColor","patternColor","bandanaColor"])pet[key]=petHex(raw[key]);
+  pet.markings=normalizePetMarkings(raw.markings);
   if (!pet.name) pet.name = side === "cats" ? "Whiskers" : "Woof";
   for (const [slot, choices] of Object.entries(TUG_ACCESSORIES)) pet[slot] = Object.hasOwn(choices, raw[slot]) && tugItemAvailable(slot, raw[slot], owned) ? raw[slot] : "none";
   return pet;

@@ -1,8 +1,9 @@
-import { petRig, tracePetEye, tracePetMouth } from "./cats-dogs-pet-rig.js";
+import { petRig, tracePetEye } from "./cats-dogs-pet-rig.js";
 
 const mouths=new Map(),lids=new WeakMap();
 export function preparePetExpression(pet){
-  const id=petRig(pet).cat?"cat":"dog";if(!mouths.has(id)){
+  if(!petRig(pet).cat)return Promise.resolve(true);
+  const id="cat";if(!mouths.has(id)){
     const entry={image:null,bounds:null};entry.ready=new Promise(resolve=>{const im=new Image();im.onload=()=>{
       const cv=document.createElement("canvas");cv.width=im.width;cv.height=im.height;const c=cv.getContext("2d",{willReadFrequently:true});c.drawImage(im,0,0);const data=c.getImageData(0,0,cv.width,cv.height).data;let x0=cv.width,y0=cv.height,x1=0,y1=0;
       for(let y=0;y<cv.height;y++)for(let x=0;x<cv.width;x++)if(data[(y*cv.width+x)*4+3]>100){x0=Math.min(x0,x);x1=Math.max(x1,x);y0=Math.min(y0,y);y1=Math.max(y1,y);}entry.image=im;entry.bounds=[x0,y0,x1-x0+1,y1-y0+1];resolve(im);
@@ -31,11 +32,10 @@ export function drawPetExpression(c,pet,sprite,{time=0,effort=0,energy=100,reduc
       c.strokeStyle="#3b2935";c.lineWidth=.0015;c.globalAlpha=.65*squint;c.beginPath();c.moveTo(x-rx,y+ry*.15);c.quadraticCurveTo(x,y+ry*.42,x+rx,y-ry*.12);c.stroke();c.restore();
     });
   }
-  const mouth=mouths.get(rig.cat?"cat":"dog");
-  if(strength>.18&&mouth?.image){
-    const [x,y,rx]=rig.mouth;c.save();c.globalAlpha=Math.min(1,(strength-.18)*2.4);
-    if(!rig.cat){tracePetMouth(c,rig);c.clip();c.drawImage(mouth.image,...mouth.bounds,x-rx*1.08,y-.032,rx*2.16,.065);}
-    else c.drawImage(mouth.image,...mouth.bounds,x-.036,y-.010,.068,.025);
+  const mouth=mouths.get("cat");
+  if(rig.cat&&strength>.18&&mouth?.image){
+    const [x,y]=rig.mouth;c.save();c.globalAlpha=Math.min(1,(strength-.18)*2.4);
+    c.drawImage(mouth.image,...mouth.bounds,x-.036,y-.010,.068,.025);
     c.restore();
   }
 }

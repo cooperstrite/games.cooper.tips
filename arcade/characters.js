@@ -37,7 +37,7 @@ const SLOTS = {
   runner: { build: ["lean", "athletic", "strong"], hair: ["short", "bob", "ponytail", "braids", "curls", "bun", "bald"], facialHair: ["none", "stubble", "mustache", "goatee", "beard"], headwear: ["none", "headband", "cap"], eyewear: ["none", "glasses", "sunglasses"], wristwear: ["none", "watch", "bands"] },
 };
 const COLOR_SLOTS = {
-  pet: ["body", "belly", "dark", "eyes", "accessory"],
+  pet: ["body", "belly", "dark", "eyes", "accessory", "bandana"],
   bird: ["body", "wing", "belly", "beak", "accessory", "trail"],
   humanoid: ["body", "skin", "hair", "eyes", "accessory", "facialHair", "headwear", "boots", "bow", "grip", "arrow"],
   snake: ["body", "belly", "accessory", "dark"], vehicle: ["body", "accessory", "light", "dark"],

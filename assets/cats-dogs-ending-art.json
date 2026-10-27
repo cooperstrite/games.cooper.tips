@@ -1,0 +1,9 @@
+{
+  "mode": "built-in image generation",
+  "assets": [
+    {
+      "file": "cats-dogs-champion-cup.png",
+      "prompt": "Use case: stylized-concept. Create a single transparent game sprite: an exquisitely detailed golden championship trophy for a polished pet tug-of-war game. A classic two-handled cup with a raised paw-print emblem, delicate laurel engraving around the bowl, convincing polished and brushed gold, tiny surface scratches, natural metal reflections, warm sunlight from upper left. Cup on a compact dark forest-green stone plinth, a blank small gold nameplate. Three-quarter front view, seen just slightly from above, symmetric handles. Softly realistic high-end 3D animated-film style, matching detailed fluffy cats and dogs in a sunny park. Whole object centered with transparent margins on all sides; cup occupies 80 percent of the square. No animal, no text, no letters, no confetti, no surrounding scene, no ground plane, no cast shadow. True transparent alpha background. Beautiful solid volume and believable materials, not a flat vector icon."
+    }
+  ]
+}

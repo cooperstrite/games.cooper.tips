@@ -26,6 +26,9 @@ export function createTugAudio() {
       if (kind === "pull") { tone(185, .12, .06, "triangle", 0, 92); return; }
       if (kind === "perfect") { tone(660, .12, .055); tone(990, .16, .04, "sine", .045); return; }
       if (kind === "burst") { [523,659,784,1046].forEach((f,i) => tone(f,.22,.045,"triangle",i*.055)); return; }
+      if (kind === "matchWin") { [392,523,659,784,1046].forEach((f,i)=>tone(f,.48,.055,"triangle",i*.16));[523,659,784,1046].forEach((f,i)=>{tone(f,1.35,.022,"sine",1.6+i*.04);tone(f*2,.7,.014,"sine",1.66+i*.08);});return; }
+      if (kind === "matchLose") { [392,349,311,261].forEach((f,i)=>tone(f,.6,.042,"sine",i*.25));[261,311,392].forEach(f=>tone(f,1.1,.015,"triangle",1.35));return; }
+      if (kind === "draw") { [392,440,392].forEach((f,i)=>tone(f,.3,.035,"sine",i*.2));return; }
       if (kind === "win") { [523,659,784,1046,784,1046].forEach((f,i) => tone(f,.27,.075,"triangle",i*.14)); return; }
       if (kind === "lose") { [440,370,294].forEach((f,i) => tone(f,.25,.055,"triangle",i*.16)); return; }
       tone(330,.1,.04,"triangle");

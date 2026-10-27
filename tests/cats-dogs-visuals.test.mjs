@@ -2,6 +2,10 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { TugGroundEffects } from "../cats-dogs-ground-effects.js";
 import { petBlink } from "../cats-dogs-expressions.js";
+import { tugPresentation } from "../cats-dogs-ending.js";
+import { petEarMotion } from "../cats-dogs-ears.js";
+import { furVariation } from "../cats-dogs-fur.js";
+import { dogEarPose } from "../cats-dogs-dog-ears.js";
 const paws=[{x:200,y:550},{x:420,y:550}];
 
 test("only actual pulls wear the ground, with stronger pulls disturbing more terrain",()=>{
@@ -24,4 +28,33 @@ test("reduced motion keeps the result of a pull without airborne debris; blink s
   let catBlinks=0,dogBlinks=0,different=false;
   for(let t=0;t<20;t+=.02){const a=petBlink(t,"cats"),b=petBlink(t,"dogs");assert.ok(a>=0&&a<=1&&b>=0&&b<=1);if(a>.5)catBlinks++;if(b>.5)dogBlinks++;if(Math.abs(a-b)>.5)different=true;}
   assert.ok(catBlinks>0&&dogBlinks>0&&different);
+});
+test("the match ending follows the human result in computer games and the winning animal in local games",()=>{
+  for(const team of ["cats","dogs"])for(const winner of ["cats","dogs"]){
+    const ai=tugPresentation({mode:"ai",team,winner});assert.equal(ai.kind,team===winner?"win":"lose");assert.equal(ai.featured,winner);assert.equal(ai.winner,winner);assert.notEqual(ai.loser,winner);
+    const local=tugPresentation({mode:"local",team,winner});assert.equal(local.kind,"win");assert.equal(local.featured,winner);
+  }
+  for(const mode of ["ai","local"])assert.deepEqual(tugPresentation({mode,team:"cats",winner:null}),{kind:"draw",winner:null,featured:null,loser:null});
+});
+test("ear animation and fur texture stay deterministic and do not need gameplay randomness",()=>{
+  for(let i=0;i<200;i++){
+    const v=furVariation(i,i*3);assert.deepEqual(furVariation(i,i*3),v);assert.ok(v.shade>.85&&v.shade<1.15);assert.ok(Math.abs(v.warmth)<=6);
+    assert.equal(petEarMotion(i/20,"cats",.8),petEarMotion(i/20,"cats",.8));
+    assert.ok(Number.isFinite(petEarMotion(i/20,"dogs",.8,"lose")));
+  }
+  assert.notEqual(petEarMotion(.3,"cats"),petEarMotion(.3,"dogs"));
+});
+test("both dog ears have independent, bounded listening and pulling motion for floppy and pointed breeds",()=>{
+  for(const breed of ["golden","labrador","pitbull","corgi","husky"]){
+    let independent=false,reacts=false;
+    for(let t=0;t<14;t+=.1){
+      const near=dogEarPose(t,breed,1),far=dogEarPose(t,breed,0),pull=dogEarPose(t,breed,1,1);
+      assert.deepEqual(near,dogEarPose(t,breed,1));
+      for(const pose of [near,far,pull]){assert.ok(Math.abs(pose.angle)<.6);assert.ok(Math.abs(pose.fold)<.7);assert.ok(pose.turn>=.9&&pose.turn<=1);}
+      independent ||= Math.abs(near.angle-far.angle)>.05;
+      reacts ||= Math.abs(near.fold-pull.fold)>.1;
+    }
+    assert.ok(independent&&reacts);
+  }
+  assert.notDeepEqual(dogEarPose(1,"labrador",1,1),dogEarPose(1,"corgi",1,1));
 });
