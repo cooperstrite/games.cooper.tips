@@ -94,7 +94,8 @@ export function createCatsDogs(root, { editorOnly = false, onAppearanceChange } 
   }
   function process(outcomes) {
     for(const event of outcomes) {
-      if(event.type==="beat") { renderer.hit();audio.beat(state.beat);beatCue=-1; }
+      if(event.type==="beat") { renderer.hit(event,state);audio.beat(state.beat);beatCue=-1; }
+      if(event.type==="pull") renderer.pull(event.side,event.power);
       if(event.type==="gadget") {audio.play("gadget");say(`${names[event.side]} prepared ${TUG_GADGETS[event.gadget].name}.`);}
       if(event.type==="showdown") say("Exact tie! Final pull: wait for GO. Pulling early loses.");
       if(event.type==="go") {audio.play("burst");say("GO! First pull wins the round!");}
@@ -118,7 +119,7 @@ export function createCatsDogs(root, { editorOnly = false, onAppearanceChange } 
     if(state.mode==="ai"&&side!==state.team)return;
     audio.unlock();advance(performance.now());const outcome=queueTugPull(state,side);
     if(outcome.type==="pull"){audio.play(outcome.burst?"burst":outcome.quality==="perfect"?"perfect":"pull");say(`${names[side]}: ${state.sides[side].feedback}. Pull locked in for this beat.`);}
-    if(outcome.type==="finish")process([outcome]);
+    if(outcome.type==="finish"||outcome.type==="pull")process([outcome]);
     update();
   }
   function gadget(side,id){if(state.mode==="ai"&&side!==state.team)return;audio.unlock();advance(performance.now());if(queueTugGadget(state,side,id))process([{type:"gadget",side,gadget:id}]);update();}

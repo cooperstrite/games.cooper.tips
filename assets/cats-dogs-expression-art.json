@@ -1,0 +1,15 @@
+{
+  "mode": "built-in image generation",
+  "assets": [
+    {
+      "file": "cats-dogs-grit-cat.png",
+      "reference": "cats-dogs-cat-v2.png",
+      "prompt": "Use case: stylized-concept. Asset type: transparent mouth-expression overlay for the provided cat (reference for style and viewing angle only). Draw ONLY a tiny friendly determined gritted-teeth smile: two rows of softly ivory cat teeth touching, two subtle little canines, fine warm pink-brown lip edge, realistic polished 3D animation shading. Three-quarter view facing right. A narrow curved horizontal smile, left side nearer and right side receding; gently slopes up on the right. No face, no nose, no whiskers, no fur, no eyes, no tongue, no background, no shadow outside the mouth, no text. This is an isolated sprite to place on an existing pet's muzzle while it pulls hard. Cute effort, not angry or frightening. Genuine alpha transparency."
+    },
+    {
+      "file": "cats-dogs-grit-dog.png",
+      "reference": "cats-dogs-dog-v2.png",
+      "prompt": "Use case: stylized-concept. Asset type: transparent mouth-expression overlay for the provided dog (reference for style and viewing angle only). Draw ONLY a friendly determined gritted-teeth dog smile: upper and lower ivory teeth clenched together with small canine teeth, thin naturally shaded dark-brown lip edge, faint pink gums, polished detailed 3D animation rendering. Three-quarter view facing left, right side nearer and left side receding. Narrow curved horizontal smile, gently rises toward the right corner. No face, no fur, no nose, no tongue, no eyes, no background, no shadow outside the mouth, no text. An isolated narrow mouth sprite for a pet pulling hard on a rope. Cute athletic effort, not aggression. Genuine alpha transparency."
+    }
+  ]
+}

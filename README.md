@@ -91,6 +91,8 @@ Open **Paint your own markings** to tap and drag up to 48 individual splotches, 
 
 Each source coat has measured face and accessory anchors. Fur recoloring retains the original transparency, texture, eyes, nose and bandana instead of applying a generic face cutout. The 2D accessories use detailed fabric, flower, metal and glass artwork fitted to those anchors, with adjustable colors; originals and built-in generation prompts are recorded in `assets/cats-dogs-accessory-art.json`.
 
+During matches, pets blink on independent rhythms, breathe faster when tired, lean into their pulls, narrow their eyes and briefly grit their teeth. Their expressions follow the saved breed and coat, with accessories layered over the face. Resolved pulls leave persistent paw grooves in sand or torn turf and exposed soil on grass; stronger pulls disturb more ground and throw more debris. Wear remains through the rounds of a match and clears for a new match or arena. Pause freezes the expressions and debris. Reduced motion keeps ground wear while suppressing particles, blinking, breathing and body motion. Effects use a separate random stream and never change pull strength or the computer. Expression artwork and prompts are recorded in `assets/cats-dogs-expression-art.json`.
+
 | Computer difficulty | Per round you win | Match-win bonus | Maximum per match |
 | --- | ---: | ---: | ---: |
 | Easy | 3 | 8 | 14 |

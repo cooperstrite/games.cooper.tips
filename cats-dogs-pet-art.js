@@ -1,12 +1,13 @@
 import { loadTugPet, tugCoatSprite } from "./cats-dogs-coat-renderer.js";
 import { drawPetAccessories, preparePetAccessories } from "./cats-dogs-accessory-renderer.js";
+import { drawPetExpression, preparePetExpression } from "./cats-dogs-expressions.js";
 export { loadTugPet } from "./cats-dogs-coat-renderer.js";
 
 const portraits=new WeakMap();
-export function prepareTugPet(pet){return Promise.all([loadTugPet(pet).ready,preparePetAccessories(pet)]);}
-export function drawTugPet(c,pet){
+export function prepareTugPet(pet,animate=false){return Promise.all([loadTugPet(pet).ready,preparePetAccessories(pet),animate?preparePetExpression(pet):true]).then(([image,items,expression])=>!!image&&items.every(Boolean)&&!!expression);}
+export function drawTugPet(c,pet,animation=null){
   const sprite=tugCoatSprite(pet);if(!sprite)return;
-  c.save();c.translate(-225,-420);c.scale(450,450);c.drawImage(sprite,0,0,1,1);drawPetAccessories(c,pet);c.restore();
+  c.save();c.translate(-225,-420);c.scale(450,450);c.drawImage(sprite,0,0,1,1);if(animation)drawPetExpression(c,pet,sprite,animation);drawPetAccessories(c,pet);c.restore();
 }
 export function drawTugPortrait(canvas,pet,afterPaint=null){
   const signature=JSON.stringify(pet);portraits.set(canvas,signature);

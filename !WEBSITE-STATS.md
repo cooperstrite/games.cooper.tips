@@ -2,7 +2,7 @@
 
 A little scoreboard for games.cooper.tips.
 
-**Updated:** October 26, 2026 at 08:45 PM EDT
+**Updated:** October 26, 2026 at 09:17 PM EDT
 
 **Visibility:** Project files only. This report is excluded from the published website.
 
@@ -10,31 +10,31 @@ A little scoreboard for games.cooper.tips.
 
 | Stat | Total |
 | --- | ---: |
-| Lines in our source files | **33,726** |
-| Nonblank source lines | 31,666 |
-| Source files written for this project | 165 |
-| Image files | **182** |
-| Total project files | **383** |
+| Lines in our source files | **33,857** |
+| Nonblank source lines | 31,795 |
+| Source files written for this project | 168 |
+| Image files | **184** |
+| Total project files | **389** |
 | Games | **28** |
 | Games on the main list | 25 |
 | Games in Coming Soon | 3 |
-| Test files | 24 |
-| Project size on disk | 151.6 MiB |
-| Image collection size | 113.4 MiB |
+| Test files | 25 |
+| Project size on disk | 153.1 MiB |
+| Image collection size | 114.9 MiB |
 
-At 50 lines per printed page, our source would fill **675 pages**.
+At 50 lines per printed page, our source would fill **678 pages**.
 
 ## Where the lines live
 
 | Area | Files | Lines |
 | --- | ---: | ---: |
 | Development tools | 4 | 415 |
-| Tests | 24 | 3,191 |
-| Website and games | 137 | 30,120 |
+| Tests | 25 | 3,218 |
+| Website and games | 139 | 30,224 |
 
 | Language | Files | Lines |
 | --- | ---: | ---: |
-| JavaScript | 151 | 25,965 |
+| JavaScript | 154 | 26,096 |
 | CSS | 10 | 6,014 |
 | HTML | 2 | 1,544 |
 | Python | 2 | 203 |
@@ -43,7 +43,7 @@ At 50 lines per printed page, our source would fill **675 pages**.
 
 | Format | Images |
 | --- | ---: |
-| PNG | 59 |
+| PNG | 61 |
 | WEBP | 50 |
 | SVG | 42 |
 | JPG | 30 |
@@ -63,13 +63,13 @@ At 50 lines per printed page, our source would fill **675 pages**.
 
 | Type | Files |
 | --- | ---: |
-| `.js` | 128 |
-| `.png` | 59 |
+| `.js` | 130 |
+| `.png` | 61 |
 | `.webp` | 50 |
 | `.svg` | 42 |
 | `.jpg` | 30 |
-| `.mjs` | 25 |
-| `.json` | 20 |
+| `.mjs` | 26 |
+| `.json` | 21 |
 | `.css` | 10 |
 | `.md` | 7 |
 | `.mp4` | 4 |
