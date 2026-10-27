@@ -1,0 +1,9 @@
+{
+  "mode": "built-in image generation edit",
+  "asset": "cats-dogs-cover-v3.jpg",
+  "references": [
+    "cats-dogs-cover-v2.jpg",
+    "cats-dogs-dog-v2.png"
+  ],
+  "prompt": "Use case: precise-object-edit. Image 1 is the cover artwork to edit. Image 2 is only a pose/anatomy reference for the golden retriever. Correct ONLY the dog's body and leg arrangement in image 1. The dog must have exactly FOUR limbs total: TWO front limbs with TWO paws gripping the rope, and TWO hind legs with TWO hind paws planted in the grass, in the same upright leaning-back tug stance as the reference dog. Remove every extra leg, duplicate paw, and extra belly appendage. Keep the dog's friendly face, golden fur and teal bandana. Preserve the original cover's square composition, orange cat, rope and ribbon, park scene, trophy, rich lighting, and all text EXACTLY: 'CATS VS DOGS' and 'PAW PULL CHAMPIONSHIP'. No new props or other changes. Keep the dog entirely visible with a natural four-limbed silhouette, with no extra paws behind it."
+}

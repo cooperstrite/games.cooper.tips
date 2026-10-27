@@ -2,7 +2,7 @@ import { GAME_PROFILES } from "./characters.js";
 import { createStudioPreview } from "./studio-preview.js";
 
 const STUDIOS = {
-  catsdogs: { image: "assets/cats-dogs-cover-v2.jpg", summary: "Six cat and dog breeds, names, hats, glasses, and accessories.", description: "Dress your cat and dog separately. All six breeds are free; special accessories unlock for both pets in the shared shop. Preview the original artwork or try the 3D character (Beta)." },
+  catsdogs: { image: "assets/cats-dogs-cover-v3.jpg", summary: "Cat and dog breeds, coat colors, hand-placed patches, and accessories.", description: "Ten free breeds, Labrador coat colors, flame point Siamese, and your own coat painter. Save separate names, colors, patch designs and accessories for each pet. Preview the original artwork or try the 3D character (Beta)." },
   rocket: { image: "assets/rocket-boost-cover.png", summary: "Build your rocket and customize up to three astronauts.", description: "Rocket families, stages, all vehicle parts, colors, and your crew's faces, hair, pressure suits, and equipment. Preview the whole rocket or each astronaut in 2D or 3D (Beta)." },
   flappy: { image: "assets/flappy-bird-cover.svg", summary: "Birds, dragons, accessories, colors, backgrounds, and pipes.", description: "Every bird, accessory, trail, and individual color, plus a preview of your background and pipes." },
   // The original Aurora Archery cover retains its legacy Memory Loop filename.

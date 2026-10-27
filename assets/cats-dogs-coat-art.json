@@ -1,0 +1,45 @@
+{
+  "mode": "Built-in image generation",
+  "assets": [
+    {
+      "file": "assets/cats-dogs-siamese-flame.png",
+      "reference": "assets/cats-dogs-siamese.png",
+      "prompt": "Use case: precise-object-edit. Edit the attached transparent game animal into a flame point Siamese cat: pale ivory-white fur with light warm apricot-orange points on its ears, face, paws and tail, subtle orange tabby rings on the tail, bright blue eyes and a soft pink nose. No dark brown points. Keep the same polished animated-film quality, warm soft lighting, exact canvas framing, and full-body tug-of-war pose. Preserve the locations of the outstretched front paws holding an invisible rope, planted hind paws, head center, and existing red neckerchief. Keep all ears, feet and tail inside the frame with transparent padding. The character must fit the same game sprite anchors. Change the breed/coat only. No extra props, no rope, no text. Actual transparent background."
+    },
+    {
+      "file": "assets/cats-dogs-labrador-yellow.png",
+      "reference": "assets/cats-dogs-labrador.png",
+      "prompt": "Use case: precise-object-edit. Edit the attached transparent game animal into a yellow Labrador Retriever with warm buttery pale golden-yellow short fur, naturally slightly creamier chest, amber eyes and dark nose. Keep the same polished animated-film quality, warm soft lighting, exact canvas framing, and full-body tug-of-war pose. Preserve the locations of the outstretched front paws holding an invisible rope, planted hind paws, head center, and existing teal neckerchief. Keep all ears, feet and tail inside the frame with transparent padding. The character must fit the same game sprite anchors. Change the breed/coat only. No extra props, no rope, no text. Actual transparent background."
+    },
+    {
+      "file": "assets/cats-dogs-labrador-white.png",
+      "reference": "assets/cats-dogs-labrador.png",
+      "prompt": "Use case: precise-object-edit. Edit the attached transparent game animal into a white-coated Labrador Retriever with ivory-white short fur, delicate cream shading, amber eyes and dark nose. Keep the same polished animated-film quality, warm soft lighting, exact canvas framing, and full-body tug-of-war pose. Preserve the locations of the outstretched front paws holding an invisible rope, planted hind paws, head center, and existing teal neckerchief. Keep all ears, feet and tail inside the frame with transparent padding. The character must fit the same game sprite anchors. Change the breed/coat only. No extra props, no rope, no text. Actual transparent background."
+    },
+    {
+      "file": "assets/cats-dogs-labrador-black.png",
+      "reference": "assets/cats-dogs-labrador.png",
+      "prompt": "Use case: precise-object-edit. Edit the attached transparent game animal into a black Labrador Retriever with rich glossy black short fur, subtle charcoal highlights that show the fur detail, amber eyes and black nose. Keep the same polished animated-film quality, warm soft lighting, exact canvas framing, and full-body tug-of-war pose. Preserve the locations of the outstretched front paws holding an invisible rope, planted hind paws, head center, and existing teal neckerchief. Keep all ears, feet and tail inside the frame with transparent padding. The character must fit the same game sprite anchors. Change the breed/coat only. No extra props, no rope, no text. Actual transparent background."
+    },
+    {
+      "file": "assets/cats-dogs-british.png",
+      "reference": "assets/cats-dogs-cat-v2.png",
+      "prompt": "Use case: precise-object-edit. Edit the attached transparent game animal into a white British shorthair cat with a plush dense snowy white coat, round chubby cheeks, little ears and warm copper eyes. No colored patches or stripes. Friendly and adorable. Keep the same polished animated-film quality, warm soft lighting, exact canvas framing, and full-body tug-of-war pose. Preserve the locations of the outstretched front paws holding an invisible rope, planted hind paws, head center, and existing red neckerchief. Keep all ears, feet and tail inside the frame with transparent padding. The character must fit the same game sprite anchors. Change the breed/coat only. No extra props, no rope, no text. Actual transparent background."
+    },
+    {
+      "file": "assets/cats-dogs-mainecoon.png",
+      "reference": "assets/cats-dogs-cat-v2.png",
+      "prompt": "Use case: precise-object-edit. Edit the attached transparent game animal into a majestic friendly Maine Coon cat with long fluffy brown-tabby fur, thick chest ruff, shaggy bushy tail, tufted pointed ears and green eyes. Recognizably long haired. Keep the same polished animated-film quality, warm soft lighting, exact canvas framing, and full-body tug-of-war pose. Preserve the locations of the outstretched front paws holding an invisible rope, planted hind paws, head center, and existing red neckerchief. Keep all ears, feet and tail inside the frame with transparent padding. The character must fit the same game sprite anchors. Change the breed/coat only. No extra props, no rope, no text. Actual transparent background."
+    },
+    {
+      "file": "assets/cats-dogs-corgi.png",
+      "reference": "assets/cats-dogs-dog-v2.png",
+      "prompt": "Use case: precise-object-edit. Edit the attached transparent game animal into a friendly red-and-white Welsh corgi, with huge upright triangular ears, a corgi's alert fox-like face, short stocky legs, compact body, fluffy white chest, dark eyes and red sable fur. Keep the same polished animated-film quality, warm soft lighting, exact canvas framing, and full-body tug-of-war pose. Preserve the locations of the outstretched front paws holding an invisible rope, planted hind paws, head center, and existing teal neckerchief. Keep all ears, feet and tail inside the frame with transparent padding. The character must fit the same game sprite anchors. Change the breed/coat only. No extra props, no rope, no text. Actual transparent background."
+    },
+    {
+      "file": "assets/cats-dogs-husky.png",
+      "reference": "assets/cats-dogs-dog-v2.png",
+      "prompt": "Use case: precise-object-edit. Edit the attached transparent game animal into a friendly Siberian husky with a beautiful dense silver-gray and white coat, recognizable symmetrical white husky face mask, icy blue eyes, erect triangular ears and fluffy curved tail. Keep the same polished animated-film quality, warm soft lighting, exact canvas framing, and full-body tug-of-war pose. Preserve the locations of the outstretched front paws holding an invisible rope, planted hind paws, head center, and existing teal neckerchief. Keep all ears, feet and tail inside the frame with transparent padding. The character must fit the same game sprite anchors. Change the breed/coat only. No extra props, no rope, no text. Actual transparent background."
+    }
+  ]
+}

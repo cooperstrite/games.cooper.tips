@@ -5,12 +5,13 @@ import { lightArcherStudio } from "./archer-materials.js";
 import { createFrameLoop } from "./runtime.js";
 import { createCharacterPortrait } from "./studio-2d.js";
 import { runnerCharacter } from "../redlight-appearance.js";
-import { TUG_BREEDS } from "../cats-dogs-customization.js";
+import { tugCoat } from "../cats-dogs-customization.js";
 
 export function studioCharacter(gameId, appearance) {
   if (gameId === "catsdogs") {
-    const breed=TUG_BREEDS[appearance.breed];
-    return new CharacterBuilder(gameId,appearance.breed).withColors({body:breed.coat,belly:breed.light,dark:breed.dark,eyes:breed.eyes,accessory:appearance.accent}).withFeature("hat",appearance.hat).withFeature("eyewear",appearance.eyewear).withFeature("charm",appearance.charm).build();
+    const breed=tugCoat(appearance),tint=appearance.coatColor;
+    const shade=(hex,scale)=>"#"+[1,3,5].map(i=>Math.min(255,Math.round(parseInt(hex.slice(i,i+2),16)*scale)).toString(16).padStart(2,"0")).join("");
+    return new CharacterBuilder(gameId,appearance.breed).withColors({body:tint||breed.coat,belly:tint?shade(tint,1.16):breed.light,dark:tint?shade(tint,.58):breed.dark,eyes:breed.eyes,accessory:appearance.accent}).withFeature("hat",appearance.hat).withFeature("eyewear",appearance.eyewear).withFeature("charm",appearance.charm).withMarkings(appearance.markings||[]).build();
   }
   if (gameId === "redlight") return runnerCharacter(appearance);
   const key = { flappy: appearance.bird, archery: appearance.avatarStyle, snake: appearance.skin, neondrift: appearance.car }[gameId];
@@ -107,7 +108,7 @@ export function createStudioPreview(root) {
       if (gameId !== id) focus = "body";
       gameId = id; appearance = nextAppearance;
       const next = studioCharacter(gameId, appearance), nextSignature = JSON.stringify(next), changed = signature !== nextSignature;
-      character = next; signature = nextSignature; panel.querySelector("strong").textContent = next.name; canvas.setAttribute("aria-label", `3D ${next.name} (Beta), with all your selected colors, features, accessories, and equipment`);
+      character = next; signature = nextSignature; panel.querySelector("strong").textContent = gameId==="catsdogs"&&tugCoat(appearance).id!=="natural"?tugCoat(appearance).name:next.name; canvas.setAttribute("aria-label", `3D ${next.name} (Beta), with all your selected colors, features, accessories, and equipment`);
       panel.querySelector('[data-focus="equipment"]').hidden = gameId !== "archery";
       panel.querySelector('[data-focus="face"]').hidden = !["archery", "redlight"].includes(gameId);
       // The normalized appearance is available to accessibility/UI checks as well as the renderer.

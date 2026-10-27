@@ -1,12 +1,12 @@
 import { TUG_ARENAS, TUG_MATCH_RULES } from "./cats-dogs-engine.js";
-import { drawTugPet, loadTugPet } from "./cats-dogs-pet-art.js";
+import { drawTugPet, prepareTugPet } from "./cats-dogs-pet-art.js";
 import { normalizeTugPet } from "./cats-dogs-customization.js";
 
 export function createTugRenderer(canvas, { reducedMotion = false, wardrobe = { cats: normalizeTugPet("cats"), dogs: normalizeTugPet("dogs") } } = {}) {
   const context = canvas.getContext("2d"), images = {}, W = 1200, H = 675;
   let disposed = false, drift = 0, pulse = 0, clock = 0, victoryAge = 0, previousPhase = "ready";
   const sources = { park: "assets/cats-dogs-park-v2.jpg", beach: "assets/cats-dogs-beach-v2.jpg" };
-  const ready = Promise.all([...Object.values(wardrobe).filter(p=>p?.breed).map(p=>loadTugPet(p.breed).ready.then(Boolean)), ...Object.entries(sources).map(([key, src]) => new Promise(resolve => {
+  const ready = Promise.all([...Object.values(wardrobe).filter(p=>p?.breed).map(p=>prepareTugPet(p).then(Boolean)), ...Object.entries(sources).map(([key, src]) => new Promise(resolve => {
     const img = new Image(); img.onload = () => { if (!disposed) images[key] = img; resolve(true); }; img.onerror = () => resolve(false); img.src = src;
   }))]);
   function ellipse(x, y, rx, ry, fill) { context.fillStyle = fill; context.beginPath(); context.ellipse(x,y,rx,ry,0,0,Math.PI*2); context.fill(); }

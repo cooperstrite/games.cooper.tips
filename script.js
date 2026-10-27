@@ -6114,7 +6114,7 @@ const games = [
     name: "Cats vs Dogs",
     summary: "Catch the beat. Win the tug. Rule the park.",
     description: "Personalize your cat and dog, then fight for the park. Hit moving targets, counter sabotage, and win a best-of-three tug championship against a computer or a friend.",
-    logo: "assets/cats-dogs-cover-v2.jpg",
+    logo: "assets/cats-dogs-cover-v3.jpg",
     init: createCatsDogs,
   },
   {

@@ -1,3 +1,5 @@
+import { TUG_BREEDS } from "../cats-dogs-customization.js";
+import { normalizePetMarkings } from "../cats-dogs-coat.js";
 // Character identity and cosmetics belong here. Physics and abilities belong to games.
 export const GAME_PROFILES = Object.freeze({
   catsdogs: Object.freeze({ name: "Cats vs. Dogs", family: "pet", route: "#catsdogs" }),
@@ -10,8 +12,7 @@ export const GAME_PROFILES = Object.freeze({
 });
 
 const definitions = [
-  ["pet", "tabby", "Orange tabby"], ["pet", "siamese", "Siamese"], ["pet", "calico", "Calico"],
-  ["pet", "golden", "Golden retriever"], ["pet", "labrador", "Labrador retriever"], ["pet", "pitbull", "Pit bull"],
+  ...Object.entries(TUG_BREEDS).map(([id,breed])=>["pet",id,breed.name]),
   ["bird", "sparrow", "Sunny sparrow"], ["bird", "jay", "Blue jay"],
   ["bird", "owl", "Little owl"], ["bird", "hummingbird", "Hummingbird"],
   ["bird", "dragon", "Baby dragon"], ["bird", "phoenix", "Tiny phoenix"],
@@ -56,11 +57,12 @@ export function resolveCharacter(gameId, key) {
 }
 
 export class GameCharacter {
-  constructor(gameId, definition, colors, features) {
+  constructor(gameId, definition, colors, features, markings = []) {
     if (!definition || resolveCharacter(gameId, definition.id) !== definition) throw new TypeError("Character definition is incompatible with this game");
     this.gameId = gameId; this.id = definition.id; this.key = definition.key;
     this.name = definition.name; this.family = definition.family;
     this.colors = Object.freeze({ ...colors }); this.features = Object.freeze({ ...features });
+    if(definition.family==="pet")this.markings=Object.freeze(normalizePetMarkings(markings).map(p=>Object.freeze(p)));
     Object.freeze(this);
   }
 }
@@ -82,5 +84,9 @@ export class CharacterBuilder {
     if (!Object.hasOwn(SLOTS[this.definition.family], slot) || !SLOTS[this.definition.family][slot].includes(value)) throw new TypeError(`Invalid character feature: ${slot}`);
     this.features[slot] = value; return this;
   }
-  build() { return new GameCharacter(this.gameId, this.definition, this.colors, this.features); }
+  withMarkings(markings) {
+    if(this.definition.family!=="pet"||!Array.isArray(markings))throw new TypeError("Coat markings require a compatible pet character");
+    this.markings=normalizePetMarkings(markings);return this;
+  }
+  build() { return new GameCharacter(this.gameId, this.definition, this.colors, this.features, this.markings); }
 }
