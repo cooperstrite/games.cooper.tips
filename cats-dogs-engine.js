@@ -5,7 +5,7 @@ export const TUG_ARENAS = Object.freeze({
   beach: { name: "Sunset Sands", subtitle: "Take a breather", period: 1.8, rest: 38, backdrop: "beach", note: "A slower opening beat and extra stamina recovered when you rest." },
   moon: { name: "Firefly Grove", subtitle: "Pick up the pace", period: 1.22, rest: 30, backdrop: "park", note: "A quick beat beneath the fireflies. Watch the target move after every pull." },
 });
-export const TUG_MATCH_RULES = Object.freeze({ target: 32, beats: 24, maxRounds: 3, perfectWindow: .035, goodWindow: .13, cost: 20, recovery: 8, gadgets: 2 });
+export const TUG_MATCH_RULES = Object.freeze({ target: 32, beats: 24, maxRounds: 3, centerTolerance: .05, perfectWindow: .035, goodWindow: .13, cost: 20, recovery: 8, gadgets: 2 });
 export const TUG_GADGETS = Object.freeze({
   mud: { name: "Mud pie", short: "Mud", detail: "Weaken their pulls by 35% for 2 beats." },
   squeak: { name: "Squeaky toy", short: "Squeak", detail: "Take 22 stamina from the other team." },
@@ -45,8 +45,10 @@ export function queueTugGadget(s, side, gadget) {
 export function queueTugPull(s, side) {
   if (s.paused || !Object.hasOwn(s.sides, side)) return { type: "ignored" };
   if (s.phase === "showdown") {
-    const early = !s.photoGo;
-    finishRound(s, early ? other(side) : side, early ? "False start in the final pull" : "First to pull after GO");
+    if(!s.photoGo)return {type:"ignored"};
+    // A tied rope only leaves the center because somebody actually pulls it.
+    s.position=side==="cats"?-6:6;s.sides[side].pulls++;s.totals[side].pulls++;
+    finishRound(s, side, "First to pull the centered rope after GO");
     return { type: "finish", winner: s.roundWinner, match: s.phase === "matchEnd" };
   }
   if (s.phase !== "playing") return { type: "ignored" };
@@ -100,16 +102,17 @@ function resolveBeat(s) {
   for (const side of ["cats", "dogs"]) { const pet = s.sides[side]; pet.incoming = pet.gadget && pet.gadget !== "shield" ? pet.gadget : null; pet.gadget = null; }
   s.position = Math.max(-32, Math.min(32, s.position + powers.dogs - powers.cats));
   if (Math.abs(s.position) < 1e-8) s.position = 0;
+  if(s.beat+1>=TUG_MATCH_RULES.beats&&Math.abs(s.position)<=TUG_MATCH_RULES.centerTolerance)s.position=0;
   s.lastBeat = { powers, pulls, effects, position: s.position }; s.beat++; s.beatTime = 0; s.botPlan = undefined;
   if (Math.abs(s.position) >= 32 || s.beat >= TUG_MATCH_RULES.beats && s.position !== 0) finishRound(s, s.position < 0 ? "cats" : "dogs", Math.abs(s.position) >= 32 ? "Ribbon reached the flag" : "Ahead at the time limit");
-  else if (s.beat >= TUG_MATCH_RULES.beats) { s.phase = "showdown"; s.photoTime = 0; s.photoDelay = 1.5 + Math.random() * 1.6; s.photoGo = false; s.photoPlan = undefined; }
+  else if (s.beat >= TUG_MATCH_RULES.beats) { s.phase = "showdown"; s.photoTime = 0; s.photoDelay = 1.5; s.photoGo = false; s.photoPlan = undefined; }
   return s.lastBeat;
 }
 export function createTugComputer({ difficulty = "medium", random = Math.random } = {}) {
   const computer = createComputerOpponent({ difficulty, random });
   const unit = () => Math.max(0, Math.min(.99999, Number(random()) || 0));
   return {
-    photo(s) { return computer.attempt() ? s.photoDelay + ({ easy: .65, medium: .48, hard: .35, expert: .26 }[computer.level.id]) + unit() * .2 : null; },
+    photo(s) { const hesitate=computer.attempt()?0:1+unit();return s.photoDelay + ({ easy: .65, medium: .48, hard: .35, expert: .26 }[computer.level.id]) + unit() * .2 + hesitate; },
     plan(s) {
       const side = other(s.team), pet = s.sides[side], energy = pet.energy;
       let choice = computer.choose(["perfect", "good", "early", "rest"], action => action === "rest" ? (energy < 28 ? 5 : energy < 48 ? 2 : 0) : energy < 20 ? -1 : ({ perfect: 4, good: 2, early: 1 }[action]));
@@ -138,11 +141,10 @@ export function tickTugMatch(s, dt, computer = null) {
     }
     if (s.phase === "showdown") {
       if (s.photoPlan === undefined) s.photoPlan = s.mode === "ai" && computer ? computer.photo(s) : null;
-      const end = s.photoDelay + 3, next = !s.photoGo ? s.photoDelay : s.photoPlan ?? end;
+      const next = !s.photoGo ? s.photoDelay : s.photoPlan ?? Infinity;
       const step = Math.min(remaining, Math.max(0, next - s.photoTime)); s.photoTime += step; remaining -= step;
       if (!s.photoGo && s.photoTime >= s.photoDelay - 1e-8) { s.photoGo = true; events.push({ type: "go" }); }
       if (s.photoPlan !== null && s.photoTime >= s.photoPlan - 1e-8) events.push(queueTugPull(s, other(s.team)));
-      else if (s.photoTime >= end - 1e-8) { finishRound(s, null, "Neither team pulled after GO"); events.push({ type: "finish", winner: s.winner, match: s.phase === "matchEnd" }); }
       continue;
     }
     if (s.botPlan === undefined) {
@@ -162,7 +164,7 @@ export function tickTugMatch(s, dt, computer = null) {
   return events;
 }
 export function tugSecondsLeft(s) {
-  if (s.phase === "showdown") return Math.max(0, s.photoDelay + 3 - s.photoTime);
+  if (s.phase === "showdown") return Math.max(0, s.photoDelay - s.photoTime);
   let seconds = -s.beatTime;
   for (let beat = s.beat; beat < TUG_MATCH_RULES.beats; beat++) seconds += tugPeriod(s, beat);
   return Math.max(0, seconds);

@@ -28,13 +28,6 @@ export function endingRig(pet){
   };
 }
 export function endingAppearance(pet,pose){
-  return {...pet,pose,markings:(pet.markings||[]).map(mark=>{
-    const cat=["tabby","siamese","calico","british","mainecoon"].includes(pet.breed),rig=endingRig({...pet,pose}),near=rig.eyes[0];
-    let x,y,size=mark.size;
-    if(mark.y<.33){x=near[0]+(mark.x-(cat?.437:.545))*.78;y=near[1]+(mark.y-(cat?.231:.175))*.78;size*=.78;}
-    else if(pose==="sad"){x=position(.52+(mark.x-.53)*.65);y=position(.58+(mark.y-.4)*.62);size*=.72;}
-    else{x=position(.58+(mark.x-.53)*.72);y=position(.42+(mark.y-.4)*.89);size*=.82;}
-    return {...mark,x:Math.max(0,Math.min(1,x)),y:Math.max(0,Math.min(1,y)),size};
-  })};
+  return {...pet,pose,markings:(pet.markings||[]).map(mark=>({...mark}))};
 }
 export function endingSource(pet){return pet.pose?`assets/cats-dogs-ending-${Object.hasOwn(measured,pet.breed)?pet.breed:"tabby"}.png`:null;}

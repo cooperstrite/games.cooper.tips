@@ -2,6 +2,7 @@ import { TUG_BREEDS, TUG_ACCESSORIES, TUG_ITEMS, readTugWardrobe, writeTugWardro
 import { drawTugPortrait } from "./cats-dogs-pet-art.js";
 import { createCoatPainter } from "./cats-dogs-coat-painter.js";
 import { PET_COAT_SWATCHES } from "./cats-dogs-coat.js";
+import { endingAppearance } from "./cats-dogs-ending-poses.js";
 import { getArcadeWallet } from "./arcade/wallet.js";
 
 export function createTugStudio(root, onAppearanceChange) {
@@ -20,9 +21,10 @@ export function createTugStudio(root, onAppearanceChange) {
   const painter=createCoatPainter($(".cd-coat-painter-host"),{getPet:()=>wardrobe[wardrobe.selected],getSide:()=>wardrobe.selected,onChange:()=>save()});
   function notify() {
     const pet=wardrobe[wardrobe.selected],side=wardrobe.selected;
-    onAppearanceChange?.({...pet,side,portrait2D(host){const canvas=document.createElement("canvas");canvas.setAttribute("role","img");canvas.setAttribute("aria-label",`${pet.name}, your ${TUG_BREEDS[pet.breed].name}, with saved accessories`);host.append(canvas);drawTugPortrait(canvas,pet);}});
+    const saved=normalizeTugPet(side,pet,wallet.getState().owned);
+    onAppearanceChange?.({...saved,side,portrait2D(host,pose){const canvas=document.createElement("canvas");canvas.setAttribute("role","img");canvas.setAttribute("aria-label",`${saved.name}, your ${TUG_BREEDS[saved.breed].name}, ${pose==="win"?"winning":pose==="sad"?"losing":"playing"}, with your saved coat and accessories`);canvas.dataset.pose=pose==="win"||pose==="sad"?pose:"playing";canvas.dataset.appearance=JSON.stringify(saved);host.append(canvas);drawTugPortrait(canvas,pose==="win"||pose==="sad"?endingAppearance(saved,pose):saved);}});
   }
-  function save() { const ok=writeTugWardrobe(wardrobe);$(".cd-studio-save").textContent=ok?"Saved. Your cat and dog keep their own looks in every match.":"This browser could not save your look. Keep this page open to preview it.";notify(); }
+  function save() { const ok=writeTugWardrobe(wardrobe);$(".cd-studio-save").textContent=ok?"Saved for gameplay and both ending poses. Your cat and dog keep their own looks.":"This browser could not save your look. Keep this page open to preview it.";notify(); }
   function render() {
     const pet=wardrobe[wardrobe.selected],owned=wallet.getState().owned;
     wrapper.querySelectorAll("[data-pet]").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.pet===wardrobe.selected)));

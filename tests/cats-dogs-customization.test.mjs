@@ -98,7 +98,7 @@ test("every ending pose keeps the selected coat and cosmetics without changing s
     for(const posed of poses){
       for(const key of ["breed","coat","name","hat","eyewear","bandanaColor","coatColor","secondaryColor","patternColor"])assert.equal(posed[key],pet[key]);
       assert.ok(existsSync(new URL("../"+endingSource(posed),import.meta.url)));
-      assert.equal(posed.markings.length,pet.markings.length);assert.notEqual(posed.markings,pet.markings);
+      assert.deepEqual(posed.markings,pet.markings);assert.notEqual(posed.markings,pet.markings);
       posed.markings.forEach((m,i)=>{assert.equal(m.color,pet.markings[i].color);assert.ok(m.x>=0&&m.x<=1&&m.y>=0&&m.y<=1&&m.size>0);});
       const rig=endingRig(posed);for(const point of [...rig.eyes,rig.nose,rig.hat,rig.neck])assert.ok(point[0]>0&&point[0]<1&&point[1]>0&&point[1]<1);
     }

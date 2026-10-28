@@ -57,20 +57,35 @@ test("crossing a flag awards one round, and first to two wins the championship",
 test("the leading team wins at the time limit even if the flag was not reached",()=>{
   const s=playing();beat(s,["dogs"]);tickTugMatch(s,100);assert.equal(s.phase,"roundEnd");assert.equal(s.roundWinner,"dogs");assert.equal(tugSecondsLeft(s),0);
 });
-test("identical timing goes to a bounded reaction finish, never repeating overtime",()=>{
+test("identical timing keeps the rope centered until a real pull moves it to the winner",()=>{
   const s=playing({mode:"local"});for(let i=0;i<24;i++)beat(s,["cats","dogs"]);
   assert.equal(s.phase,"showdown");assert.equal(s.position,0);assert.ok(tugSecondsLeft(s)<=6.1);
   tickTugMatch(s,s.photoDelay);assert.equal(s.photoGo,true);const result=queueTugPull(s,"dogs");
   assert.equal(result.type,"finish");assert.equal(s.roundWinner,"dogs");assert.equal(s.phase,"roundEnd");
+  assert.ok(s.position>0);assert.equal(s.scores.dogs,1);
 });
-test("a false start loses the final pull, and a paused finish cannot advance",()=>{
+test("early taps and a paused tie-break cannot award either player a win",()=>{
   const s=playing({mode:"local"});tickTugMatch(s,30.6);assert.equal(s.phase,"showdown");
   s.paused=true;assert.equal(queueTugPull(s,"cats").type,"ignored");tickTugMatch(s,10);assert.equal(s.photoGo,false);
-  s.paused=false;queueTugPull(s,"cats");assert.equal(s.roundWinner,"dogs");assert.match(s.finishReason,/False start/);
+  s.paused=false;assert.equal(queueTugPull(s,"cats").type,"ignored");assert.equal(s.roundWinner,null);assert.equal(s.position,0);assert.deepEqual(s.scores,{cats:0,dogs:0});
+  tickTugMatch(s,s.photoDelay);queueTugPull(s,"cats");assert.equal(s.roundWinner,"cats");assert.ok(s.position<0);
 });
-test("an entirely idle match ends after three rounds without coins or invented points",()=>{
-  const s=playing({mode:"local"});for(let i=0;i<3;i++){tickTugMatch(s,100);if(i<2){assert.equal(s.phase,"roundEnd");nextTugRound(s);tickTugMatch(s,3);}}
-  assert.equal(s.phase,"matchEnd");assert.equal(s.round,3);assert.equal(s.winner,null);assert.deepEqual(s.scores,{cats:0,dogs:0});assert.equal(nextTugRound(s),false);
+test("an idle centered rope waits indefinitely without awarding a round or ending a match",()=>{
+  const s=playing({mode:"local"});for(let i=0;i<5;i++)tickTugMatch(s,120);
+  assert.equal(s.phase,"showdown");assert.equal(s.round,1);assert.equal(s.photoGo,true);assert.equal(s.winner,null);assert.deepEqual(s.scores,{cats:0,dogs:0});assert.equal(nextTugRound(s),false);
+  queueTugPull(s,"dogs");assert.equal(s.roundWinner,"dogs");assert.ok(s.position>0);
+});
+test("a subpixel centered finish uses the tie-break, while a visible lead still wins",()=>{
+  for(const position of [-.04,0,.04]){const s=playing({mode:"local"});s.beat=23;s.position=position;tickTugMatch(s,tugPeriod(s));assert.equal(s.phase,"showdown");assert.equal(s.position,0);assert.equal(s.roundWinner,null);}
+  for(const position of [-.2,.2]){const s=playing({mode:"local"});s.beat=23;s.position=position;tickTugMatch(s,tugPeriod(s));assert.equal(s.phase,"roundEnd");assert.equal(s.roundWinner,position<0?"cats":"dogs");}
+});
+test("computer tie-breaks use beatable reaction time and the same actual pull rule",()=>{
+  for(const difficulty of ["easy","medium","hard","expert"])for(const team of ["cats","dogs"]){
+    const bot=createTugComputer({difficulty,random:rng(10)}),s=playing({mode:"ai",difficulty,team});s.beat=23;tickTugMatch(s,tugPeriod(s));assert.equal(s.phase,"showdown");
+    tickTugMatch(s,s.photoDelay+.2,bot);assert.equal(s.roundWinner,null);queueTugPull(s,team);assert.equal(s.roundWinner,team);
+    const idle=playing({mode:"ai",difficulty,team});idle.beat=23;tickTugMatch(idle,tugPeriod(idle));tickTugMatch(idle,8,bot);
+    assert.equal(idle.roundWinner,team==="cats"?"dogs":"cats");assert.equal(idle.totals[idle.roundWinner].pulls,1);assert.ok(Math.abs(idle.position)>0);
+  }
 });
 test("pause freezes the countdown, rope, queued inputs, and computer schedule",()=>{
   const s=createTugMatch(),bot=createTugComputer({random:rng(2)});startTugMatch(s);s.paused=true;const before=JSON.stringify(s);tickTugMatch(s,50,bot);assert.equal(JSON.stringify(s),before);

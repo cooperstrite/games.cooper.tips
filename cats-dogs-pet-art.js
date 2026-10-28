@@ -5,13 +5,13 @@ import { drawPetFur } from "./cats-dogs-ears.js";
 export { loadTugPet } from "./cats-dogs-coat-renderer.js";
 
 const portraits=new WeakMap();
-export function prepareTugPet(pet,animate=false){return Promise.all([loadTugPet(pet).ready,preparePetAccessories(pet),animate?preparePetExpression(pet):true]).then(([image,items,expression])=>!!image&&items.every(Boolean)&&!!expression);}
+export function prepareTugPet(pet,animate=false){return Promise.all([loadTugPet(pet).ready,preparePetAccessories(pet),animate?preparePetExpression(pet):true,pet.pose?loadTugPet({...pet,pose:undefined}).ready:true]).then(([image,items,expression,source])=>{const ready=!!image&&items.every(Boolean)&&!!expression&&!!source;if(ready&&pet.pose)tugCoatSprite(pet);return ready;});}
 export function drawTugPet(c,pet,animation=null){
   const sprite=tugCoatSprite(pet);if(!sprite)return;
   c.save();c.translate(-225,-420);c.scale(450,450);drawPetFur(c,pet,sprite,animation);if(animation)drawPetExpression(c,pet,sprite,animation);drawPetAccessories(c,pet);c.restore();
 }
 export function drawTugPortrait(canvas,pet,afterPaint=null){
-  const signature=JSON.stringify(pet);portraits.set(canvas,signature);
+  const signature=JSON.stringify(pet);portraits.set(canvas,signature);canvas.dataset.ready="loading";
   const paint=()=>{
     if(portraits.get(canvas)!==signature)return;
     const ratio=Math.min(2,globalThis.devicePixelRatio||1);canvas.width=600*ratio;canvas.height=620*ratio;
@@ -20,7 +20,7 @@ export function drawTugPortrait(canvas,pet,afterPaint=null){
     c.fillStyle="#29433320";c.beginPath();c.ellipse(300,561,160,22,0,0,Math.PI*2);c.fill();
     c.save();c.translate(300,535);c.scale(1.12,1.12);drawTugPet(c,pet);c.restore();afterPaint?.(c);
   };
-  paint();prepareTugPet(pet).then(paint);
+  paint();prepareTugPet(pet).then(ready=>{if(portraits.get(canvas)!==signature)return;paint();canvas.dataset.ready=ready?"ready":"partial";});
 }
 export function drawTugShopPreview(canvas,item){
   const pet={breed:item.setting==="eyewear"?"labrador":"calico",hat:"none",eyewear:"none",charm:"none",accent:"#638f96",[item.setting]:item.value};
