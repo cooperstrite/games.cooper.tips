@@ -2,13 +2,16 @@ import { loadTugPet, tugCoatSprite } from "./cats-dogs-coat-renderer.js";
 import { drawPetAccessories, preparePetAccessories } from "./cats-dogs-accessory-renderer.js";
 import { drawPetExpression, preparePetExpression } from "./cats-dogs-expressions.js";
 import { drawPetFur } from "./cats-dogs-ears.js";
+import { petRig } from "./cats-dogs-pet-rig.js";
+import { petPoseLayout } from "./cats-dogs-pose-surface.js";
 export { loadTugPet } from "./cats-dogs-coat-renderer.js";
 
 const portraits=new WeakMap();
-export function prepareTugPet(pet,animate=false){return Promise.all([loadTugPet(pet).ready,preparePetAccessories(pet),animate?preparePetExpression(pet):true,pet.pose?loadTugPet({...pet,pose:undefined}).ready:true]).then(([image,items,expression,source])=>{const ready=!!image&&items.every(Boolean)&&!!expression&&!!source;if(ready&&pet.pose)tugCoatSprite(pet);return ready;});}
+export function prepareTugPet(pet,animate=false){return Promise.all([loadTugPet(pet).ready,preparePetAccessories(pet),animate?preparePetExpression(pet):true]).then(([image,items,expression])=>{const ready=!!image&&items.every(Boolean)&&!!expression;if(ready&&pet.pose)tugCoatSprite(pet);return ready;});}
 export function drawTugPet(c,pet,animation=null){
   const sprite=tugCoatSprite(pet);if(!sprite)return;
-  c.save();c.translate(-225,-420);c.scale(450,450);drawPetFur(c,pet,sprite,animation);if(animation)drawPetExpression(c,pet,sprite,animation);drawPetAccessories(c,pet);c.restore();
+  c.save();c.translate(-225,-420);c.scale(450,450);c.imageSmoothingEnabled=true;c.imageSmoothingQuality="high";drawPetFur(c,pet,sprite,animation);if(animation)drawPetExpression(c,pet,sprite,animation);
+  if(pet.pose){const original={...pet,pose:undefined};c.save();c.transform(...petPoseLayout(petRig(original),pet.pose).head);drawPetAccessories(c,original);c.restore();}else drawPetAccessories(c,pet);c.restore();
 }
 export function drawTugPortrait(canvas,pet,afterPaint=null){
   const signature=JSON.stringify(pet);portraits.set(canvas,signature);canvas.dataset.ready="loading";

@@ -6,7 +6,8 @@ import { CharacterBuilder } from "../arcade/characters.js";
 import { rewardTotal, createRewardSession } from "../arcade/game-services.js";
 import { createArcadeWallet } from "../arcade/wallet.js";
 import { studioCharacter } from "../arcade/studio-preview.js";
-import { endingAppearance, endingSource, endingRig } from "../cats-dogs-ending-poses.js";
+import { endingAppearance, endingSource } from "../cats-dogs-ending-poses.js";
+import { petRig } from "../cats-dogs-pet-rig.js";
 import { existsSync } from "node:fs";
 const storage=()=>{const v=new Map();return{getItem:k=>v.get(k)||null,setItem:(k,x)=>v.set(k,x)};};
 test("all ten breeds are free and cannot cross cat/dog teams",()=>{
@@ -100,9 +101,10 @@ test("every ending pose keeps the selected coat and cosmetics without changing s
       assert.ok(existsSync(new URL("../"+endingSource(posed),import.meta.url)));
       assert.deepEqual(posed.markings,pet.markings);assert.notEqual(posed.markings,pet.markings);
       posed.markings.forEach((m,i)=>{assert.equal(m.color,pet.markings[i].color);assert.ok(m.x>=0&&m.x<=1&&m.y>=0&&m.y<=1&&m.size>0);});
-      const rig=endingRig(posed);for(const point of [...rig.eyes,rig.nose,rig.hat,rig.neck])assert.ok(point[0]>0&&point[0]<1&&point[1]>0&&point[1]<1);
+      assert.equal(endingSource(posed),tugCoat(pet).image);
+      const rig=petRig(posed);for(const point of [...rig.eyes,rig.nose,rig.hat,rig.neck])assert.ok(point[0]>0&&point[0]<1&&point[1]>0&&point[1]<1);
     }
-    assert.notDeepEqual(endingRig(poses[0]).eyes,endingRig(poses[1]).eyes);
+    assert.notDeepEqual(petRig(poses[0]).eyes,petRig(poses[1]).eyes);
     assert.equal(JSON.stringify(pet),saved);
   }
 });

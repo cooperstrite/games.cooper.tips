@@ -1,23 +1,18 @@
 import { tugCoat } from "./cats-dogs-customization.js";
 import { tracePetPatch } from "./cats-dogs-coat.js";
 import { petRig, tracePetEye, tracePetNose, tracePetMouth } from "./cats-dogs-pet-rig.js";
-import { furZones, furVariation, furGrain, furSmooth } from "./cats-dogs-fur.js";
-import { endingSource, END_POSE_PAD, END_POSE_SCALE } from "./cats-dogs-ending-poses.js";
-import { petPoseSurface, sourceCoatPoint } from "./cats-dogs-pose-surface.js";
+import { furZones, furVariation, furGrain } from "./cats-dogs-fur.js";
+import { poseTugSprite } from "./cats-dogs-pose-surface.js";
 
-const sources=new Map(), sheets=new Map(), painted=new Map(), SIZE=1024;
-const poseMaps=new Map(), snapshots=new WeakMap();
+const sources=new Map(), painted=new Map(), SIZE=1024;
 function surface(width=SIZE,height=SIZE){const c=document.createElement("canvas");c.width=width;c.height=height;return c;}
 export function loadTugPet(appearance) {
-  const pet=typeof appearance==="string"?{breed:appearance}:appearance,coat=tugCoat(pet),src=endingSource(pet)||coat.image,key=src+(pet.pose||"");
-  if(!sources.has(key)){
+  const pet=typeof appearance==="string"?{breed:appearance}:appearance,src=tugCoat(pet).image;
+  if(!sources.has(src)){
     const entry={image:null,data:null};
-    if(pet.pose){
-      if(!sheets.has(src))sheets.set(src,new Promise(resolve=>{const image=new Image();image.onload=()=>resolve(image);image.onerror=()=>resolve(null);image.src=src;}));
-      entry.ready=sheets.get(src).then(image=>{if(!image)return null;const crop=surface(),c=crop.getContext("2d"),half=image.width/2;c.drawImage(image,pet.pose==="sad"?half:0,0,half,image.height,SIZE*END_POSE_PAD,SIZE*END_POSE_PAD,SIZE*END_POSE_SCALE,SIZE*END_POSE_SCALE);entry.image=crop;return crop;});
-    }else entry.ready=new Promise(resolve=>{const image=new Image();image.onload=()=>{entry.image=image;resolve(image);};image.onerror=()=>resolve(null);image.src=src;});sources.set(key,entry);
+    entry.ready=new Promise(resolve=>{const image=new Image();image.onload=()=>{entry.image=image;resolve(image);};image.onerror=()=>resolve(null);image.src=src;});sources.set(src,entry);
   }
-  return sources.get(key);
+  return sources.get(src);
 }
 function prepare(entry,pet) {
   if(entry.data||!entry.image)return;
@@ -26,29 +21,15 @@ function prepare(entry,pet) {
   // Keep eyes, nose, mouth and the original bandana free of coat paint.
   const rig=petRig(pet),cat=rig.cat;
   for(const eye of rig.eyes){tracePetEye(m,eye,SIZE);m.fill();}
-  let features=null;
-  if(rig.pose){
-    const face=surface(),f=face.getContext("2d",{willReadFrequently:true});
-    f.fillStyle="#ff0000";tracePetNose(f,rig,SIZE);f.fill();f.fillStyle="#00ff00";tracePetMouth(f,rig,SIZE);f.fill();
-    if(rig.pawPads){const[x,y,r]=rig.pawPads;f.fillStyle="#0000ff";for(const[dx,dy,rx,ry]of[[0,.24,.42,.35],[-.60,-.10,.20,.24],[-.30,-.50,.20,.24],[.10,-.60,.20,.24],[.48,-.35,.20,.24]]){f.beginPath();f.ellipse((x+dx*r)*SIZE,(y+dy*r)*SIZE,rx*r*SIZE,ry*r*SIZE,0,0,Math.PI*2);f.fill();}}
-    features=f.getImageData(0,0,SIZE,SIZE).data;
-  }else{tracePetNose(m,rig,SIZE);m.fill();if(!cat){tracePetMouth(m,rig,SIZE);m.fill();}}
+  tracePetNose(m,rig,SIZE);m.fill();if(!cat){tracePetMouth(m,rig,SIZE);m.fill();}
   const maskPixels=m.getImageData(0,0,SIZE,SIZE),histogram=new Uint32Array(256),band=new Uint8Array(SIZE*SIZE),zones=new Uint8Array(SIZE*SIZE*2);
   for(let i=0;i<pixels.data.length;i+=4){const r=pixels.data[i],g=pixels.data[i+1],b=pixels.data[i+2],a=pixels.data[i+3],x=(i/4%SIZE)/SIZE,y=Math.floor(i/4/SIZE)/SIZE;
     // Alpha describes the hair silhouette, not how strongly to recolor that hair.
     // Dividing it out avoids leaving the old coat color around fine fur edges.
     maskPixels.data[i+3]=a?Math.min(255,Math.round(maskPixels.data[i+3]/a*255)):0;
-    if(features?.[i+3]){
-      // Only the skin, lip, teeth and pad pigments are protected inside these
-      // measured regions. Fur beside a nose or closed mouth must still recolor.
-      const lum=r*.2126+g*.7152+b*.0722,sat=(Math.max(r,g,b)-Math.min(r,g,b))/Math.max(1,r,g,b),dark=1-furSmooth(65,125,lum),pink=furSmooth(1.12,1.38,r/Math.max(1,g))*furSmooth(.74,.92,b/Math.max(1,g));
-      const tooth=pet.pose!=="sad"&&features[i+1]?furSmooth(185,235,lum)*(1-furSmooth(.12,.24,sat)):0;
-      maskPixels.data[i+3]*=1-Math.max(dark,pink,tooth)*features[i+3]/255;
-    }
     const bx=x-(rig.neck[0]-.373),by=y-(rig.neck[1]-.394),strapBottom=bx<.45?.422-(bx-.35)*.62:.363;
     const catCloth=(bx>.27&&bx<.389&&by>.376&&by<.505)||(bx>.353&&bx<.566&&by>.32&&by<strapBottom);
-    const bounds=rig.bandanaBounds,poseCloth=bounds&&x>bounds[0]&&x<bounds[0]+bounds[2]&&y>bounds[1]&&y<bounds[1]+bounds[3];
-    const bandana=cat?(rig.pose?poseCloth:catCloth)&&r>g*1.4&&r>b*1.5&&(g-b)<(r-b)*.25&&(b-g)<(r-g)*.12:(rig.pose?poseCloth:y>rig.neck[1]-.06&&y<rig.neck[1]+.17&&x>.38&&x<.81)&&g>r*1.3&&b>r*1.25;
+    const bandana=cat?catCloth&&r>g*1.4&&r>b*1.5&&(g-b)<(r-b)*.25&&(b-g)<(r-g)*.12:(y>rig.neck[1]-.06&&y<rig.neck[1]+.17&&x>.38&&x<.81)&&g>r*1.3&&b>r*1.25;
     if(bandana){band[i/4]=maskPixels.data[i+3];maskPixels.data[i+3]=0;}
     if(maskPixels.data[i+3]>220&&a>220)histogram[Math.round(r*.2126+g*.7152+b*.0722)]++;
   }
@@ -64,66 +45,10 @@ function prepare(entry,pet) {
   entry.data={pixels: pixels.data,mask:maskPixels.data,median,band,zones,levels:sums.map((sum,i)=>Math.max(24,sum/Math.max(1,weights[i])))};
 }
 const rgb=hex=>[1,3,5].map(n=>parseInt(hex.slice(n,n+2),16));
-function nearestFur(data,rig){
-  if(data.nearest)return data.nearest;
-  const nearest=new Int32Array(SIZE*SIZE).fill(-1),queue=new Int32Array(SIZE*SIZE);let end=0;
-  const cloth=surface(),cc=cloth.getContext("2d",{willReadFrequently:true}),clothImage=cc.createImageData(SIZE,SIZE);
-  for(let k=0;k<data.band.length;k++)clothImage.data[k*4+3]=data.band[k];cc.putImageData(clothImage,0,0);
-  const expanded=surface(),ec=expanded.getContext("2d",{willReadFrequently:true});ec.filter="blur(8px)";ec.drawImage(cloth,0,0);const clothEdge=ec.getImageData(0,0,SIZE,SIZE).data;
-  for(let k=0;k<nearest.length;k++){
-    const x=k%SIZE/SIZE,y=Math.floor(k/SIZE)/SIZE,i=k*4;
-    const face=rig.eyes.some(([ex,ey,rx,ry])=>Math.hypot((x-ex)/(rx*1.7),(y-ey)/(ry*1.9))<1)||Math.hypot((x-rig.nose[0])/(rig.nose[2]*1.6),(y-rig.nose[1])/(rig.nose[3]*1.8))<1||!rig.cat&&Math.hypot((x-rig.mouth[0])/.095,(y-rig.mouth[1])/.05)<1;
-    if(data.mask[i+3]>220&&data.pixels[i+3]>220&&!clothEdge[i+3]&&!face&&y<.9){nearest[k]=i;queue[end++]=k;}
-  }
-  for(let start=0;start<end;start++){
-    const k=queue[start],x=k%SIZE;
-    for(const next of [x?k-1:-1,x<SIZE-1?k+1:-1,k-SIZE,k+SIZE])if(next>=0&&next<nearest.length&&nearest[next]===-1){nearest[next]=nearest[k];queue[end++]=next;}
-  }
-  data.nearest=nearest;return nearest;
-}
-function savedCoatPose(pet,entry){
-  const original={...pet,pose:undefined},source=loadTugPet(original),sprite=tugCoatSprite(original);
-  if(!sprite)return null;
-  const key=JSON.stringify(["saved-coat",pet.breed,pet.coat,pet.pose,pet.coatColor,pet.secondaryColor,pet.patternColor,pet.bandanaColor,pet.markings]);if(painted.has(key))return painted.get(key);
-  prepare(source,original);prepare(entry,pet);
-  if(!snapshots.has(sprite)){
-    const canvas=surface(),c=canvas.getContext("2d",{willReadFrequently:true});c.drawImage(sprite,0,0,SIZE,SIZE);const raw=c.getImageData(0,0,SIZE,SIZE).data;
-    c.clearRect(0,0,SIZE,SIZE);c.filter="blur(2px)";c.drawImage(sprite,0,0,SIZE,SIZE);const smooth=c.getImageData(0,0,SIZE,SIZE).data;
-    c.clearRect(0,0,SIZE,SIZE);c.filter="blur(.65px)";for(const mark of original.markings||[]){tracePetPatch(c,mark,SIZE);c.fillStyle="#fff";c.fill();}
-    snapshots.set(sprite,{raw,smooth,paint:c.getImageData(0,0,SIZE,SIZE).data});
-  }
-  const {raw,smooth,paint}=snapshots.get(sprite),mapKey=tugCoat(original).image+":"+pet.pose,from=source.data,to=entry.data;
-  if(!poseMaps.has(mapKey)){
-    const indices=new Int32Array(SIZE*SIZE).fill(-1),parts=new Uint8Array(SIZE*SIZE),sums=Array(7).fill(0),counts=Array(7).fill(0),surfaceMap=petPoseSurface(petRig(original),petRig(pet),pet.pose);
-    const sample=(x,y)=>((Math.max(0,Math.min(SIZE-1,Math.round(y*SIZE)))*SIZE)+Math.max(0,Math.min(SIZE-1,Math.round(x*SIZE))))*4;
-    const nearest=nearestFur(from,petRig(original));
-    for(let k=0;k<indices.length;k++){
-      const i=k*4;if(!to.pixels[i+3]||!to.mask[i+3])continue;
-      const point=sourceCoatPoint(surfaceMap,k%SIZE/SIZE,Math.floor(k/SIZE)/SIZE),at=nearest[sample(point.x,point.y)/4];
-      indices[k]=at;parts[k]=point.part;sums[point.part]+=to.pixels[i]*.2126+to.pixels[i+1]*.7152+to.pixels[i+2]*.0722;counts[point.part]++;
-    }
-    poseMaps.set(mapKey,{indices,parts,levels:sums.map((sum,i)=>sum/Math.max(1,counts[i]))});if(poseMaps.size>8)poseMaps.delete(poseMaps.keys().next().value);
-  }
-  const {indices,parts,levels}=poseMaps.get(mapKey),cloth=[0,0,0];let clothWeight=0;
-  for(let k=0;k<from.band.length;k++)if(from.band[k]){const weight=from.band[k]/255*from.pixels[k*4+3]/255;clothWeight+=weight;for(let ch=0;ch<3;ch++)cloth[ch]+=raw[k*4+ch]*weight;}
-  cloth.forEach((sum,ch)=>cloth[ch]=sum/Math.max(1,clothWeight));
-  const out=surface(),c=out.getContext("2d"),image=c.createImageData(SIZE,SIZE),tone=surface(),tc=tone.getContext("2d",{willReadFrequently:true}),toneData=tc.createImageData(SIZE,SIZE);
-  for(let k=0;k<indices.length;k++){const at=indices[k],i=k*4;if(at<0)continue;for(let ch=0;ch<3;ch++)toneData.data[i+ch]=smooth[at+ch];toneData.data[i+3]=255;}
-  tc.putImageData(toneData,0,0);c.filter="blur(4px)";c.drawImage(tone,0,0);c.filter="none";const tones=c.getImageData(0,0,SIZE,SIZE).data;
-  tc.clearRect(0,0,SIZE,SIZE);tc.filter="blur(9px)";tc.drawImage(entry.image,0,0,SIZE,SIZE);tc.filter="none";const lighting=tc.getImageData(0,0,SIZE,SIZE).data;
-  for(let k=0;k<indices.length;k++){
-    const i=k*4;if(!to.pixels[i+3])continue;
-    const at=indices[k],weight=at<0?0:to.mask[i+3]/255,band=to.band[k]/255,lum=to.pixels[i]*.2126+to.pixels[i+1]*.7152+to.pixels[i+2]*.0722;
-    const blurLum=lighting[i]*.2126+lighting[i+1]*.7152+lighting[i+2]*.0722,light=Math.max(.75,Math.min(1.23,Math.pow(lum/Math.max(1,blurLum),.7)))*Math.max(.85,Math.min(1.12,Math.pow(lum/Math.max(1,levels[parts[k]]),.15))),clothLight=Math.pow(lum/Math.max(1,to.levels[3]),.8);
-    for(let ch=0;ch<3;ch++){const patch=at<0?0:paint[at+3]/255,coat=at<0?to.pixels[i+ch]:(tones[i+ch]*(1-patch)+raw[at+ch]*patch)*light;image.data[i+ch]=(to.pixels[i+ch]*(1-weight)+coat*weight)*(1-band)+cloth[ch]*clothLight*band;}
-    image.data[i+3]=to.pixels[i+3];
-  }
-  c.putImageData(image,0,0);painted.set(key,out);if(painted.size>12)painted.delete(painted.keys().next().value);return out;
-}
 export function isTugFur(pet,x,y){const entry=loadTugPet(pet);prepare(entry,pet);const i=(Math.min(SIZE-1,Math.floor(y*SIZE))*SIZE+Math.min(SIZE-1,Math.floor(x*SIZE)))*4+3;return !!entry.data&&x>=0&&x<=1&&y>=0&&y<=1&&entry.data.mask[i]>180&&entry.data.pixels[i]>180;}
 export function tugCoatSprite(pet) {
+  if(pet.pose){const original={...pet,pose:undefined},sprite=tugCoatSprite(original),source=loadTugPet(original);if(!sprite)return null;prepare(source,original);return poseTugSprite(sprite,petRig(original),pet.pose,source.data.band);}
   const entry=loadTugPet(pet);if(!entry.image)return null;
-  if(pet.pose)return savedCoatPose(pet,entry);
   const coat=tugCoat(pet),tint=pet.coatColor||coat.tint,markings=pet.markings||[],colors=[tint,pet.secondaryColor,pet.patternColor,pet.bandanaColor];
   if(!colors.some(Boolean)&&!markings.length)return entry.image;
   const key=JSON.stringify([coat.image,pet.pose,colors,markings]);if(painted.has(key))return painted.get(key);

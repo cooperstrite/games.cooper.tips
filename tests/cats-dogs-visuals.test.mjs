@@ -6,7 +6,20 @@ import { tugPresentation } from "../cats-dogs-ending.js";
 import { petEarMotion } from "../cats-dogs-ears.js";
 import { furVariation } from "../cats-dogs-fur.js";
 import { dogEarPose } from "../cats-dogs-dog-ears.js";
+import { petRig } from "../cats-dogs-pet-rig.js";
+import { TUG_BREEDS, tugCoats } from "../cats-dogs-customization.js";
+import { petPoseLayout, poseBodyPoint } from "../cats-dogs-pose-surface.js";
 const paws=[{x:200,y:550},{x:420,y:550}];
+
+test("ending poses preserve every breed's face proportions and keep the body surface continuous",()=>{
+  for(const breed of Object.keys(TUG_BREEDS))for(const coat of tugCoats(breed))for(const pose of ["win","sad"]){
+    const source=petRig({breed,coat:coat.id}),target=petRig({breed,coat:coat.id,pose}),layout=petPoseLayout(source,pose);
+    const features=rig=>[...rig.eyes,rig.nose,rig.mouth,rig.hat,rig.neck];
+    const a=features(source),b=features(target);
+    for(let i=0;i<a.length;i++)for(let j=i+1;j<a.length;j++)assert.ok(Math.abs(Math.hypot(a[i][0]-a[j][0],a[i][1]-a[j][1])-Math.hypot(b[i][0]-b[j][0],b[i][1]-b[j][1]))<1e-12,"A pose must not enlarge eyes, shorten the muzzle or move fitted accessories relative to the face");
+    for(let x=0;x<=1;x+=.1){let previous=-Infinity;for(let y=.45;y<=.99;y+=.005){const [px,py]=poseBodyPoint(layout,x,y);assert.ok(Number.isFinite(px)&&Number.isFinite(py));assert.ok(py>previous,"The continuous body must not fold over itself");previous=py;}}
+  }
+});
 
 test("only actual pulls wear the ground, with stronger pulls disturbing more terrain",()=>{
   const weak=new TugGroundEffects(),strong=new TugGroundEffects();

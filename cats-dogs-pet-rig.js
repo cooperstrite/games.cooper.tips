@@ -19,7 +19,7 @@ export const PET_RIGS=Object.freeze({
   corgi:dog([.561,.225,.024,.023],[.487,.192,.0115,.020],[.421,.232,.029,.023],[.551,.151,.24],[.563,.397],[.479,.307,.064,.017,-.36]),
   husky:dog([.546,.210,.024,.023],[.478,.177,.0115,.020],[.412,.219,.029,.023],[.537,.139,.24],[.559,.384],[.474,.293,.064,.017,-.38]),
 });
-export function petRig(pet){return pet.pose?endingRig(pet):PET_RIGS[pet.breed+":"+pet.coat]||PET_RIGS[pet.breed]||PET_RIGS.tabby;}
+export function petRig(pet){const source=PET_RIGS[pet.breed+":"+pet.coat]||PET_RIGS[pet.breed]||PET_RIGS.tabby;return pet.pose?endingRig(pet,source):source;}
 export function tracePetEye(c,eye,scale=1){
   const[x,y,rx,ry,angle,shape]=eye;c.save();c.translate(x*scale,y*scale);c.rotate(angle);c.scale(rx*scale,ry*scale);c.beginPath();
   if(shape==="oval")c.ellipse(0,0,1,1,0,0,Math.PI*2);
