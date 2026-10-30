@@ -1,0 +1,231 @@
+[ 1569475ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/not-a-robot/:0
+[ 1569475ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[ 1600100ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/not-a-robot/:0
+[ 1600100ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[ 1630745ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/not-a-robot/:0
+[ 1630745ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[ 1661273ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/not-a-robot/:0
+[ 1661273ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[ 1665126ms] [WARNING] No client strategy found. Metrics will not be enabled. @ https://m.media-amazon.com/images/I/B11npF-s7xL.js:27
+[ 1692041ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/not-a-robot/:0
+[ 1692041ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[ 1722753ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/not-a-robot/:0
+[ 1722753ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[  745026ms] [WARNING] Mixed Content: The page at 'https://ssum-sec.casalemedia.com/usermatch?s=179394&cb=https%3A%2F%2Frtb-csync.smartadserver.com%2Fredir%2F%3Fissi%3D1%26partnerid%3D33%26partneruserid%3D&gdpr=0&gdpr_consent=' was loaded over HTTPS, but requested an insecure element 'http://rtb2-useast.delivrdsp.ai/sync?exchange=1378&r=https%3A%2F%2Fdsum-sec.casalemedia.com%2Fcrum%3Fcm_dsp_id%3D282%26external_user_id%3D%7BUID%7D&us_privacy='. This request was automatically upgraded to HTTPS, For more information see https://blog.chromium.org/2019/10/no-more-mixed-messages-about-https.html @ https://ssum-sec.casalemedia.com/usermatch?s=179394&cb=https%3A%2F%2Frtb-csync.smartadserver.com%2Fredir%2F%3Fissi%3D1%26partnerid%3D33%26partneruserid%3D&gdpr=0&gdpr_consent=:0
+[  745027ms] [WARNING] Mixed Content: The page at 'https://ssum-sec.casalemedia.com/usermatch?s=179394&cb=https%3A%2F%2Frtb-csync.smartadserver.com%2Fredir%2F%3Fissi%3D1%26partnerid%3D33%26partneruserid%3D&gdpr=0&gdpr_consent=' was loaded over HTTPS, but requested an insecure element 'http://rtb2-useast.delivrdsp.ai/sync?exchange=1378&r=https%3A%2F%2Fdsum-sec.casalemedia.com%2Fcrum%3Fcm_dsp_id%3D282%26external_user_id%3D%7BUID%7D&us_privacy='. This request was automatically upgraded to HTTPS, For more information see https://blog.chromium.org/2019/10/no-more-mixed-messages-about-https.html @ https://ssum-sec.casalemedia.com/usermatch?s=179394&cb=https%3A%2F%2Frtb-csync.smartadserver.com%2Fredir%2F%3Fissi%3D1%26partnerid%3D33%26partneruserid%3D&gdpr=0&gdpr_consent=:0
+[ 1727418ms] TypeError: Cannot read properties of undefined (reading 'setRushSimulatedLocalEvents')
+    at https://s0.2mdn.net/sadbundle/6047984976058859579/160x600/index.html?ev=01_262:2905:572
+[ 1754188ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/not-a-robot/:0
+[ 1754188ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[ 1785016ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/not-a-robot/:0
+[ 1785016ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[ 1815753ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/not-a-robot/:0
+[ 1815753ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[ 1846261ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/not-a-robot/:0
+[ 1846261ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[ 1877261ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/not-a-robot/:0
+[ 1877261ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[ 1908401ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/not-a-robot/:0
+[ 1908401ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[ 1939150ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/not-a-robot/:0
+[ 1939151ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[  378681ms] [ERROR] Failed to load resource: net::ERR_TOO_MANY_REDIRECTS @ https://partners.tremorhub.com/sync?UIIQ=b7d0b374-a77b-430f-b3c3-b5317bd160e9:0
+[  379034ms] [ERROR] Failed to load resource: net::ERR_TOO_MANY_REDIRECTS @ https://pxl.iqm.com/i/ck/pubmatic?puid=CDC4C68B-7D59-445D-BF5C-514FB0109AAC:0
+[ 1969969ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/not-a-robot/:0
+[ 1969970ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[ 1974305ms] [WARNING] No client strategy found. Metrics will not be enabled. @ https://m.media-amazon.com/images/I/B11npF-s7xL.js:27
+[ 2000551ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/not-a-robot/:0
+[ 2000551ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[ 2031189ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/not-a-robot/:0
+[ 2031189ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[ 2062261ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/not-a-robot/:0
+[ 2062261ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[ 2092993ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/not-a-robot/:0
+[ 2092993ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[ 2123746ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/not-a-robot/:0
+[ 2123747ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[ 2154356ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/not-a-robot/:0
+[ 2154356ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[ 2185015ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/not-a-robot/:0
+[ 2185015ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[ 2216085ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/not-a-robot/:0
+[ 2216085ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[  745026ms] [WARNING] Mixed Content: The page at 'https://ssum-sec.casalemedia.com/usermatch?s=179394&cb=https%3A%2F%2Frtb-csync.smartadserver.com%2Fredir%2F%3Fissi%3D1%26partnerid%3D33%26partneruserid%3D&gdpr=0&gdpr_consent=' was loaded over HTTPS, but requested an insecure element 'http://rtb2-useast.delivrdsp.ai/sync?exchange=1378&r=https%3A%2F%2Fdsum-sec.casalemedia.com%2Fcrum%3Fcm_dsp_id%3D282%26external_user_id%3D%7BUID%7D&us_privacy='. This request was automatically upgraded to HTTPS, For more information see https://blog.chromium.org/2019/10/no-more-mixed-messages-about-https.html @ https://ssum-sec.casalemedia.com/usermatch?s=179394&cb=https%3A%2F%2Frtb-csync.smartadserver.com%2Fredir%2F%3Fissi%3D1%26partnerid%3D33%26partneruserid%3D&gdpr=0&gdpr_consent=:0
+[  745027ms] [WARNING] Mixed Content: The page at 'https://ssum-sec.casalemedia.com/usermatch?s=179394&cb=https%3A%2F%2Frtb-csync.smartadserver.com%2Fredir%2F%3Fissi%3D1%26partnerid%3D33%26partneruserid%3D&gdpr=0&gdpr_consent=' was loaded over HTTPS, but requested an insecure element 'http://rtb2-useast.delivrdsp.ai/sync?exchange=1378&r=https%3A%2F%2Fdsum-sec.casalemedia.com%2Fcrum%3Fcm_dsp_id%3D282%26external_user_id%3D%7BUID%7D&us_privacy='. This request was automatically upgraded to HTTPS, For more information see https://blog.chromium.org/2019/10/no-more-mixed-messages-about-https.html @ https://ssum-sec.casalemedia.com/usermatch?s=179394&cb=https%3A%2F%2Frtb-csync.smartadserver.com%2Fredir%2F%3Fissi%3D1%26partnerid%3D33%26partneruserid%3D&gdpr=0&gdpr_consent=:0
+[ 2219983ms] [TIMEEND] a: 0.001220703125 ms @ https://static.adsafeprotected.com/sca.17.6.4.js:31
+[ 2220011ms] [TIMEEND] a: 0.0009765625 ms @ https://static.adsafeprotected.com/sca.17.6.4.js:31
+[ 2220055ms] [DIR] SyntaxError @ https://js.ad-score.com/score.min.js?pid=1000925&tt=g:1
+[ 2246742ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/not-a-robot/:0
+[ 2246742ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[ 2277874ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/not-a-robot/:0
+[ 2277874ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[  378681ms] [ERROR] Failed to load resource: net::ERR_TOO_MANY_REDIRECTS @ https://partners.tremorhub.com/sync?UIIQ=b7d0b374-a77b-430f-b3c3-b5317bd160e9:0
+[  379034ms] [ERROR] Failed to load resource: net::ERR_TOO_MANY_REDIRECTS @ https://pxl.iqm.com/i/ck/pubmatic?puid=CDC4C68B-7D59-445D-BF5C-514FB0109AAC:0
+[ 2283983ms] [ERROR] Failed to load resource: net::ERR_TOO_MANY_REDIRECTS @ https://px.adhigh.net/p/cm/gpmhub?u=c7bbe642-61d0-512e-986b-f5d5f2898d95:0
+[ 2308680ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/not-a-robot/:0
+[ 2308681ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[ 2312678ms] TypeError: Cannot read properties of undefined (reading 'setRushSimulatedLocalEvents')
+    at https://s0.2mdn.net/sadbundle/11271643377778301230/NP-US-HVU-BNNR-260018-160x600/index.html?ev=01_262:2671:573
+[ 2339583ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/not-a-robot/:0
+[ 2339583ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[ 2343345ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://neal.fun/not-a-robot/mraid.js:0
+[  653648ms] [ERROR] Failed to load resource: net::ERR_NAME_NOT_RESOLVED @ https://cs.lkqd.net/cs?partnerId=59&partnerUserId=CAESECQBh5Bt12ce8zJj7HYe9ZU&google_cver=1:0
+[  653648ms] [ERROR] Failed to load resource: net::ERR_NAME_NOT_RESOLVED @ https://cs.lkqd.net/cs?partnerId=59&redirect=https%3A%2F%2Fcm.g.doubleclick.net%2Fpixel%3Fgoogle_nid%3Dlkqd_dbm%26google_hm%3D%24%24rawlkqduserid%7Cbase64%24%24:0
+[ 2370664ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/not-a-robot/:0
+[ 2370664ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[ 2401438ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/not-a-robot/:0
+[ 2401438ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[ 2432889ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/not-a-robot/:0
+[ 2432889ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[ 2464220ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/not-a-robot/:0
+[ 2464220ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[  378681ms] [ERROR] Failed to load resource: net::ERR_TOO_MANY_REDIRECTS @ https://partners.tremorhub.com/sync?UIIQ=b7d0b374-a77b-430f-b3c3-b5317bd160e9:0
+[  379034ms] [ERROR] Failed to load resource: net::ERR_TOO_MANY_REDIRECTS @ https://pxl.iqm.com/i/ck/pubmatic?puid=CDC4C68B-7D59-445D-BF5C-514FB0109AAC:0
+[ 2494905ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/not-a-robot/:0
+[ 2494905ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[ 2495022ms] [ERROR] Failed to load resource: the server responded with a status of 429 () @ https://ib.adnxs.com/openrtb2/prebidjs:0
+[ 2525521ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/not-a-robot/:0
+[ 2525521ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[ 2556611ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/not-a-robot/:0
+[ 2556611ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[ 2587385ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/not-a-robot/:0
+[ 2587385ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[ 2618225ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/not-a-robot/:0
+[ 2618226ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[ 2649173ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/not-a-robot/:0
+[ 2649173ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[ 2680009ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/not-a-robot/:0
+[ 2680009ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[ 2710800ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/not-a-robot/:0
+[ 2710800ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[ 2741746ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/not-a-robot/:0
+[ 2741746ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[ 2745586ms] [LOG] {} @ https://cdn.advanseads.com/dnaFiles/js/html_render_v4.min.js?v=1793186533368:0
+[ 2772365ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/not-a-robot/:0
+[ 2772365ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[ 2803070ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/not-a-robot/:0
+[ 2803070ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[ 2834092ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/not-a-robot/:0
+[ 2834092ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[ 2837871ms] [LOG] {} @ https://cdn.advanseads.com/dnaFiles/js/html_render_v4.min.js?v=1793186533368:0
+[ 2864688ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/not-a-robot/:0
+[ 2864688ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[ 2895413ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/not-a-robot/:0
+[ 2895413ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[  378681ms] [ERROR] Failed to load resource: net::ERR_TOO_MANY_REDIRECTS @ https://partners.tremorhub.com/sync?UIIQ=b7d0b374-a77b-430f-b3c3-b5317bd160e9:0
+[  379034ms] [ERROR] Failed to load resource: net::ERR_TOO_MANY_REDIRECTS @ https://pxl.iqm.com/i/ck/pubmatic?puid=CDC4C68B-7D59-445D-BF5C-514FB0109AAC:0
+[ 2926221ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/not-a-robot/:0
+[ 2926222ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[ 2956844ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/not-a-robot/:0
+[ 2956844ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[  653648ms] [ERROR] Failed to load resource: net::ERR_NAME_NOT_RESOLVED @ https://cs.lkqd.net/cs?partnerId=59&partnerUserId=CAESECQBh5Bt12ce8zJj7HYe9ZU&google_cver=1:0
+[  653648ms] [ERROR] Failed to load resource: net::ERR_NAME_NOT_RESOLVED @ https://cs.lkqd.net/cs?partnerId=59&redirect=https%3A%2F%2Fcm.g.doubleclick.net%2Fpixel%3Fgoogle_nid%3Dlkqd_dbm%26google_hm%3D%24%24rawlkqduserid%7Cbase64%24%24:0
+[ 1051054ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ https://sync.cootlogix.com/api/cookie?partnerId=rubiconut&userId=MVSNQLU6-1M-HE88:0
+[ 2961348ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ https://sync.cootlogix.com/api/cookie?partnerId=rubicon&userId=MVSNQLU6-1M-HE88:0
+[ 2987833ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/not-a-robot/:0
+[ 2987833ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[ 2991620ms] [LOG] {} @ https://cdn.advanseads.com/dnaFiles/js/html_render_v4.min.js?v=1793186533368:0
+[ 3018596ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/not-a-robot/:0
+[ 3018596ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[ 3022959ms] [WARNING] No client strategy found. Metrics will not be enabled. @ https://m.media-amazon.com/images/I/B11npF-s7xL.js:27
+[ 3049686ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/not-a-robot/:0
+[ 3049686ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[ 3080592ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/not-a-robot/:0
+[ 3080592ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[ 3111411ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/not-a-robot/:0
+[ 3111411ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[ 3142175ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/not-a-robot/:0
+[ 3142175ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[ 3172917ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/not-a-robot/:0
+[ 3172918ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[ 3203750ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/not-a-robot/:0
+[ 3203750ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[  378681ms] [ERROR] Failed to load resource: net::ERR_TOO_MANY_REDIRECTS @ https://partners.tremorhub.com/sync?UIIQ=b7d0b374-a77b-430f-b3c3-b5317bd160e9:0
+[  379034ms] [ERROR] Failed to load resource: net::ERR_TOO_MANY_REDIRECTS @ https://pxl.iqm.com/i/ck/pubmatic?puid=CDC4C68B-7D59-445D-BF5C-514FB0109AAC:0
+[ 3234812ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/not-a-robot/:0
+[ 3234812ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[ 3265469ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/not-a-robot/:0
+[ 3265469ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[ 3296495ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/not-a-robot/:0
+[ 3296495ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[ 3327341ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/not-a-robot/:0
+[ 3327341ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[168806099ms] [WARNING] [MapKit] Authorization token may have an "iat" value that is in the future (Fri Oct 30 2026 16:49:00 GMT-0400 (Eastern Daylight Time)). @ https://neal.fun/asteroid-launcher/apple-maps.min.js:0
+[168806099ms] [WARNING] [MapKit] Authorization token with expiration date greater than 1 year is not recommended in production environments. @ https://neal.fun/asteroid-launcher/apple-maps.min.js:0
+[168806117ms] [WARNING] [MapKit] value passed to `Map.showsCompass` setter must be part of the MapKit.FeatureVisibility enum. @ https://neal.fun/asteroid-launcher/apple-maps.min.js:0
+[168808960ms] [LOG] [7, 1, 2, undefined] @ https://cdn.intergi.com/pf?country=US&browser=Chrome&device=desktop&website_id=73417&config_id=1024587_73417_primary_config:0
+[168808960ms] [LOG] [7, 1, 2, undefined] @ https://cdn.intergi.com/pf?country=US&browser=Chrome&device=desktop&website_id=73417&config_id=1024587_73417_primary_config:0
+[168808966ms] [LOG] [7, 1, 2, 0] @ https://cdn.intergi.com/pf?country=US&browser=Chrome&device=desktop&website_id=73417&config_id=1024587_73417_primary_config:0
+[168808966ms] [LOG] [7, 1, 2, 0] @ https://cdn.intergi.com/pf?country=US&browser=Chrome&device=desktop&website_id=73417&config_id=1024587_73417_primary_config:0
+[168809025ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/asteroid-launcher/:0
+[168809025ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[168809668ms] [WARNING] [GPT] Slot.updateTargetingFromMap is deprecated, use Slot.setConfig({targeting: ...}) instead.
+https://goo.gle/gpt-message#171 @ https://securepubads.g.doubleclick.net/pagead/managed/js/gpt/m202610270101/pubads_impl.js?cb=122881924:22
+[168810049ms] [WARNING] [Audigent] cannot find __gpp framework @ https://a.ad.gt/api/v1/u/matches/403?_it=amazon:0
+[168810226ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=1258' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ about:srcdoc:0
+[168810226ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=1258:0
+[168810703ms] [ERROR] Failed to load resource: the server responded with a status of 400 () @ https://cm.mgid.com/m?cdsp=834149&c=7b9ecda6-837c-4095-86e6-86d3d5bfd05c:0
+[168812909ms] [ERROR] Failed to load resource: the server responded with a status of 422 () @ https://match.sharethrough.com/FGMrCMMc/v1?gdpr=&gdpr_consent=&us_privacy=&gpp=&gpp_sid=&redirectUri=https%3A%2F%2Fpbs.intergient.com%2Fsetuid%3Fbidder%3Dsharethrough%26gdpr%3D%26gdpr_consent%3D%26gpp%3D%26gpp_sid%3D%26f%3Di%26uid%3D%24UID:0
+[168837511ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/asteroid-launcher/:0
+[168837511ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[168841696ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://neal.fun/asteroid-launcher/mraid.js:0
+[168841827ms] [ERROR] Failed to load resource: net::ERR_NAME_NOT_RESOLVED @ https://sync.search.spotxchange.com/partner?adv_id=7025&gdpr=0&redir=https%3A%2F%2Fcm.g.doubleclick.net%2Fpixel%3Fgoogle_nid%3Dspotxchange_dbm%26google_hm%3D%24SPOTX_BASE64_USER_ID:0
+[168841827ms] [ERROR] Failed to load resource: net::ERR_NAME_NOT_RESOLVED @ https://sync.search.spotxchange.com/partner?adv_id=7025&gdpr=0&uid=CAESEBmexpW8zvCKJyuNALF5lz8&google_cver=1:0
+[168868032ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/asteroid-launcher/:0
+[168868032ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[168885576ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_TIMED_OUT @ https://cs.krushmedia.com/feeeee7941a3729706aafcc88658ed50.gif?puid=7b9ecda6-837c-4095-86e6-86d3d5bfd05c&redir=https%3A%2F%2Fsync.go.sonobi.com%2Fus.gif%3Fnw%3Dkr%26nuid%3D[UID]:0
+[168898773ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/asteroid-launcher/:0
+[168898773ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[168902140ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://neal.fun/asteroid-launcher/mraid.js:0
+[168902877ms] [DIR] SyntaxError @ https://js.ad-score.com/score.min.js?pid=1001086&tt=g:1
+[168904384ms] [LOG] layout = Primary @ https://cdn.flashtalking.com/241207/6341071/index.html:276
+[168904384ms] [LOG] bgColor is set in manifest @ https://cdn.flashtalking.com/241207/6341071/index.html:304
+[168904487ms] [LOG] el.offsetWidth =  155  child scrollwidth =  206  child offsetwidth =  206 @ https://cdn.flashtalking.com/241207/6341071/index.html:85
+[168904487ms] [LOG] el.offsetWidth =  155  child scrollwidth =  217  child offsetwidth =  216 @ https://cdn.flashtalking.com/241207/6341071/index.html:85
+[168904493ms] [LOG] el.offsetWidth =  155  child scrollwidth =  132  child offsetwidth =  130 @ https://cdn.flashtalking.com/241207/6341071/index.html:85
+[168929359ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/asteroid-launcher/:0
+[168929359ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[168960650ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/asteroid-launcher/:0
+[168960651ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[168991132ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/asteroid-launcher/:0
+[168991132ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[169021608ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/asteroid-launcher/:0
+[169021608ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[169052519ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_CLOSED @ https://htlb.casalemedia.com/openrtb/pbjs?s=1031634:0
+[169052555ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/asteroid-launcher/:0
+[169052555ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[169056592ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://neal.fun/asteroid-launcher/mraid.js:0
+[169057200ms] [DIR] SyntaxError @ https://js.ad-score.com/score.min.js?pid=1001086&tt=g:1
+[169060299ms] [LOG] ///////// SCALE_OUT_TOP_LINE_FIRST @ https://cdn.flashtalking.com/241207/6341071/index.html:877
+[169083448ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/asteroid-launcher/:0
+[169083448ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[169114431ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/asteroid-launcher/:0
+[169114431ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[168841827ms] [ERROR] Failed to load resource: net::ERR_NAME_NOT_RESOLVED @ https://sync.search.spotxchange.com/partner?adv_id=7025&gdpr=0&redir=https%3A%2F%2Fcm.g.doubleclick.net%2Fpixel%3Fgoogle_nid%3Dspotxchange_dbm%26google_hm%3D%24SPOTX_BASE64_USER_ID:0
+[168841827ms] [ERROR] Failed to load resource: net::ERR_NAME_NOT_RESOLVED @ https://sync.search.spotxchange.com/partner?adv_id=7025&gdpr=0&uid=CAESEBmexpW8zvCKJyuNALF5lz8&google_cver=1:0
+[169145331ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/asteroid-launcher/:0
+[169145331ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[168841827ms] [ERROR] Failed to load resource: net::ERR_NAME_NOT_RESOLVED @ https://sync.search.spotxchange.com/partner?adv_id=7025&gdpr=0&redir=https%3A%2F%2Fcm.g.doubleclick.net%2Fpixel%3Fgoogle_nid%3Dspotxchange_dbm%26google_hm%3D%24SPOTX_BASE64_USER_ID:0
+[168841827ms] [ERROR] Failed to load resource: net::ERR_NAME_NOT_RESOLVED @ https://sync.search.spotxchange.com/partner?adv_id=7025&gdpr=0&uid=CAESEBmexpW8zvCKJyuNALF5lz8&google_cver=1:0
+[169176239ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/asteroid-launcher/:0
+[169176239ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[169179976ms] [LOG] [NoriLogger] Initialized successfully @ https://m.media-amazon.com/images/I/B1R+2lRHoyL.js:0
+[169180304ms] [ERROR] [SushiLogger] Logger not initialized, performance not logged for: asinImageRender @ https://m.media-amazon.com/images/I/B1R+2lRHoyL.js:0
+[169180332ms] [ERROR] [NoriLogger] [WARN] DSPClientStrategy NoriLogger: Timer for buyboxRender already exists. @ https://m.media-amazon.com/images/I/B1R+2lRHoyL.js:0
+[169206869ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/asteroid-launcher/:0
+[169206869ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[168841827ms] [ERROR] Failed to load resource: net::ERR_NAME_NOT_RESOLVED @ https://sync.search.spotxchange.com/partner?adv_id=7025&gdpr=0&redir=https%3A%2F%2Fcm.g.doubleclick.net%2Fpixel%3Fgoogle_nid%3Dspotxchange_dbm%26google_hm%3D%24SPOTX_BASE64_USER_ID:0
+[168841827ms] [ERROR] Failed to load resource: net::ERR_NAME_NOT_RESOLVED @ https://sync.search.spotxchange.com/partner?adv_id=7025&gdpr=0&uid=CAESEBmexpW8zvCKJyuNALF5lz8&google_cver=1:0
+[169210608ms] [LOG] Polite loading scripts @ https://s0.2mdn.net/sadbundle/7322907214239216688/js/banner.js?v=20260612-timelinefix:11
+[169210902ms] [WARNING] GSAP target undefined not found. https://greensock.com @ https://s0.2mdn.net/ads/studio/cached_libs/gsap_3.11.1_min.js:9
+[169210903ms] [WARNING] GSAP target undefined not found. https://greensock.com @ https://s0.2mdn.net/ads/studio/cached_libs/gsap_3.11.1_min.js:9
+[169211844ms] [LOG] Polite loading scripts @ https://s0.2mdn.net/sadbundle/7322907214239216688/js/banner.js?v=20260612-timelinefix:11
+[169211910ms] [WARNING] GSAP target undefined not found. https://greensock.com @ https://s0.2mdn.net/ads/studio/cached_libs/gsap_3.11.1_min.js:9
+[169211912ms] [WARNING] GSAP target undefined not found. https://greensock.com @ https://s0.2mdn.net/ads/studio/cached_libs/gsap_3.11.1_min.js:9
+[169237543ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/asteroid-launcher/:0
+[169237543ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[169268257ms] [ERROR] Access to fetch at 'https://api.rlcdn.com/api/identity/envelope?pid=13310' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/asteroid-launcher/:0
+[169268257ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.rlcdn.com/api/identity/envelope?pid=13310:0
+[169271666ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://neal.fun/asteroid-launcher/mraid.js:0
+[169271850ms] [DIR] SyntaxError @ https://js.ad-score.com/score.min.js?pid=1001086&tt=g:1
+[169274195ms] [LOG] ///////// SOFT_FADE @ https://cdn.flashtalking.com/241207/6341071/index.html:877
