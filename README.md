@@ -18,7 +18,7 @@ A playful single-page playground inspired by [neal.fun](https://neal.fun), bundl
 - **Tower Stack** — Drop moving blocks with precise timing to grow the tallest, straightest tower.
 - **Orbit Dash** — Hold Dash/space to burst outward through the glowing gate, release to reset your orbit, and chain flawless passes for a faster streak.
 - **Pop Dash** — Click bubbles the instant they appear to keep the streak alive before they burst.
-- **Nim Duel** — Choose a pile, remove 1–3 matches, and take the final match to win against four computer difficulties.
+- **Nim Duel** — Take 1–3 matches from one pile, watch them burn away, and claim the final match. Play four computer difficulties or two players on one device around a stone tabletop with brass-edged wooden trays.
 - **Bubble Rally** — Race glass bubbles across three ocean circuits with 2-4 human/computer racers. Choose each computer's difficulty, manage energy, raise shields, and pop rivals back to checkpoints.
 - **Skyport Command** — Pick a contract, ensure you have the energy, dispatch a drone, and reinvest the cargo/credits before the 3-minute day ends.
 - **Harmonic Echo** — Master a growing instrument sequence across dynamic difficulty modes.
@@ -74,6 +74,16 @@ Coin rewards are exactly 1 per pipe on Easy, 3 on Medium, 5 on Hard, and 10 on E
 Use Play, Customize, and Shop to open `/#flappy`, the central studio at `/#characters/flappy`, and `/#flappy/shop`. The old `/#flappy/customize` link redirects to the central studio. The Flappy shop pauses and preserves a flight; leaving for the shared library or another game settles its earned coins and starts a fresh flight when you return. Browser Back and Forward work between pages. First-person 3D (Beta) uses the same flight rules and scoring. Line up its center ring with the dotted circle in the next opening.
 
 Each bird has its own artwork and motion: a fluffy sparrow, crested and striped jay, forward-facing owl, hovering hummingbird, scaled dragon with membrane wings, and glowing phoenix. The first-person wings and beaks match the character. Natural colors applies the selected species' recommended palette; individual colors and accessories remain independently editable. Characters, colors, accessories, views, records, coins, and purchases save in this browser.
+
+## Nim Duel
+
+Select one wooden tray, choose **1, 2, or 3**, and confirm with **Take**. The highlighted matches show exactly what will be removed; they ignite and burn down before the next turn. You cannot combine piles or remove more matches than a pile contains. Whoever takes the final match across the entire table wins. Emptying one tray alone does not end the round. There is no timer, and the rules include an example and an optional strategy tip.
+
+**vs Computer** keeps Easy, Medium, Hard, and Expert on the shared opponent engine. The human opens, each generated table has a winning line, and the original bounded-Nim rules and computer decision policy are unchanged. **2 players** takes turns on the same device, supports player names, and alternates the starting player each round. Each mode keeps its own win counts for the current visit. Changing mode or difficulty starts a fresh round and cancels pending moves.
+
+The final match leads into a golden win scene or a quieter computer-victory scene, with the winner named in local multiplayer. **Skip animation**, **Pause**, **New round**, and a persistent **Sound on/off** control are available. Effects pause with the game or hidden tab, and reduced-motion mode skips flames and moving celebrations. Ignition, crackling, and result sounds use local Web Audio; no backend or audio downloads are needed.
+
+`nim-duel-engine.js` owns legal moves and round state, `nim-duel.js` handles the interface, and `nim-duel.css` / `nim-duel-audio.js` supply the artwork and effects. The stone-table cover is `assets/nim-duel-cover.png`; `assets/nim-duel-art.json` records its built-in image-generation and stone-surface edit prompts. Run `node --test tests/nim-duel.test.mjs tests/opponents.test.mjs` to check rules, opening positions, turn enforcement, and beatable computer play.
 
 ## Cats vs Dogs
 

@@ -1,0 +1,21 @@
+{
+  "game": "Nim Duel",
+  "mode": "Built-in image generation and reference-image editing",
+  "assets": [
+    {
+      "path": "assets/nim-duel-cover.png",
+      "description": "Wooden matches in brass-rimmed walnut trays on a dark green-gray stone table.",
+      "steps": [
+        {
+          "operation": "generate",
+          "prompt": "Use case: stylized game cover illustration. Asset type: square premium browser-game cover for Nim Duel. A beautiful tactile tabletop strategy game photographed as a high-end 3D illustration: deep pine-green velvet table, three small dark walnut trays with slim softly brushed brass rims, each holding a different tidy cluster of slender ivory wooden matchsticks with rounded vermilion red heads. The clusters and single sticks must read clearly at thumbnail size. Foreground hero: one elegantly tilted wooden match with a small luminous golden flame, symbolizing taking the final match. Warm honey-colored light from upper left and restrained cool teal rim light from right, detailed natural wood grain, soft velvet texture, realistic soft contact shadows, subtle glowing dust motes, quiet atmospheric dark green background. Elevated three-quarter tabletop camera, balanced cinematic composition, generous breathing space, polished inviting board-game aesthetic. Consistent natural materials, physically plausible sticks and trays. No text, letters, numbers, logos, hands, people, dice, playing cards, chess pieces, fireworks, or extra game objects. Full square artwork with no border; opaque background. Rich dark greens, cream wood, red match heads and antique brass, with clean, sharply resolved surfaces."
+        },
+        {
+          "operation": "edit",
+          "reference": "The original generated Nim Duel cover; preserve its composition and replace the cloth with stone.",
+          "prompt": "Use case: precise-object-edit. Edit the supplied Nim Duel game cover. Keep exactly the same composition, circular dark-walnut trays with brass rims, matchstick clusters, match colors and wood detail, lit foreground hero match, flame, camera angle, warm golden light, teal rim light, and rich cinematic high-end 3D look. Change ONLY the tabletop material: replace ALL green velvet cloth and fabric folds with a flat, solid, honed dark green-gray STONE tabletop, such as subtly veined green slate or soapstone. Show fine mineral grain, a few restrained natural pale stone veins, realistic matte stone reflections and contact shadows. The table must be visibly solid stone, with no cloth, velvet, felt, drapes, folds, or wrinkles anywhere. Keep the existing objects in their same positions and at the same scale. No text, letters, numbers, new objects, or border. Square opaque image."
+        }
+      ]
+    }
+  ]
+}
