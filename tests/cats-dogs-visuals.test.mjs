@@ -4,20 +4,19 @@ import { TugGroundEffects } from "../cats-dogs-ground-effects.js";
 import { petBlink } from "../cats-dogs-expressions.js";
 import { tugPresentation } from "../cats-dogs-ending.js";
 import { petEarMotion } from "../cats-dogs-ears.js";
-import { furVariation } from "../cats-dogs-fur.js";
+import { furVariation, furDepth } from "../cats-dogs-fur.js";
 import { dogEarPose } from "../cats-dogs-dog-ears.js";
 import { petRig } from "../cats-dogs-pet-rig.js";
 import { TUG_BREEDS, tugCoats } from "../cats-dogs-customization.js";
-import { petPoseLayout, poseBodyPoint } from "../cats-dogs-pose-surface.js";
+import { petPoseLayout } from "../cats-dogs-pose-surface.js";
 const paws=[{x:200,y:550},{x:420,y:550}];
 
-test("ending poses preserve every breed's face proportions and keep the body surface continuous",()=>{
-  for(const breed of Object.keys(TUG_BREEDS))for(const coat of tugCoats(breed))for(const pose of ["win","sad"]){
-    const source=petRig({breed,coat:coat.id}),target=petRig({breed,coat:coat.id,pose}),layout=petPoseLayout(source,pose);
-    const features=rig=>[...rig.eyes,rig.nose,rig.mouth,rig.hat,rig.neck];
+test("celebrations preserve each original face and fitted hat with uniform scaling",()=>{
+  for(const breed of Object.keys(TUG_BREEDS))for(const coat of tugCoats(breed)){
+    const pet={breed,coat:coat.id,pose:"win"},source=petRig({...pet,pose:undefined}),target=petRig(pet),layout=petPoseLayout(source,pet);
+    const features=rig=>[...rig.eyes,rig.nose,rig.mouth,rig.hat];
     const a=features(source),b=features(target);
-    for(let i=0;i<a.length;i++)for(let j=i+1;j<a.length;j++)assert.ok(Math.abs(Math.hypot(a[i][0]-a[j][0],a[i][1]-a[j][1])-Math.hypot(b[i][0]-b[j][0],b[i][1]-b[j][1]))<1e-12,"A pose must not enlarge eyes, shorten the muzzle or move fitted accessories relative to the face");
-    for(let x=0;x<=1;x+=.1){let previous=-Infinity;for(let y=.45;y<=.99;y+=.005){const [px,py]=poseBodyPoint(layout,x,y);assert.ok(Number.isFinite(px)&&Number.isFinite(py));assert.ok(py>previous,"The continuous body must not fold over itself");previous=py;}}
+    for(let i=0;i<a.length;i++)for(let j=i+1;j<a.length;j++)assert.ok(Math.abs(Math.hypot(a[i][0]-a[j][0],a[i][1]-a[j][1])*layout.scale-Math.hypot(b[i][0]-b[j][0],b[i][1]-b[j][1]))<1e-12,"A pose must not shear a face or move its fitted hat");
   }
 });
 
@@ -51,11 +50,19 @@ test("the match ending follows the human result in computer games and the winnin
 });
 test("ear animation and fur texture stay deterministic and do not need gameplay randomness",()=>{
   for(let i=0;i<200;i++){
-    const v=furVariation(i,i*3);assert.deepEqual(furVariation(i,i*3),v);assert.ok(v.shade>.85&&v.shade<1.15);assert.ok(Math.abs(v.warmth)<=6);
+    const v=furVariation(i,i*3);assert.deepEqual(furVariation(i,i*3),v);assert.ok(v.shade>.94&&v.shade<1.06);assert.ok(Math.abs(v.warmth)<=8);
     assert.equal(petEarMotion(i/20,"cats",.8),petEarMotion(i/20,"cats",.8));
     assert.ok(Number.isFinite(petEarMotion(i/20,"dogs",.8,"lose")));
   }
   assert.notEqual(petEarMotion(.3,"cats"),petEarMotion(.3,"dogs"));
+});
+test("paint detail scales with its patch and foreground limbs retain depth over the chest",()=>{
+  const spot={x:.4,y:.5,size:.08,textureScale:1};
+  assert.notDeepEqual(furVariation(435,540,spot),furVariation(435,540,{...spot,textureScale:2}));
+  for(const breed of ["tabby","labrador"]){
+    const rig=petRig({breed}),arm=furDepth(rig,rig.cat?.64:.35,.43),body=furDepth(rig,.53,.59);
+    assert.ok(arm>body+.08,"The foreleg should remain visibly separate from the chest under painted fur");
+  }
 });
 test("both dog ears have independent, bounded listening and pulling motion for floppy and pointed breeds",()=>{
   for(const breed of ["golden","labrador","pitbull","corgi","husky"]){

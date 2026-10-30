@@ -8,7 +8,7 @@ export function normalizePetMarkings(raw) {
   const ids=new Set();
   return (Array.isArray(raw)?raw:[]).slice(0,MAX_PET_MARKINGS).filter(p=>p&&Number.isFinite(p.x)&&Number.isFinite(p.y)).map((p,index)=>{
     let id=Number.isSafeInteger(p.id)&&p.id>0?p.id:index+1;while(ids.has(id))id++;ids.add(id);
-    return {id,x:clamp(p.x,0,1),y:clamp(p.y,0,1),size:clamp(Number.isFinite(p.size)?p.size:.08,.018,.22),rotation:clamp(Number.isFinite(p.rotation)?p.rotation:0,-180,180),shape:Object.hasOwn(PET_PATCH_SHAPES,p.shape)?p.shape:"splotch",color:petHex(p.color,"#4a3027")};
+    return {id,x:clamp(p.x,0,1),y:clamp(p.y,0,1),size:clamp(Number.isFinite(p.size)?p.size:.08,.018,.22),rotation:clamp(Number.isFinite(p.rotation)?p.rotation:0,-180,180),shape:Object.hasOwn(PET_PATCH_SHAPES,p.shape)?p.shape:"splotch",color:petHex(p.color,"#4a3027"),textureScale:clamp(Number.isFinite(p.textureScale)?p.textureScale:1,.5,2),undertone:clamp(Number.isFinite(p.undertone)?p.undertone:.28,0,.5)};
   });
 }
 export function tracePetPatch(c, spot, scale=1) {

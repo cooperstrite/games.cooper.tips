@@ -1,12 +1,12 @@
-import { tugCoat } from "./cats-dogs-customization.js";
+import { nativePoseSource, nativePoseRig } from "./cats-dogs-pose-rigs.js";
 import { petPoseLayout, posePoint } from "./cats-dogs-pose-surface.js";
 
-// Pose metadata and feature anchors follow the same rigid head transform as
-// the source artwork. Faces and fitted accessories are never redrawn.
 export function endingRig(pet,source){
-  const {head}=petPoseLayout(source,pet.pose),angle=Math.atan2(head[1],head[0]);
-  const feature=([x,y,...rest])=>[...posePoint(head,x,y),...rest];
-  return {...source,pose:pet.pose,eyes:source.eyes.map(eye=>{const result=feature(eye);result[4]+=angle;return result;}),nose:feature(source.nose),mouth:feature(source.mouth),hat:feature(source.hat),neck:feature(source.neck)};
+  if(pet.pose==="sad")return nativePoseRig(pet);
+  const {head,angle,scale,target}=petPoseLayout(source,pet);
+  const feature=([x,y,...rest])=>[...posePoint(head,x,y),...rest.map(v=>v*scale)];
+  return {...source,pose:pet.pose,eyes:source.eyes.map(([x,y,rx,ry,a,shape])=>[...posePoint(head,x,y),rx*scale,ry*scale,a+angle,shape]),nose:feature(source.nose),mouth:feature(source.mouth),hat:feature(source.hat),neck:target.neck};
 }
+// Paint stays in gameplay coordinates; rendering never mutates the wardrobe.
 export function endingAppearance(pet,pose){return {...pet,pose,markings:(pet.markings||[]).map(mark=>({...mark}))};}
-export function endingSource(pet){return pet.pose?tugCoat(pet).image:null;}
+export function endingSource(pet){return pet.pose?nativePoseSource(pet):null;}

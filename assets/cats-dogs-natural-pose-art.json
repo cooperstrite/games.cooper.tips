@@ -1,0 +1,42 @@
+{
+  "generator": "Built-in image generation",
+  "purpose": "Natural ending-pose bodies; saved coat colors, painted markings and fitted accessories are applied at runtime.",
+  "assets": [
+    {
+      "id": "siamese-flame",
+      "path": "assets/cats-dogs-ending-siamese-flame-v2.png",
+      "references": [
+        "assets/cats-dogs-ending-siamese.png",
+        "assets/cats-dogs-siamese-flame.png"
+      ],
+      "prompt": "Use case: precise-object-edit. Asset type: transparent two-pose game sprite sheet. Image 1 is the EDIT TARGET; image 2 is ONLY a fur-color reference. Change ONLY the fur pigmentation to match the flame-point Siamese reference: creamy ivory body, warm orange ears, face points, paws and lower legs, and the orange ringed tail. The paws must remain orange fur with natural pink-brown skin pads; preserve the blue eyes and red bandana. Keep the exact 2:1 sheet layout, both full-body silhouettes, all joint and paw positions, scale, camera, face shapes, expressions, bandana geometry, smooth fur texture, and lighting from Image 1. Left: balanced standing/waving pet; right: anatomically natural seated pet with hindquarters supporting it and front paws resting on the ground. Exactly four limbs per animal. No new pose, no pulling arms, no extra accessories, no ground or scenery. Preserve real transparent alpha, not a checkerboard background. Keep every ear, paw and tail inside the original cell. Do not alter the original layout."
+    },
+    {
+      "id": "labrador-white",
+      "path": "assets/cats-dogs-ending-labrador-white-v2.png",
+      "references": [
+        "assets/cats-dogs-ending-labrador.png",
+        "assets/cats-dogs-labrador-white.png"
+      ],
+      "prompt": "Use case: precise-object-edit. Asset type: transparent two-pose game sprite sheet. Image 1 is the EDIT TARGET; image 2 is ONLY a fur-color reference. Change ONLY the fur pigmentation to the white/ivory Labrador in the coat reference, including its pale cream ears and paws. Preserve the dark nose, brown eyes, dark paw pads and teal bandana. Keep the exact 2:1 sheet layout, both full-body silhouettes, all joint and paw positions, scale, camera, face shapes, expressions, bandana geometry, smooth fur texture, and lighting from Image 1. Left: balanced standing/waving pet; right: anatomically natural seated pet with hindquarters supporting it and front paws resting on the ground. Exactly four limbs per animal. No new pose, no pulling arms, no extra accessories, no ground or scenery. Preserve real transparent alpha, not a checkerboard background. Keep every ear, paw and tail inside the original cell. Do not alter the original layout."
+    },
+    {
+      "id": "labrador-black",
+      "path": "assets/cats-dogs-ending-labrador-black-v2.png",
+      "references": [
+        "assets/cats-dogs-ending-labrador.png",
+        "assets/cats-dogs-labrador-black.png"
+      ],
+      "prompt": "Use case: precise-object-edit. Asset type: transparent two-pose game sprite sheet. Image 1 is the EDIT TARGET; image 2 is ONLY a fur-color reference. Change ONLY the fur pigmentation to the deep charcoal-black Labrador in the coat reference, with readable soft charcoal highlights. Preserve the dark nose, brown eyes, dark paw pads and teal bandana. Keep the exact 2:1 sheet layout, both full-body silhouettes, all joint and paw positions, scale, camera, face shapes, expressions, bandana geometry, smooth fur texture, and lighting from Image 1. Left: balanced standing/waving pet; right: anatomically natural seated pet with hindquarters supporting it and front paws resting on the ground. Exactly four limbs per animal. No new pose, no pulling arms, no extra accessories, no ground or scenery. Preserve real transparent alpha, not a checkerboard background. Keep every ear, paw and tail inside the original cell. Do not alter the original layout."
+    },
+    {
+      "id": "labrador-chocolate",
+      "path": "assets/cats-dogs-ending-labrador-chocolate-v2.png",
+      "references": [
+        "assets/cats-dogs-ending-labrador.png",
+        "assets/cats-dogs-labrador.png"
+      ],
+      "prompt": "Use case: precise-object-edit. Asset type: transparent two-pose game sprite sheet. Image 1 is the EDIT TARGET; image 2 is ONLY a fur-color reference. Change ONLY the fur pigmentation to the chocolate-brown Labrador in the coat reference, with its warm darker brown ears and legs. Preserve the brown eyes, dark nose, dark paw pads and teal bandana. Keep the exact 2:1 sheet layout, both full-body silhouettes, all joint and paw positions, scale, camera, face shapes, expressions, bandana geometry, smooth fur texture, and lighting from Image 1. Left: balanced standing/waving pet; right: anatomically natural seated pet with hindquarters supporting it and front paws resting on the ground. Exactly four limbs per animal. No new pose, no pulling arms, no extra accessories, no ground or scenery. Preserve real transparent alpha, not a checkerboard background. Keep every ear, paw and tail inside the original cell. Do not alter the original layout."
+    }
+  ]
+}

@@ -1,4 +1,6 @@
 import test from "node:test";
+import { posePetMarkings } from "../cats-dogs-pose-paint.js";
+import { nativePoseRig } from "../cats-dogs-pose-rigs.js";
 import assert from "node:assert/strict";
 import { TUG_ITEMS, TUG_BREEDS, normalizeTugPet, readTugWardrobe, writeTugWardrobe, TUG_REWARDS, tugCoats, tugCoat, TUG_WARDROBE_KEY } from "../cats-dogs-customization.js";
 import { MAX_PET_MARKINGS, normalizePetMarkings, petPatchAt, petPattern } from "../cats-dogs-coat.js";
@@ -52,7 +54,7 @@ test("old wardrobes retain their names and accessories while new coats and patch
 });
 test("invalid saved paint is bounded, colors are validated, and overlapping patches pick the top layer",()=>{
   const markings=normalizePetMarkings([{id:1,x:-1,y:2,size:20,rotation:500,color:"red",shape:"__proto__"},{id:1,x:.5,y:.5,size:.1,shape:"stripe",rotation:90,color:"#AABBCC"},{x:NaN,y:.4},null]);
-  assert.deepEqual(markings[0],{id:1,x:0,y:1,size:.22,rotation:180,shape:"splotch",color:"#4a3027"});
+  assert.deepEqual(markings[0],{id:1,x:0,y:1,size:.22,rotation:180,shape:"splotch",color:"#4a3027",textureScale:1,undertone:.28});
   assert.equal(markings.length,2);assert.equal(markings[1].id,2);assert.equal(markings[1].color,"#aabbcc");
   assert.equal(petPatchAt(markings,.63,.5)?.id,2);assert.equal(petPatchAt(markings,.5,.63),null);
   assert.equal(petPatchAt([{...markings[1],id:3},markings[1]],.5,.5)?.id,2);
@@ -101,10 +103,34 @@ test("every ending pose keeps the selected coat and cosmetics without changing s
       assert.ok(existsSync(new URL("../"+endingSource(posed),import.meta.url)));
       assert.deepEqual(posed.markings,pet.markings);assert.notEqual(posed.markings,pet.markings);
       posed.markings.forEach((m,i)=>{assert.equal(m.color,pet.markings[i].color);assert.ok(m.x>=0&&m.x<=1&&m.y>=0&&m.y<=1&&m.size>0);});
-      assert.equal(endingSource(posed),tugCoat(pet).image);
+      assert.notEqual(endingSource(posed),tugCoat(pet).image,"The ending uses a complete natural body, not a bent pulling sprite");
       const rig=petRig(posed);for(const point of [...rig.eyes,rig.nose,rig.hat,rig.neck])assert.ok(point[0]>0&&point[0]<1&&point[1]>0&&point[1]<1);
     }
     assert.notDeepEqual(petRig(poses[0]).eyes,petRig(poses[1]).eyes);
     assert.equal(JSON.stringify(pet),saved);
+  }
+});
+test("paint material controls migrate safely and persist through all presentations",()=>{
+  const old=normalizePetMarkings([{id:1,x:.5,y:.5,size:.1}])[0];
+  assert.equal(old.textureScale,1);assert.equal(old.undertone,.28);
+  const limited=normalizePetMarkings([{...old,textureScale:100,undertone:-1}])[0];
+  assert.equal(limited.textureScale,2);assert.equal(limited.undertone,0);
+  const store=storage(),wardrobe=readTugWardrobe([],store);
+  wardrobe.cats.markings=[{...old,textureScale:1.65,undertone:.43}];writeTugWardrobe(wardrobe,store);
+  const saved=readTugWardrobe([],store).cats;
+  for(const pose of ["win","sad"])assert.deepEqual(endingAppearance(saved,pose).markings,wardrobe.cats.markings);
+  assert.deepEqual(studioCharacter("catsdogs",saved).markings,wardrobe.cats.markings);
+});
+test("posing repositions complete markings without losing their shapes or saved material",()=>{
+  for(const [breed,b] of Object.entries(TUG_BREEDS))for(const pose of ["win","sad"]){
+    const pet=normalizeTugPet(b.side,{breed,markings:petPattern(b.side,"splotches","#93764a")}),before=JSON.stringify(pet);
+    const mapped=posePetMarkings(pet.markings,petRig(pet),nativePoseRig({...pet,pose}),pose);
+    assert.equal(mapped.length,pet.markings.length);
+    mapped.forEach((mark,i)=>{
+      for(const key of ["id","color","shape","textureScale","undertone"])assert.equal(mark[key],pet.markings[i][key]);
+      for(const key of ["x","y","size","rotation"])assert.ok(Number.isFinite(mark[key]));
+      assert.ok(mark.size>0&&mark.size<pet.markings[i].size*1.5);
+    });
+    assert.equal(JSON.stringify(pet),before);
   }
 });

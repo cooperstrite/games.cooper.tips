@@ -5,18 +5,19 @@ import { MAX_PET_MARKINGS, PET_PATCH_SHAPES, normalizePetMarkings, petPatchAt, p
 export function createCoatPainter(root,{getPet,getSide,onChange}) {
   const wrapper=document.createElement("details");wrapper.className="cd-coat-painter";
   wrapper.innerHTML=`<summary>Paint your own markings <span>Place every patch yourself</span></summary><div class="cd-painter-body">
-    <p class="cd-painter-help">Choose Add, then tap the fur and drag your new patch into place. Use Move to adjust an existing patch, or Erase to remove it. Eyes, noses and accessories stay clear.</p>
+    <p class="cd-painter-help">Choose Add, then tap the fur and drag your new patch into place. Use Move to adjust an existing patch, or Erase to remove it. Markings follow the fur texture and body shading, including in the ending poses. Eyes, noses and accessories stay clear.</p>
     <div class="cd-paint-tools" role="group" aria-label="Marking tool"><button type="button" data-tool="add" aria-pressed="true">Add</button><button type="button" data-tool="move" aria-pressed="false">Move</button><button type="button" data-tool="erase" aria-pressed="false">Erase</button><button type="button" data-action="undo" disabled>Undo</button><button type="button" data-action="redo" disabled>Redo</button></div>
     <canvas class="cd-paint-canvas" width="600" height="620" tabindex="0" role="application" aria-label="Pet coat painter. Enter adds a patch. Arrow keys move the selected patch. Delete removes it."></canvas>
     <p class="cd-paint-status" role="status">Tap the fur to add your first patch.</p>
     <div class="cd-paint-fields"><label>Patch color<input type="color" data-brush="color" value="#4a3027" aria-label="Patch color"></label><label>Shape<select data-brush="shape" aria-label="Patch shape">${Object.entries(PET_PATCH_SHAPES).map(([id,name])=>`<option value="${id}">${name}</option>`).join("")}</select></label>
     <label>Size <output class="cd-patch-size">8%</output><input type="range" data-brush="size" min="2" max="22" value="8" step="1" aria-label="Patch size"></label><label>Rotation <output class="cd-patch-rotation">0 degrees</output><input type="range" data-brush="rotation" min="-180" max="180" value="0" step="5" aria-label="Patch rotation"></label>
+    <label>Fur detail scale <output class="cd-patch-texture">100%</output><input type="range" data-brush="textureScale" min="50" max="200" value="100" step="5" aria-label="Patch fur detail scale"></label><label>Coat undertone <output class="cd-patch-undertone">28%</output><input type="range" data-brush="undertone" min="0" max="50" value="28" step="1" aria-label="Patch coat undertone"></label>
     <label>Selected patch<select class="cd-patch-select" aria-label="Selected patch"><option value="">New patch</option></select></label><button type="button" data-action="delete" disabled>Delete selected</button>
     <label>Horizontal position (%)<input type="number" data-position="x" min="0" max="100" step="1" aria-label="Patch horizontal position" disabled></label><label>Vertical position (%)<input type="number" data-position="y" min="0" max="100" step="1" aria-label="Patch vertical position" disabled></label></div>
     <div class="cd-pattern-presets"><span>Start with a pattern, then move its patches:</span><button type="button" data-pattern="splotches">Splotches</button><button type="button" data-pattern="spots">Spotted</button><button type="button" data-pattern="stripes">Stripes</button><button type="button" data-action="clear">Clear added patches</button></div>
-    <p class="cd-painter-footnote">Natural breed markings stay in the artwork. For a blank canvas, try a white British shorthair or a white Labrador. Keyboard: Enter adds a patch, arrows move it, Shift + arrows makes a smaller adjustment, Delete removes it.</p></div>`;
+    <p class="cd-painter-footnote">Size changes the patch; fur detail scale changes the texture inside it. Coat undertone adds hints of your pet's fur color. Natural breed markings stay in the artwork. For a blank canvas, try a white British shorthair or a white Labrador. Keyboard: Enter adds a patch, arrows move it, Shift + arrows makes a smaller adjustment, Delete removes it.</p></div>`;
   root.append(wrapper);const $=s=>wrapper.querySelector(s),canvas=$("canvas"),abort=new AbortController(),history={cats:{undo:[],redo:[]},dogs:{undo:[],redo:[]}};
-  let tool="add",selected=null,brush={color:"#4a3027",size:.08,rotation:0,shape:"splotch"},gesture=null,frame=0,disposed=false;
+  let tool="add",selected=null,brush={color:"#4a3027",size:.08,rotation:0,shape:"splotch",textureScale:1,undertone:.28},gesture=null,frame=0,disposed=false;
   const on=(el,event,fn)=>el.addEventListener(event,fn,{signal:abort.signal}),current=()=>getPet().markings.find(p=>p.id===selected),snapshot=()=>JSON.stringify(getPet().markings);
   const status=text=>{$(".cd-paint-status").textContent=text;};
   function paint(){if(disposed)return;drawTugPortrait(canvas,getPet(),c=>{const spot=current();if(!spot)return;c.save();c.translate(48,64.6);tracePetPatch(c,spot,504);c.lineWidth=4;c.strokeStyle="#fffdf1";c.stroke();c.setLineDash([6,4]);c.lineWidth=2;c.strokeStyle="#275448";c.stroke();c.restore();});}
@@ -24,8 +25,9 @@ export function createCoatPainter(root,{getPet,getSide,onChange}) {
   function controls(){
     const pet=getPet(),spot=current(),value=spot||brush,h=history[getSide()];
     wrapper.querySelectorAll("button[data-tool]").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.tool===tool)));canvas.dataset.tool=tool;
-    for(const key of ["color","shape","size","rotation"])$(`[data-brush="${key}"]`).value=key==="size"?Math.round(value.size*100):value[key];
+    for(const key of ["color","shape","size","rotation","textureScale","undertone"])$(`[data-brush="${key}"]`).value=["size","textureScale","undertone"].includes(key)?Math.round(value[key]*100):value[key];
     $(".cd-patch-size").value=`${Math.round(value.size*100)}%`;$(".cd-patch-rotation").value=`${value.rotation} degrees`;
+    $(".cd-patch-texture").value=`${Math.round(value.textureScale*100)}%`;$(".cd-patch-undertone").value=`${Math.round(value.undertone*100)}%`;
     $(".cd-patch-select").innerHTML='<option value="">New patch</option>'+pet.markings.map((p,i)=>`<option value="${p.id}">Patch ${i+1} / ${PET_PATCH_SHAPES[p.shape]}</option>`).join("");$(".cd-patch-select").value=spot?String(spot.id):"";
     for(const axis of ["x","y"]){const input=$(`[data-position="${axis}"]`);input.disabled=!spot;input.value=spot?Math.round(spot[axis]*100):"";}
     $('[data-action="delete"]').disabled=!spot;$('[data-action="undo"]').disabled=!h.undo.length;$('[data-action="redo"]').disabled=!h.redo.length;$('[data-action="clear"]').disabled=!pet.markings.length;
@@ -63,7 +65,7 @@ export function createCoatPainter(root,{getPet,getSide,onChange}) {
   on(wrapper,"input",e=>{
     const key=e.target.dataset.brush;if(!key)return;
     const before=snapshot(),spot=current();
-    if(key){const value=key==="size"?Number(e.target.value)/100:key==="rotation"?Number(e.target.value):e.target.value;brush[key]=value;if(spot)spot[key]=value;}
+    if(key){const value=["size","textureScale","undertone"].includes(key)?Number(e.target.value)/100:key==="rotation"?Number(e.target.value):e.target.value;brush[key]=value;if(spot)spot[key]=value;}
     getPet().markings=normalizePetMarkings(getPet().markings);commit(before);
   });
   on(wrapper,"change",e=>{

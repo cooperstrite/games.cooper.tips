@@ -2,7 +2,7 @@
 
 A little scoreboard for games.cooper.tips.
 
-**Updated:** October 28, 2026 at 06:19 PM EDT
+**Updated:** October 30, 2026 at 05:19 PM EDT
 
 **Visibility:** Project files only. This report is excluded from the published website.
 
@@ -10,31 +10,31 @@ A little scoreboard for games.cooper.tips.
 
 | Stat | Total |
 | --- | ---: |
-| Lines in our source files | **34,354** |
-| Nonblank source lines | 32,288 |
-| Source files written for this project | 175 |
-| Image files | **195** |
-| Total project files | **409** |
+| Lines in our source files | **34,465** |
+| Nonblank source lines | 32,398 |
+| Source files written for this project | 177 |
+| Image files | **199** |
+| Total project files | **416** |
 | Games | **28** |
 | Games on the main list | 25 |
 | Games in Coming Soon | 3 |
 | Test files | 25 |
-| Project size on disk | 168.1 MiB |
-| Image collection size | 129.8 MiB |
+| Project size on disk | 172.5 MiB |
+| Image collection size | 134.2 MiB |
 
-At 50 lines per printed page, our source would fill **688 pages**.
+At 50 lines per printed page, our source would fill **690 pages**.
 
 ## Where the lines live
 
 | Area | Files | Lines |
 | --- | ---: | ---: |
 | Development tools | 4 | 415 |
-| Tests | 25 | 3,312 |
-| Website and games | 146 | 30,627 |
+| Tests | 25 | 3,345 |
+| Website and games | 148 | 30,705 |
 
 | Language | Files | Lines |
 | --- | ---: | ---: |
-| JavaScript | 161 | 26,588 |
+| JavaScript | 163 | 26,699 |
 | CSS | 10 | 6,019 |
 | HTML | 2 | 1,544 |
 | Python | 2 | 203 |
@@ -43,7 +43,7 @@ At 50 lines per printed page, our source would fill **688 pages**.
 
 | Format | Images |
 | --- | ---: |
-| PNG | 72 |
+| PNG | 76 |
 | WEBP | 50 |
 | SVG | 42 |
 | JPG | 30 |
@@ -63,13 +63,13 @@ At 50 lines per printed page, our source would fill **688 pages**.
 
 | Type | Files |
 | --- | ---: |
-| `.js` | 137 |
-| `.png` | 72 |
+| `.js` | 139 |
+| `.png` | 76 |
 | `.webp` | 50 |
 | `.svg` | 42 |
 | `.jpg` | 30 |
 | `.mjs` | 26 |
-| `.json` | 23 |
+| `.json` | 24 |
 | `.css` | 10 |
 | `.md` | 7 |
 | `.mp4` | 4 |
