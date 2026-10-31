@@ -1,0 +1,2 @@
+[346832984ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_RESET @ http://127.0.0.1:4173/free-flight-effects.js:0
+[347269491ms] [LOG] BJS - [17:41:34]: Babylon.js v9.31.0 - WebGL2 - Parallel shader compilation @ http://127.0.0.1:4173/vendor/babylonjs/babylon.js:0
