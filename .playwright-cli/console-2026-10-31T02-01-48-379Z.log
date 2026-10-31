@@ -1,0 +1,784 @@
+[   90157ms] [LOG] 🖱️ Manual pointer lock activation... @ http://127.0.0.1:4173/masterpiece-standalone.html:3002
+[   90157ms] [LOG] 🔒 Requesting full pointer lock... @ http://127.0.0.1:4173/masterpiece-standalone.html:2941
+[   90157ms] [LOG] 🔍 Canvas element: JSHandle@node @ http://127.0.0.1:4173/masterpiece-standalone.html:2945
+[   90157ms] [LOG] 🔍 Available pointer lock methods: @ http://127.0.0.1:4173/masterpiece-standalone.html:2946
+[   90157ms] [LOG]   - canvas.requestPointerLock: function @ http://127.0.0.1:4173/masterpiece-standalone.html:2947
+[   90157ms] [LOG]   - canvas.mozRequestPointerLock: undefined @ http://127.0.0.1:4173/masterpiece-standalone.html:2948
+[   90157ms] [LOG]   - canvas.webkitRequestPointerLock: undefined @ http://127.0.0.1:4173/masterpiece-standalone.html:2949
+[   90157ms] [LOG] 🎯 Using standard requestPointerLock... @ http://127.0.0.1:4173/masterpiece-standalone.html:2953
+[   90157ms] [LOG] ✅ Standard pointer lock requested @ http://127.0.0.1:4173/masterpiece-standalone.html:2956
+[   90157ms] [LOG] 🎯 Canvas focused for keyboard input @ http://127.0.0.1:4173/masterpiece-standalone.html:3078
+[   90157ms] [LOG] 🖱️ Mouse click detected @ http://127.0.0.1:4173/masterpiece-standalone.html:6118
+[   90158ms] [LOG] 🎯 Clicked object: {} @ http://127.0.0.1:4173/masterpiece-standalone.html:6154
+[   90158ms] [LOG] ⚠️ Clicked non-clue object: unknown type @ http://127.0.0.1:4173/masterpiece-standalone.html:6168
+[   90160ms] [LOG] 🎉 POINTER LOCKED! Mouse is now captured - infinite movement! @ http://127.0.0.1:4173/masterpiece-standalone.html:3018
+[   90809ms] [LOG] 🎬 Animation running - frame 3001 @ http://127.0.0.1:4173/masterpiece-standalone.html:6904
+[   90809ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[   90809ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[   91155ms] [LOG] 🔍 Pointer lock status after 1 second: LOCKED @ http://127.0.0.1:4173/masterpiece-standalone.html:2987
+[   91768ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[   91768ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[   92157ms] [LOG] 🎹 Key pressed: KeyC Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[   92158ms] [LOG] 🔧 Debug collision mode: ON (walk through walls) @ http://127.0.0.1:4173/masterpiece-standalone.html:5964
+[   92409ms] [LOG] 🎬 Animation running - frame 3101 @ http://127.0.0.1:4173/masterpiece-standalone.html:6904
+[   92728ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[   92728ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[   93468ms] [LOG] 🎹 Key pressed: KeyC Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[   93468ms] [LOG] 🔧 Debug collision mode: OFF (normal collision) @ http://127.0.0.1:4173/masterpiece-standalone.html:5964
+[   93688ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[   93689ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[   93833ms] [LOG] 🎹 Key pressed: KeyC Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[   93833ms] [LOG] 🔧 Debug collision mode: ON (walk through walls) @ http://127.0.0.1:4173/masterpiece-standalone.html:5964
+[   94009ms] [LOG] 🎬 Animation running - frame 3201 @ http://127.0.0.1:4173/masterpiece-standalone.html:6904
+[   94648ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[   94648ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[   95608ms] [LOG] 🎬 Animation running - frame 3301 @ http://127.0.0.1:4173/masterpiece-standalone.html:6904
+[   95608ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[   95609ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[   96344ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[   96344ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[   96569ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: true, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[   96569ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[   96569ms] [LOG] 🎮 Keys pressed: {W: true, A: false, S: false, D: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6974
+[   96853ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[   96853ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[   96936ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[   96936ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[   97019ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[   97019ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[   97103ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[   97103ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[   97187ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[   97187ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[   97209ms] [LOG] 🎬 Animation running - frame 3401 @ http://127.0.0.1:4173/masterpiece-standalone.html:6904
+[   97270ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[   97270ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[   97353ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[   97353ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[   97437ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[   97437ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[   97520ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[   97520ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[   97530ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: true, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[   97530ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[   97530ms] [LOG] 🎮 Keys pressed: {W: true, A: false, S: false, D: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6974
+[   97603ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[   97604ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[   97687ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[   97687ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[   97770ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[   97770ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[   97853ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[   97853ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[   97936ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[   97936ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[   98020ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[   98020ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[   98097ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[   98097ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[   98186ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[   98186ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[   98271ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[   98271ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[   98354ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[   98354ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[   98433ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[   98433ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[   98488ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: true, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[   98488ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[   98488ms] [LOG] 🎮 Keys pressed: {W: true, A: false, S: false, D: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6974
+[   98516ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[   98517ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[   98596ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[   98596ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[   98687ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[   98687ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[   98771ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[   98771ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[   98808ms] [LOG] 🎬 Animation running - frame 3501 @ http://127.0.0.1:4173/masterpiece-standalone.html:6904
+[   98854ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[   98854ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[   98933ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[   98933ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[   99020ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[   99020ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[   99104ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[   99104ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[   99188ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[   99188ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[   99271ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[   99271ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[   99354ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[   99355ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[   99437ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[   99438ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[   99438ms] [LOG] ⬆️ W released @ http://127.0.0.1:4173/masterpiece-standalone.html:6011
+[   99448ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[   99448ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  100408ms] [LOG] 🎬 Animation running - frame 3601 @ http://127.0.0.1:4173/masterpiece-standalone.html:6904
+[  100408ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  100408ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  100599ms] [LOG] 🎹 Key pressed: KeyV Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  100599ms] [LOG] 🎨 Creating hitbox visualizations... @ http://127.0.0.1:4173/masterpiece-standalone.html:4037
+[  100599ms] [LOG] 🧹 Removed all hitbox visualizations @ http://127.0.0.1:4173/masterpiece-standalone.html:4133
+[  100619ms] [LOG] ✅ Created 149 hitbox visualizations @ http://127.0.0.1:4173/masterpiece-standalone.html:4095
+[  100619ms] [LOG] 👁️ Hitbox visualization: ON @ http://127.0.0.1:4173/masterpiece-standalone.html:5982
+[  101464ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  101464ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  102104ms] [LOG] 🎬 Animation running - frame 3701 @ http://127.0.0.1:4173/masterpiece-standalone.html:6904
+[  102425ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  102425ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  102705ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  102705ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  103205ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  103206ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  103290ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  103290ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  103373ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  103374ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  103383ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: true, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  103384ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  103384ms] [LOG] 🎮 Keys pressed: {W: true, A: false, S: false, D: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6974
+[  103456ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  103456ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  103540ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  103540ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  103623ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  103623ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  103704ms] [LOG] 🎬 Animation running - frame 3801 @ http://127.0.0.1:4173/masterpiece-standalone.html:6904
+[  103706ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  103706ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  103789ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  103789ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  103873ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  103873ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  103956ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  103956ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  104040ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  104040ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  104123ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  104123ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  104207ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  104207ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  104239ms] [LOG] ⬆️ W released @ http://127.0.0.1:4173/masterpiece-standalone.html:6011
+[  104344ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  104344ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  104864ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  104864ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  105106ms] [LOG] ⬆️ W released @ http://127.0.0.1:4173/masterpiece-standalone.html:6011
+[  105305ms] [LOG] 🎬 Animation running - frame 3901 @ http://127.0.0.1:4173/masterpiece-standalone.html:6904
+[  105305ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  105305ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  105823ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  105824ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  106023ms] [LOG] ⬆️ W released @ http://127.0.0.1:4173/masterpiece-standalone.html:6011
+[  106265ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  106265ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  106841ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  106841ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  106904ms] [LOG] 🎬 Animation running - frame 4001 @ http://127.0.0.1:4173/masterpiece-standalone.html:6904
+[  107224ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: true, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  107224ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  107224ms] [LOG] 🎮 Keys pressed: {W: true, A: false, S: false, D: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6974
+[  107341ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  107341ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  107425ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  107425ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  107507ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  107507ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  107591ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  107591ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  107675ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  107676ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  107758ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  107758ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  107841ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  107842ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  107926ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  107926ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  108009ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  108009ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  108108ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  108108ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  108177ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  108177ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  108185ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: true, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  108185ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  108185ms] [LOG] 🎮 Keys pressed: {W: true, A: false, S: false, D: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6974
+[  108266ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  108266ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  108352ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  108352ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  108435ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  108435ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  108504ms] [LOG] 🎬 Animation running - frame 4101 @ http://127.0.0.1:4173/masterpiece-standalone.html:6904
+[  108525ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  108525ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  108609ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  108609ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  108683ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  108683ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  108768ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  108769ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  108854ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  108854ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  108939ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  108939ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  109021ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  109021ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  109108ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  109109ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  109144ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: true, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  109145ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  109145ms] [LOG] 🎮 Keys pressed: {W: true, A: false, S: false, D: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6974
+[  109185ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  109185ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  109269ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  109269ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  109354ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  109354ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  109443ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  109443ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  109518ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  109518ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  109604ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  109604ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  109679ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  109679ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  109772ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  109772ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  109853ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  109853ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  109936ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  109936ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  110026ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  110026ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  110103ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  110103ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  110104ms] [LOG] 🎬 Animation running - frame 4201 @ http://127.0.0.1:4173/masterpiece-standalone.html:6904
+[  110104ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: true, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  110104ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  110104ms] [LOG] 🎮 Keys pressed: {W: true, A: false, S: false, D: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6974
+[  110180ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  110180ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  110275ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  110275ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  110359ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  110359ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  110443ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  110443ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  110517ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  110517ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  110601ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  110601ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  110686ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  110686ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  110771ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  110771ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  110855ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  110855ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  110941ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  110941ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  111021ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  111021ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  111065ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: true, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  111065ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  111065ms] [LOG] 🎮 Keys pressed: {W: true, A: false, S: false, D: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6974
+[  111102ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  111103ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  111180ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  111180ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  111271ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  111271ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  111356ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  111356ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  111437ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  111437ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  111514ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  111514ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  111609ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  111609ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  111693ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  111693ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  111703ms] [LOG] 🎬 Animation running - frame 4301 @ http://127.0.0.1:4173/masterpiece-standalone.html:6904
+[  111777ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  111777ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  111859ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  111859ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  111943ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  111943ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  112024ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: true, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  112024ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  112024ms] [LOG] 🎮 Keys pressed: {W: true, A: false, S: false, D: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6974
+[  112027ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  112027ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  112110ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  112110ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  112193ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  112193ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  112270ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  112270ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  112352ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  112352ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  112440ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  112441ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  112516ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  112516ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  112605ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  112605ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  112688ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  112688ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  112771ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  112771ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  112856ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  112856ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  112943ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  112943ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  112985ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: true, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  112985ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  112985ms] [LOG] 🎮 Keys pressed: {W: true, A: false, S: false, D: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6974
+[  113027ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  113028ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  113111ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  113111ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  113194ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  113194ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  113277ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  113277ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  113304ms] [LOG] 🎬 Animation running - frame 4401 @ http://127.0.0.1:4173/masterpiece-standalone.html:6904
+[  113361ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  113361ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  113444ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  113444ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  113527ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  113527ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  113605ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  113605ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  113690ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  113690ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  113777ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  113777ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  113861ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  113861ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  113939ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  113939ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  113944ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: true, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  113944ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  113944ms] [LOG] 🎮 Keys pressed: {W: true, A: false, S: false, D: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6974
+[  114027ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  114027ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  114111ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  114111ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  114195ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  114195ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  114277ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  114277ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  114357ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  114357ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  114443ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  114443ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  114524ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  114524ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  114608ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  114608ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  114690ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  114690ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  114774ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  114774ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  114861ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  114861ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  114905ms] [LOG] 🎬 Animation running - frame 4501 @ http://127.0.0.1:4173/masterpiece-standalone.html:6904
+[  114905ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: true, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  114905ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  114905ms] [LOG] 🎮 Keys pressed: {W: true, A: false, S: false, D: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6974
+[  114945ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  114945ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  115028ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  115028ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  115106ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  115106ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  115194ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  115194ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  115274ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  115274ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  115358ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  115358ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  115445ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  115445ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  115525ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  115525ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  115608ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  115608ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  115694ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  115695ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  115779ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  115779ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  115862ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  115862ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  115872ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: true, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  115872ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  115872ms] [LOG] 🎮 Keys pressed: {W: true, A: false, S: false, D: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6974
+[  115939ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  115939ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  116028ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  116028ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  116107ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  116107ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  116190ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  116191ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  116275ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  116275ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  116357ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  116357ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  116442ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  116442ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  116505ms] [LOG] 🎬 Animation running - frame 4601 @ http://127.0.0.1:4173/masterpiece-standalone.html:6904
+[  116528ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  116528ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  116612ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  116612ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  116696ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  116696ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  116773ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  116773ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  116824ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: true, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  116824ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  116824ms] [LOG] 🎮 Keys pressed: {W: true, A: false, S: false, D: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6974
+[  116857ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  116857ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  116941ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  116941ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  117024ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  117024ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  117107ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  117107ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  117191ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  117191ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  117274ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  117274ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  117362ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  117362ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  117446ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  117446ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  117529ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  117529ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  117613ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  117613ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  117696ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  117696ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  117779ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  117779ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  117789ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: true, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  117789ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  117789ms] [LOG] 🎮 Keys pressed: {W: true, A: false, S: false, D: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6974
+[  117863ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  117863ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  117946ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  117946ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  118029ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  118029ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  118105ms] [LOG] 🎬 Animation running - frame 4701 @ http://127.0.0.1:4173/masterpiece-standalone.html:6904
+[  118113ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  118113ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  118196ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  118196ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  118213ms] [LOG] ⬆️ W released @ http://127.0.0.1:4173/masterpiece-standalone.html:6011
+[  118744ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  118744ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  119146ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  119146ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  119646ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  119646ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  119704ms] [LOG] 🎬 Animation running - frame 4801 @ http://127.0.0.1:4173/masterpiece-standalone.html:6904
+[  119705ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: true, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  119705ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  119705ms] [LOG] 🎮 Keys pressed: {W: true, A: false, S: false, D: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6974
+[  119724ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  119724ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  119809ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  119810ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  119893ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  119893ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  119977ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  119977ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  120063ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  120063ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  120147ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  120147ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  120230ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  120230ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  120314ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  120314ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  120397ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  120397ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  120480ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  120480ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  120564ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  120564ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  120648ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  120649ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  120664ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: true, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  120664ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  120664ms] [LOG] 🎮 Keys pressed: {W: true, A: false, S: false, D: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6974
+[  120725ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  120726ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  120809ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  120809ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  120893ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  120893ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  120976ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  120976ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  121064ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  121064ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  121142ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  121142ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  121226ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  121226ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  121305ms] [LOG] 🎬 Animation running - frame 4901 @ http://127.0.0.1:4173/masterpiece-standalone.html:6904
+[  121311ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  121311ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  121397ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  121397ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  121481ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  121481ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  121559ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  121560ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  121624ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: true, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  121624ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  121624ms] [LOG] 🎮 Keys pressed: {W: true, A: false, S: false, D: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6974
+[  121647ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  121647ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  121731ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  121731ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  121814ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  121814ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  121898ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  121898ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  121977ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  121977ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  122064ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  122064ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  122148ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  122148ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  122232ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  122232ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  122315ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  122315ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  122398ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  122398ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  122478ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  122478ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  122560ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  122560ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  122584ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: true, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  122585ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  122585ms] [LOG] 🎮 Keys pressed: {W: true, A: false, S: false, D: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6974
+[  122643ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  122643ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  122727ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  122727ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  122810ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  122811ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  122893ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  122893ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  122904ms] [LOG] 🎬 Animation running - frame 5001 @ http://127.0.0.1:4173/masterpiece-standalone.html:6904
+[  122981ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  122981ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  123065ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  123065ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  123144ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  123144ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  123226ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  123226ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  123315ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  123315ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  123399ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  123399ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  123482ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  123482ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  123544ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: true, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  123544ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  123544ms] [LOG] 🎮 Keys pressed: {W: true, A: false, S: false, D: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6974
+[  123565ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  123565ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  123648ms] [LOG] 🎹 Key pressed: KeyW Target: CANVAS @ http://127.0.0.1:4173/masterpiece-standalone.html:5931
+[  123648ms] [LOG] ✅ W pressed - moving forward @ http://127.0.0.1:4173/masterpiece-standalone.html:5947
+[  123715ms] [LOG] ⬆️ W released @ http://127.0.0.1:4173/masterpiece-standalone.html:6011
+[  124140ms] [LOG] 🔓 Mouse control released @ http://127.0.0.1:4173/masterpiece-standalone.html:3032
+[  124505ms] [LOG] 🎬 Animation running - frame 5101 @ http://127.0.0.1:4173/masterpiece-standalone.html:6904
+[  124505ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  124505ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  125464ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  125465ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  126104ms] [LOG] 🎬 Animation running - frame 5201 @ http://127.0.0.1:4173/masterpiece-standalone.html:6904
+[  126424ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  126425ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  127384ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  127384ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  127704ms] [LOG] 🎬 Animation running - frame 5301 @ http://127.0.0.1:4173/masterpiece-standalone.html:6904
+[  128344ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  128344ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  129305ms] [LOG] 🎬 Animation running - frame 5401 @ http://127.0.0.1:4173/masterpiece-standalone.html:6904
+[  129306ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  129306ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  130263ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  130263ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  130904ms] [LOG] 🎬 Animation running - frame 5501 @ http://127.0.0.1:4173/masterpiece-standalone.html:6904
+[  131224ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  131225ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  132184ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  132184ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  132504ms] [LOG] 🎬 Animation running - frame 5601 @ http://127.0.0.1:4173/masterpiece-standalone.html:6904
+[  133145ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  133145ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  134104ms] [LOG] 🎬 Animation running - frame 5701 @ http://127.0.0.1:4173/masterpiece-standalone.html:6904
+[  134105ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  134105ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  135064ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  135064ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  135704ms] [LOG] 🎬 Animation running - frame 5801 @ http://127.0.0.1:4173/masterpiece-standalone.html:6904
+[  136024ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  136024ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  136984ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  136985ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  137305ms] [LOG] 🎬 Animation running - frame 5901 @ http://127.0.0.1:4173/masterpiece-standalone.html:6904
+[  137945ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  137945ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  138904ms] [LOG] 🎬 Animation running - frame 6001 @ http://127.0.0.1:4173/masterpiece-standalone.html:6904
+[  138905ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  138905ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  139865ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  139865ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  140504ms] [LOG] 🎬 Animation running - frame 6101 @ http://127.0.0.1:4173/masterpiece-standalone.html:6904
+[  140825ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  140825ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  141784ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  141784ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  142104ms] [LOG] 🎬 Animation running - frame 6201 @ http://127.0.0.1:4173/masterpiece-standalone.html:6904
+[  142745ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  142745ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  143704ms] [LOG] 🎬 Animation running - frame 6301 @ http://127.0.0.1:4173/masterpiece-standalone.html:6904
+[  143705ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  143705ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  144665ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  144665ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  145303ms] [LOG] 🎬 Animation running - frame 6401 @ http://127.0.0.1:4173/masterpiece-standalone.html:6904
+[  145624ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  145624ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  146584ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  146584ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  146903ms] [LOG] 🎬 Animation running - frame 6501 @ http://127.0.0.1:4173/masterpiece-standalone.html:6904
+[  147545ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  147545ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  148504ms] [LOG] 🎬 Animation running - frame 6601 @ http://127.0.0.1:4173/masterpiece-standalone.html:6904
+[  148504ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  148504ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  149465ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  149465ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  150104ms] [LOG] 🎬 Animation running - frame 6701 @ http://127.0.0.1:4173/masterpiece-standalone.html:6904
+[  150424ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  150424ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  151384ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  151384ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  151704ms] [LOG] 🎬 Animation running - frame 6801 @ http://127.0.0.1:4173/masterpiece-standalone.html:6904
+[  152345ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  152345ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  153305ms] [LOG] 🎬 Animation running - frame 6901 @ http://127.0.0.1:4173/masterpiece-standalone.html:6904
+[  153306ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  153306ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  154265ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  154265ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  154905ms] [LOG] 🎬 Animation running - frame 7001 @ http://127.0.0.1:4173/masterpiece-standalone.html:6904
+[  155225ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  155225ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  156185ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  156186ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  156505ms] [LOG] 🎬 Animation running - frame 7101 @ http://127.0.0.1:4173/masterpiece-standalone.html:6904
+[  157143ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  157144ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  158104ms] [LOG] 🎬 Animation running - frame 7201 @ http://127.0.0.1:4173/masterpiece-standalone.html:6904
+[  158104ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  158104ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  159064ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  159064ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  159705ms] [LOG] 🎬 Animation running - frame 7301 @ http://127.0.0.1:4173/masterpiece-standalone.html:6904
+[  160025ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  160025ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  160985ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  160985ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  161305ms] [LOG] 🎬 Animation running - frame 7401 @ http://127.0.0.1:4173/masterpiece-standalone.html:6904
+[  161944ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  161944ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  162904ms] [LOG] 🎬 Animation running - frame 7501 @ http://127.0.0.1:4173/masterpiece-standalone.html:6904
+[  162905ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  162905ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  163865ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  163865ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  164505ms] [LOG] 🎬 Animation running - frame 7601 @ http://127.0.0.1:4173/masterpiece-standalone.html:6904
+[  164825ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  164825ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  165784ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  165784ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  166105ms] [LOG] 🎬 Animation running - frame 7701 @ http://127.0.0.1:4173/masterpiece-standalone.html:6904
+[  166745ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  166745ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  167705ms] [LOG] 🎬 Animation running - frame 7801 @ http://127.0.0.1:4173/masterpiece-standalone.html:6904
+[  167705ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  167705ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  168664ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  168665ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  169304ms] [LOG] 🎬 Animation running - frame 7901 @ http://127.0.0.1:4173/masterpiece-standalone.html:6904
+[  169625ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  169625ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  170584ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  170584ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  170904ms] [LOG] 🎬 Animation running - frame 8001 @ http://127.0.0.1:4173/masterpiece-standalone.html:6904
+[  171544ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  171544ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  172505ms] [LOG] 🎬 Animation running - frame 8101 @ http://127.0.0.1:4173/masterpiece-standalone.html:6904
+[  172505ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  172505ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  173465ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  173465ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  174104ms] [LOG] 🎬 Animation running - frame 8201 @ http://127.0.0.1:4173/masterpiece-standalone.html:6904
+[  174425ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  174425ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  175383ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  175384ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  175704ms] [LOG] 🎬 Animation running - frame 8301 @ http://127.0.0.1:4173/masterpiece-standalone.html:6904
+[  176346ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  176346ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  177304ms] [LOG] 🎬 Animation running - frame 8401 @ http://127.0.0.1:4173/masterpiece-standalone.html:6904
+[  177304ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  177304ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  178265ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  178265ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  178904ms] [LOG] 🎬 Animation running - frame 8501 @ http://127.0.0.1:4173/masterpiece-standalone.html:6904
+[  179225ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  179225ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  180184ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  180184ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  180504ms] [LOG] 🎬 Animation running - frame 8601 @ http://127.0.0.1:4173/masterpiece-standalone.html:6904
+[  181145ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  181145ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  182104ms] [LOG] 🎬 Animation running - frame 8701 @ http://127.0.0.1:4173/masterpiece-standalone.html:6904
+[  182104ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  182104ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  183064ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  183065ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  183703ms] [LOG] 🎬 Animation running - frame 8801 @ http://127.0.0.1:4173/masterpiece-standalone.html:6904
+[  184024ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  184024ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  184985ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  184985ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  185303ms] [LOG] 🎬 Animation running - frame 8901 @ http://127.0.0.1:4173/masterpiece-standalone.html:6904
+[  185944ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  185944ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  186904ms] [LOG] 🎬 Animation running - frame 9001 @ http://127.0.0.1:4173/masterpiece-standalone.html:6904
+[  186904ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  186904ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  187864ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  187865ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
+[  188504ms] [LOG] 🎬 Animation running - frame 9101 @ http://127.0.0.1:4173/masterpiece-standalone.html:6904
+[  188824ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ http://127.0.0.1:4173/masterpiece-standalone.html:6960
+[  188824ms] [LOG] 🚶 Camera position: Lt @ http://127.0.0.1:4173/masterpiece-standalone.html:6961
