@@ -1,6 +1,8 @@
 // One set of measurements drives the museum, floor plan, and solid hitboxes.
 export const HEIGHT = 5.8;
 export const START = Object.freeze({ x: 0, y: .04, z: 11, yaw: 0 });
+// Shared by the visible runners and the sound of shoes crossing them.
+export const RUGS = [[0,9,4.4,8],[0,0,4.4,7.4],[0,-8,7,7],[24,-3,5,10]];
 export const ROOMS = [
   { id: "gallery", name: "Main Gallery", x: 0, z: -8, w: 24, d: 8, color: "#9d7b57" },
   { id: "corridor", name: "Central Corridor", x: 0, z: 0, w: 24, d: 8, color: "#7e8275" },

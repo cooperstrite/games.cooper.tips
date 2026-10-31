@@ -1,7 +1,7 @@
 import { createWebGLScene } from "./arcade/babylon.js";
 import { createMuseumMaterials } from "./museum-materials.js";
 import { prepareArcherAssets } from "./arcade/humanoid-mesh.js";
-import { WALLS, FURNITURE, ROOMS, CLUES, HEIGHT, COLUMNS, segmentHitsBox } from "./museum-world.js";
+import { WALLS, FURNITURE, ROOMS, RUGS, CLUES, HEIGHT, COLUMNS, segmentHitsBox } from "./museum-world.js";
 import { WINDOWS, SKYLIGHT, wallPanels, wallTrim, ceilingPanels, pictureFrameGeometry } from "./museum-architecture.js";
 
 export async function createMuseumRenderer(canvas, physics, { isCurrent=()=>true }={}) {
@@ -70,7 +70,7 @@ export async function createMuseumRenderer(canvas, physics, { isCurrent=()=>true
   }
   for(const z of [-4,4]){box('door lintel',7.2,.28,.72,0,3.96,z,m.white);label(z<0?'THE MAIN GALLERY':'ENTRANCE HALL',0,4.45,z+.225,3.1,0,true);}
   label('SECURITY OFFICE',-11.76,4.35,0,2.6,Math.PI/2,true);label('EAST WING / STORAGE',11.76,4.35,0,3,-Math.PI/2,true);
-  for(const [x,z,w,d] of [[0,9,4.4,8],[0,0,4.4,7.4],[0,-8,7,7],[24,-3,5,10]]){
+  for(const [x,z,w,d] of RUGS){
     const rug=B.MeshBuilder.CreateGround('woven runner',{width:w,height:d},scene);rug.position.set(x,.017,z);finish(rug,m.rug,false);
   }
   function point(name,x,y,z,power,color='#ffe1b1',range=14){const l=new B.PointLight(name,V(x,y,z),scene);l.intensity=power;l.diffuse=B.Color3.FromHexString(color);l.range=range;l.radius=.5;localLights.push(l);return l;}
