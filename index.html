@@ -21,6 +21,8 @@
     <meta name="twitter:image" content="https://games.cooper.tips/assets/social-share-cover.png" />
     <link rel="icon" type="image/png" href="assets/social-share-cover.png" />
     <title>games.cooper.tips</title>
+    <meta name="theme-color" content="#0e101c" />
+    <script src="theme.js"></script>
     <link rel="stylesheet" href="style.css" />
     <link rel="stylesheet" href="bubble-rally.css" />
     <link rel="stylesheet" href="memory-loop.css" />
@@ -33,6 +35,7 @@
     <link rel="stylesheet" href="haunted-harvest.css?v=20261023-2" />
     <link rel="stylesheet" href="switchyard-signals.css?v=20261023-1" />
     <link rel="stylesheet" href="rocket-boost.css?v=20261023-1" />
+    <link rel="stylesheet" href="theme.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -46,7 +49,19 @@
         <div class="title-group">
           <h1>games.cooper.tips</h1>
         </div>
-        <p class="tagline">Small games, big vibes.</p>
+        <div class="site-preferences">
+          <p class="tagline">Small games, big vibes.</p>
+          <div class="theme-switch" role="group" aria-label="Color theme">
+            <button type="button" data-arcade-theme="light" aria-pressed="false">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg>
+              Light
+            </button>
+            <button type="button" data-arcade-theme="dark" aria-pressed="true">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14A8.7 8.7 0 0 1 10 3.5 8.7 8.7 0 1 0 20.5 14Z"/></svg>
+              Dark
+            </button>
+          </div>
+        </div>
       </header>
 
       <main class="site-main">

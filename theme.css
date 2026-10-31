@@ -1,0 +1,476 @@
+/* Shared interface palette. Scenery, sprites, swatches, and gameplay signals keep
+   their own colors. Load after game styles; no filters are applied to artwork. */
+:root,
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --ui-page: #0e101c;
+  --ui-glow: rgba(58, 105, 255, .35);
+  --ui-glow-bottom: rgba(114, 255, 182, .2);
+  --ui-card: rgba(16, 18, 34, .82);
+  --ui-tile-start: rgba(114, 246, 255, .08);
+  --ui-tile-end: rgba(255, 217, 114, .18);
+  --ui-tile-hover-start: rgba(114, 246, 255, .18);
+  --ui-tile-hover-end: rgba(255, 217, 114, .3);
+  --ui-panel: #151c2c;
+  --ui-raised: #202b3e;
+  --ui-soft: #1a2436;
+  --ui-hover: #2a3a50;
+  --ui-ink: #f0f4fc;
+  --ui-muted: #b0bfd3;
+  --ui-line: #3b4b63;
+  --ui-accent: #82e3e3;
+  --ui-cool: #9ab6ff;
+  --ui-accent-soft: #193d49;
+  --ui-primary: #92e5df;
+  --ui-on-primary: #122e38;
+  --ui-gold: #f1cf8b;
+  --ui-gold-soft: #3a3226;
+  --ui-success: #99e1b7;
+  --ui-success-soft: #1a3a34;
+  --ui-danger: #ffa7b3;
+  --ui-danger-soft: #422a3b;
+  --ui-coral: #f3b299;
+  --ui-coral-soft: #3c2e34;
+  --ui-shadow: 0 16px 45px #02061133;
+  --ui-input: #111c2c;
+}
+:root[data-theme="light"] {
+  color-scheme: light;
+  --ui-page: #f3f6fb;
+  --ui-glow: rgba(160, 190, 255, .46);
+  --ui-glow-bottom: rgba(125, 226, 192, .34);
+  --ui-card: rgba(255, 255, 255, .88);
+  --ui-tile-start: rgba(213, 242, 250, .9);
+  --ui-tile-end: rgba(255, 237, 203, .94);
+  --ui-tile-hover-start: rgba(193, 235, 246, .96);
+  --ui-tile-hover-end: rgba(255, 228, 179, .98);
+  --ui-panel: #ffffff;
+  --ui-raised: #f4f7fb;
+  --ui-soft: #eaf0f7;
+  --ui-hover: #e0e9f3;
+  --ui-ink: #213247;
+  --ui-muted: #53657a;
+  --ui-line: #c7d2e1;
+  --ui-accent: #096b7c;
+  --ui-cool: #365ca0;
+  --ui-accent-soft: #deeff2;
+  --ui-primary: #126d80;
+  --ui-on-primary: #ffffff;
+  --ui-gold: #805c1c;
+  --ui-gold-soft: #faf0d9;
+  --ui-success: #266b4c;
+  --ui-success-soft: #e2f1e9;
+  --ui-danger: #a32b46;
+  --ui-danger-soft: #fbe7ec;
+  --ui-coral: #9b4931;
+  --ui-coral-soft: #f9e9e1;
+  --ui-shadow: 0 16px 45px #344e6c10;
+  --ui-input: #ffffff;
+}
+:root[data-theme] {
+  --bg: var(--ui-page);
+  --bg-glow: var(--ui-glow);
+  --card: var(--ui-card);
+  --card-border: var(--ui-line);
+  --text: var(--ui-ink);
+  --text-muted: var(--ui-muted);
+  --accent: var(--ui-accent);
+  --accent-strong: var(--ui-gold);
+  --success: var(--ui-success);
+  --danger: var(--ui-danger);
+  accent-color: var(--ui-primary);
+}
+:root[data-theme] body {
+  color: var(--ui-ink);
+  background: radial-gradient(circle at top, var(--ui-glow), transparent 60%),
+    radial-gradient(circle at 10% 80%, var(--ui-glow-bottom), transparent 55%), var(--ui-page);
+}
+:root[data-theme] :is(.game-card, .game-tile) {
+  background: var(--ui-card);
+  border-color: var(--ui-line);
+  box-shadow: var(--ui-shadow);
+}
+:root[data-theme] .game-tile { background: linear-gradient(135deg, var(--ui-tile-start), var(--ui-tile-end)); }
+:root[data-theme] .game-tile:hover,
+:root[data-theme] .game-tile:focus-visible { background: linear-gradient(135deg, var(--ui-tile-hover-start), var(--ui-tile-hover-end)); border-color: var(--ui-accent); }
+:root[data-theme] :is(.site-footer, .game-header, .coming-strip) { border-color: var(--ui-line); }
+.site-preferences { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+/* The shared header must stay inside the viewport on every game route. */
+#app { min-width: 0; grid-template-columns: minmax(0, 1fr); }
+:is(.site-header, .site-main, .game-card, .game-root, .title-group) { min-width: 0; }
+.title-group h1 { overflow-wrap: anywhere; }
+.site-preferences .tagline { margin: 0; }
+.theme-switch { display: inline-flex; gap: 4px; padding: 4px; border: 1px solid var(--ui-line); border-radius: 999px; background: var(--ui-panel); flex-shrink: 0; }
+:root[data-theme] .theme-switch button { display: inline-flex; align-items: center; gap: 7px; min-height: 38px; padding: 8px 14px; border: 0; border-radius: 999px; font: 600 12px var(--font-body, system-ui); color: var(--ui-muted); background: transparent; box-shadow: none; cursor: pointer; }
+:root[data-theme] .theme-switch button:hover { background: var(--ui-hover); color: var(--ui-ink); }
+:root[data-theme] .theme-switch button[aria-pressed="true"] { color: var(--ui-on-primary); background: var(--ui-primary); }
+.theme-switch svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+:root[data-theme] :is(button, a, input, select, summary):focus-visible { outline-color: var(--ui-accent); }
+:root[data-theme] :is(input, select, textarea) { accent-color: var(--ui-primary); }
+:root[data-theme] :is(#app, .hh-dialog, .control-panel) :is(select, input:not([type]), input[type="text"], input[type="password"], input[type="search"], input[type="number"], textarea) {
+  background: var(--ui-input); color: var(--ui-ink); border-color: var(--ui-line); color-scheme: inherit;
+}
+:root[data-theme] :is(#app, .hh-dialog) option { color: var(--ui-ink); background: var(--ui-input); }
+:root[data-theme] :is(#app, .hh-dialog) input::placeholder { color: var(--ui-muted); opacity: 1; }
+
+/* Adapt existing game variables so labels and dynamically created UI agree. */
+:root[data-theme] :is(.flappy-game, .rg-game, .sl-game, .cd-game, .cd-studio, .nim-duel, .spot-clash, .sw-game, .rb-game, .rb-studio, .hh-game, .hh-dialog, .rally-game, .ml-game) {
+  --flappy-ink: var(--ui-ink); --flappy-muted: var(--ui-muted); --flappy-paper: var(--ui-panel);
+  --rg-ink: var(--ui-ink); --rg-soft: var(--ui-muted); --rg-line: var(--ui-line); --rg-accent: var(--ui-accent);
+  --sl-ink: var(--ui-ink); --sl-muted: var(--ui-muted); --sl-line: var(--ui-line); --sl-paper: var(--ui-panel); --sl-gold: var(--ui-gold);
+  --cd-ink: var(--ui-ink); --cd-muted: var(--ui-muted); --cd-line: var(--ui-line); --cd-cat: var(--ui-coral); --cd-dog: var(--ui-accent);
+  --nd-ink: var(--ui-ink); --nd-muted: var(--ui-muted); --nd-paper: var(--ui-panel); --nd-green: var(--ui-primary);
+  --scg-ink: var(--ui-ink); --scg-muted: var(--ui-muted); --scg-paper: var(--ui-panel); --scg-you: var(--ui-accent); --scg-bot: var(--ui-coral);
+  --sw-ink: var(--ui-ink); --sw-muted: var(--ui-muted); --sw-paper: var(--ui-panel); --sw-line: var(--ui-line);
+  --rb-ink: var(--ui-ink); --rb-muted: var(--ui-muted); --rb-border: var(--ui-line); --rb-panel: var(--ui-soft); --rb-gold: var(--ui-gold); --rb-aqua: var(--ui-accent);
+  --hh-text: var(--ui-ink); --hh-muted: var(--ui-muted); --hh-line: var(--ui-line); --hh-gold: var(--ui-gold);
+  --rally-ink: var(--ui-ink); --rally-muted: var(--ui-muted);
+  --ml-dim: var(--ui-muted); --ml-gold: var(--ui-gold); --ml-mint: var(--ui-success);
+  color-scheme: inherit; color: var(--ui-ink); background: var(--ui-panel); border-color: var(--ui-line);
+}
+
+/* Common cards, instructions, setup areas, and result panels. These are UI only;
+   artboards, scene canvases, card faces, and cinematic backdrops are excluded. */
+:root[data-theme] :is(
+  .arcade-hero, .arcade-item, .arcade-studio-card, .arcade-editor-toolbar, .arcade-studio-preview,
+  .arcade-earning-guide, .arcade-game-wallet, .arcade-pet-poses,
+  .snake-customization, .neondrift-setup, .archery-guide, .archery-gear, .archery-history, .archery-customizer,
+  .rlgl-view-buttons, .rlgl-customizer fieldset,
+  .flappy-setup, .flappy-customization, .flappy-customizer, .flappy-shop, .flappy-howto,
+  .flappy-game fieldset, .flappy-preview, .flappy-world-preview, .flappy-shop-item,
+  .rally-setup, .rally-rules, .rally-history, .rally-turn-panel, .rally-test-panel,
+  .ml-setup, .ml-rules, .ml-results,
+  .sl-settings, .sl-desk, .sl-rules, .sl-rewards, .sl-custom, .sl-results,
+  .cd-match, .cd-player, .cd-instructions, .cd-coat-painter,
+  .nd-guide, .nd-log, .nd-mode,
+  .scg-levels, .scg-card, .scg-guide, .scg-finale,
+  .rg-aircraft-card, .rg-mission-panel, .rg-handbook, .rg-control-preferences,
+  .ff-navigation-panel, .ff-handbook,
+  .hh-toolbar, .hh-rules, .hh-best, .hh-gallery, .hh-dialog-body, .hh-inventory, .hh-help-cards > div,
+  .sw-brief, .sw-control-panel, .sw-guide, .sw-junction-card, .sw-train-card,
+  .rb-briefing, .rb-console, .rb-handbook, .rb-assembly, .rb-custom-section, .rb-stage-card, .rb-workshop,
+  .skyport-panel, .skyport-upgrade, .skyport-drone, .skyport-contract,
+  .spotter-info, .foodchain-info
+) { color: var(--ui-ink); background: var(--ui-raised); border-color: var(--ui-line); }
+:root[data-theme] :is(
+  .arcade-balance, .arcade-item-body, .arcade-studio-modes, .arcade-studio-focus, .arcade-studio-preview figcaption,
+  .arcade-editor-note, .snake-score, .neondrift-car-choice,
+  .rlgl-status, .archery-log li, .archery-instructions, .archery-readout,
+  .flappy-hud > div, .flappy-overlay-card, .flappy-color-control, .flappy-balance, .flappy-coin-guide, .flappy-reward,
+  .rally-seat, .rally-racer-card, .rally-action, .rally-preview-note, .rally-brake-tip, .rally-test-racer,
+  .ml-player, .ml-turn-status, .ml-next-coins, .ml-coin-guide, .ml-coin-example, .ml-standings > div, .ml-stats,
+  .sl-topbar, .sl-levels, .sl-mode, .sl-cover, .sl-utility, .sl-status, .sl-found-list, .sl-reward-cell,
+  .sl-interaction-note, .sl-preferences, .sl-custom-status,
+  .cd-scoreboard, .cd-stage-card, .cd-hero-badge, .cd-ending-result,
+  .nd-player, .nd-turnbar, .nd-example, .nd-tip, .nd-takebar,
+  .scg-player, .scg-status, .scg-card-number, .scg-curtain, .scg-recent li, .scg-win-rule,
+  .rg-mission-facts span, .rg-tower, .rg-result, .rg-loading, .rg-paused,
+  .ff-trip, .ff-message, .ff-chart-heading, .ff-nearby,
+  .hh-scoreboard > div, .hh-status, .hh-question-help, .hh-bench-help, .hh-answer-feedback, .hh-carve-hint,
+  .hh-objective, .hh-guide-steps, .hh-clues, .hh-tool-help, .hh-workshop-reward,
+  .sw-stats > div, .sw-progress, .sw-step, .sw-map-key, .sw-quick-controls, .sw-pause-shade, .sw-result, .sw-announcement,
+  .rb-check, .rb-health, .rb-mission-checklist, .rb-build-stats, .rb-build-status, .rb-debrief, .rb-camera-bar,
+  .rb-preview-toolbar, .rb-crew-tabs, .rb-preview-caption, .rb-flight-guide, .rb-control-feedback,
+  .popdash-status, .skyport-status, .harmonic-status
+) { color: var(--ui-ink); background: var(--ui-soft); border-color: var(--ui-line); }
+
+/* Native form controls and non-art buttons. Game pieces and color swatches are
+   intentionally absent so Light/Dark never changes the meaning of a move. */
+:root[data-theme] :is(
+  .controls, .arcade-nav, .arcade-editor-toolbar, .arcade-studio-modes, .arcade-studio-focus, .arcade-pet-poses,
+  .arcade-item-footer, .arcade-filters, .arcade-shop-filters, .arcade-studio-preview figcaption,
+  .snake-controls, .snake-sound-group, .neondrift-audio, .rlgl-view-buttons,
+  .rlgl-controls, .archery-controls, .archery-gear, .archery-result,
+  .flappy-game, .rally-game, .ml-setup, .ml-table-actions, .ml-results,
+  .sl-settings, .sl-utility, .sl-results, .sl-preferences, .sl-custom,
+  .cd-setup, .cd-venues, .cd-toolbar, .cd-gadgets, .cd-studio,
+  .nd-settings, .nd-amounts, .nd-toolbar, .nd-ending-actions,
+  .scg-levels, .scg-actions, .scg-finale,
+  .rg-game, .hh-toolbar, .hh-dialog, .hh-audio, .hh-draft-actions,
+  .sw-toolbar, .sw-viewbar, .sw-control-panel, .sw-quick-controls, .sw-result,
+  .rb-game, .rb-studio
+) :is(button, select):not(:where(.cd-fur-swatches button, .ml-card, .sl-scene, .nd-pile)) {
+  color: var(--ui-ink); background: var(--ui-input); border-color: var(--ui-line); text-shadow: none;
+}
+:root[data-theme] :is(
+  .back-button, .coming-strip button, .theme-switch, .arcade-nav a, .arcade-item button,
+  .ml-mobile-setup, .ml-setup-jump, .rlgl-sound, .archery-customizer-toggle,
+  .flappy-subnav a, .cd-natural-bandana, .cd-natural-coat, .cd-pattern-presets button
+) { color: var(--ui-ink); background: var(--ui-input); border-color: var(--ui-line); }
+:root[data-theme] :is(.game-root, .hh-dialog) kbd { color: var(--ui-muted); background: var(--ui-soft); border-color: var(--ui-line); box-shadow: none; }
+:root[data-theme] :is(
+  .controls, .arcade-nav, .arcade-item, .arcade-studio-modes, .arcade-studio-focus, .arcade-pet-poses,
+  .rlgl-view-buttons, .flappy-game, .rally-setup, .rally-actions, .ml-setup, .ml-results,
+  .sl-settings, .sl-utility, .sl-results, .cd-setup, .cd-toolbar, .cd-gadgets,
+  .cd-studio, .nd-settings, .nd-amounts, .nd-toolbar, .scg-levels, .scg-actions,
+  .rg-toolbar, .rg-setup, .hh-toolbar, .hh-dialog, .sw-toolbar, .sw-control-panel,
+  .rb-launch-row, .rb-flight-actions, .rb-camera-bar, .rb-preview-toolbar, .rb-crew-tabs
+) button:hover:not(:disabled):not(:where(.cd-fur-swatches button)) { background: var(--ui-hover); border-color: var(--ui-accent); }
+:root[data-theme] :is(
+  .theme-switch, .arcade-studio-modes, .arcade-studio-focus, .arcade-pet-poses, .arcade-filters,
+  .rlgl-view-buttons, .neondrift-audio, .flappy-game, .rally-presets, .sl-levels, .sl-mode,
+  .cd-studio-tabs, .cd-paint-tools, .nd-mode, .nd-amounts, .scg-levels,
+  .rg-toolbar, .rg-control-preferences, .sw-viewbar, .sw-routes,
+  .rb-camera-bar, .rb-preview-toolbar, .rb-crew-tabs
+) button[aria-pressed="true"] { color: var(--ui-on-primary); background: var(--ui-primary); border-color: var(--ui-primary); }
+:root[data-theme] :is(
+  .game-root .primary-btn, .controls .primary, .arcade-item button:not(:disabled), .rlgl-controls .rlgl-run-btn,
+  .archery-shoot, .archery-result .primary, .flappy-play, .flappy-flap,
+  .rally-primary, .ml-primary, .sl-primary, .cd-main-action, .cd-replay,
+  .nd-primary, .scg-primary, .rg-primary, .hh-primary, .sw-primary, .rb-primary
+) { color: var(--ui-on-primary); background: var(--ui-primary); border-color: var(--ui-primary); box-shadow: none; }
+:root[data-theme] :is(
+  .rally-primary, .ml-primary, .sl-primary, .cd-main-action, .cd-replay, .nd-primary,
+  .scg-primary, .rg-primary, .hh-primary, .sw-primary, .rb-primary
+):hover:not(:disabled) { color: var(--ui-on-primary); background: var(--ui-primary); filter: brightness(1.08); }
+
+/* Copy in themed interface sections inherits readable foreground colors. */
+:root[data-theme] :is(
+  .arcade-hero, .arcade-balance, .arcade-item-body, .arcade-earning-guide, .arcade-studio-card,
+  .arcade-editor-toolbar, .arcade-studio-preview figcaption,
+  .flappy-howto, .flappy-customizer, .flappy-coin-guide, .flappy-hud, .flappy-game fieldset,
+  .rally-rules, .rally-setup, .rally-history, .rally-turn-panel, .rally-racer-card,
+  .ml-intro, .ml-setup, .ml-rules, .ml-results, .ml-coin-guide, .ml-table-top, .ml-stats,
+  .sl-hero, .sl-settings, .sl-topbar, .sl-cover, .sl-rules, .sl-rewards, .sl-results, .sl-custom,
+  .cd-hero, .cd-instructions, .cd-stage-card, .cd-ending-result, .cd-studio,
+  .nd-hero, .nd-guide, .nd-log, .nd-turnbar, .nd-takebar, .nd-settings,
+  .scg-hero, .scg-status, .scg-guide, .scg-finale,
+  .rg-intro, .rg-aircraft-card, .rg-mission-panel, .rg-handbook, .rg-tower, .rg-result,
+  .ff-intro, .ff-handbook, .ff-navigation-panel,
+  .hh-masthead, .hh-toolbar, .hh-rules, .hh-dialog-body, .hh-objective, .hh-help-cards,
+  .sw-masthead, .sw-brief, .sw-control-panel, .sw-guide, .sw-result,
+  .rb-masthead, .rb-briefing, .rb-console, .rb-handbook, .rb-custom-section, .rb-debrief,
+  .rlgl-instructions, .rlgl-customizer
+) :is(h3, h4, h5, p, label, legend, small, summary, li, strong, b, output) { color: inherit; }
+:root[data-theme] :is(
+  .arcade-eyebrow, .arcade-hero p:not(.arcade-eyebrow), .arcade-item-body p, .arcade-item-body small,
+  .arcade-earning-guide p, .arcade-studio-card p, .arcade-studio-preview figcaption span,
+  .arcade-editor-toolbar label, .arcade-editor-note, .arcade-earning-guide li,
+  .flappy-eyebrow, .flappy-page-note, .flappy-color-control output, .flappy-world-caption,
+  .rally-eyebrow, .rally-field, .rally-course-note, .rally-human-note, .rally-fair-note,
+  .rally-history li, .rally-resources, .rally-action-result, .rally-preview-note,
+  .ml-eyebrow, .ml-opponent-note, .ml-setup-note, .ml-coin-context, .ml-computer-read,
+  .ml-table-foot, .ml-result-summary, .ml-player > span, .ml-coin-example,
+  .sl-eyebrow, .sl-level-note, .sl-frame-label, .sl-gallery-heading, .sl-interaction-note,
+  .sl-title small, .sl-stats span, .sl-found-list, .sl-reward-cell span,
+  .cd-eyebrow, .cd-hero p, .cd-arena-note, .cd-round-number, .cd-round small, .cd-owner,
+  .cd-rhythm-caption, .cd-rhythm p, .cd-combo-note, .cd-energy-label, .cd-gadget-caption,
+  .cd-effects, .cd-feedback, .cd-key-note, .cd-record, .cd-toolbar > span,
+  .cd-result-detail, .cd-studio label, .cd-studio-footnote, .cd-coat-note, .cd-painter-help,
+  .cd-painter-footnote, .cd-coat-painter summary > span, .cd-pattern-presets > span,
+  .nd-eyebrow, .nd-mode-note, .nd-player small, .nd-round, .nd-last, .nd-remaining,
+  .nd-selection, .nd-guide p, .nd-guide li, .nd-log li,
+  .scg-eyebrow, .scg-label, .scg-goal, .scg-goal strong, .scg-roundbar, .scg-round,
+  .scg-status-tag, .scg-status-detail, .scg-answer > span:last-child,
+  .scg-card > header, .scg-card > header > span:last-child, .scg-curtain p,
+  .scg-pacing, .scg-final-detail, .scg-final-stats span, .scg-recent small,
+  .scg-recent li > span:last-child > span, .scg-guide p, .scg-guide ol,
+  .rg-eyebrow, .rg-intro p, .rg-control-preferences, .rg-handbook p, .rg-handbook li,
+  .ff-intro p, .ff-trip span, .ff-chart-heading p, .ff-nearby p, .ff-handbook p,
+  .hh-eyebrow, .hh-edition, .hh-mode-note, .hh-save-note, .hh-storage-note,
+  .sw-eyebrow, .sw-ticket, .sw-save-note, .sw-train-status, .sw-guide-body,
+  .rb-eyebrow, .rb-mission-description, .rb-vehicle-summary, .rb-small, .rb-hint,
+  .rb-persistence, .rb-preview-caption,
+  .rlgl-instructions ol, .rlgl-customizer label
+) { color: var(--ui-muted); }
+:root[data-theme] :is(
+  .arcade-text-link, .arcade-studio-card > div > span, .arcade-item-price,
+  .cd-personalize a, .cd-studio .arcade-text-link, .cd-studio-save, .cd-paint-status,
+  .ml-shop-link, .ml-live-coin-breakdown, .sl-reward-cell strong,
+  .scg-answer strong, .scg-status-title, .scg-final-stats strong,
+  .nd-turn, .nd-guide strong, .cd-result-title
+) { color: var(--ui-accent); }
+
+/* Team colors and feedback must remain distinct in both themes. */
+:root[data-theme] :is(.scg-player, .scg-status)[data-player="0"],
+:root[data-theme] .scg-status[data-scorer="0"] { color: var(--ui-accent); background: var(--ui-accent-soft); border-color: var(--ui-accent); }
+:root[data-theme] .scg-player[data-player="1"],
+:root[data-theme] .scg-status[data-scorer="1"] { color: var(--ui-coral); background: var(--ui-coral-soft); border-color: var(--ui-coral); }
+:root[data-theme] .scg-status[data-scorer="0"] :is(.scg-status-tag, .scg-status-title) { color: var(--ui-accent); }
+:root[data-theme] .scg-status[data-scorer="1"] :is(.scg-status-tag, .scg-status-title) { color: var(--ui-coral); }
+:root[data-theme] .scg-card { box-shadow: 0 4px 0 var(--ui-line), var(--ui-shadow); }
+:root[data-theme] .scg-card > header { border-color: var(--ui-line); }
+:root[data-theme] .scg-avatar { background: var(--ui-panel); }
+:root[data-theme] .scg-tile.is-match .scg-tile-mark { color: var(--ui-panel); }
+:root[data-theme] :is(.nd-hero, .scg-hero, .scg-finale, .arcade-hero) {
+  color: var(--ui-ink); background: linear-gradient(120deg, var(--ui-accent-soft), var(--ui-raised)); border-color: var(--ui-line);
+}
+:root[data-theme] :is(.nd-hero, .scg-hero) :is(strong, p, .nd-eyebrow, .scg-eyebrow) { color: var(--ui-ink); }
+:root[data-theme] .scg-final-avatar { color: var(--ui-gold); background: var(--ui-gold-soft); border-color: var(--ui-gold); }
+:root[data-theme] .scg-finale[data-winner="1"] { background: var(--ui-soft); border-color: var(--ui-line); }
+:root[data-theme] .scg-finale .scg-primary:hover { color: var(--ui-on-primary); background: var(--ui-primary) !important; }
+:root[data-theme] .scg-guide .scg-win-rule { color: var(--ui-ink); background: var(--ui-soft); border-color: var(--ui-line); }
+:root[data-theme] .cd-game[data-result="lose"] .cd-ending-result { color: var(--ui-ink); background: var(--ui-soft); border-color: var(--ui-line); }
+:root[data-theme] .cd-game[data-result="lose"] .cd-result-kicker { color: var(--ui-muted); }
+:root[data-theme] :is(.cd-earned, .cd-result-kicker, .ml-result-coins, .sl-reward-cell strong, .rally-action-cost) { color: var(--ui-gold); }
+:root[data-theme] .cd-effects[data-warning="true"] { color: var(--ui-danger); }
+:root[data-theme] .cd-breed-grid button[aria-pressed="true"] { border-color: var(--ui-accent); background: var(--ui-accent-soft); }
+:root[data-theme] .cd-coat-painter summary { color: var(--ui-ink); }
+:root[data-theme] .cd-studio legend small { color: var(--ui-muted); }
+:root[data-theme] .cd-paint-fields output { color: var(--ui-muted); }
+:root[data-theme] .cd-game :is(.cd-scoreboard, .cd-toolbar, .cd-instructions, .cd-player, .cd-gadget-caption, .cd-ending-result),
+:root[data-theme] .cd-studio :is(fieldset, .cd-pattern-presets, .cd-studio-footnote) { border-color: var(--ui-line); }
+:root[data-theme] .nd-mode button[aria-pressed="true"],
+:root[data-theme] .scg-levels button[aria-pressed="true"] { color: var(--ui-on-primary); background: var(--ui-primary); }
+:root[data-theme] .rg-game :is(.rg-setup, .rg-toolbar, .rg-flight-controls, .rg-handbook, .rg-control-preferences) { border-color: var(--ui-line); }
+:root[data-theme] .ff-airfield-list button { background: var(--ui-input); color: var(--ui-ink); border-color: var(--ui-line); }
+:root[data-theme] :is(.ff-airfield-list button, .rg-aircraft-card, .rg-mission-facts, .rg-tower) :is(span, small, strong) { color: inherit; }
+:root[data-theme] .rlgl-game[data-signal="red"] .rlgl-status { border-color: var(--ui-danger); background: var(--ui-danger-soft); }
+:root[data-theme] .rlgl-game[data-signal="amber"] .rlgl-status { border-color: var(--ui-gold); background: var(--ui-gold-soft); }
+:root[data-theme] .neondrift-car-choice:has(input:checked) { border-color: var(--ui-accent); background: var(--ui-accent-soft); }
+:root[data-theme] .snake-customization select { color: var(--ui-ink); background: var(--ui-input); }
+
+/* Wallets, collection choices, and score colors need their own foregrounds. */
+:root[data-theme] :is(.arcade-game-wallet a, .arcade-balance > span, .arcade-price strong) { color: var(--ui-gold); }
+:root[data-theme] :is(.arcade-toolbar > a, .arcade-earning-guide a, .arcade-editor-play, .arcade-editor-link, .sl-gallery-heading a) { color: var(--ui-accent); border-color: var(--ui-line); }
+:root[data-theme] :is(.arcade-shop-status, .arcade-empty, .arcade-editor-description, .arcade-studio-preview [role="status"], .nd-label, .cd-status, .cd-hero-badge span, .sl-zoom-label) { color: var(--ui-muted); }
+:root[data-theme] .flappy-page-nav a { color: var(--ui-ink); background: var(--ui-input); border-color: var(--ui-line); }
+:root[data-theme] .flappy-page-nav .flappy-shop-link { color: var(--ui-gold); background: var(--ui-gold-soft); border-color: var(--ui-line); }
+:root[data-theme] .flappy-page-nav a[aria-current="page"] { color: var(--ui-on-primary); background: var(--ui-primary); border-color: var(--ui-primary); }
+:root[data-theme] .sl-scene { color: var(--ui-ink); background: var(--ui-raised); border-color: var(--ui-line); }
+:root[data-theme] .sl-scene[aria-pressed="true"] { border-color: var(--ui-accent); box-shadow: 0 0 0 1px var(--ui-accent); }
+:root[data-theme] .sl-scene small { color: var(--ui-muted); }
+:root[data-theme] .ml-coin-rates dt { color: var(--ui-muted); }
+:root[data-theme] :is(.ml-coin-rates dd, .ml-shop-coin-guide caption, .ml-shop-coin-guide thead) { color: var(--ui-gold); }
+:root[data-theme] .ml-shop-coin-guide :is(th, td) { border-color: var(--ui-line); }
+:root[data-theme] .ml-player.is-active > small { color: var(--player-color); }
+:root[data-theme="light"] .ml-player[data-player="0"] { --player-color: #276c56; }
+:root[data-theme="light"] .ml-player[data-player="1"] { --player-color: #8b581c; }
+:root[data-theme="light"] .ml-player[data-player="2"] { --player-color: #6a4c9c; }
+:root[data-theme="light"] .ml-player[data-player="3"] { --player-color: #a13f64; }
+
+/* Flight and dispatch: leave instrument overlays on their scenic backdrops. */
+:root[data-theme] .rg-brand-mark { color: var(--ui-on-primary); background: var(--ui-primary); }
+:root[data-theme] :is(.rg-aircraft-card, .ff-aircraft)[aria-pressed="true"],
+:root[data-theme] .ff-airfield-list button[aria-pressed="true"],
+:root[data-theme] .sw-train-card.is-selected { color: var(--ui-ink); background: var(--ui-accent-soft); border-color: var(--ui-accent); }
+:root[data-theme] :is(.rg-aircraft-landing, .rg-mission-location, .ff-aircraft-detail, .ff-location-description,
+  .ff-departure-grid label, .ff-pitch-help, .ff-footnote, .ff-chart-key, .ff-aircraft > span:last-child,
+  .sw-lock, .rg-result-metrics span) { color: var(--ui-muted); }
+:root[data-theme] .ff-trip strong { color: var(--ui-ink); }
+:root[data-theme] .rg-switches button[aria-pressed="true"] { color: var(--ui-accent); background: var(--ui-accent-soft); border-color: var(--ui-accent); }
+:root[data-theme] .rg-game button.is-held { color: var(--ui-on-primary); background: var(--ui-primary); }
+:root[data-theme] .sw-game .sw-signal { color: var(--ui-danger); background: var(--ui-danger-soft); border-color: var(--ui-danger); }
+:root[data-theme] .sw-game .sw-signal[data-green="true"] { color: var(--ui-success); background: var(--ui-success-soft); border-color: var(--ui-success); }
+:root[data-theme] .sw-game .sw-routes button[aria-pressed="true"] { color: var(--ui-on-primary); background: var(--ui-primary); border-color: var(--ui-primary); }
+
+/* Text and legends on the original dark game interfaces. */
+:root[data-theme] :is(.rb-game, .rb-studio) a { color: var(--ui-accent); }
+:root[data-theme] :is(.rb-fuel-row, .rb-health > div, .rb-handbook-body ol, .rb-key-guide,
+  .rb-handbook summary span, .rb-assembly summary span, .rb-handbook-body .rb-small,
+  .hh-learn-toggle, .hh-inventory > span, .hh-inventory small, .hh-legend p > span,
+  .hh-audio > span, .rally-rules ol,
+  .archery-level-tip, .archery-status, .archery-aim label, .archery-aim-controls label,
+  .archery-slider > span, .archery-guide-toggle, .archery-customize, .archery-help,
+  .neondrift-route-note, .neondrift-ability-hint, .neondrift-progress-row) { color: var(--ui-muted); }
+:root[data-theme] :is(.rb-mission-checklist h4, .rb-handbook summary, .rb-assembly summary,
+  .rb-health b, .hh-legend strong, .hh-gallery-heading h4, .rally-test-panel summary,
+  .archery-eyebrow, .archery-instructions h4, .archery-instructions strong,
+  .archery-history h4, .archery-target-guide h4, .neondrift-setup summary) { color: var(--ui-ink); }
+:root[data-theme] :is(.rb-fuel-row.is-active, .archery-wind strong) { color: var(--ui-success); }
+:root[data-theme] :is(.archery-angle-value, .archery-power-value) { color: var(--ui-accent); }
+:root[data-theme] .rb-mission-checklist li { color: var(--ui-muted); background: var(--ui-raised); border-color: var(--ui-line); }
+:root[data-theme] .rb-mission-checklist li.is-current { color: var(--ui-gold); background: var(--ui-gold-soft); border-color: var(--ui-gold); }
+:root[data-theme] .rb-mission-checklist li.is-complete { color: var(--ui-success); background: var(--ui-success-soft); border-color: var(--ui-success); }
+:root[data-theme] .hh-fright b { color: var(--ui-danger); }
+:root[data-theme] .rally-legend > div { color: var(--ui-ink); background: var(--ui-soft); border-color: var(--ui-line); }
+:root[data-theme] .rally-legend b { color: var(--ui-accent); background: var(--ui-accent-soft); }
+:root[data-theme] .rally-legend [data-tile="charge"] b { color: var(--ui-success); background: var(--ui-success-soft); }
+:root[data-theme] .rally-legend [data-tile="storm"] b { color: var(--ui-danger); background: var(--ui-danger-soft); }
+:root[data-theme] .rally-legend [data-tile="checkpoint"] b { color: var(--ui-gold); background: var(--ui-gold-soft); }
+:root[data-theme] :is(.archery-control > span, .archery-flight-info label) { color: var(--ui-muted); }
+:root[data-theme] .archery-range h4 { color: var(--ui-ink); }
+:root[data-theme] .archery-status.is-hit { color: var(--ui-gold); border-color: var(--ui-gold); }
+:root[data-theme] .archery-status.is-miss { color: var(--ui-danger); border-color: var(--ui-danger); }
+:root[data-theme] .archery-instructions li::marker { color: var(--ui-accent); }
+:root[data-theme] :is(.archery-gear > legend, .neondrift-garage legend) { color: var(--ui-ink); }
+:root[data-theme] .neondrift-car-power { color: var(--ui-muted); }
+:root[data-theme] .neondrift-pad-ability { color: var(--ui-accent); background: linear-gradient(90deg, var(--ui-accent-soft) var(--charge, 100%), var(--ui-soft) var(--charge, 100%)); border-color: var(--ui-accent); }
+:root[data-theme] .neondrift-pad-ability small { color: var(--ui-muted); }
+:root[data-theme] .neondrift-pad-boost.is-boosting { color: var(--ui-on-primary); background: var(--ui-primary); border-color: var(--ui-primary); }
+:root[data-theme] :is(.archery-stats > div, .archery-target-card, .archery-appearance-card,
+  .archery-preview-modes, .archery-avatar-tabs, .hh-empty-shelf, .hh-stage-panel > div,
+  .rb-telemetry, .rb-director) { color: var(--ui-ink); background: var(--ui-soft); border-color: var(--ui-line); }
+:root[data-theme] :is(.archery-appearance-card, .hh-stage-panel > div) :is(h4, strong, p, span) { color: var(--ui-ink); }
+:root[data-theme] :is(.archery-preview-modes, .archery-avatar-tabs) button { color: var(--ui-muted); background: var(--ui-input); border-color: var(--ui-line); }
+:root[data-theme] .archery-preview-modes button[aria-pressed="true"],
+:root[data-theme] .archery-avatar-tabs button[aria-selected="true"] { color: var(--ui-on-primary); background: var(--ui-primary); }
+:root[data-theme] :is(.rb-guide-title, .rb-telemetry strong, .rb-director p, .rb-build-stats b) { color: var(--ui-ink); }
+:root[data-theme] :is(.rb-guide-kicker, .rb-guide-progress-value, .rb-parts button > span) { color: var(--ui-gold); }
+:root[data-theme] :is(.rb-game .rb-guide-instruction, .rb-guide-progress > div,
+  .rb-guide-explanation, .rb-game .rb-guide-explanation p, .rb-telemetry span, .rb-director > span,
+  .rb-build-stats span, .rb-section-heading > span, .rb-section-heading small,
+  .rb-studio h3 small, .rb-parts small, .rb-stage-heading > label, .rb-drop-target,
+  .hh-inventory > div > span) { color: var(--ui-muted); }
+:root[data-theme] :is(.rb-save-status, .rb-build-status) { color: var(--ui-success) !important; }
+:root[data-theme] .rb-build-status.is-warning { color: var(--ui-gold) !important; }
+:root[data-theme] .rb-flight-guide[data-tone="warning"],
+:root[data-theme] .rb-director.is-warning,
+:root[data-theme] .rb-game .rb-control-feedback.is-warning { color: var(--ui-gold); background: var(--ui-gold-soft); border-color: var(--ui-gold); }
+:root[data-theme] .rb-telemetry .is-danger { color: var(--ui-danger); }
+:root[data-theme] :is(.rb-flight-deck.rb-is-expanded, .rb-flight-deck:fullscreen) { background: var(--ui-page); }
+:root[data-theme] :is(.cookieclicker-total, .spotter-tail) { color: var(--ui-gold); }
+:root[data-theme] :is(.spotter-card, .archery-pause-overlay, .archery-result) { color: var(--ui-ink); background: var(--ui-soft); border-color: var(--ui-line); }
+:root[data-theme] :is(.archery-result p, .archery-pause-overlay span) { color: var(--ui-muted); }
+:root[data-theme] .archery-result .archery-final-score { color: var(--ui-gold); }
+:root[data-theme] .rb-studio-preview { color: var(--ui-ink); background: var(--ui-raised); border-color: var(--ui-line); }
+:root[data-theme] :is(.cd-lead, .rb-preview-toolbar small) { color: var(--ui-muted); }
+:root[data-theme] :is(.nd-move-count, .cd-rhythm-caption span) { color: var(--ui-muted); }
+:root[data-theme] :is(.rg-handbook, .ff-handbook, .rg-lesson-grid) b { color: var(--ui-accent); }
+:root[data-theme] .sl-game .arcade-game-wallet a { color: var(--ui-gold); background: var(--ui-gold-soft); border-color: var(--ui-line); }
+
+/* Classic games: visible controls and unambiguous lit/unlit states in Light. */
+:root[data-theme] :is(.feedback, .reaction-display, .tower-controls, .badge, .hint-confirm) { background: var(--ui-soft); border-color: var(--ui-line); }
+:root[data-theme] :is(.lights-controls, .lights-meta, .harmonic-controls, .foodchain-controls, .spotter-controls) button { color: var(--ui-ink); background: var(--ui-input); border-color: var(--ui-line); }
+:root[data-theme] .harmonic-mode-btn[aria-pressed="true"] { color: var(--ui-accent); background: var(--ui-accent-soft); border-color: var(--ui-accent); }
+:root[data-theme] .light-cell:not(.on):not(.light-hint) { background: var(--ui-raised); border-color: var(--ui-line); box-shadow: none; }
+:root[data-theme] .reaction-display.ready { border-color: var(--ui-gold); }
+:root[data-theme] .reaction-display.too-soon { border-color: var(--ui-danger); }
+:root[data-theme] .tone-cool { color: var(--ui-cool); }
+:root[data-theme] .foodchain-toggle.is-active { color: var(--ui-on-primary); background: var(--ui-primary); border-color: var(--ui-primary); }
+:root[data-theme] :is(.cookieclicker-btn, .cookieclicker-btn-label) { color: var(--ui-ink); }
+:root[data-theme] .cookieclicker-achievement.is-unlocked .cookieclicker-achievement-name { color: var(--ui-success); }
+:root[data-theme="dark"] .reaction-display.go { color: #0e101c; background: #ffffff; border-color: #ffffff; }
+:root[data-theme="light"] .reaction-display.go { color: #123c2e; background: #b4f4d4; border-color: #34875c; box-shadow: 0 0 35px #3db87840; }
+:root[data-theme="light"] .reaction-display.go :is(.reaction-time, .help-text) { color: #123c2e; }
+
+/* Feedback that only appears during play or at the end of a round. */
+:root[data-theme] .cd-pull { color: var(--ui-on-primary); }
+:root[data-theme] .cd-feedback:is([data-kind="perfect"], [data-kind="burst"]) { color: var(--ui-gold); }
+:root[data-theme] .cd-feedback:is([data-kind="early"], [data-kind="tired"]) { color: var(--ui-danger); }
+:root[data-theme] .cd-stage-overlay .cd-stage-card { color: var(--ui-ink); background: var(--ui-soft); border-color: var(--ui-line); }
+:root[data-theme] .cd-stage-overlay[data-kind="showdown"] .cd-overlay-title { color: var(--ui-gold); }
+:root[data-theme] .cd-stage-overlay[data-kind="showdown"][data-go="true"] .cd-overlay-title { color: var(--ui-success); }
+:root[data-theme] .sl-tool[aria-pressed="true"] { color: var(--ui-on-primary); background: var(--ui-primary); border-color: var(--ui-primary); }
+:root[data-theme] .sl-found-list li { color: var(--ui-success); background: var(--ui-success-soft); border-color: var(--ui-line); }
+:root[data-theme] .sl-status.is-miss { color: var(--ui-danger); }
+:root[data-theme] .sl-results[data-outcome="loss"] { color: var(--ui-ink); background: var(--ui-soft); border-color: var(--ui-line); }
+:root[data-theme] .nd-ending .nd-primary:hover { color: var(--ui-on-primary); background: var(--ui-primary) !important; }
+:root[data-theme] :is(.game-root, .hh-dialog) :is(button, select):disabled:not(:where(.ml-card, .scg-tile, .harmonic-pad, .light-cell)) { opacity: .65; }
+:root[data-theme="light"] .ml-standings [data-player="0"] { --player-color: #276c56; }
+:root[data-theme="light"] .ml-standings [data-player="1"] { --player-color: #8b581c; }
+:root[data-theme="light"] .ml-standings [data-player="2"] { --player-color: #6a4c9c; }
+:root[data-theme="light"] .ml-standings [data-player="3"] { --player-color: #a13f64; }
+
+/* Submerged is an isolated document; theme.js relays changes without restarting it. */
+:root[data-theme] body:has(.ocean-layers) { margin: 0; font-family: Inter, system-ui, sans-serif; }
+:root[data-theme] body:has(.ocean-layers) :is(header, footer) { padding: 18px 24px; color: var(--ui-ink); background: var(--ui-panel); }
+:root[data-theme] :is(.game-info, .control-panel, .score-board, .depth-indicator, .current-difficulty, .mission-popup, .celebration-content) {
+  color: var(--ui-ink); background: var(--ui-panel); border-color: var(--ui-line);
+}
+:root[data-theme] :is(.depth-meter, .mission-status, .difficulty-info) { color: var(--ui-ink); background: var(--ui-soft); border-color: var(--ui-line); }
+:root[data-theme] :is(.control-panel, .score-board, .game-info, .mission-popup) :is(h3, h4, p, span) { color: inherit; }
+:root[data-theme] :is(.control-btn, .unit-btn, .difficulty-btn, .popup-btn, .blurb-toggle, .celebration-btn) {
+  color: var(--ui-ink); background: var(--ui-raised); border-color: var(--ui-line);
+}
+:root[data-theme] :is(.control-btn:hover, .unit-btn.active, .difficulty-btn.active, .popup-btn) { color: var(--ui-on-primary); background: var(--ui-primary); border-color: var(--ui-primary); }
+:root[data-theme] .depth-value { color: var(--ui-gold); }
+
+@media (max-width: 480px) {
+  .site-preferences { gap: 14px; }
+  .site-preferences .tagline { font-size: .85rem; }
+  .theme-switch { margin-left: auto; }
+  :root[data-theme] .theme-switch button { min-height: 40px; padding: 9px 12px; }
+  .lights-grid { min-width: 0; }
+  .light-cell { min-width: 0; width: 100%; padding: 0; }
+}

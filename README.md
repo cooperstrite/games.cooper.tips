@@ -2,6 +2,12 @@
 
 A playful single-page playground inspired by [neal.fun](https://neal.fun), bundling a few quick mini-games you can host on GitHub Pages.
 
+## Appearance
+
+Use **Light** or **Dark** beside the home-page tagline to choose one interface theme for the whole arcade, including games, the shop, and character studios. Dark keeps the original blue/green page glow and cyan/gold tile gradients; Light uses blue, mint, and cream gradients with dark text. The switch stays available while playing and updates the colors without restarting a game. Dark is the default; the choice saves in this browser and syncs across open tabs. Game artwork, scenery, character colors, and gameplay signals retain their intended colors.
+
+`theme.js` restores the preference before styles load and passes it to the embedded Submerged game. `theme.css`, loaded after the game styles, supplies the shared `--ui-*` palette and the existing games' interface adaptations. New interface panels should use these tokens; keep scene materials and customization swatches independent of the UI theme.
+
 ## Games
 
 - **Hot & Cold** — Hunt down a mystery number with warmer/colder hints on every guess.
