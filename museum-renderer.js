@@ -1,5 +1,6 @@
 import { createWebGLScene } from "./arcade/babylon.js";
 import { createMuseumMaterials } from "./museum-materials.js";
+import { createMuseumClues } from "./museum-clues.js";
 import { prepareArcherAssets } from "./arcade/humanoid-mesh.js";
 import { WALLS, FURNITURE, ROOMS, RUGS, CLUES, HEIGHT, COLUMNS, segmentHitsBox } from "./museum-world.js";
 import { WINDOWS, SKYLIGHT, wallPanels, wallTrim, ceilingPanels, pictureFrameGeometry } from "./museum-architecture.js";
@@ -14,7 +15,7 @@ export async function createMuseumRenderer(canvas, physics, { isCurrent=()=>true
   const fill=scene.getLightByName('sky-fill');fill.intensity=.3;fill.diffuse=B.Color3.FromHexString('#d8e4ed');fill.groundColor=B.Color3.FromHexString('#66533a');
   sun.direction.set(-.82,-.62,-.25);sun.position.set(30,25,22);sun.intensity=4.2;sun.diffuse=B.Color3.FromHexString('#ffdea5');
   shadows.mapSize=4096;shadows.useBlurExponentialShadowMap=false;shadows.usePercentageCloserFiltering=true;shadows.filteringQuality=B.ShadowGenerator.QUALITY_HIGH;shadows.bias=.00008;shadows.normalBias=.015;sun.autoCalcShadowZBounds=true;sun.shadowOrthoScale=.04;
-  const m=createMuseumMaterials(B,scene), props=[],wallSurfaces=[],floorMaterials=[],clueNodes=new Map(),debugMeshes=new Map(),dynamicMeshes=new Map(),localLights=[],pictureLights=[];
+  const m=createMuseumMaterials(B,scene), props=[],wallSurfaces=[],floorMaterials=[],debugMeshes=new Map(),dynamicMeshes=new Map(),localLights=[],pictureLights=[];
   await m.ready;
   if(!isCurrent()){gfx.dispose();throw new Error('Museum loading cancelled');}
   function finish(mesh,mat,shadow=true){mesh.material=mat;mesh.receiveShadows=true;mesh.isPickable=false;props.push(mesh);if(shadow)shadows.addShadowCaster(mesh);return mesh;}
@@ -177,26 +178,7 @@ export async function createMuseumRenderer(canvas, physics, { isCurrent=()=>true
   securityCamera(0,3.73,5.8);securityCamera(16,3.7,-3);
   cylinder('entrance camera ceiling mount',.035,.035,1.78,0,4.79,5.55,m.black);
   cylinder('storage camera ceiling mount',.035,.035,1.81,16,4.775,-3.25,m.black);
-  function clueMaterial(name,color){const mat=m.material(name,color,.86);return mat;}
-  for(const c of CLUES){
-    const g=groupAt(c.id,c.x,c.y,c.z);clueNodes.set(c.id,g);
-    const mark=clueMaterial(c.id,c.id==='fabric'?'#38434a':c.id==='footprint1'?'#514535':'#e9e3d3');
-    if(c.id==='footprint1'){
-      for(let i=0;i<8;i++)localBox(g,'boot tread',.12,.005,.016,Math.sin(i)*.014,.002,-.13+i*.034,mark,false);attach(sphere('mud heel',.12,.008,.09,0,.004,.15,mark),g);
-    }else if(c.id==='droplet'){
-      attach(sphere('paint drop',.1,.006,.15,0,.005,0,mark),g);for(let i=0;i<5;i++)attach(sphere('paint splatter',.014,.004,.028,Math.sin(i*2)*.08,.003,Math.cos(i*2)*.09,mark),g);
-    }else if(c.id==='scratches'){
-      for(let i=0;i<4;i++){const scratch=localBox(g,'tool mark',.011,.3+i*.02,.008,i*.045,0,.02,m.wood,false);scratch.rotation.z=.3+i*.13;}
-    }else if(c.id==='fabric'){
-      const cloth=B.MeshBuilder.CreateGround('torn cloth',{width:.2,height:.36,subdivisions:9},scene);const pos=cloth.getVerticesData(B.VertexBuffer.PositionKind);for(let i=0;i<pos.length;i+=3)pos[i+1]=Math.sin(pos[i]*29+pos[i+2]*13)*.02;cloth.setVerticesData(B.VertexBuffer.PositionKind,pos);cloth.rotation.x=Math.PI/2;cloth.parent=g;finish(cloth,mark);for(let i=0;i<6;i++)localBox(g,'frayed thread',.003,.06,.003,-.08+i*.03,-.19,0,mark,false);
-    }else if(c.id==='keycard'){
-      localBox(g,'staff access card',.19,.007,.3,0,0,0,m.paper,false);localBox(g,'magnetic stripe',.15,.001,.035,0,.006,-.07,m.black,false);localBox(g,'staff photo',.055,.001,.07,-.035,.006,.04,m.screen,false);
-    }else if(c.id==='glove'){
-      attach(sphere('glove palm',.13,.022,.14,0,.01,0,mark),g);for(let i=0;i<4;i++)attach(sphere('glove finger',.024,.018,.12,-.043+i*.029,.01,-.1,mark),g);const thumb=attach(sphere('glove thumb',.03,.02,.1,-.08,.01,-.02,mark),g);thumb.rotation.y=.7;
-    }else if(c.id==='note'){
-      localBox(g,'folded note',.28,.007,.21,0,0,0,m.paper,false);for(let i=0;i<6;i++)localBox(g,'pencil line',.18-(i%3)*.025,.001,.002,0,.005,-.07+i*.026,m.wood,false);
-    }else{attach(sphere('disabled status LED',.025,.025,.02,.11,.02,.25,m.red),g);}
-  }
+  const evidence=createMuseumClues(B,scene,m,finish);
   const restoredMat=m.material('recovered Mona Lisa','#ffffff',.8);restoredMat.albedoTexture=new B.Texture(new URL('./assets/museum-mona-lisa.jpg',import.meta.url).href,scene);
   // Reserve the light budget for the room and nearby fixtures. Previously the
   // first eight global lights crowded out fixtures in the other rooms.
@@ -241,11 +223,11 @@ export async function createMuseumRenderer(canvas, physics, { isCurrent=()=>true
     }
     return best;
   }
-  function update(pos,yaw,pitch,dt,state,{headBob=true}={}){
+  function update(pos,yaw,pitch,dt,state,{headBob=true,hints=true,animateHints=true}={}){
     time+=dt;camera.position.set(pos.x,pos.y+(headBob?Math.sin(time*9)*Math.min(.012,pos.speed*.005):0),pos.z);camera.rotation.set(-pitch,yaw+Math.PI,0);
     for(const b of physics.dynamic){const node=dynamicMeshes.get(b.museum.id),q=new B.Quaternion(b.quaternion.x,b.quaternion.y,b.quaternion.z,b.quaternion.w);if(B.Vector3.DistanceSquared(node.position,V(b.position.x,b.position.y,b.position.z))>.0001||(node.rotationQuaternion&&1-Math.abs(B.Quaternion.Dot(node.rotationQuaternion,q))>.00001))shadows.getShadowMap().resetRefreshCounter();node.position.copyFromFloats(b.position.x,b.position.y,b.position.z);node.rotationQuaternion=q;}
     if(boxesVisible)for(const b of physics.bodies){const mesh=debugMeshes.get(b.museum.id);if(mesh){mesh.position.copyFromFloats(b.position.x,b.position.y,b.position.z);mesh.rotationQuaternion=new B.Quaternion(b.quaternion.x,b.quaternion.y,b.quaternion.z,b.quaternion.w);}}
-    for(const c of CLUES){const node=clueNodes.get(c.id);node.setEnabled(!state.found.includes(c.id));}
+    evidence.update(state,dt,{hints,animateHints});
     if(foundCount!==state.found.length){foundCount=state.found.length;shadows.getShadowMap().resetRefreshCounter();}
     if(solved!==state.solved){solved=state.solved;restored.material=solved?restoredMat:m.linen;probe.cubeTexture.resetRefreshCounter();}
     scene.render();

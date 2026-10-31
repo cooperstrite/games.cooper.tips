@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {CLUES,WALLS,FURNITURE,COLUMNS,START,ROOMS,collectEvidence,newCase,segmentHitsBox,roomAt} from '../museum-world.js';
+import {CLUES,WALLS,FURNITURE,COLUMNS,START,ROOMS,collectEvidence,newCase,segmentHitsBox,roomAt,mapClues,clueHintVisible} from '../museum-world.js';
+import {drawMuseumMap,mapHeading} from '../museum-map.js';
 import {createMuseumPhysics} from '../museum-physics.js';
 import {WINDOWS,SKYLIGHT,wallPanels,wallTrim,ceilingPanels,pictureFrameGeometry} from '../museum-architecture.js';
 const run=(p,seconds,input={},yaw=0,rate=60)=>{for(let n=0;n<Math.round(seconds*rate);n++)p.step(1/rate,input,yaw);};
@@ -85,4 +86,35 @@ test('the movement-speed setting scales walking and Shift movement with safe lim
 });
 test('walls remain solid at the fastest selectable Shift speed on low frame rates',()=>{
   for(const rate of [20,30,60]){const p=createMuseumPhysics();p.player.position.set(5,.03,6);run(p,3,{forward:1,fast:true,speedMultiplier:2},0,rate);assert.ok(p.player.position.z>=4.47);p.dispose();}
+});
+
+test('normal is the default, easy hints disappear on discovery, and modes preserve the eight-clue case',()=>{
+  assert.equal(newCase().mode,'normal');assert.equal(newCase('invented').mode,'normal');
+  for(const mode of ['easy','normal','hard']){
+    const state=newCase(mode);assert.equal(clueHintVisible(state,'fabric'),mode==='easy');
+    collectEvidence(state,'fabric');assert.equal(clueHintVisible(state,'fabric'),false);
+    for(const c of CLUES)collectEvidence(state,c.id);
+    assert.equal(state.found.length,8);assert.equal(state.solved,true);
+  }
+});
+test('hard maps show only discovered evidence, including when switching mode during a case',()=>{
+  const state=newCase('hard');assert.deepEqual(mapClues(state),[]);
+  collectEvidence(state,'keycard');assert.deepEqual(mapClues(state).map(c=>c.id),['keycard']);
+  state.mode='normal';assert.equal(mapClues(state).length,8);assert.equal(state.found.length,1);
+  state.mode='easy';assert.equal(mapClues(state).length,8);assert.equal(clueHintVisible(state,'keycard'),false);
+  state.mode='hard';assert.deepEqual(mapClues(state).map(c=>c.id),['keycard']);
+});
+test('both actual map sizes omit undiscovered locations in hard mode',()=>{
+  for(const large of [false,true]){
+    const circles=[],c=new Proxy({createRadialGradient:()=>({addColorStop(){}}),arc(x,y,r){circles.push([x,y,r]);}},{get:(target,key)=>target[key]||(()=>{})});
+    const canvas={width:large?1100:560,height:large?570:290,clientWidth:large?700:230,getContext:()=>c},state=newCase('hard');
+    drawMuseumMap(canvas,state,START,0,large);const initial=circles.length;
+    collectEvidence(state,'keycard');drawMuseumMap(canvas,state,START,0,large);assert.equal(circles.length-initial,initial+1,'only the collected marker is drawn');
+    circles.length=0;state.mode='normal';drawMuseumMap(canvas,state,START,0,large);assert.equal(circles.length,initial+8);
+  }
+});
+test('map arrow faces north, west, south, and east in agreement with walking direction',()=>{
+  for(const [yaw,x,z]of [[0,0,-1],[Math.PI/2,-1,0],[Math.PI,0,1],[-Math.PI/2,1,0]]){
+    const direction=mapHeading(yaw);assert.ok(Math.abs(direction.x-x)<1e-9);assert.ok(Math.abs(direction.z-z)<1e-9);
+  }
 });

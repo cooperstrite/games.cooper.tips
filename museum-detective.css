@@ -56,6 +56,17 @@
 .md-audio-settings { border:1px solid #d6c39340; border-radius:10px; margin:22px 0; padding:12px 18px 4px; min-width:0; }
 .md-audio-settings legend { color:#f6dfb9; font-size:14px; font-weight:600; padding:0 7px; }
 .md-audio-settings .md-speed { margin-top:18px; gap:7px; }
+.md-difficulty { padding:0; border:0; margin:18px 0 22px; min-width:0; }
+.md-difficulty legend { color:#f6dfb9; font-size:12px; margin-bottom:9px; }
+.md-difficulty>div { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:7px; }
+:root .md-difficulty button { margin:0; padding:10px 7px; min-height:47px; }
+:root .md-difficulty button[aria-pressed=true] { color:#1d2a2a; background:#efd09a; border-color:#ffe4b3; }
+.md-difficulty small { display:block; font-size:9px; font-weight:400; margin-top:3px; }
+.md-difficulty p { font-size:11px; line-height:1.55; color:#cdd7d3; margin:9px 0 0; }
+.md-case-badge .md-mode-label { display:inline-block; font:500 8px Inter,system-ui,sans-serif; letter-spacing:.03em; color:#cfdfdd; padding:3px 5px; border:1px solid #cfdfdd55; border-radius:4px; margin-left:4px; }
+.md-minimap p>span { display:inline-flex; align-items:center; gap:4px; }
+.md-minimap i.md-map-arrow { background:#398fff; width:9px; height:11px; border-radius:0; clip-path:polygon(50% 0,100% 100%,50% 78%,0 100%); }
+.md-minimap i.md-map-unfound { background:#f2ba72; }.md-minimap i.md-map-found { background:#8cdbc1; }
 .md-debug-settings { border-top:1px solid #d6c39340; border-bottom:1px solid #d6c39340; padding:20px 0; margin:22px 0; }.md-unlock { display:flex; flex-wrap:wrap; gap:14px; align-items:flex-end; }.md-unlock label { display:grid; gap:8px; font-size:12px; }.md-unlock p { width:100%; margin:0; }.md-unlocked { color:#a3dfc8 !important; }
 .md-debugbar { position:absolute; z-index:8; bottom:0; left:0; right:0; display:flex; gap:7px; padding:10px; align-items:center; flex-wrap:wrap; background:#0a2128eb; border-top:1px solid #85d8bc70; }.md-debugbar>span { font-size:9px; letter-spacing:.1em; color:#94e4c7; }.md-debugbar output { font:10px monospace; color:#bcd7cf; }.md-debugbar button { font-size:10px !important; padding:6px 8px !important; }.md-debugbar button[aria-pressed=true] { color:#152626; background:#8edbbb; }
 .md-recovered { width:110px; margin:18px auto; border:8px ridge #b38f4e; box-shadow:0 10px 30px #0006; }.md-recovered img { display:block; width:100%; height:auto; }.md-ending { text-align:center; }.md-ending h3 { margin-right:0; }.md-ending>p { max-width:550px; margin:15px auto; }.md-ending .md-primary { margin-top:14px; }

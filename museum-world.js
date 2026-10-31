@@ -61,7 +61,15 @@ export const CLUES = [
   { id: "camera", name: "Security Camera Footage", room: "East Wing Storage", x: 16, y: 3.7, z: -3, radius: .3, description: "Timestamp shows camera was disabled at 2:15 AM. Last frame shows a figure in maintenance clothes approaching the Mona Lisa." },
 ];
 export function roomAt(x, z) { return ROOMS.find(r => Math.abs(x-r.x) <= r.w/2 && Math.abs(z-r.z) <= r.d/2)?.name || "Museum grounds"; }
-export function newCase() { return { found: [], solved: false, seconds: 0 }; }
+export const MUSEUM_MODES=Object.freeze({
+  easy:{label:'Easy',description:'Bouncing red exclamation marks highlight clues. Both maps show every clue.'},
+  normal:{label:'Normal',description:'The original investigation. Both maps show clues; look closely to find the evidence.'},
+  hard:{label:'Hard',description:'Find the evidence yourself. Clues appear on your maps only after you collect them.'},
+});
+export const museumMode=value=>Object.hasOwn(MUSEUM_MODES,value)?value:'normal';
+export function newCase(mode='normal') { return { found: [], solved: false, seconds: 0, mode:museumMode(mode) }; }
+export function mapClues(state){return CLUES.filter(c=>museumMode(state.mode)!=='hard'||state.found.includes(c.id));}
+export function clueHintVisible(state,id){return museumMode(state.mode)==='easy'&&!state.found.includes(id);}
 export function collectEvidence(state, id) {
   if (!CLUES.some(c => c.id === id) || state.found.includes(id)) return false;
   state.found.push(id); state.solved = state.found.length === CLUES.length; return true;
