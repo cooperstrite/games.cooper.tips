@@ -6028,6 +6028,33 @@ const games = [
     logo: "assets/spotlight-cover.jpg",
     init: createSpotlight,
   },
+  {
+    id: "masterpiece",
+    name: "Masterpiece: Museum Detective",
+    summary: "Explore a 3D museum and solve the mystery of the missing Mona Lisa.",
+    description: "Investigate the museum, collect eight clues, and uncover what happened to the Mona Lisa. Use WASD to walk, the mouse or arrow keys to look, and click to investigate. Press Escape to release the mouse.",
+    logo: "assets/masterpiece-cover.svg",
+    init(root) {
+      const iframe = document.createElement("iframe");
+      iframe.className = "masterpiece-frame";
+      iframe.src = "masterpiece-standalone.html";
+      iframe.title = "Masterpiece: Museum Detective game";
+      iframe.allowFullscreen = true;
+      iframe.referrerPolicy = "no-referrer";
+      iframe.addEventListener("load", () => {
+        // Keep the imported file intact; only adapt its old website shell here.
+        const style = iframe.contentDocument.createElement("style");
+        style.textContent = `
+          body > header, .settings-gear { display: none !important; }
+          .start-screen { padding: 24px 16px; overflow-y: auto; justify-content: flex-start; }
+          .start-screen > * { flex-shrink: 0; }
+        `;
+        iframe.contentDocument.head.appendChild(style);
+      });
+      root.appendChild(iframe);
+      return () => iframe.remove();
+    },
+  },
 ];
 
 const appRoot = document.getElementById("app");
@@ -6041,7 +6068,7 @@ const listTemplate = document.getElementById("game-list-item-template");
 const backButton = document.querySelector(".back-button");
 
 const LOCK_PASSWORD = "1108";
-const LOCKED_GAME_IDS = new Set(["skyport", "orbit", "rocket"]);
+const LOCKED_GAME_IDS = new Set(["skyport", "orbit", "rocket", "masterpiece"]);
 let lockedUnlocked = false;
 lockedUnlocked = false;
 

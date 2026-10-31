@@ -34,6 +34,7 @@ Use **Light** or **Dark** beside the home-page tagline to choose one interface t
 - **Lights Down** — A compact Lights Out puzzle; toggle tiles (and their neighbors) to dim the board.
 - **Submerged Explorer** — Glide through ocean zones, collect samples, and finish mission objectives in a retro submarine.
 - **Spotlight** — Compare detailed illustrated scenes at Easy, Medium, Hard, and Expert. Earn shared coins, unlock picture collections and frames, or explore in untimed practice. Available in the main games list while being improved.
+- **Masterpiece: Museum Detective** — Explore a 3D museum and collect eight clues to solve the case of the missing Mona Lisa. Imported into Coming Soon for later editing; use the existing preview access key, then select Masterpiece. The original `masterpiece-standalone.html` is preserved, including its embedded assets and license notices. The arcade embeds it at `/#masterpiece`, hiding the original site's navigation and keeping the start screen scrollable without changing the game.
 - **Food Chain Relay** — Shuffle producers, consumers, and apex predators back into order to prove you understand energy flow.
 - **Neon Drift** — Pick from five routes, four difficulty levels, and four cars with special abilities. Traffic and speed build with distance. Choose a 1 km, 3 km, 8 km, or endless drive, with crash explosions, varied vehicles, music, and sound effects.
 
