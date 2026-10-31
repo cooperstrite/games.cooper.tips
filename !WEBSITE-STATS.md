@@ -2,7 +2,7 @@
 
 A little scoreboard for games.cooper.tips.
 
-**Updated:** October 30, 2026 at 05:59 PM EDT
+**Updated:** October 30, 2026 at 08:51 PM EDT
 
 **Visibility:** Project files only. This report is excluded from the published website.
 
@@ -10,40 +10,40 @@ A little scoreboard for games.cooper.tips.
 
 | Stat | Total |
 | --- | ---: |
-| Lines in our source files | **34,491** |
-| Nonblank source lines | 32,474 |
-| Source files written for this project | 182 |
-| Image files | **200** |
-| Total project files | **423** |
+| Lines in our source files | **34,720** |
+| Nonblank source lines | 32,725 |
+| Source files written for this project | 188 |
+| Image files | **202** |
+| Total project files | **432** |
 | Games | **28** |
 | Games on the main list | 25 |
 | Games in Coming Soon | 3 |
-| Test files | 26 |
-| Project size on disk | 175.1 MiB |
-| Image collection size | 136.8 MiB |
+| Test files | 27 |
+| Project size on disk | 179.5 MiB |
+| Image collection size | 141.2 MiB |
 
-At 50 lines per printed page, our source would fill **690 pages**.
+At 50 lines per printed page, our source would fill **695 pages**.
 
 ## Where the lines live
 
 | Area | Files | Lines |
 | --- | ---: | ---: |
 | Development tools | 4 | 415 |
-| Tests | 26 | 3,439 |
-| Website and games | 152 | 30,637 |
+| Tests | 27 | 3,544 |
+| Website and games | 157 | 30,761 |
 
 | Language | Files | Lines |
 | --- | ---: | ---: |
-| JavaScript | 167 | 26,690 |
-| CSS | 11 | 6,053 |
-| HTML | 2 | 1,545 |
+| JavaScript | 172 | 26,870 |
+| CSS | 12 | 6,101 |
+| HTML | 2 | 1,546 |
 | Python | 2 | 203 |
 
 ## Image collection
 
 | Format | Images |
 | --- | ---: |
-| PNG | 77 |
+| PNG | 79 |
 | WEBP | 50 |
 | SVG | 42 |
 | JPG | 30 |
@@ -53,8 +53,8 @@ At 50 lines per printed page, our source would fill **690 pages**.
 
 | File | Lines |
 | --- | ---: |
-| `script.js` | 6,534 |
-| `style.css` | 4,838 |
+| `script.js` | 6,265 |
+| `style.css` | 4,724 |
 | `submerged.html` | 1,456 |
 | `neon-drift.js` | 838 |
 | `aurora-archery.js` | 425 |
@@ -63,14 +63,14 @@ At 50 lines per printed page, our source would fill **690 pages**.
 
 | Type | Files |
 | --- | ---: |
-| `.js` | 142 |
-| `.png` | 77 |
+| `.js` | 146 |
+| `.png` | 79 |
 | `.webp` | 50 |
 | `.svg` | 42 |
 | `.jpg` | 30 |
-| `.mjs` | 27 |
-| `.json` | 25 |
-| `.css` | 11 |
+| `.mjs` | 28 |
+| `.json` | 26 |
+| `.css` | 12 |
 | `.md` | 7 |
 | `.mp4` | 4 |
 | `.py` | 2 |

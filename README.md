@@ -22,7 +22,7 @@ A playful single-page playground inspired by [neal.fun](https://neal.fun), bundl
 - **Bubble Rally** — Race glass bubbles across three ocean circuits with 2-4 human/computer racers. Choose each computer's difficulty, manage energy, raise shields, and pop rivals back to checkpoints.
 - **Skyport Command** — Pick a contract, ensure you have the energy, dispatch a drone, and reinvest the cargo/credits before the 3-minute day ends.
 - **Harmonic Echo** — Master a growing instrument sequence across dynamic difficulty modes.
-- **Spot Clash** — Race an AI rival to find the shared symbol across dueling glyph cards.
+- **Spot Clash** — Race the computer to find the one shared picture across two illustrated cards. Clear point reveals highlight both matches and explain who scored before you choose the next pair.
 - **Cats vs Dogs** — Lead Team Whiskers or Team Woof in a rhythm tug-of-war. Time pulls, rest to recover stamina, and charge super pulls in a best-of-three championship.
 - **Haunted Harvest** — Gather candy across three haunted paths, solve riddles and ordered spells, manage fright, and carve glowing jack-o'-lanterns in a drawing workshop.
 - **Lights Down** — A compact Lights Out puzzle; toggle tiles (and their neighbors) to dim the board.
@@ -74,6 +74,18 @@ Coin rewards are exactly 1 per pipe on Easy, 3 on Medium, 5 on Hard, and 10 on E
 Use Play, Customize, and Shop to open `/#flappy`, the central studio at `/#characters/flappy`, and `/#flappy/shop`. The old `/#flappy/customize` link redirects to the central studio. The Flappy shop pauses and preserves a flight; leaving for the shared library or another game settles its earned coins and starts a fresh flight when you return. Browser Back and Forward work between pages. First-person 3D (Beta) uses the same flight rules and scoring. Line up its center ring with the dotted circle in the next opening.
 
 Each bird has its own artwork and motion: a fluffy sparrow, crested and striped jay, forward-facing owl, hovering hummingbird, scaled dragon with membrane wings, and glowing phoenix. The first-person wings and beaks match the character. Natural colors applies the selected species' recommended palette; individual colors and accessories remain independently editable. Characters, colors, accessories, views, records, coins, and purchases save in this browser.
+
+## Spot Clash
+
+Each pair contains exactly one shared picture from a set of 25 detailed object illustrations. Tap that picture on **either card** before the computer finds it. A correct claim earns 1 point; a wrong claim gives the other player 1 point. Both players follow that same rule, and every computer difficulty can make mistakes.
+
+Easy uses 5 pictures per card and a first-to-7 target; Medium uses 6 / first to 8, Hard uses 7 / first to 9, and Expert uses 8 / first to 10. The existing shared computer reaction speeds and accuracy are preserved. Pictures are shuffled independently on each card, with no repeated answer on consecutive pairs. The opponent starts searching only after the artwork loads and the cards are displayed.
+
+Every point has a large **You +1** or **Computer +1** result, scorer labels on both cards, progress marks on the scoreboard, matching-picture highlights, and a separate wrong-pick marker when needed. The explanation distinguishes a fast match from an opponent's mistake. Results stay in place until you press **Next pair**, and the last five points remain visible in a small history. The final pair stays visible alongside a win/loss celebration, the final score, and your fastest successful match.
+
+**Pause** stops both the computer and the deal, conceals the pictures, and preserves the remaining search time. Changing difficulty or starting a new match cancels pending actions. Leaving the browser tab suspends the opponent; leaving the game removes its timers and sounds. **Sound on/off** saves in this browser, and reduced-motion preferences keep the reveals static. Sounds are synthesized locally with Web Audio.
+
+The rules live in `spot-clash-engine.js`, with rendering and controls in `spot-clash.js`, `spot-clash-art.js`, `spot-clash.css`, and `spot-clash-audio.js`. `assets/spot-clash-art.json` records the built-in image-generation prompts and saved artwork paths. Run `node --test tests/spot-clash.test.mjs tests/opponents.test.mjs` for pair generation, scoring, race resolution, and computer-policy checks.
 
 ## Nim Duel
 
