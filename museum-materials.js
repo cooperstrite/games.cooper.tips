@@ -25,8 +25,17 @@ export function createMuseumMaterials(B, scene) {
     for(let y=78;y<h-60;y+=67)for(let x=80;x<w-60;x+=58){c.save();c.translate(x,y);c.rotate(Math.PI/4);c.fillStyle='#9e8253';c.fillRect(-8,-8,16,16);c.fillStyle='#622e2a';c.fillRect(-4,-4,8,8);c.restore();}
     for(let y=0;y<h;y+=2){c.fillStyle='rgba(0,0,0,.08)';c.fillRect(0,y,w,1);}for(let x=0;x<w;x+=3){c.fillStyle='rgba(240,204,158,.055)';c.fillRect(x,0,1,h);}
   });
-  const dust=material('warm light','#e6d7b3');dust.unlit=true;dust.emissiveColor=B.Color3.FromHexString('#cbb785');
-  const window=material('daylit glass','#cadce0',.25);window.emissiveColor=B.Color3.FromHexString('#b4cbd2').scale(.55);
+  const dust=material('warm light','#fff2d2');dust.unlit=true;dust.emissiveColor=B.Color3.FromHexString('#ffdf9c').scale(1.3);
+  gold.albedoColor=B.Color3.FromHexString('#cf9e4b');gold.roughness=.3;gold.metallic=.45;gold.environmentIntensity=1;
+  gold.bumpTexture=normal;gold.bumpTexture.level=.08;
+  const window=material('daylit garden glass','#ffffff',.9);window.unlit=true;
+  window.albedoTexture=texture('soft garden daylight',512,1024,(c,w,h)=>{
+    const sky=c.createLinearGradient(0,0,0,h);sky.addColorStop(0,'#a9c7dc');sky.addColorStop(.52,'#e9e7d7');sky.addColorStop(1,'#d0cd97');c.fillStyle=sky;c.fillRect(0,0,w,h);
+    c.filter='blur(14px)';
+    for(let i=0;i<180;i++){const x=random()*w,y=h*(.54+random()*.46),r=12+random()*56;c.fillStyle=['#82906f55','#526b5544','#adad7455','#e3d7a455'][i%4];c.beginPath();c.ellipse(x,y,r,r*.85,0,0,Math.PI*2);c.fill();}
+    c.filter='none';
+  });
+  window.emissiveColor=B.Color3.FromHexString('#a6b4b1').scale(.15);
   const screen=material('security display','#061d22',.5);screen.emissiveColor=B.Color3.FromHexString('#254c4d').scale(.45);
   // Unpack the material atlas into repeatable textures at runtime. The procedural
   // surfaces above remain usable if an image fails to load.

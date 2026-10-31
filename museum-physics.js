@@ -1,7 +1,9 @@
 import { World, Body, Vec3, Box, Sphere, Cylinder, Material, ContactMaterial, SAPBroadphase } from "./vendor/cannon-es/cannon-es.js";
 import { START, HEIGHT, WALLS, FURNITURE, MOVABLES, ROOMS, COLUMNS } from "./museum-world.js";
 export const STEP = 1/120, RADIUS = .3, EYE_HEIGHT = 1.66;
+export const WALK_SPEED_MIN=.5,WALK_SPEED_MAX=2;
 const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
+export const clampWalkSpeed=value=>Number.isFinite(value)?clamp(value,WALK_SPEED_MIN,WALK_SPEED_MAX):1;
 export function createMuseumPhysics() {
   const world = new World({ gravity: new Vec3(0,-9.81,0) });
   world.broadphase = new SAPBroadphase(world); world.solver.iterations = 12;
@@ -42,7 +44,7 @@ export function createMuseumPhysics() {
   function step(dt, input = {}, yaw = 0) {
     accumulator+=clamp(Number.isFinite(dt)?dt:0,0,.1);
     while(accumulator>=STEP){
-      const forward=clamp(input.forward||0,-1,1),side=clamp(input.side||0,-1,1),n=Math.max(1,Math.hypot(forward,side)),speed=input.fast?3.7:2.25;
+      const forward=clamp(input.forward||0,-1,1),side=clamp(input.side||0,-1,1),n=Math.max(1,Math.hypot(forward,side)),speed=(input.fast?3.7:2.25)*clampWalkSpeed(input.speedMultiplier);
       const vx=(-Math.sin(yaw)*forward+Math.cos(yaw)*side)/n*speed,vz=(-Math.cos(yaw)*forward-Math.sin(yaw)*side)/n*speed;
       const response=1-Math.exp(-(n===1&&forward===0&&side===0?16:11)*STEP);
       player.velocity.x+=(vx-player.velocity.x)*response;player.velocity.z+=(vz-player.velocity.z)*response;

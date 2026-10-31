@@ -2,18 +2,19 @@ import { createWebGLScene } from "./arcade/babylon.js";
 import { createMuseumMaterials } from "./museum-materials.js";
 import { prepareArcherAssets } from "./arcade/humanoid-mesh.js";
 import { WALLS, FURNITURE, ROOMS, CLUES, HEIGHT, COLUMNS, segmentHitsBox } from "./museum-world.js";
+import { WINDOWS, SKYLIGHT, wallPanels, wallTrim, ceilingPanels, pictureFrameGeometry } from "./museum-architecture.js";
 
 export async function createMuseumRenderer(canvas, physics, { isCurrent=()=>true }={}) {
   const gfx=await createWebGLScene(canvas,{quality:"high",isCurrent});
   const {B,scene,engine,camera,sun,shadows}=gfx,V=(x,y,z)=>new B.Vector3(x,y,z);
   scene.useRightHandedSystem=true;scene.skipPointerMovePicking=true;
-  scene.clearColor=B.Color4.FromHexString('#aca38fff');scene.fogMode=B.Scene.FOGMODE_EXP2;scene.fogDensity=.004;scene.fogColor=B.Color3.FromHexString('#b5a78e');
-  scene.imageProcessingConfiguration.exposure=1.2;scene.imageProcessingConfiguration.contrast=1.15;
+  scene.clearColor=B.Color4.FromHexString('#c8d8ddff');scene.fogMode=B.Scene.FOGMODE_EXP2;scene.fogDensity=.0018;scene.fogColor=B.Color3.FromHexString('#c6b695');
+  scene.imageProcessingConfiguration.exposure=1.05;scene.imageProcessingConfiguration.contrast=1.12;
   camera.fov=.98;camera.minZ=.055;camera.maxZ=140;camera.inputs.clear();
-  const fill=scene.getLightByName('sky-fill');fill.intensity=.42;fill.diffuse=B.Color3.FromHexString('#e9dfc9');fill.groundColor=B.Color3.FromHexString('#5e5141');
-  sun.direction.set(-.7,-1,-.25);sun.position.set(18,20,12);sun.intensity=1.45;sun.diffuse=B.Color3.FromHexString('#ffe4b8');
-  shadows.mapSize=2048;shadows.useBlurExponentialShadowMap=false;shadows.usePercentageCloserFiltering=true;shadows.filteringQuality=B.ShadowGenerator.QUALITY_HIGH;shadows.bias=.00015;shadows.normalBias=.025;sun.autoCalcShadowZBounds=true;sun.shadowOrthoScale=.1;
-  const m=createMuseumMaterials(B,scene), props=[],floorMaterials=[],clueNodes=new Map(),debugMeshes=new Map(),dynamicMeshes=new Map();
+  const fill=scene.getLightByName('sky-fill');fill.intensity=.3;fill.diffuse=B.Color3.FromHexString('#d8e4ed');fill.groundColor=B.Color3.FromHexString('#66533a');
+  sun.direction.set(-.82,-.62,-.25);sun.position.set(30,25,22);sun.intensity=4.2;sun.diffuse=B.Color3.FromHexString('#ffdea5');
+  shadows.mapSize=4096;shadows.useBlurExponentialShadowMap=false;shadows.usePercentageCloserFiltering=true;shadows.filteringQuality=B.ShadowGenerator.QUALITY_HIGH;shadows.bias=.00008;shadows.normalBias=.015;sun.autoCalcShadowZBounds=true;sun.shadowOrthoScale=.04;
+  const m=createMuseumMaterials(B,scene), props=[],wallSurfaces=[],floorMaterials=[],clueNodes=new Map(),debugMeshes=new Map(),dynamicMeshes=new Map(),localLights=[],pictureLights=[];
   await m.ready;
   if(!isCurrent()){gfx.dispose();throw new Error('Museum loading cancelled');}
   function finish(mesh,mat,shadow=true){mesh.material=mat;mesh.receiveShadows=true;mesh.isPickable=false;props.push(mesh);if(shadow)shadows.addShadowCaster(mesh);return mesh;}
@@ -30,15 +31,24 @@ export async function createMuseumRenderer(canvas, physics, { isCurrent=()=>true
   function localBox(parent,name,w,h,d,x,y,z,mat,shadow=true){return attach(box(name,w,h,d,x,y,z,mat,shadow),parent);}
   function label(text,x,y,z,width=1.4,angle=0,dark=false){
     const mat=m.material('label '+text,dark?'#dfcda7':'#c7b995',.8);mat.albedoTexture=m.texture('label '+text,512,128,(c,w,h)=>{c.fillStyle=dark?'#262c29':'#d8c9a5';c.fillRect(0,0,w,h);c.fillStyle=dark?'#e9d8b6':'#242c2c';c.font='500 25px Georgia';c.textAlign='center';c.textBaseline='middle';c.fillText(text,w/2,h/2,w-30);});
-    return plane(text,width,width/4,x,y,z,mat,angle);
+    const sign=groupAt(text,x,y,z,angle),w=width/2,h=width/8;
+    // Two independently oriented printed faces. A double-sided single quad
+    // shows the same UVs through its back and mirrors the lettering.
+    for(const back of [false,true]){
+      const face=new B.Mesh(text+(back?' / back':' / front'),scene),data=new B.VertexData();
+      data.positions=[-w,-h,0,w,-h,0,w,h,0,-w,h,0];data.normals=[0,0,1,0,0,1,0,0,1,0,0,1];data.uvs=[0,0,1,0,1,1,0,1];data.indices=[0,2,1,0,3,2];data.applyToMesh(face);
+      face.parent=sign;face.position.z=back?-.006:.006;face.rotation.y=back?Math.PI:0;finish(face,mat,false);
+    }
+    return sign;
   }
   // Each room uses the same footprint as the navigable map and collision world.
   for(const r of ROOMS){
     const floorMat=m.material(r.id+' stone','#ffffff',.32);floorMat.albedoTexture=m.copyTexture(m.stone.albedoTexture,r.id+' marble');floorMat.albedoTexture.uScale=r.w/4;floorMat.albedoTexture.vScale=r.d/4;
     floorMaterials.push(floorMat);
     const floor=B.MeshBuilder.CreateGround(r.name+' floor',{width:r.w,height:r.d},scene);floor.position.set(r.x,.001,r.z);finish(floor,floorMat,false);
-    box(r.id+' ceiling',r.w,.18,r.d,r.x,HEIGHT,r.z,m.plaster,false);
+    for(const p of ceilingPanels(r))box(r.id+' ceiling',p.w,.18,p.d,p.x,HEIGHT,p.z,m.plaster);
     for(let x=r.x-r.w/2+2;x<r.x+r.w/2;x+=4)for(let z=r.z-r.d/2+2;z<r.z+r.d/2;z+=4){
+      if(r.id===SKYLIGHT.room&&Math.abs(x-SKYLIGHT.x)<SKYLIGHT.w/2+1.83&&Math.abs(z-SKYLIGHT.z)<SKYLIGHT.d/2+1.83)continue;
       box('ceiling coffer',3.65,.08,3.65,x,HEIGHT-.13,z,m.linen,false);
       box('coffer panel',3.5,.06,3.5,x,HEIGHT-.18,z,m.plaster,false);
     }
@@ -50,17 +60,8 @@ export async function createMuseumRenderer(canvas, physics, { isCurrent=()=>true
     for(let x=r.x-r.w/2+2;x<r.x+r.w/2;x+=4)for(let z=r.z-r.d/2+2;z<r.z+r.d/2;z+=4){const tile=box('marble diamond',.19,.003,.19,x,.012,z,m.darkStone,false);tile.rotation.y=Math.PI/4;}
   }
   for(const d of WALLS){
-    // Architectural walls receive shadows; the roof is not a sun blocker.
-    box(d.id,d.w,d.h,d.d,d.x,d.y,d.z,m.plaster,false);
-    if(d.h<3)continue;
-    const alongX=d.w>d.d;
-    const w=alongX?d.w:d.w+.05,depth=alongX?d.d+.05:d.d;
-    box(d.id+' wainscot',w,1.05,depth,d.x,.54,d.z,m.wood,false);
-    for(const [y,h,extra]of [[.12,.16,.13],[1.08,.08,.12],[HEIGHT-.28,.14,.18],[HEIGHT-.1,.14,.27]])box('moulding',d.w+(alongX?0:extra),h,d.d+(alongX?extra:0),d.x,y,d.z,y>2?m.plaster:m.wood,false);
-    const length=alongX?d.w:d.d;
-    for(let n=-length/2+.22;n<length/2-.2;n+=1.3){
-      box('panel stile',alongX?.045:depth+.025,.85,alongX?depth+.025:.045,alongX?d.x+n:d.x,.56,alongX?d.z:d.z+n,m.gold,false);
-    }
+    for(const p of wallPanels(d))wallSurfaces.push(box(p.id,p.w,p.h,p.d,p.x,p.y,p.z,m.plaster));
+    for(const p of wallTrim(d))box(p.id,p.w,p.h,p.d,p.x,p.y,p.z,m[p.material],false);
   }
   // Broad open doorways stay open in both geometry and physics.
   for(const z of [-4,4])for(const x of [-3.25,3.25]){
@@ -72,9 +73,9 @@ export async function createMuseumRenderer(canvas, physics, { isCurrent=()=>true
   for(const [x,z,w,d] of [[0,9,4.4,8],[0,0,4.4,7.4],[0,-8,7,7],[24,-3,5,10]]){
     const rug=B.MeshBuilder.CreateGround('woven runner',{width:w,height:d},scene);rug.position.set(x,.017,z);finish(rug,m.rug,false);
   }
-  function point(name,x,y,z,power,color='#ffe1b1',range=14){const l=new B.PointLight(name,V(x,y,z),scene);l.intensity=power;l.diffuse=B.Color3.FromHexString(color);l.range=range;l.radius=.5;return l;}
+  function point(name,x,y,z,power,color='#ffe1b1',range=14){const l=new B.PointLight(name,V(x,y,z),scene);l.intensity=power;l.diffuse=B.Color3.FromHexString(color);l.range=range;l.radius=.5;localLights.push(l);return l;}
   for(const [x,z]of [[0,10],[0,0],[0,-8],[-18,0],[22,-3],[31,-3]]){
-    point('gallery bounce',x,4.1,z,55);
+    point('gallery bounce',x,4.3,z,42,'#ffdfb0',12);
     cylinder('ceiling rose',.48,.48,.07,x,HEIGHT-.12,z,m.gold);
     cylinder('pendant cable',.018,.018,.6,x,HEIGHT-.4,z,m.black);
     cylinder('pendant shade',.18,.54,.28,x,HEIGHT-.76,z,m.gold);
@@ -83,38 +84,69 @@ export async function createMuseumRenderer(canvas, physics, { isCurrent=()=>true
   // Detailed frames, with real painting textures rather than colored rectangles.
   const atlas=new B.Texture(new URL('./assets/museum-paintings.png',import.meta.url).href,scene);
   function artwork(name,x,y,z,w,h,rotation,index,empty=false){
-    const g=groupAt(name,x,y,z,rotation);
-    for(const [pad,depth,mat]of [[.18,.1,m.wood],[.12,.14,m.gold],[.05,.18,m.gold],[0,.11,m.black]]){
-      localBox(g,'frame rail',w+pad*2,.055,depth,0,h/2+pad,0,mat);localBox(g,'frame rail',w+pad*2,.055,depth,0,-h/2-pad,0,mat);
-      localBox(g,'frame stile',.055,h+pad*2,depth,-w/2-pad,0,0,mat);localBox(g,'frame stile',.055,h+pad*2,depth,w/2+pad,0,0,mat);
+    const g=groupAt(name,0,0,0);
+    const frame=new B.Mesh(name+' continuous gilt frame',scene),data=new B.VertexData(),shape=pictureFrameGeometry(w,h);Object.assign(data,shape);data.normals=[];B.VertexData.ComputeNormals(shape.positions,shape.indices,data.normals);data.applyToMesh(frame);frame.parent=g;finish(frame,m.gold);
+    // Fine beading and small leaf scrolls stay on the moulding, outside the art.
+    for(const sign of [-1,1]){
+      for(let t=-w/2;t<=w/2;t+=.075)attach(sphere('gilt pearl',.021,.021,.018,t,sign*(h/2+.055),.09,m.gold),g);
+      for(let t=-h/2;t<=h/2;t+=.075)attach(sphere('gilt pearl',.021,.021,.018,sign*(w/2+.055),t,.09,m.gold),g);
     }
-    for(let t=-w/2;t<w/2;t+=.12){attach(sphere('gilded beading',.027,.027,.027,t,h/2+.08,.09,m.gold),g);attach(sphere('gilded beading',.027,.027,.027,t,-h/2-.08,.09,m.gold),g);}
+    for(const sx of [-1,1])for(const sy of [-1,1])for(const n of [-1,1]){
+      const path=Array.from({length:18},(_,i)=>{const a=i/17*Math.PI*1.65,r=.055*(1-i/24);return V(sx*(w/2+.12)+Math.cos(a)*r,sy*(h/2+.12)+Math.sin(a)*r*n,.152);});
+      attach(finish(B.MeshBuilder.CreateTube('corner leaf scroll',{path,radius:.009,tessellation:6},scene),m.gold),g);
+    }
+    // Bake the tiny ornamental pieces into one draw call per frame.
+    const ornaments=g.getChildMeshes();for(const mesh of ornaments){props.splice(props.indexOf(mesh),1);shadows.removeShadowCaster(mesh);}
+    const joined=B.Mesh.MergeMeshes(ornaments,true,true);joined.name=name+' continuous gilt frame';joined.parent=g;finish(joined,m.gold);
     let mat=m.linen;
-    if(!empty){mat=m.material(name+' oil on canvas','#ffffff',.78);mat.albedoTexture=atlas.clone();mat.albedoTexture.uScale=.5;mat.albedoTexture.vScale=.5;mat.albedoTexture.uOffset=(index%2)*.5;mat.albedoTexture.vOffset=Math.floor(index/2)*.5;}
-    const picture=attach(plane(name+' painting',w,h,0,0,.035,mat),g);
-    const plaque=label(name,x,y-h/2-.42,z+.12,w*.7,rotation);plaque.position.x+=Math.sin(rotation)*.12;
-    if(empty){localBox(g,'picture hook',.045,.1,.035,0,.4,.07,m.gold);localBox(g,'uncovered paint',.05,.16,.02,-.4,-.5,.055,m.plaster);}
+    if(!empty){mat=m.material(name+' oil on canvas','#ffffff',.78);mat.albedoTexture=atlas.clone();mat.albedoTexture.uScale=.5;mat.albedoTexture.vScale=.5;mat.albedoTexture.uOffset=(index%2)*.5;mat.albedoTexture.vOffset=(1-Math.floor(index/2))*.5;}
+    const picture=attach(plane(name+' painting',w,h,0,0,.045,mat),g);
+    const plaque=label(name,0,-h/2-.4,.06,Math.min(1.1,w*.65),0);plaque.parent=g;
+    const lampY=h/2+.5,lampZ=.48;
+    localBox(g,'picture lamp backplate',.34,.075,.045,0,lampY,.015,m.gold);
+    for(const side of [-1,1]){
+      const path=[V(side*w*.23,lampY,.02),V(side*w*.23,lampY+.045,.2),V(side*w*.23,lampY-.005,lampZ)];
+      attach(finish(B.MeshBuilder.CreateTube('picture lamp curved arm',{path,radius:.012,tessellation:10},scene),m.gold),g);
+    }
+    const hood=attach(cylinder('brass picture light',.095,.095,w*.72,0,lampY,lampZ,m.gold),g);hood.rotation.z=Math.PI/2;
+    localBox(g,'picture lamp diffuser',w*.68,.012,.045,0,lampY-.047,lampZ-.012,m.dust,false);
+    const origin=V(x+Math.sin(rotation)*lampZ,y+lampY,z+Math.cos(rotation)*lampZ);
+    const direction=V(-Math.sin(rotation)*lampZ,-lampY,-Math.cos(rotation)*lampZ).normalize();
+    const light=new B.SpotLight(name+' picture light',origin,direction,1.6,1,scene);light.intensity=17;light.range=5;light.diffuse=B.Color3.FromHexString('#ffe0ad');light.radius=.16;pictureLights.push({light,group:g});
+    g.position.set(x,y,z);g.rotation.y=rotation;
     return picture;
   }
   const restored=artwork('MONA LISA',0,2.6,-11.72,1.55,2.12,0,0,true);
-  for(const [x,z,ry]of [[-6,-11.72,0],[6,-11.72,0],[-11.72,-7,Math.PI/2],[11.72,-7,-Math.PI/2],[-7,14.72,Math.PI],[0,14.72,Math.PI],[7,14.72,Math.PI],[-11.72,11,Math.PI/2],[11.72,10,-Math.PI/2],[23,-11.72,0],[31,-11.72,0]])artwork(['RIVER STUDY','THE DISTANT SHORE','STILL LIFE','EVENING ON THE LAKE'][props.length%4],x,2.8,z,2.35,1.65,ry,Math.floor(Math.abs(x+z))%4);
+  for(const [i,[x,z,ry]]of [[-6,-11.72,0],[6,-11.72,0],[-11.72,-7,Math.PI/2],[11.72,-7,-Math.PI/2],[-7,14.72,Math.PI],[0,14.72,Math.PI],[7,14.72,Math.PI],[-11.72,11,Math.PI/2],[11.72,9.55,-Math.PI/2],[23,-11.72,0],[31,-11.72,0]].entries())artwork(['RIVER STUDY','THE DISTANT SHORE','STILL LIFE','EVENING ON THE LAKE'][i%4],x,2.8,z,2.35,1.65,ry,i%4);
   for(const z of [4.25,-3.75])for(const x of [-7.4,7.4])artwork(x<0?'LANDSCAPE STUDY':'STILL LIFE',x,2.6,z,2.5,1.7,0,x<0?0:2);
-  for(const z of [8.5,12.5]){
-    const g=groupAt('tall gallery window',11.73,3.2,z,-Math.PI/2);
-    attach(plane('soft daylight',1.5,3,0,0,.025,m.window),g);
-    for(const dx of [-.85,.85])localBox(g,'window casing',.15,3.3,.16,dx,0,.04,m.white);
-    for(const y of [-1.62,1.62])localBox(g,'window cornice',1.95,.15,.25,0,y,.04,m.white);
-    localBox(g,'vertical mullion',.045,3,.08,0,0,.09,m.wood);
-    for(const y of [-.5,.5])localBox(g,'cross mullion',1.7,.045,.08,0,y,.09,m.wood);
-    point('cool window fill',10.8,3.1,z,38,'#d6e5ee',12);
+  for(const win of WINDOWS){
+    const height=win.top-win.bottom,y=(win.top+win.bottom)/2;
+    const g=groupAt(win.id,win.x,y,win.z,win.angle),w=win.width;
+    // Deep reveals and real openings let the directional sunlight cast the
+    // window grid onto the floor; the physical wall still includes solid glass.
+    attach(plane('daylit garden beyond glass',w,height,0,0,-.27,m.window),g);
+    for(const dx of [-w/2,w/2])localBox(g,'window stone reveal',.13,height+.22,.5,dx,0,0,m.white);
+    for(const yy of [-height/2,height/2])localBox(g,'window stone lintel',w+.3,.15,.52,0,yy,.02,m.white);
+    localBox(g,'window sill',w+.38,.12,.6,0,-height/2-.07,.08,m.white);
+    localBox(g,'window central mullion',.05,height,.085,0,0,.025,m.wood);
+    for(const yy of [-height/6,height/6])localBox(g,'window cross mullion',w,.045,.085,0,yy,.025,m.wood);
+    point('window sky bounce',win.x+Math.sin(win.angle)*.75,y,win.z+Math.cos(win.angle)*.75,24,'#c9deee',8);
   }
-  const focusLight=new B.SpotLight('painting spotlight',V(0,5,-8.5),V(0,-.65,-1),1.1,2,scene);focusLight.intensity=80;focusLight.range=10;focusLight.diffuse=B.Color3.FromHexString('#ffe4b9');
+  const sky=B.MeshBuilder.CreateGround('gallery skylight glass',{width:SKYLIGHT.w,height:SKYLIGHT.d,sideOrientation:B.Mesh.DOUBLESIDE},scene);sky.position.set(SKYLIGHT.x,HEIGHT+.2,SKYLIGHT.z);finish(sky,m.window,false);
+  for(const side of [-1,1]){
+    box('skylight stone reveal',.15,.32,SKYLIGHT.d+.25,SKYLIGHT.x+side*SKYLIGHT.w/2,HEIGHT,SKYLIGHT.z,m.white);
+    box('skylight stone reveal',SKYLIGHT.w,.32,.15,SKYLIGHT.x,HEIGHT,SKYLIGHT.z+side*SKYLIGHT.d/2,m.white);
+  }
+  box('skylight mullion',.05,.1,SKYLIGHT.d,SKYLIGHT.x,HEIGHT+.04,SKYLIGHT.z,m.wood);
+  box('skylight mullion',SKYLIGHT.w,.1,.05,SKYLIGHT.x,HEIGHT+.04,SKYLIGHT.z,m.wood);
+  point('gallery skylight bounce',SKYLIGHT.x,HEIGHT-.4,SKYLIGHT.z,40,'#d9e6eb',12);
   // Layered brass sconces and warm light keep the gallery readable at eye level.
-  for(const x of [-3.8,3.8,-9,9]){
+  for(const x of [-3.6,3.6]){
     box('sconce backplate',.18,.42,.04,x,2.9,-11.7,m.gold);cylinder('sconce arm',.025,.025,.4,x,2.74,-11.53,m.gold);cylinder('sconce shade',.17,.3,.25,x,3.03,-11.5,m.linen);point('sconce',x,3.04,-11.3,9,'#ffcf8b',5);
   }
   function shadowPatch(x,z,w,d){const mat=new B.StandardMaterial('contact shade',scene);mat.disableLighting=true;mat.diffuseColor=B.Color3.Black();mat.emissiveColor=B.Color3.Black();mat.opacityTexture=contact;mat.alpha=.22;const s=B.MeshBuilder.CreateGround('soft contact shadow',{width:w,height:d},scene);s.position.set(x,.022,z);s.material=mat;s.isPickable=false;return s;}
   const contact=m.texture('contact falloff',64,64,(c,w,h)=>{const g=c.createRadialGradient(w/2,h/2,4,w/2,h/2,w/2);g.addColorStop(0,'white');g.addColorStop(1,'black');c.fillStyle=g;c.fillRect(0,0,w,h);});
+  contact.getAlphaFromRGB=true;
   function plant(d){cylinder('planter rim',d.w,d.w*.8,.12,d.x,.88,d.z,m.terracotta);cylinder('ceramic planter',d.w*.8,d.w*.5,.82,d.x,.45,d.z,m.terracotta);cylinder('soil',.75,.75,.02,d.x,.92,d.z,m.wood);
     for(let i=0;i<16;i++){const a=i*2.4,h=1.1+(i%4)*.24,dx=Math.sin(a)*.38,dz=Math.cos(a)*.38;const path=[V(d.x,.88,d.z),V(d.x+dx*.55,h,d.z+dz*.55),V(d.x+dx*1.4,h+.25,d.z+dz*1.4)];finish(B.MeshBuilder.CreateTube('plant stem',{path,radius:.009,tessellation:5},scene),m.leaves);const leaf=sphere('broad leaf',.19,.48,.028,d.x+dx*1.5,h+.18,d.z+dz*1.5,m.leaves);leaf.rotation.set(.35,a,.3);}}
   function crate(d,body){const g=groupAt(d.id,d.x,d.y,d.z);localBox(g,'crate shell',d.w,d.h,d.d,0,0,0,m.wood);for(const x of [-d.w*.36,d.w*.36])for(const z of [-d.d/2-.018,d.d/2+.018])localBox(g,'crate batten',.1,d.h,.045,x,0,z,m.linen);for(const z of [-d.d/2-.045,d.d/2+.045]){const a=label('FRAGILE',0,0,z,Math.min(.55,d.w*.75),0,true);a.parent=g;}if(body)dynamicMeshes.set(d.id,g);return g;}
@@ -166,22 +198,38 @@ export async function createMuseumRenderer(canvas, physics, { isCurrent=()=>true
     }else{attach(sphere('disabled status LED',.025,.025,.02,.11,.02,.25,m.red),g);}
   }
   const restoredMat=m.material('recovered Mona Lisa','#ffffff',.8);restoredMat.albedoTexture=new B.Texture(new URL('./assets/museum-mona-lisa.jpg',import.meta.url).href,scene);
+  // Reserve the light budget for the room and nearby fixtures. Previously the
+  // first eight global lights crowded out fixtures in the other rooms.
+  for(const light of localLights)light.includedOnlyMeshes=[];
+  const roomFor=p=>ROOMS.find(r=>Math.abs(p.x-r.x)<=r.w/2+.1&&Math.abs(p.z-r.z)<=r.d/2+.1);
+  for(const mesh of props){mesh.computeWorldMatrix(true);const p=mesh.getBoundingInfo().boundingBox.centerWorld,room=roomFor(p);
+    const nearest=localLights.filter(l=>roomFor(l.position)===room).sort((a,b)=>B.Vector3.DistanceSquared(p,a.position)-B.Vector3.DistanceSquared(p,b.position)).slice(0,2);
+    for(const light of nearest)light.includedOnlyMeshes.push(mesh);
+  }
+  for(const {light,group}of pictureLights){
+    const own=group.getChildMeshes();light.includedOnlyMeshes=[...own,...wallSurfaces.filter(mesh=>{const box=mesh.getBoundingInfo().boundingBox,p=light.position;return B.Vector3.Distance(p,B.Vector3.Clamp(p,box.minimumWorld,box.maximumWorld))<2;})];
+    const shade=new B.ShadowGenerator(512,light);shade.usePercentageCloserFiltering=true;shade.bias=.00015;shade.normalBias=.008;shade.getShadowMap().renderList=own.filter(mesh=>mesh.name.includes('frame'));shade.getShadowMap().refreshRate=0;
+  }
+  shadows.getShadowMap().refreshRate=0;
   // A static room reflection supplies soft brass highlights without a distant sky photograph.
-  const probe=new B.ReflectionProbe('museum reflections',128,scene);probe.position.set(0,2,-7);probe.renderList=props;probe.refreshRate=0;scene.environmentIntensity=.45;
+  const probe=new B.ReflectionProbe('museum reflections',256,scene);probe.position.set(0,2,-7);probe.renderList=props;probe.refreshRate=0;scene.environmentIntensity=.8;
   // Never sample the cubemap while drawing into that same cubemap.
   probe.cubeTexture.onBeforeBindObservable.add(()=>{scene.environmentTexture=null;});
   probe.cubeTexture.onAfterUnbindObservable.add(()=>{scene.environmentTexture=probe.cubeTexture;});
+  // Capture once before assigning the environment. Without this explicit render
+  // target the probe is never drawn, leaving metal and reflections black.
+  scene.customRenderTargets.push(probe.cubeTexture);
   scene.executeWhenReady(()=>probe.cubeTexture.resetRefreshCounter());
   // Planar floor reflections are local to the museum and softened by the stone finish.
-  const mirror=new B.MirrorTexture('polished marble reflection',512,scene,true);
-  mirror.mirrorPlane=new B.Plane(0,-1,0,.015);mirror.level=.18;mirror.adaptiveBlurKernel=18;
+  const mirror=new B.MirrorTexture('polished marble reflection',1024,scene,true);
+  mirror.mirrorPlane=new B.Plane(0,-1,0,.015);mirror.level=.35;mirror.adaptiveBlurKernel=12;
   mirror.renderList=props.filter(mesh=>!mesh.name.includes('floor')&&!mesh.name.includes('runner')&&!mesh.name.includes('joint')&&!mesh.name.includes('diamond'));
-  mirror.refreshRate=2;for(const mat of floorMaterials){mat.reflectionTexture=mirror;mat.roughness=.32;}
+  mirror.refreshRate=2;for(const mat of floorMaterials){mat.reflectionTexture=mirror;mat.roughness=.25;}
   probe.renderList=props.filter(mesh=>!floorMaterials.includes(mesh.material));
-  if(engine.webGLVersion>1){const ao=new B.SSAO2RenderingPipeline('museum ambient occlusion',scene,{ssaoRatio:.5,blurRatio:.5},[camera]);ao.radius=.5;ao.totalStrength=.65;ao.samples=8;ao.expensiveBlur=false;}
-  const glow=new B.GlowLayer('restrained light bloom',scene,{blurKernelSize:24});glow.intensity=.15;
+  if(engine.webGLVersion>1){const ao=new B.SSAO2RenderingPipeline('museum ambient occlusion',scene,{ssaoRatio:.5,blurRatio:.5},[camera]);ao.radius=.5;ao.totalStrength=.65;ao.samples=8;ao.expensiveBlur=false;ao.textureSamples=4;}
+  const glow=new B.GlowLayer('restrained light bloom',scene,{blurKernelSize:32});glow.intensity=.18;
   const debugMaterial=new B.StandardMaterial('collision wireframe',scene);debugMaterial.emissiveColor=B.Color3.FromHexString('#55edcd');debugMaterial.disableLighting=true;debugMaterial.wireframe=true;debugMaterial.alpha=.7;
-  let boxesVisible=false,solved=false,time=0;
+  let boxesVisible=false,solved=false,time=0,foundCount=0;
   function hitboxes(value){boxesVisible=!!value;for(const mesh of debugMeshes.values())mesh.dispose();debugMeshes.clear();if(!boxesVisible)return;
     for(const body of physics.bodies){const d=body.museum;if(d.kind==='floor'||d.kind==='ceiling')continue;const mesh=B.MeshBuilder.CreateBox('hitbox '+d.id,{width:d.w+.005,height:d.h+.005,depth:d.d+.005},scene);mesh.material=debugMaterial;mesh.isPickable=false;mesh.position.copyFromFloats(body.position.x,body.position.y,body.position.z);debugMeshes.set(d.id,mesh);}
   }
@@ -195,10 +243,11 @@ export async function createMuseumRenderer(canvas, physics, { isCurrent=()=>true
   }
   function update(pos,yaw,pitch,dt,state,{headBob=true}={}){
     time+=dt;camera.position.set(pos.x,pos.y+(headBob?Math.sin(time*9)*Math.min(.012,pos.speed*.005):0),pos.z);camera.rotation.set(-pitch,yaw+Math.PI,0);
-    for(const b of physics.dynamic){const node=dynamicMeshes.get(b.museum.id);node.position.copyFromFloats(b.position.x,b.position.y,b.position.z);node.rotationQuaternion=new B.Quaternion(b.quaternion.x,b.quaternion.y,b.quaternion.z,b.quaternion.w);}
+    for(const b of physics.dynamic){const node=dynamicMeshes.get(b.museum.id),q=new B.Quaternion(b.quaternion.x,b.quaternion.y,b.quaternion.z,b.quaternion.w);if(B.Vector3.DistanceSquared(node.position,V(b.position.x,b.position.y,b.position.z))>.0001||(node.rotationQuaternion&&1-Math.abs(B.Quaternion.Dot(node.rotationQuaternion,q))>.00001))shadows.getShadowMap().resetRefreshCounter();node.position.copyFromFloats(b.position.x,b.position.y,b.position.z);node.rotationQuaternion=q;}
     if(boxesVisible)for(const b of physics.bodies){const mesh=debugMeshes.get(b.museum.id);if(mesh){mesh.position.copyFromFloats(b.position.x,b.position.y,b.position.z);mesh.rotationQuaternion=new B.Quaternion(b.quaternion.x,b.quaternion.y,b.quaternion.z,b.quaternion.w);}}
     for(const c of CLUES){const node=clueNodes.get(c.id);node.setEnabled(!state.found.includes(c.id));}
-    if(solved!==state.solved){solved=state.solved;restored.material=solved?restoredMat:m.linen;}
+    if(foundCount!==state.found.length){foundCount=state.found.length;shadows.getShadowMap().resetRefreshCounter();}
+    if(solved!==state.solved){solved=state.solved;restored.material=solved?restoredMat:m.linen;probe.cubeTexture.resetRefreshCounter();}
     scene.render();
   }
   await scene.whenReadyAsync();
