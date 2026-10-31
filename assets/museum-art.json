@@ -1,0 +1,26 @@
+{
+  "game": "Museum Detective",
+  "generated_with": "OpenAI built-in image_gen tool",
+  "generated_assets": [
+    {
+      "file": "assets/museum-detective-cover.png",
+      "prompt": "Use case: stylized-concept. Asset type: cover artwork for a realistic browser 3D museum detective game, landscape 1536x1024. A beautiful, credible fine art museum interior seen at human eye level looking down a grand long gallery: warm ivory limestone walls, walnut wall wainscoting, polished cream marble tile floor with subtle charcoal inlay, rich red Persian runner rug, gilded antique painting frames, classical white marble sculpture on a stone plinth, graceful stone columns, tall windows at one side bringing soft amber late-afternoon sun, coffered ceiling and small museum track spotlights. A large empty gold portrait frame at the far end, its tan fabric backing and a small bare picture hook visible, subtly suggesting a stolen painting. Foreground right on a walnut curator desk: a realistic magnifying glass and an open investigator notebook. Architectural visualization realism, natural material microtexture, attractive cinematic lighting, quiet intriguing atmosphere, precise plausible scale, uncluttered premium composition. No words, no letters, no logos, no people, no brand references, no UI. This is artwork, not a screenshot with interface."
+    },
+    {
+      "file": "assets/museum-paintings.png",
+      "prompt": "Use case: historical-scene. Asset type: museum oil painting texture atlas for a 3D video game. Square image, exactly FOUR individual rectangular original paintings in a precise equal 2 by 2 grid, every painting fills its quadrant edge to edge, NO spacing, NO frames or margins. The whole image is perfectly flat frontal artwork, no perspective. Top left: richly detailed old oil painting of a green river valley, pale sky, dark leafy trees, a distant stone bridge and mountains. Top right: old oil painting of a stormy seacoast with a small sailing vessel and dramatic cloudy sky. Bottom left: old oil still life painting of pears, grapes, a dark pottery jug, and linen on a dark walnut table. Bottom right: old oil painting of a quiet Italian village and warm ochre buildings beside a lake at sunset. All in coherent authentic 18th/19th century European oil painting style, sophisticated chiaroscuro, muted warm pigments, realistic forms, fine visible canvas grain and restrained impasto brushwork, slight aged varnish. Museum quality. No text, logos, signatures, dividers, picture frames, people, lettering, or watermark."
+    },
+    {
+      "file": "assets/museum-surfaces.png",
+      "prompt": "Use case: product-mockup. Asset type: photoreal PBR base color texture atlas for a fine art museum game. Square image consisting of exactly FOUR equal square material photographs in a strict 2x2 grid, edge to edge with absolutely no gutters, labels, perspective or shadows. Orthographic perfectly flat scans with even diffuse lighting and microtexture. TOP LEFT quadrant: cream ivory polished Carrara marble stone with delicate cool gray and warm beige veins, a single continuous uncut slab, restrained veining, no tile joints. TOP RIGHT quadrant: authentic dark warm brown walnut wood, straight predominantly vertical fine grain, subtle natural pores and smooth satin finish, not wavy stripes. BOTTOM LEFT quadrant: one intricately patterned antique Persian carpet, red burgundy ground with very fine delicate faded tan gold and dark navy botanical motifs and detailed border, a full square rug pattern cropped exactly to its edge, realistic fine textile weave. BOTTOM RIGHT quadrant: subtle warm ivory limestone plaster, faint fine pores and mineral mottling, clean premium interior finish, very light cream color. Dense realistic texture detail. No text, no logos, no objects, no obvious lighting highlights, no glossy hotspots, no frames, no room view. Four flat material textures only."
+    }
+  ],
+  "retained_art": {
+    "file": "assets/museum-mona-lisa.jpg",
+    "source": "Extracted unchanged from the supplied standalone museum game's embedded Mona Lisa image.",
+    "original_source_url": "https://upload.wikimedia.org/wikipedia/commons/6/6a/Mona_Lisa.jpg",
+    "credit": "Leonardo da Vinci, Mona Lisa. Public-domain painting.",
+    "sha256": "0403529ec3f8ec8ef9900fd6c49b341da6235a07a9a8a44f75e628b93980e07d"
+  },
+  "sculpture_geometry": "Uses the existing shared anatomical head geometry. See assets/archer/ for its retained source and license notices. All museum furniture and architecture are generated in museum-renderer.js."
+}

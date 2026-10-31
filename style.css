@@ -749,15 +749,6 @@ button:hover {
   background: #0a1426;
 }
 
-.masterpiece-frame {
-  display: block;
-  width: 100%;
-  height: max(720px, 82vh);
-  border: 1px solid var(--ui-line);
-  border-radius: var(--radius-lg);
-  background: #080a10;
-}
-
 .reaction-panel {
   display: grid;
   gap: 1rem;
