@@ -1,0 +1,17 @@
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - heading "games.cooper.tips" [level=1] [ref=e5]
+    - generic [ref=e6]:
+      - paragraph [ref=e7]: Small games, big vibes.
+      - group "Color theme" [ref=e8]:
+        - button "Light" [ref=e9] [cursor=pointer]
+        - button "Dark" [pressed] [ref=e13] [cursor=pointer]
+  - main:
+    - region "Mini game selection":
+      - list
+  - contentinfo [ref=e16]:
+    - paragraph [ref=e17]:
+      - text: Built with curiosity, inspired by
+      - link "neal.fun" [ref=e18] [cursor=pointer]:
+        - /url: https://neal.fun
+      - text: .

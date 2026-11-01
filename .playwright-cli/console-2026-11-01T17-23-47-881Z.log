@@ -1,0 +1,6 @@
+[     168ms] Unexpected token '{'
+[   35551ms] Unexpected token '{'
+[   52328ms] [LOG] BJS - [12:24:40]: Babylon.js v9.31.0 - WebGL2 - Parallel shader compilation @ http://127.0.0.1:4173/vendor/babylonjs/babylon.js:0
+[   58104ms] [LOG] BJS - [12:24:45]: Babylon.js v9.31.0 - WebGL2 - Parallel shader compilation @ http://127.0.0.1:4173/vendor/babylonjs/babylon.js:0
+[  588582ms] [LOG] BJS - [12:33:36]: Babylon.js v9.31.0 - WebGL2 - Parallel shader compilation @ http://127.0.0.1:4173/vendor/babylonjs/babylon.js:0
+[  611746ms] [LOG] BJS - [12:33:59]: Babylon.js v9.31.0 - WebGL2 - Parallel shader compilation @ http://127.0.0.1:4173/vendor/babylonjs/babylon.js:0
