@@ -4566,111 +4566,6 @@ button:hover {
 
 }
 
-.lights-grid {
-  display: grid;
-  gap: 0.4rem;
-  justify-content: center;
-}
-
-.lights-controls {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  align-items: center;
-  margin-bottom: 0.5rem;
-}
-
-.lights-controls select {
-  min-width: 130px;
-}
-
-.hint-confirm {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: var(--radius-md);
-  padding: 0.5rem 0.75rem;
-}
-
-.hint-confirm[hidden] {
-  display: none;
-}
-
-.hint-confirm button {
-  padding: 0.4rem 0.9rem;
-}
-
-.hint-confirm-yes {
-  background: linear-gradient(135deg, rgba(114, 246, 255, 0.3), rgba(255, 217, 114, 0.45));
-  border-color: rgba(114, 246, 255, 0.35);
-  color: var(--accent-strong);
-  font-weight: 600;
-}
-
-.hint-confirm-yes:hover {
-  background: linear-gradient(135deg, rgba(114, 246, 255, 0.5), rgba(255, 217, 114, 0.65));
-}
-
-.light-cell {
-  width: clamp(54px, 10vw, 66px);
-  aspect-ratio: 1 / 1;
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  background: rgba(255, 255, 255, 0.05);
-  display: grid;
-  place-items: center;
-  cursor: pointer;
-  transition: background var(--transition), box-shadow var(--transition);
-  position: relative;
-}
-
-.light-cell.on {
-  background: linear-gradient(135deg, rgba(114, 246, 255, 0.55), rgba(255, 217, 114, 0.65));
-  box-shadow: 0 10px 25px rgba(114, 246, 255, 0.45);
-}
-
-.light-cell.light-hint {
-  border-color: rgba(114, 246, 255, 0.65);
-  background: linear-gradient(135deg, rgba(114, 246, 255, 0.28), rgba(255, 217, 114, 0.42));
-  box-shadow: 0 0 28px rgba(114, 246, 255, 0.45);
-  animation: hintGlow 1.3s ease-in-out infinite;
-}
-
-.light-cell.light-hint::before {
-  content: "";
-  position: absolute;
-  inset: -6px;
-  border-radius: inherit;
-  border: 2px solid rgba(114, 246, 255, 0.45);
-  opacity: 0;
-  pointer-events: none;
-}
-
-.light-cell.light-hint-primary {
-  animation: hintGlow 0.95s ease-in-out infinite;
-}
-
-.light-cell.light-hint-primary::before {
-  opacity: 1;
-  animation: hintPulseRing 1.4s ease-out infinite;
-}
-
-.light-cell.light-hint-queued {
-  opacity: 0.35;
-  filter: saturate(0.5);
-  animation: none;
-  box-shadow: none;
-}
-
-.lights-meta {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
 .site-footer {
   text-align: center;
   color: var(--text-muted);
@@ -4682,33 +4577,6 @@ button:hover {
   text-decoration: none;
 }
 
-@keyframes hintGlow {
-  0%,
-  100% {
-    box-shadow: 0 0 24px rgba(114, 246, 255, 0.35);
-    filter: brightness(1);
-  }
-  50% {
-    box-shadow: 0 0 36px rgba(114, 246, 255, 0.6);
-    filter: brightness(1.25);
-  }
-}
-
-@keyframes hintPulseRing {
-  0% {
-    transform: scale(0.8);
-    opacity: 0.85;
-  }
-  70% {
-    transform: scale(1.25);
-    opacity: 0;
-  }
-  100% {
-    transform: scale(1.25);
-    opacity: 0;
-  }
-}
-
 @media (max-width: 720px) {
   body {
     padding: clamp(1.5rem, 5vw, 2rem);
@@ -4718,7 +4586,4 @@ button:hover {
     border-radius: 18px;
   }
 
-  .lights-grid {
-    gap: 0.3rem;
-  }
 }

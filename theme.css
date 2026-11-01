@@ -420,10 +420,9 @@
 :root[data-theme] .sl-game .arcade-game-wallet a { color: var(--ui-gold); background: var(--ui-gold-soft); border-color: var(--ui-line); }
 
 /* Classic games: visible controls and unambiguous lit/unlit states in Light. */
-:root[data-theme] :is(.feedback, .reaction-display, .tower-controls, .badge, .hint-confirm) { background: var(--ui-soft); border-color: var(--ui-line); }
-:root[data-theme] :is(.lights-controls, .lights-meta, .harmonic-controls, .foodchain-controls, .spotter-controls) button { color: var(--ui-ink); background: var(--ui-input); border-color: var(--ui-line); }
+:root[data-theme] :is(.feedback, .reaction-display, .tower-controls, .badge) { background: var(--ui-soft); border-color: var(--ui-line); }
+:root[data-theme] :is(.harmonic-controls, .foodchain-controls, .spotter-controls) button { color: var(--ui-ink); background: var(--ui-input); border-color: var(--ui-line); }
 :root[data-theme] .harmonic-mode-btn[aria-pressed="true"] { color: var(--ui-accent); background: var(--ui-accent-soft); border-color: var(--ui-accent); }
-:root[data-theme] .light-cell:not(.on):not(.light-hint) { background: var(--ui-raised); border-color: var(--ui-line); box-shadow: none; }
 :root[data-theme] .reaction-display.ready { border-color: var(--ui-gold); }
 :root[data-theme] .reaction-display.too-soon { border-color: var(--ui-danger); }
 :root[data-theme] .tone-cool { color: var(--ui-cool); }
@@ -446,7 +445,7 @@
 :root[data-theme] .sl-status.is-miss { color: var(--ui-danger); }
 :root[data-theme] .sl-results[data-outcome="loss"] { color: var(--ui-ink); background: var(--ui-soft); border-color: var(--ui-line); }
 :root[data-theme] .nd-ending .nd-primary:hover { color: var(--ui-on-primary); background: var(--ui-primary) !important; }
-:root[data-theme] :is(.game-root, .hh-dialog) :is(button, select):disabled:not(:where(.ml-card, .scg-tile, .harmonic-pad, .light-cell)) { opacity: .65; }
+:root[data-theme] :is(.game-root, .hh-dialog) :is(button, select):disabled:not(:where(.ml-card, .scg-tile, .harmonic-pad, .ld-cell)) { opacity: .65; }
 :root[data-theme="light"] .ml-standings [data-player="0"] { --player-color: #276c56; }
 :root[data-theme="light"] .ml-standings [data-player="1"] { --player-color: #8b581c; }
 :root[data-theme="light"] .ml-standings [data-player="2"] { --player-color: #6a4c9c; }
@@ -471,6 +470,4 @@
   .site-preferences .tagline { font-size: .85rem; }
   .theme-switch { margin-left: auto; }
   :root[data-theme] .theme-switch button { min-height: 40px; padding: 9px 12px; }
-  .lights-grid { min-width: 0; }
-  .light-cell { min-width: 0; width: 100%; padding: 0; }
 }
