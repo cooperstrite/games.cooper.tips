@@ -1722,3 +1722,1330 @@
 [  297810ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
 [  298811ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
 [  298811ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  299144ms] [LOG] 🎬 Animation running - frame 15201 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  299811ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  299811ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  300812ms] [LOG] 🎬 Animation running - frame 15301 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  300812ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  300812ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  301812ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  301812ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  302479ms] [LOG] 🎬 Animation running - frame 15401 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  302813ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  302813ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  303813ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  303813ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  304147ms] [LOG] 🎬 Animation running - frame 15501 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  304814ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  304814ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  305814ms] [LOG] 🎬 Animation running - frame 15601 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  305814ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  305814ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  306815ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  306815ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  307481ms] [LOG] 🎬 Animation running - frame 15701 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  307815ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  307815ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  308815ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  308815ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  309149ms] [LOG] 🎬 Animation running - frame 15801 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  309816ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  309816ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  310817ms] [LOG] 🎬 Animation running - frame 15901 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  310817ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  310817ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  311817ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  311818ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  312484ms] [LOG] 🎬 Animation running - frame 16001 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  312818ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  312818ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  313818ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  313818ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  314151ms] [LOG] 🎬 Animation running - frame 16101 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  314819ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  314819ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  315819ms] [LOG] 🎬 Animation running - frame 16201 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  315819ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  315819ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  316836ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  316836ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  317503ms] [LOG] 🎬 Animation running - frame 16301 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  317836ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  317836ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  318837ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  318837ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  319170ms] [LOG] 🎬 Animation running - frame 16401 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  319837ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  319837ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  320838ms] [LOG] 🎬 Animation running - frame 16501 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  320838ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  320838ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  321838ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  321838ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  322505ms] [LOG] 🎬 Animation running - frame 16601 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  322839ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  322839ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  323839ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  323839ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  324172ms] [LOG] 🎬 Animation running - frame 16701 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  324840ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  324840ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  325840ms] [LOG] 🎬 Animation running - frame 16801 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  325840ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  325840ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  326840ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  326841ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  327507ms] [LOG] 🎬 Animation running - frame 16901 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  327841ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  327841ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  328841ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  328842ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  329175ms] [LOG] 🎬 Animation running - frame 17001 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  329842ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  329842ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  330842ms] [LOG] 🎬 Animation running - frame 17101 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  330842ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  330842ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  331843ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  331843ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  332510ms] [LOG] 🎬 Animation running - frame 17201 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  332843ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  332843ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  333844ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  333844ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  334177ms] [LOG] 🎬 Animation running - frame 17301 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  334844ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  334844ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  335844ms] [LOG] 🎬 Animation running - frame 17401 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  335845ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  335845ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  336845ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  336845ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  337512ms] [LOG] 🎬 Animation running - frame 17501 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  337846ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  337846ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  338846ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  338846ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  339179ms] [LOG] 🎬 Animation running - frame 17601 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  339846ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  339847ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  340847ms] [LOG] 🎬 Animation running - frame 17701 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  340847ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  340847ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  341847ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  341848ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  342514ms] [LOG] 🎬 Animation running - frame 17801 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  342848ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  342848ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  343848ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  343849ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  344182ms] [LOG] 🎬 Animation running - frame 17901 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  344849ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  344849ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  345849ms] [LOG] 🎬 Animation running - frame 18001 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  345849ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  345849ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  346850ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  346850ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  347517ms] [LOG] 🎬 Animation running - frame 18101 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  347850ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  347850ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  348851ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  348851ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  349184ms] [LOG] 🎬 Animation running - frame 18201 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  349851ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  349851ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  350851ms] [LOG] 🎬 Animation running - frame 18301 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  350852ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  350852ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  351852ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  351852ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  352519ms] [LOG] 🎬 Animation running - frame 18401 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  352853ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  352853ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  353853ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  353853ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  354186ms] [LOG] 🎬 Animation running - frame 18501 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  354853ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  354853ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  355854ms] [LOG] 🎬 Animation running - frame 18601 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  355854ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  355854ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  356854ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  356854ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  357521ms] [LOG] 🎬 Animation running - frame 18701 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  357855ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  357855ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  358855ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  358855ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  359189ms] [LOG] 🎬 Animation running - frame 18801 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  359855ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  359855ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  360856ms] [LOG] 🎬 Animation running - frame 18901 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  360856ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  360856ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  361857ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  361857ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  362524ms] [LOG] 🎬 Animation running - frame 19001 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  362856ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  362856ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  363857ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  363857ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  364191ms] [LOG] 🎬 Animation running - frame 19101 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  364857ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  364857ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  365858ms] [LOG] 🎬 Animation running - frame 19201 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  365859ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  365859ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  366859ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  366859ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  367526ms] [LOG] 🎬 Animation running - frame 19301 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  367860ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  367860ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  368859ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  368859ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  369193ms] [LOG] 🎬 Animation running - frame 19401 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  369860ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  369861ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  370861ms] [LOG] 🎬 Animation running - frame 19501 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  370861ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  370861ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  371860ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  371860ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  372527ms] [LOG] 🎬 Animation running - frame 19601 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  372861ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  372861ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  373862ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  373862ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  374196ms] [LOG] 🎬 Animation running - frame 19701 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  374863ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  374863ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  375863ms] [LOG] 🎬 Animation running - frame 19801 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  375863ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  375863ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  376863ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  376864ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  377531ms] [LOG] 🎬 Animation running - frame 19901 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  377863ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  377863ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  378865ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  378865ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  379198ms] [LOG] 🎬 Animation running - frame 20001 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  379864ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  379864ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  380865ms] [LOG] 🎬 Animation running - frame 20101 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  380866ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  380866ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  381866ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  381866ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  382533ms] [LOG] 🎬 Animation running - frame 20201 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  382866ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  382867ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  383866ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  383866ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  384200ms] [LOG] 🎬 Animation running - frame 20301 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  384866ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  384866ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  385868ms] [LOG] 🎬 Animation running - frame 20401 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  385868ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  385868ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  386867ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  386867ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  387535ms] [LOG] 🎬 Animation running - frame 20501 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  387868ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  387868ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  388869ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  388869ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  389202ms] [LOG] 🎬 Animation running - frame 20601 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  389869ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  389869ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  390870ms] [LOG] 🎬 Animation running - frame 20701 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  390870ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  390870ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  391871ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  391871ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  392538ms] [LOG] 🎬 Animation running - frame 20801 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  392871ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  392871ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  393872ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  393872ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  394205ms] [LOG] 🎬 Animation running - frame 20901 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  394871ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  394871ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  395872ms] [LOG] 🎬 Animation running - frame 21001 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  395873ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  395873ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  396873ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  396873ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  397539ms] [LOG] 🎬 Animation running - frame 21101 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  397872ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  397873ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  398874ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  398874ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  399206ms] [LOG] 🎬 Animation running - frame 21201 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  399874ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  399874ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  400875ms] [LOG] 🎬 Animation running - frame 21301 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  400875ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  400875ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  401874ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  401874ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  402542ms] [LOG] 🎬 Animation running - frame 21401 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  402876ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  402876ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  403876ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  403876ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  404210ms] [LOG] 🎬 Animation running - frame 21501 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  404877ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  404877ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  405877ms] [LOG] 🎬 Animation running - frame 21601 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  405877ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  405877ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  406878ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  406878ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  407544ms] [LOG] 🎬 Animation running - frame 21701 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  407878ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  407878ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  408878ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  408879ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  409212ms] [LOG] 🎬 Animation running - frame 21801 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  409879ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  409879ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  410879ms] [LOG] 🎬 Animation running - frame 21901 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  410880ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  410880ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  411880ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  411880ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  412547ms] [LOG] 🎬 Animation running - frame 22001 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  412880ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  412880ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  413881ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  413881ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  414214ms] [LOG] 🎬 Animation running - frame 22101 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  414881ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  414881ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  415882ms] [LOG] 🎬 Animation running - frame 22201 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  415882ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  415882ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  416881ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  416881ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  417549ms] [LOG] 🎬 Animation running - frame 22301 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  417882ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  417882ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  418883ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  418883ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  419216ms] [LOG] 🎬 Animation running - frame 22401 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  419884ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  419884ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  420884ms] [LOG] 🎬 Animation running - frame 22501 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  420884ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  420884ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  421885ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  421885ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  422551ms] [LOG] 🎬 Animation running - frame 22601 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  422884ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  422884ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  423886ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  423886ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  424218ms] [LOG] 🎬 Animation running - frame 22701 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  424886ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  424886ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  425886ms] [LOG] 🎬 Animation running - frame 22801 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  425886ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  425887ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  426886ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  426886ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  427554ms] [LOG] 🎬 Animation running - frame 22901 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  427886ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  427887ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  428888ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  428888ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  429221ms] [LOG] 🎬 Animation running - frame 23001 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  429888ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  429888ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  430889ms] [LOG] 🎬 Animation running - frame 23101 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  430889ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  430889ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  431889ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  431889ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  432556ms] [LOG] 🎬 Animation running - frame 23201 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  432890ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  432890ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  433890ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  433890ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  434222ms] [LOG] 🎬 Animation running - frame 23301 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  434891ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  434891ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  435891ms] [LOG] 🎬 Animation running - frame 23401 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  435891ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  435891ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  436892ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  436892ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  437557ms] [LOG] 🎬 Animation running - frame 23501 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  437892ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  437892ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  438892ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  438893ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  439226ms] [LOG] 🎬 Animation running - frame 23601 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  439893ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  439893ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  440893ms] [LOG] 🎬 Animation running - frame 23701 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  440893ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  440893ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  441894ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  441894ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  442561ms] [LOG] 🎬 Animation running - frame 23801 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  442894ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  442894ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  443894ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  443894ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  444227ms] [LOG] 🎬 Animation running - frame 23901 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  444895ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  444895ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  445896ms] [LOG] 🎬 Animation running - frame 24001 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  445896ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  445896ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  446895ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  446895ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  447563ms] [LOG] 🎬 Animation running - frame 24101 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  447897ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  447897ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  448897ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  448897ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  449229ms] [LOG] 🎬 Animation running - frame 24201 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  449897ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  449898ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  450898ms] [LOG] 🎬 Animation running - frame 24301 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  450898ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  450898ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  451899ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  451899ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  452565ms] [LOG] 🎬 Animation running - frame 24401 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  452899ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  452899ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  453899ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  453899ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  454233ms] [LOG] 🎬 Animation running - frame 24501 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  454900ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  454900ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  455900ms] [LOG] 🎬 Animation running - frame 24601 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  455900ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  455900ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  456901ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  456901ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  457568ms] [LOG] 🎬 Animation running - frame 24701 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  457901ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  457901ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  458902ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  458902ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  459235ms] [LOG] 🎬 Animation running - frame 24801 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  459902ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  459902ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  460902ms] [LOG] 🎬 Animation running - frame 24901 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  460902ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  460902ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  461902ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  461902ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  462570ms] [LOG] 🎬 Animation running - frame 25001 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  462904ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  462904ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  463904ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  463904ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  464237ms] [LOG] 🎬 Animation running - frame 25101 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  464904ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  464905ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  465905ms] [LOG] 🎬 Animation running - frame 25201 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  465905ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  465905ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  466905ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  466906ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  467572ms] [LOG] 🎬 Animation running - frame 25301 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  467905ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  467906ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  468905ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  468905ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  469240ms] [LOG] 🎬 Animation running - frame 25401 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  469907ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  469907ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  470907ms] [LOG] 🎬 Animation running - frame 25501 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  470907ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  470907ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  471908ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  471908ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  472575ms] [LOG] 🎬 Animation running - frame 25601 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  472908ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  472908ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  473909ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  473909ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  474242ms] [LOG] 🎬 Animation running - frame 25701 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  474909ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  474909ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  475909ms] [LOG] 🎬 Animation running - frame 25801 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  475910ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  475910ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  476910ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  476910ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  477577ms] [LOG] 🎬 Animation running - frame 25901 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  477911ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  477911ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  478911ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  478911ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  479244ms] [LOG] 🎬 Animation running - frame 26001 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  479911ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  479912ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  480912ms] [LOG] 🎬 Animation running - frame 26101 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  480912ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  480912ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  481912ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  481913ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  482579ms] [LOG] 🎬 Animation running - frame 26201 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  482912ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  482912ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  483912ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  483912ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  484247ms] [LOG] 🎬 Animation running - frame 26301 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  484913ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  484913ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  485914ms] [LOG] 🎬 Animation running - frame 26401 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  485914ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  485914ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  486915ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  486915ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  487582ms] [LOG] 🎬 Animation running - frame 26501 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  487915ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  487915ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  488916ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  488916ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  489249ms] [LOG] 🎬 Animation running - frame 26601 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  489915ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  489915ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  490916ms] [LOG] 🎬 Animation running - frame 26701 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  490917ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  490917ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  491917ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  491917ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  492584ms] [LOG] 🎬 Animation running - frame 26801 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  492917ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  492918ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  493917ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  493917ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  494251ms] [LOG] 🎬 Animation running - frame 26901 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  494917ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  494918ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  495919ms] [LOG] 🎬 Animation running - frame 27001 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  495919ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  495919ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  496919ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  496919ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  497586ms] [LOG] 🎬 Animation running - frame 27101 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  497920ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  497920ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  498920ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  498920ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  499254ms] [LOG] 🎬 Animation running - frame 27201 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  499920ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  499920ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  500920ms] [LOG] 🎬 Animation running - frame 27301 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  500921ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  500921ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  501921ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  501921ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  502588ms] [LOG] 🎬 Animation running - frame 27401 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  502922ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  502922ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  503923ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  503923ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  504256ms] [LOG] 🎬 Animation running - frame 27501 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  504923ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  504923ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  505924ms] [LOG] 🎬 Animation running - frame 27601 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  505924ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  505924ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  506940ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  506940ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  507608ms] [LOG] 🎬 Animation running - frame 27701 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  507941ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  507941ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  508942ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  508942ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  509275ms] [LOG] 🎬 Animation running - frame 27801 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  509942ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  509942ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  510942ms] [LOG] 🎬 Animation running - frame 27901 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  510943ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  510943ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  511943ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  511943ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  512610ms] [LOG] 🎬 Animation running - frame 28001 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  512943ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  512943ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  513944ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  513944ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  514277ms] [LOG] 🎬 Animation running - frame 28101 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  514944ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  514945ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  515945ms] [LOG] 🎬 Animation running - frame 28201 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  515945ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  515945ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  516945ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  516945ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  517612ms] [LOG] 🎬 Animation running - frame 28301 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  517946ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  517946ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  518945ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  518945ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  519280ms] [LOG] 🎬 Animation running - frame 28401 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  519947ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  519947ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  520947ms] [LOG] 🎬 Animation running - frame 28501 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  520947ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  520947ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  521947ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  521947ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  522615ms] [LOG] 🎬 Animation running - frame 28601 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  522948ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  522948ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  523948ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  523948ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  524282ms] [LOG] 🎬 Animation running - frame 28701 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  524949ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  524949ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  525949ms] [LOG] 🎬 Animation running - frame 28801 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  525949ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  525949ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  526950ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  526950ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  527617ms] [LOG] 🎬 Animation running - frame 28901 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  527950ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  527951ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  528951ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  528951ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  529284ms] [LOG] 🎬 Animation running - frame 29001 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  529951ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  529951ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  530951ms] [LOG] 🎬 Animation running - frame 29101 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  530951ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  530951ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  531952ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  531952ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  532619ms] [LOG] 🎬 Animation running - frame 29201 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  532952ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  532952ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  533953ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  533953ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  534287ms] [LOG] 🎬 Animation running - frame 29301 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  534954ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  534954ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  535954ms] [LOG] 🎬 Animation running - frame 29401 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  535954ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  535954ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  536955ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  536955ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  537621ms] [LOG] 🎬 Animation running - frame 29501 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  537955ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  537955ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  538956ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  538956ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  539288ms] [LOG] 🎬 Animation running - frame 29601 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  539956ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  539956ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  540956ms] [LOG] 🎬 Animation running - frame 29701 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  540957ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  540957ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  541957ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  541957ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  542624ms] [LOG] 🎬 Animation running - frame 29801 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  542957ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  542958ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  543958ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  543958ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  544291ms] [LOG] 🎬 Animation running - frame 29901 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  544958ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  544958ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  545959ms] [LOG] 🎬 Animation running - frame 30001 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  545959ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  545959ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  546959ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  546959ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  547626ms] [LOG] 🎬 Animation running - frame 30101 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  547960ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  547960ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  548960ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  548960ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  549294ms] [LOG] 🎬 Animation running - frame 30201 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  549961ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  549961ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  550960ms] [LOG] 🎬 Animation running - frame 30301 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  550960ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  550960ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  551962ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  551962ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  552629ms] [LOG] 🎬 Animation running - frame 30401 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  552962ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  552962ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  553963ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  553963ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  554296ms] [LOG] 🎬 Animation running - frame 30501 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  554963ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  554963ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  555963ms] [LOG] 🎬 Animation running - frame 30601 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  555964ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  555964ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  556964ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  556964ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  557631ms] [LOG] 🎬 Animation running - frame 30701 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  557964ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  557965ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  558965ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  558965ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  559298ms] [LOG] 🎬 Animation running - frame 30801 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  559965ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  559965ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  560966ms] [LOG] 🎬 Animation running - frame 30901 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  560966ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  560966ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  561966ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  561966ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  562633ms] [LOG] 🎬 Animation running - frame 31001 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  562967ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  562967ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  563967ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  563967ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  564301ms] [LOG] 🎬 Animation running - frame 31101 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  564968ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  564968ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  565968ms] [LOG] 🎬 Animation running - frame 31201 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  565968ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  565968ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  566969ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  566969ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  567635ms] [LOG] 🎬 Animation running - frame 31301 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  567969ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  567969ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  568969ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  568970ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  569303ms] [LOG] 🎬 Animation running - frame 31401 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  569970ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  569970ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  570970ms] [LOG] 🎬 Animation running - frame 31501 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  570970ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  570971ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  571971ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  571971ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  572638ms] [LOG] 🎬 Animation running - frame 31601 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  572971ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  572971ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  573972ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  573972ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  574305ms] [LOG] 🎬 Animation running - frame 31701 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  574972ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  574973ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  575972ms] [LOG] 🎬 Animation running - frame 31801 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  575972ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  575972ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  576973ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  576973ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  577640ms] [LOG] 🎬 Animation running - frame 31901 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  577974ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  577974ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  578974ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  578974ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  579308ms] [LOG] 🎬 Animation running - frame 32001 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  579975ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  579975ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  580975ms] [LOG] 🎬 Animation running - frame 32101 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  580975ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  580975ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  581975ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  581975ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  582642ms] [LOG] 🎬 Animation running - frame 32201 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  582976ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  582976ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  583977ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  583977ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  584310ms] [LOG] 🎬 Animation running - frame 32301 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  584977ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  584977ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  585977ms] [LOG] 🎬 Animation running - frame 32401 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  585977ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  585978ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  586978ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  586978ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  587644ms] [LOG] 🎬 Animation running - frame 32501 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  587977ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  587977ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  588979ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  588979ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  589312ms] [LOG] 🎬 Animation running - frame 32601 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  589979ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  589979ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  590980ms] [LOG] 🎬 Animation running - frame 32701 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  590980ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  590980ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  591980ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  591980ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  592647ms] [LOG] 🎬 Animation running - frame 32801 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  592981ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  592981ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  593981ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  593981ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  594314ms] [LOG] 🎬 Animation running - frame 32901 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  594982ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  594982ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  595982ms] [LOG] 🎬 Animation running - frame 33001 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  595982ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  595982ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  596983ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  596983ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  597648ms] [LOG] 🎬 Animation running - frame 33101 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  597983ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  597983ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  598984ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  598984ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  599316ms] [LOG] 🎬 Animation running - frame 33201 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  599984ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  599984ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  600983ms] [LOG] 🎬 Animation running - frame 33301 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  600984ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  600984ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  601985ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  601985ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  602651ms] [LOG] 🎬 Animation running - frame 33401 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  602985ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  602986ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  603986ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  603986ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  604319ms] [LOG] 🎬 Animation running - frame 33501 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  604986ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  604986ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  605987ms] [LOG] 🎬 Animation running - frame 33601 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  605987ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  605987ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  606987ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  606987ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  607654ms] [LOG] 🎬 Animation running - frame 33701 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  607987ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  607987ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  608988ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  608988ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  609321ms] [LOG] 🎬 Animation running - frame 33801 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  609989ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  609989ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  610989ms] [LOG] 🎬 Animation running - frame 33901 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  610989ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  610989ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  611989ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  611990ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  612656ms] [LOG] 🎬 Animation running - frame 34001 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  612990ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  612990ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  613990ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  613990ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  614324ms] [LOG] 🎬 Animation running - frame 34101 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  614991ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  614991ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  615991ms] [LOG] 🎬 Animation running - frame 34201 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  615991ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  615991ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  616992ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  616992ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  617659ms] [LOG] 🎬 Animation running - frame 34301 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  617992ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  617992ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  618993ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  618993ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  619325ms] [LOG] 🎬 Animation running - frame 34401 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  619993ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  619993ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  620994ms] [LOG] 🎬 Animation running - frame 34501 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  620994ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  620994ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  621994ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  621994ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  622661ms] [LOG] 🎬 Animation running - frame 34601 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  622995ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  622995ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  623995ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  623995ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  624328ms] [LOG] 🎬 Animation running - frame 34701 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  624996ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  624996ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  625996ms] [LOG] 🎬 Animation running - frame 34801 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  625996ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  625996ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  626996ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  626997ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  627663ms] [LOG] 🎬 Animation running - frame 34901 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  627997ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  627997ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  628997ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  628997ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  629331ms] [LOG] 🎬 Animation running - frame 35001 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  629998ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  629998ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  630998ms] [LOG] 🎬 Animation running - frame 35101 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  630998ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  630998ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  631999ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  631999ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  632666ms] [LOG] 🎬 Animation running - frame 35201 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  632999ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  632999ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  634000ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  634000ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  634333ms] [LOG] 🎬 Animation running - frame 35301 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  635000ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  635000ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  636001ms] [LOG] 🎬 Animation running - frame 35401 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  636001ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  636001ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  637000ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  637001ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  637667ms] [LOG] 🎬 Animation running - frame 35501 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  638002ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  638002ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  639002ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  639002ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  639335ms] [LOG] 🎬 Animation running - frame 35601 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  640002ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  640003ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  641002ms] [LOG] 🎬 Animation running - frame 35701 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  641002ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  641002ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  642003ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  642003ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  642670ms] [LOG] 🎬 Animation running - frame 35801 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  643004ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  643004ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  644004ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  644004ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  644338ms] [LOG] 🎬 Animation running - frame 35901 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  645005ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  645005ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  646005ms] [LOG] 🎬 Animation running - frame 36001 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  646005ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  646005ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  647006ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  647006ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  647673ms] [LOG] 🎬 Animation running - frame 36101 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  648006ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  648006ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  649007ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  649007ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  649340ms] [LOG] 🎬 Animation running - frame 36201 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  650007ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  650007ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  651008ms] [LOG] 🎬 Animation running - frame 36301 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  651008ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  651008ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  652008ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  652008ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  652675ms] [LOG] 🎬 Animation running - frame 36401 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  653009ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  653009ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  654009ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  654009ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  654342ms] [LOG] 🎬 Animation running - frame 36501 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  655010ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  655010ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  656010ms] [LOG] 🎬 Animation running - frame 36601 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  656010ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  656010ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  657010ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  657011ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  657677ms] [LOG] 🎬 Animation running - frame 36701 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  658011ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  658011ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  659011ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  659011ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  659345ms] [LOG] 🎬 Animation running - frame 36801 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  660012ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  660012ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  661012ms] [LOG] 🎬 Animation running - frame 36901 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  661012ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  661012ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  662013ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  662013ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  662680ms] [LOG] 🎬 Animation running - frame 37001 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  663013ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  663013ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  664014ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  664014ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  664347ms] [LOG] 🎬 Animation running - frame 37101 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  665014ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  665014ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  666015ms] [LOG] 🎬 Animation running - frame 37201 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  666015ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  666015ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  667015ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  667015ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  667682ms] [LOG] 🎬 Animation running - frame 37301 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  668016ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  668016ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  669016ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  669016ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  669349ms] [LOG] 🎬 Animation running - frame 37401 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  670017ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  670017ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  671017ms] [LOG] 🎬 Animation running - frame 37501 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  671017ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  671017ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  672017ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  672017ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  672684ms] [LOG] 🎬 Animation running - frame 37601 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  673018ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  673018ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  674018ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  674018ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  674352ms] [LOG] 🎬 Animation running - frame 37701 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  675019ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  675019ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  676019ms] [LOG] 🎬 Animation running - frame 37801 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  676019ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  676019ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  677020ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  677020ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  677687ms] [LOG] 🎬 Animation running - frame 37901 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  678020ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  678020ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  679021ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  679021ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  679354ms] [LOG] 🎬 Animation running - frame 38001 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  680021ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  680021ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  681021ms] [LOG] 🎬 Animation running - frame 38101 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  681022ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  681022ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  682022ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  682022ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  682689ms] [LOG] 🎬 Animation running - frame 38201 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  683023ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  683023ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  684023ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  684023ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  684356ms] [LOG] 🎬 Animation running - frame 38301 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  685023ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  685023ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  686024ms] [LOG] 🎬 Animation running - frame 38401 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  686024ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  686024ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  687024ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  687024ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  687691ms] [LOG] 🎬 Animation running - frame 38501 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  688025ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  688025ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  689025ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  689025ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  689359ms] [LOG] 🎬 Animation running - frame 38601 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  690026ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  690026ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  691026ms] [LOG] 🎬 Animation running - frame 38701 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  691026ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  691026ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  692027ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  692027ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  692694ms] [LOG] 🎬 Animation running - frame 38801 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  693027ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  693027ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  694028ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  694028ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  694361ms] [LOG] 🎬 Animation running - frame 38901 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  695028ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  695028ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  696028ms] [LOG] 🎬 Animation running - frame 39001 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  696028ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  696028ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  697029ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  697029ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  697696ms] [LOG] 🎬 Animation running - frame 39101 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  698029ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  698030ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  699030ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  699030ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  699363ms] [LOG] 🎬 Animation running - frame 39201 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  700030ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  700031ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  701031ms] [LOG] 🎬 Animation running - frame 39301 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  701031ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  701031ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  702031ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  702031ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  702698ms] [LOG] 🎬 Animation running - frame 39401 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  703032ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  703032ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  704032ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  704032ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  704366ms] [LOG] 🎬 Animation running - frame 39501 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  705033ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  705033ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  706033ms] [LOG] 🎬 Animation running - frame 39601 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  706033ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  706033ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  707034ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  707034ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  707700ms] [LOG] 🎬 Animation running - frame 39701 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  708034ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  708034ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  709035ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  709035ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  709368ms] [LOG] 🎬 Animation running - frame 39801 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  710035ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  710035ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  711035ms] [LOG] 🎬 Animation running - frame 39901 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  711036ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  711036ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  712036ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  712036ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  712703ms] [LOG] 🎬 Animation running - frame 40001 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  713037ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  713037ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  714037ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  714037ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  714370ms] [LOG] 🎬 Animation running - frame 40101 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  715037ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  715037ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  716038ms] [LOG] 🎬 Animation running - frame 40201 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  716038ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  716038ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  717038ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  717038ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  717705ms] [LOG] 🎬 Animation running - frame 40301 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  718039ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  718039ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  719039ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  719039ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  719373ms] [LOG] 🎬 Animation running - frame 40401 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  720040ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  720040ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  721040ms] [LOG] 🎬 Animation running - frame 40501 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  721040ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  721040ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  722041ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  722041ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  722707ms] [LOG] 🎬 Animation running - frame 40601 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  723041ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  723041ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  724042ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  724042ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  724374ms] [LOG] 🎬 Animation running - frame 40701 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  725042ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  725042ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  726042ms] [LOG] 🎬 Animation running - frame 40801 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  726043ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  726043ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  727043ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  727043ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  727710ms] [LOG] 🎬 Animation running - frame 40901 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  728044ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  728044ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  729044ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  729044ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  729377ms] [LOG] 🎬 Animation running - frame 41001 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  730044ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  730044ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  731045ms] [LOG] 🎬 Animation running - frame 41101 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  731045ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  731045ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  732045ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  732045ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  732712ms] [LOG] 🎬 Animation running - frame 41201 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  733046ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  733046ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  734046ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  734046ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  734380ms] [LOG] 🎬 Animation running - frame 41301 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  735047ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  735047ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  736047ms] [LOG] 🎬 Animation running - frame 41401 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  736047ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  736047ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  737048ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  737048ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  737714ms] [LOG] 🎬 Animation running - frame 41501 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  738048ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  738048ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  739049ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  739049ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  739382ms] [LOG] 🎬 Animation running - frame 41601 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  740049ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  740049ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  741049ms] [LOG] 🎬 Animation running - frame 41701 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  741050ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  741050ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  742049ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  742049ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  742717ms] [LOG] 🎬 Animation running - frame 41801 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  743050ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  743050ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  744051ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  744051ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  744384ms] [LOG] 🎬 Animation running - frame 41901 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  745051ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  745051ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  746052ms] [LOG] 🎬 Animation running - frame 42001 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  746052ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  746052ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  747052ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  747052ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  747719ms] [LOG] 🎬 Animation running - frame 42101 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  748053ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  748053ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  749053ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  749053ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  749387ms] [LOG] 🎬 Animation running - frame 42201 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  750054ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  750054ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  751054ms] [LOG] 🎬 Animation running - frame 42301 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  751054ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  751054ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  752055ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  752055ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  752721ms] [LOG] 🎬 Animation running - frame 42401 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  753055ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  753055ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  754055ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  754055ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  754389ms] [LOG] 🎬 Animation running - frame 42501 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  755056ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  755056ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  756056ms] [LOG] 🎬 Animation running - frame 42601 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  756057ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  756057ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  757057ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  757057ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  757723ms] [LOG] 🎬 Animation running - frame 42701 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  758057ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  758057ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  759058ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  759058ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  759391ms] [LOG] 🎬 Animation running - frame 42801 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  760058ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  760058ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  761059ms] [LOG] 🎬 Animation running - frame 42901 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  761059ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  761059ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  762059ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  762059ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  762726ms] [LOG] 🎬 Animation running - frame 43001 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  763060ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  763060ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  764060ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  764060ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  764393ms] [LOG] 🎬 Animation running - frame 43101 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  765061ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  765061ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  766061ms] [LOG] 🎬 Animation running - frame 43201 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  766061ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  766061ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  767062ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  767062ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  767728ms] [LOG] 🎬 Animation running - frame 43301 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  768062ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  768062ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  769062ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  769063ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  769396ms] [LOG] 🎬 Animation running - frame 43401 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  770063ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  770063ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  771063ms] [LOG] 🎬 Animation running - frame 43501 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  771064ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  771064ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  772064ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  772064ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  772731ms] [LOG] 🎬 Animation running - frame 43601 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  773064ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  773064ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  774065ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  774065ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  774398ms] [LOG] 🎬 Animation running - frame 43701 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  775065ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  775065ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  776066ms] [LOG] 🎬 Animation running - frame 43801 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  776066ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  776066ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  777066ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  777066ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  777733ms] [LOG] 🎬 Animation running - frame 43901 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  778067ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  778067ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  779067ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  779067ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  779400ms] [LOG] 🎬 Animation running - frame 44001 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  780068ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  780068ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  781068ms] [LOG] 🎬 Animation running - frame 44101 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  781068ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  781068ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  782068ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  782069ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  782735ms] [LOG] 🎬 Animation running - frame 44201 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  783069ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  783069ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  784069ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  784069ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  784403ms] [LOG] 🎬 Animation running - frame 44301 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  785070ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  785070ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  786070ms] [LOG] 🎬 Animation running - frame 44401 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  786070ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  786071ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  787071ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  787071ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  787738ms] [LOG] 🎬 Animation running - frame 44501 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  788071ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  788071ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  789072ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  789072ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  789405ms] [LOG] 🎬 Animation running - frame 44601 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  790072ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  790072ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  791073ms] [LOG] 🎬 Animation running - frame 44701 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  791073ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  791073ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  792073ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  792073ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  792740ms] [LOG] 🎬 Animation running - frame 44801 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  793074ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  793074ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  794074ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  794074ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  794407ms] [LOG] 🎬 Animation running - frame 44901 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  795074ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  795074ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  796074ms] [LOG] 🎬 Animation running - frame 45001 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  796074ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  796075ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  797075ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  797076ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  797742ms] [LOG] 🎬 Animation running - frame 45101 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  798076ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  798076ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  799076ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  799076ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  799410ms] [LOG] 🎬 Animation running - frame 45201 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  800076ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  800076ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  801077ms] [LOG] 🎬 Animation running - frame 45301 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  801077ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  801077ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  802078ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  802078ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  802745ms] [LOG] 🎬 Animation running - frame 45401 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  803078ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  803079ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  804079ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  804079ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  804412ms] [LOG] 🎬 Animation running - frame 45501 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  805079ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  805079ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  806079ms] [LOG] 🎬 Animation running - frame 45601 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  806080ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  806080ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  807080ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  807080ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  807747ms] [LOG] 🎬 Animation running - frame 45701 @ https://camelshumpcoders.org/masterpiece.html:4851
+[  808081ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  808081ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  809081ms] [LOG] 🚶 Movement Debug - gameStarted: true moveState: {forward: false, backward: false, left: false, right: false} @ https://camelshumpcoders.org/masterpiece.html:4907
+[  809081ms] [LOG] 🚶 Camera position: Lt @ https://camelshumpcoders.org/masterpiece.html:4908
+[  809414ms] [LOG] 🎬 Animation running - frame 45801 @ https://camelshumpcoders.org/masterpiece.html:4851
