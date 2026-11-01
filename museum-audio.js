@@ -30,7 +30,6 @@ export function createMuseumAudio(options=readMuseumAudio(),Audio=globalThis.Aud
   let prefs=preferences(options),context,master,stepsBus,musicBus,effectsBus,roomSend;
   let active=false,disposed=false,timer=null,nextNote=0,scoreStep=0,lastStep=-1,foot=0;
   const voices=new Set(),pianoNotes=new Map(),pads=new Map();
-  let stoneSteps=[],rugSteps=[];
   const hz=note=>440*Math.pow(2,(note-69)/12);
   function buffer(seconds,write){const b=context.createBuffer(1,Math.ceil(context.sampleRate*seconds),context.sampleRate),data=b.getChannelData(0);for(let i=0;i<data.length;i++)data[i]=write(i/context.sampleRate,i);return b;}
   function piano(note){
@@ -55,18 +54,6 @@ export function createMuseumAudio(options=readMuseumAudio(),Audio=globalThis.Aud
       return (Math.sin(2*Math.PI*f*t+.012*Math.sin(t*4.1))+.34*Math.sin(2*Math.PI*f*1.002*t)+.12*Math.sin(4*Math.PI*f*t))*.4*envelope;
     });pads.set(note,b);return b;
   }
-  function footstep(soft,variant){
-    let smooth=0,seed=9137+variant*1741+(soft?117:0);
-    return buffer(.3,t=>{
-      seed=(Math.imul(seed,1664525)+1013904223)|0;const noise=seed/2147483648;
-      smooth+=(noise-smooth)*(soft?.09:.38);
-      const heel=(1-Math.exp(-t*1300))*Math.exp(-t*(soft?38:47));
-      const soleTime=Math.max(0,t-.045),sole=t>.045?(1-Math.exp(-soleTime*350))*Math.exp(-soleTime*55):0;
-      const body=Math.sin(2*Math.PI*((soft?94:138)+variant*3)*t-2.8*t*t)*heel;
-      const contact=smooth*(heel*(soft?.55:1.05)+sole*.62);
-      return (body*.48+contact)*Math.min(1,(.3-t)/.025)*(soft?.78:1);
-    });
-  }
   function setup(){
     if(disposed||!Audio)return false;if(context)return true;
     try{
@@ -77,7 +64,6 @@ export function createMuseumAudio(options=readMuseumAudio(),Audio=globalThis.Aud
       const reverb=context.createConvolver(),wet=context.createGain();wet.gain.value=.19;roomSend=context.createGain();roomSend.connect(reverb);reverb.connect(wet);wet.connect(master);
       let smoothed=0;reverb.buffer=buffer(1.45,t=>{smoothed+=((Math.random()*2-1)-smoothed)*.22;return t<.025?0:smoothed*Math.exp(-t*4.8)*Math.min(1,(1.45-t)/.03);});
       musicBus.connect(roomSend);effectsBus.connect(roomSend);
-      stoneSteps=Array.from({length:4},(_,i)=>footstep(false,i));rugSteps=Array.from({length:4},(_,i)=>footstep(true,i));
       // Cache the small instrument palette once, so notes do not allocate PCM during play.
       for(const chord of HARMONY){chord.forEach(piano);chord.slice(1,4).forEach(pad);}
       for(const bar of MELODY)for(const note of bar)if(note!==null)piano(note);
@@ -86,12 +72,22 @@ export function createMuseumAudio(options=readMuseumAudio(),Audio=globalThis.Aud
   }
   function levels(){if(!context)return;const t=context.currentTime;stepsBus.gain.setTargetAtTime(prefs.footsteps*prefs.footsteps*1.4,t,.035);musicBus.gain.setTargetAtTime(prefs.music*prefs.music,t,.08);effectsBus.gain.value=.7;master.gain.setTargetAtTime(enabled()?.65:0,t,.06);}
   function enabled(){return active&&prefs.enabled&&!disposed;}
+  function connectVoice(source,bus,group,pan){
+    const volume=context.createGain(),stereo=context.createStereoPanner();
+    stereo.pan.value=pan;source.connect(volume);volume.connect(stereo);stereo.connect(bus);
+    const voice={source,volume,stereo,group};voices.add(voice);
+    source.onended=()=>{voices.delete(voice);for(const node of [source,volume,stereo])node.disconnect();};return voice;
+  }
   function play(b,time,gain,bus,group,pan=0){
     if(!enabled())return;
-    const source=context.createBufferSource(),volume=context.createGain(),stereo=context.createStereoPanner();
-    source.buffer=b;volume.gain.value=gain;stereo.pan.value=pan;source.connect(volume);volume.connect(stereo);stereo.connect(bus);
-    const voice={source,volume,stereo,group};voices.add(voice);
-    source.onended=()=>{voices.delete(voice);for(const node of [source,volume,stereo])node.disconnect();};source.start(time);return voice;
+    const source=context.createBufferSource(),voice=connectVoice(source,bus,group,pan);
+    source.buffer=b;voice.volume.gain.value=gain;source.start(time);return voice;
+  }
+  function stepTone(frequency,time,duration,gain,type,pan){
+    const source=context.createOscillator(),voice=connectVoice(source,stepsBus,'step',pan),envelope=voice.volume.gain;
+    source.type=type;source.frequency.setValueAtTime(frequency,time);
+    envelope.setValueAtTime(.0001,time);envelope.exponentialRampToValueAtTime(gain,time+.015);envelope.exponentialRampToValueAtTime(.0001,time+duration);
+    source.start(time);source.stop(time+duration+.03);
   }
   function stop(group){
     if(!context)return;
@@ -122,13 +118,14 @@ export function createMuseumAudio(options=readMuseumAudio(),Audio=globalThis.Aud
     pause(){active=false;stopMusic();stop();levels();lastStep=-1;},
     step(speed,soft){
       if(!context||!enabled()||prefs.footsteps===0||speed<.2)return;
-      const now=context.currentTime,interval=Math.max(.25,Math.min(.7,.51*2.25/speed));if(lastStep>=0&&now-lastStep<interval)return;lastStep=now;
-      const variation=foot++%4,pan=foot%2?-.13:.13;
-      play((soft?rugSteps:stoneSteps)[variation],now,.46,stepsBus,'step',pan);
-      // The echo follows the walking slider too; muting footsteps removes both.
-      if(!soft)play(stoneSteps[variation],now+.08,.046,stepsBus,'step',-pan);
+      const now=context.currentTime,interval=.56/Math.max(.7,speed/2.25);if(lastStep>=0&&now-lastStep<interval)return;lastStep=now;
+      const pan=foot++%2? .13:-.13;
+      // Restore the original brief, soft shoe taps, with no noisy sole layer or echo.
+      // Both components still follow the walking slider and soften on carpet.
+      stepTone(soft?92:135,now,.07,soft?.045:.08,'triangle',pan);
+      stepTone(soft?230:320,now+.012,.04,.016,'sine',pan);
     },
     clue(){cue([74,77,81],.12,.15);},win(){cue([62,65,69,74,77,81],.19,.18);},
-    dispose(){disposed=true;active=false;stopMusic();for(const voice of voices){try{voice.source.stop();}catch{}for(const node of [voice.source,voice.volume,voice.stereo])node.disconnect();}voices.clear();context?.close().catch(()=>{});context=null;pianoNotes.clear();pads.clear();stoneSteps=[];rugSteps=[];},
+    dispose(){disposed=true;active=false;stopMusic();for(const voice of voices){try{voice.source.stop();}catch{}for(const node of [voice.source,voice.volume,voice.stereo])node.disconnect();}voices.clear();context?.close().catch(()=>{});context=null;pianoNotes.clear();pads.clear();},
   };
 }
