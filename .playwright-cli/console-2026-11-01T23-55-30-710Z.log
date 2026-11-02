@@ -1,0 +1,122 @@
+[ 2300643ms] [WARNING] WebGL: INVALID_OPERATION: delete: object does not belong to this context @ https://neal.fun/_nuxt/eb69b07.js:3
+[ 2300644ms] [WARNING] WebGL: INVALID_OPERATION: delete: object does not belong to this context @ https://neal.fun/_nuxt/eb69b07.js:3
+[ 2300644ms] [WARNING] WebGL: INVALID_OPERATION: delete: object does not belong to this context @ https://neal.fun/_nuxt/eb69b07.js:3
+[ 2300644ms] [WARNING] WebGL: INVALID_OPERATION: delete: object does not belong to this context @ https://neal.fun/_nuxt/eb69b07.js:3
+[ 2300644ms] [WARNING] WebGL: INVALID_OPERATION: delete: object does not belong to this context @ https://neal.fun/_nuxt/eb69b07.js:3
+[ 2300644ms] [WARNING] WebGL: INVALID_OPERATION: delete: object does not belong to this context @ https://neal.fun/_nuxt/eb69b07.js:3
+[ 2300644ms] [WARNING] WebGL: INVALID_OPERATION: delete: object does not belong to this context @ https://neal.fun/_nuxt/eb69b07.js:3
+[ 2300644ms] [WARNING] WebGL: INVALID_OPERATION: delete: object does not belong to this context @ https://neal.fun/_nuxt/eb69b07.js:3
+[ 2300644ms] [WARNING] WebGL: INVALID_OPERATION: delete: object does not belong to this context @ https://neal.fun/_nuxt/eb69b07.js:3
+[ 2300644ms] [WARNING] WebGL: INVALID_OPERATION: delete: object does not belong to this context @ https://neal.fun/_nuxt/eb69b07.js:3
+[ 2302132ms] [ERROR] Access to video at 'https://cursor-camp.neal.fun/movies/4.mp4' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/cursor-camp/:0
+[ 2302132ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://cursor-camp.neal.fun/movies/4.mp4:0
+[ 2302132ms] [LOG] [video] error loading: MEDIA_ELEMENT_ERROR: Format error @ https://neal.fun/_nuxt/5f5b7f5.js:2
+[ 2319752ms] [ERROR] Access to video at 'https://cursor-camp.neal.fun/movies/4.mp4' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/cursor-camp/:0
+[ 2319752ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://cursor-camp.neal.fun/movies/4.mp4:0
+[ 2319758ms] [LOG] [video] error loading: MEDIA_ELEMENT_ERROR: Format error @ https://neal.fun/_nuxt/5f5b7f5.js:2
+[ 2344614ms] [WARNING] WebGL: INVALID_OPERATION: delete: object does not belong to this context @ https://neal.fun/_nuxt/eb69b07.js:3
+[ 2344614ms] [WARNING] WebGL: INVALID_OPERATION: delete: object does not belong to this context @ https://neal.fun/_nuxt/eb69b07.js:3
+[ 2344614ms] [WARNING] WebGL: INVALID_OPERATION: delete: object does not belong to this context @ https://neal.fun/_nuxt/eb69b07.js:3
+[ 2344614ms] [WARNING] WebGL: INVALID_OPERATION: delete: object does not belong to this context @ https://neal.fun/_nuxt/eb69b07.js:3
+[ 2344614ms] [WARNING] WebGL: INVALID_OPERATION: delete: object does not belong to this context @ https://neal.fun/_nuxt/eb69b07.js:3
+[ 2344615ms] [WARNING] WebGL: INVALID_OPERATION: delete: object does not belong to this context @ https://neal.fun/_nuxt/eb69b07.js:3
+[ 2344615ms] [WARNING] WebGL: INVALID_OPERATION: delete: object does not belong to this context @ https://neal.fun/_nuxt/eb69b07.js:3
+[ 2344615ms] [WARNING] WebGL: INVALID_OPERATION: delete: object does not belong to this context @ https://neal.fun/_nuxt/eb69b07.js:3
+[ 2344615ms] [WARNING] WebGL: INVALID_OPERATION: delete: object does not belong to this context @ https://neal.fun/_nuxt/eb69b07.js:3
+[ 2344615ms] [WARNING] WebGL: INVALID_OPERATION: delete: object does not belong to this context @ https://neal.fun/_nuxt/eb69b07.js:3
+[ 2344669ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://neal.fun/cursor-camp/optimized/sounds/ambient/ocean-waves.mp3:0
+[ 2368316ms] [ERROR] Access to video at 'https://cursor-camp.neal.fun/movies/4.mp4' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/cursor-camp/:0
+[ 2368316ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://cursor-camp.neal.fun/movies/4.mp4:0
+[ 2368322ms] [LOG] [video] error loading: MEDIA_ELEMENT_ERROR: Format error @ https://neal.fun/_nuxt/5f5b7f5.js:2
+[ 2417713ms] [WARNING] WebGL: INVALID_OPERATION: delete: object does not belong to this context @ https://neal.fun/_nuxt/eb69b07.js:3
+[ 2417714ms] [WARNING] WebGL: INVALID_OPERATION: delete: object does not belong to this context @ https://neal.fun/_nuxt/eb69b07.js:3
+[ 2417714ms] [WARNING] WebGL: INVALID_OPERATION: delete: object does not belong to this context @ https://neal.fun/_nuxt/eb69b07.js:3
+[ 2417714ms] [WARNING] WebGL: INVALID_OPERATION: delete: object does not belong to this context @ https://neal.fun/_nuxt/eb69b07.js:3
+[ 2417714ms] [WARNING] WebGL: INVALID_OPERATION: delete: object does not belong to this context @ https://neal.fun/_nuxt/eb69b07.js:3
+[ 2417714ms] [WARNING] WebGL: INVALID_OPERATION: delete: object does not belong to this context @ https://neal.fun/_nuxt/eb69b07.js:3
+[ 2417714ms] [WARNING] WebGL: INVALID_OPERATION: delete: object does not belong to this context @ https://neal.fun/_nuxt/eb69b07.js:3
+[ 2417714ms] [WARNING] WebGL: INVALID_OPERATION: delete: object does not belong to this context @ https://neal.fun/_nuxt/eb69b07.js:3
+[ 2417714ms] [WARNING] WebGL: INVALID_OPERATION: delete: object does not belong to this context @ https://neal.fun/_nuxt/eb69b07.js:3
+[ 2417714ms] [WARNING] WebGL: INVALID_OPERATION: delete: object does not belong to this context @ https://neal.fun/_nuxt/eb69b07.js:3
+[ 2452140ms] [ERROR] Access to video at 'https://cursor-camp.neal.fun/movies/4.mp4' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/cursor-camp/:0
+[ 2452140ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://cursor-camp.neal.fun/movies/4.mp4:0
+[ 2452523ms] [ERROR] Access to video at 'https://cursor-camp.neal.fun/movies/4.mp4' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/cursor-camp/:0
+[ 2452523ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://cursor-camp.neal.fun/movies/4.mp4:0
+[ 2452976ms] [ERROR] Access to video at 'https://cursor-camp.neal.fun/movies/4.mp4' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/cursor-camp/:0
+[ 2452976ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://cursor-camp.neal.fun/movies/4.mp4:0
+[ 2453468ms] [ERROR] Access to video at 'https://cursor-camp.neal.fun/movies/4.mp4' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/cursor-camp/:0
+[ 2453468ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://cursor-camp.neal.fun/movies/4.mp4:0
+[ 2454002ms] [ERROR] Access to video at 'https://cursor-camp.neal.fun/movies/4.mp4' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/cursor-camp/:0
+[ 2454002ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://cursor-camp.neal.fun/movies/4.mp4:0
+[ 2454581ms] [ERROR] Access to video at 'https://cursor-camp.neal.fun/movies/4.mp4' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/cursor-camp/:0
+[ 2454581ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://cursor-camp.neal.fun/movies/4.mp4:0
+[ 2455212ms] [ERROR] Access to video at 'https://cursor-camp.neal.fun/movies/4.mp4' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/cursor-camp/:0
+[ 2455212ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://cursor-camp.neal.fun/movies/4.mp4:0
+[ 2455891ms] [ERROR] Access to video at 'https://cursor-camp.neal.fun/movies/4.mp4' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/cursor-camp/:0
+[ 2455891ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://cursor-camp.neal.fun/movies/4.mp4:0
+[ 2456625ms] [ERROR] Access to video at 'https://cursor-camp.neal.fun/movies/4.mp4' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/cursor-camp/:0
+[ 2456625ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://cursor-camp.neal.fun/movies/4.mp4:0
+[ 2504054ms] [WARNING] WebGL: INVALID_OPERATION: delete: object does not belong to this context @ https://neal.fun/_nuxt/eb69b07.js:3
+[ 2504054ms] [WARNING] WebGL: INVALID_OPERATION: delete: object does not belong to this context @ https://neal.fun/_nuxt/eb69b07.js:3
+[ 2504054ms] [WARNING] WebGL: INVALID_OPERATION: delete: object does not belong to this context @ https://neal.fun/_nuxt/eb69b07.js:3
+[ 2504054ms] [WARNING] WebGL: INVALID_OPERATION: delete: object does not belong to this context @ https://neal.fun/_nuxt/eb69b07.js:3
+[ 2504054ms] [WARNING] WebGL: INVALID_OPERATION: delete: object does not belong to this context @ https://neal.fun/_nuxt/eb69b07.js:3
+[ 2504055ms] [WARNING] WebGL: INVALID_OPERATION: delete: object does not belong to this context @ https://neal.fun/_nuxt/eb69b07.js:3
+[ 2504055ms] [WARNING] WebGL: INVALID_OPERATION: delete: object does not belong to this context @ https://neal.fun/_nuxt/eb69b07.js:3
+[ 2504055ms] [WARNING] WebGL: INVALID_OPERATION: delete: object does not belong to this context @ https://neal.fun/_nuxt/eb69b07.js:3
+[ 2504055ms] [WARNING] WebGL: INVALID_OPERATION: delete: object does not belong to this context @ https://neal.fun/_nuxt/eb69b07.js:3
+[ 2504055ms] [WARNING] WebGL: INVALID_OPERATION: delete: object does not belong to this context @ https://neal.fun/_nuxt/eb69b07.js:3
+[ 2541859ms] [ERROR] Access to video at 'https://cursor-camp.neal.fun/movies/4.mp4' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/cursor-camp/:0
+[ 2541859ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://cursor-camp.neal.fun/movies/4.mp4:0
+[ 2542187ms] [ERROR] Access to video at 'https://cursor-camp.neal.fun/movies/4.mp4' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/cursor-camp/:0
+[ 2542187ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://cursor-camp.neal.fun/movies/4.mp4:0
+[ 2542563ms] [ERROR] Access to video at 'https://cursor-camp.neal.fun/movies/4.mp4' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/cursor-camp/:0
+[ 2542563ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://cursor-camp.neal.fun/movies/4.mp4:0
+[ 2542991ms] [ERROR] Access to video at 'https://cursor-camp.neal.fun/movies/4.mp4' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/cursor-camp/:0
+[ 2542991ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://cursor-camp.neal.fun/movies/4.mp4:0
+[ 2543475ms] [ERROR] Access to video at 'https://cursor-camp.neal.fun/movies/4.mp4' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/cursor-camp/:0
+[ 2543475ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://cursor-camp.neal.fun/movies/4.mp4:0
+[ 2544001ms] [ERROR] Access to video at 'https://cursor-camp.neal.fun/movies/4.mp4' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/cursor-camp/:0
+[ 2544001ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://cursor-camp.neal.fun/movies/4.mp4:0
+[ 2544595ms] [ERROR] Access to video at 'https://cursor-camp.neal.fun/movies/4.mp4' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/cursor-camp/:0
+[ 2544595ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://cursor-camp.neal.fun/movies/4.mp4:0
+[ 2545232ms] [ERROR] Access to video at 'https://cursor-camp.neal.fun/movies/4.mp4' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/cursor-camp/:0
+[ 2545232ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://cursor-camp.neal.fun/movies/4.mp4:0
+[ 2545911ms] [ERROR] Access to video at 'https://cursor-camp.neal.fun/movies/4.mp4' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/cursor-camp/:0
+[ 2545911ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://cursor-camp.neal.fun/movies/4.mp4:0
+[ 2546651ms] [ERROR] Access to video at 'https://cursor-camp.neal.fun/movies/4.mp4' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/cursor-camp/:0
+[ 2546651ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://cursor-camp.neal.fun/movies/4.mp4:0
+[ 2547424ms] [ERROR] Access to video at 'https://cursor-camp.neal.fun/movies/4.mp4' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/cursor-camp/:0
+[ 2547424ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://cursor-camp.neal.fun/movies/4.mp4:0
+[ 2612786ms] [WARNING] WebGL: INVALID_OPERATION: delete: object does not belong to this context @ https://neal.fun/_nuxt/eb69b07.js:3
+[ 2612786ms] [WARNING] WebGL: INVALID_OPERATION: delete: object does not belong to this context @ https://neal.fun/_nuxt/eb69b07.js:3
+[ 2612786ms] [WARNING] WebGL: INVALID_OPERATION: delete: object does not belong to this context @ https://neal.fun/_nuxt/eb69b07.js:3
+[ 2612786ms] [WARNING] WebGL: INVALID_OPERATION: delete: object does not belong to this context @ https://neal.fun/_nuxt/eb69b07.js:3
+[ 2612786ms] [WARNING] WebGL: INVALID_OPERATION: delete: object does not belong to this context @ https://neal.fun/_nuxt/eb69b07.js:3
+[ 2612786ms] [WARNING] WebGL: INVALID_OPERATION: delete: object does not belong to this context @ https://neal.fun/_nuxt/eb69b07.js:3
+[ 2612786ms] [WARNING] WebGL: INVALID_OPERATION: delete: object does not belong to this context @ https://neal.fun/_nuxt/eb69b07.js:3
+[ 2612786ms] [WARNING] WebGL: INVALID_OPERATION: delete: object does not belong to this context @ https://neal.fun/_nuxt/eb69b07.js:3
+[ 2612786ms] [WARNING] WebGL: INVALID_OPERATION: delete: object does not belong to this context @ https://neal.fun/_nuxt/eb69b07.js:3
+[ 2612786ms] [WARNING] WebGL: INVALID_OPERATION: delete: object does not belong to this context @ https://neal.fun/_nuxt/eb69b07.js:3
+[ 2642618ms] [ERROR] Access to video at 'https://cursor-camp.neal.fun/movies/4.mp4' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/cursor-camp/:0
+[ 2642618ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://cursor-camp.neal.fun/movies/4.mp4:0
+[ 2642943ms] [ERROR] Access to video at 'https://cursor-camp.neal.fun/movies/4.mp4' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/cursor-camp/:0
+[ 2642943ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://cursor-camp.neal.fun/movies/4.mp4:0
+[ 2643326ms] [ERROR] Access to video at 'https://cursor-camp.neal.fun/movies/4.mp4' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/cursor-camp/:0
+[ 2643326ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://cursor-camp.neal.fun/movies/4.mp4:0
+[ 2643756ms] [ERROR] Access to video at 'https://cursor-camp.neal.fun/movies/4.mp4' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/cursor-camp/:0
+[ 2643756ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://cursor-camp.neal.fun/movies/4.mp4:0
+[ 2644232ms] [ERROR] Access to video at 'https://cursor-camp.neal.fun/movies/4.mp4' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/cursor-camp/:0
+[ 2644232ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://cursor-camp.neal.fun/movies/4.mp4:0
+[ 2644767ms] [ERROR] Access to video at 'https://cursor-camp.neal.fun/movies/4.mp4' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/cursor-camp/:0
+[ 2644767ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://cursor-camp.neal.fun/movies/4.mp4:0
+[ 2645341ms] [ERROR] Access to video at 'https://cursor-camp.neal.fun/movies/4.mp4' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/cursor-camp/:0
+[ 2645341ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://cursor-camp.neal.fun/movies/4.mp4:0
+[ 2645974ms] [ERROR] Access to video at 'https://cursor-camp.neal.fun/movies/4.mp4' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/cursor-camp/:0
+[ 2645974ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://cursor-camp.neal.fun/movies/4.mp4:0
+[ 2646651ms] [ERROR] Access to video at 'https://cursor-camp.neal.fun/movies/4.mp4' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/cursor-camp/:0
+[ 2646651ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://cursor-camp.neal.fun/movies/4.mp4:0
+[ 2647374ms] [ERROR] Access to video at 'https://cursor-camp.neal.fun/movies/4.mp4' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/cursor-camp/:0
+[ 2647374ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://cursor-camp.neal.fun/movies/4.mp4:0
+[ 2648152ms] [ERROR] Access to video at 'https://cursor-camp.neal.fun/movies/4.mp4' from origin 'https://neal.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://neal.fun/cursor-camp/:0
+[ 2648153ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://cursor-camp.neal.fun/movies/4.mp4:0
