@@ -1,6 +1,6 @@
 import { ARCADE_ITEMS, STYLE_KITS } from "./catalog.js";
 import { getArcadeWallet } from "./wallet.js";
-import { ARCADE_GAMES } from "./games.js";
+import { ARCADE_GAMES, PREVIEW_ONLY_GAMES, isPublicArcadeGame, isShopItemVisible } from "./games.js";
 import { EARNING_RULES } from "./game-services.js";
 import { readFlappySettings } from "../flappy-appearance.js";
 import { drawFlappyShopPreview } from "../flappy-renderer.js";
@@ -16,7 +16,7 @@ import { readTugWardrobe, writeTugWardrobe } from "../cats-dogs-customization.js
 import { echoInstrumentArt } from "../harmonic-art.js";
 import { readEchoSettings, swapEchoInstrument, writeEchoSettings } from "../harmonic-config.js";
 
-const gameOptions = (compatible = Object.keys(ARCADE_GAMES).filter(id => ARCADE_ITEMS.some(item => item.games.includes(id)))) => Object.entries(ARCADE_GAMES).filter(([id]) => compatible.includes(id)).map(([id, game]) => `<option value="${id}">${game.name}</option>`).join("");
+const gameOptions = (compatible = Object.keys(ARCADE_GAMES).filter(id => isPublicArcadeGame(id) && ARCADE_ITEMS.some(item => item.games.includes(id)))) => Object.entries(ARCADE_GAMES).filter(([id]) => compatible.includes(id)).map(([id, game]) => `<option value="${id}">${game.name}</option>`).join("");
 const KEYS = { flappy: "cooper-flappy-bird-v1", archery: "aurora-archery-v2", snake: "snake-garden-settings-v1", neondrift: "neondrift-drive-v2" };
 function readSettings(game) { try { const value = JSON.parse(localStorage.getItem(KEYS[game])); return value && typeof value === "object" && !Array.isArray(value) ? value : {}; } catch { return {}; } }
 function writeSettings(game, settings) { try { localStorage.setItem(KEYS[game], JSON.stringify(settings)); return true; } catch { return false; } }
@@ -31,11 +31,20 @@ export function mountArcadeNavigation(root) {
 }
 
 export function createArcadeShop(root, initialGame = "all") {
+  // The router only opens a preview shop after Coming Soon has been unlocked.
+  const previewGame = PREVIEW_ONLY_GAMES.includes(initialGame) ? initialGame : null;
+  const visibleGame = id => previewGame ? id === previewGame : isPublicArcadeGame(id);
   const wallet = getArcadeWallet(), wrapper = document.createElement("section"); wrapper.className = "arcade-hub arcade-shop";
   wrapper.innerHTML = `<div class="arcade-hero"><div><p class="arcade-eyebrow">ONE ARCADE. MORE POSSIBILITIES.</p><h3>A little play goes a long way.</h3><p>Your coins travel between games. Pick a look for one adventure, or a collection for several.</p></div><div class="arcade-balance"><span>YOUR COINS</span><strong>0</strong><small>Shared across your arcade</small></div></div>
-    <div class="arcade-toolbar"><label>Find something for<select aria-label="Shop game"><option value="all">All games</option>${gameOptions()}</select></label><label class="arcade-owned-filter"><input type="checkbox" aria-label="Show owned items only"> My collection</label><a href="#characters">Open character library &rarr;</a></div>
+    <div class="arcade-toolbar"><label>Find something for<select aria-label="Shop game">${previewGame ? gameOptions([previewGame]) : `<option value="all">All games</option>${gameOptions()}`}</select></label><label class="arcade-owned-filter"><input type="checkbox" aria-label="Show owned items only"> My collection</label><a href="${previewGame ? `#characters/${previewGame}` : '#characters'}">${previewGame ? 'Temporary customization' : 'Open character library'} &rarr;</a></div>
     <p class="arcade-shop-status" role="status">Discover picture collections and new looks. There are no paid ability boosts.</p><div class="arcade-item-grid"></div>
-    <details class="arcade-earning-guide"><summary>How to earn coins</summary><div>${Object.entries(EARNING_RULES).map(([id, note]) => `<p><a href="${ARCADE_GAMES[id].route}">${ARCADE_GAMES[id].name}</a><span>${note}</span></p>`).join("")}</div>${memoryShopCoinGuide(readMemorySettings(wallet.getState().owned).tiles)}<p>Coins and unlocks save in this browser. Existing Flappy Bird coins and purchases are carried over automatically.</p></details>`;
+    <details class="arcade-earning-guide"><summary>How to earn coins</summary><div>${Object.entries(EARNING_RULES).filter(([id]) => visibleGame(id)).map(([id, note]) => `<p><a href="${ARCADE_GAMES[id].route}">${ARCADE_GAMES[id].name}</a><span>${note}</span></p>`).join("")}</div>${previewGame ? '' : memoryShopCoinGuide(readMemorySettings(wallet.getState().owned).tiles)}<p>Coins and unlocks save in this browser.</p></details>`;
+  if (previewGame) {
+    wrapper.querySelector('.arcade-eyebrow').textContent = 'COMING SOON / TEMPORARY SHOP';
+    wrapper.querySelector('h3').textContent = `${ARCADE_GAMES[previewGame].name} finishes.`;
+    wrapper.querySelector('.arcade-hero p:last-child').textContent = 'Preview cosmetic finishes for your rocket and crew. Your existing purchases and shared coins are kept.';
+    const back = document.createElement('a'); back.className = 'arcade-text-link'; back.href = `#${previewGame}`; back.textContent = 'Back to Rocket Boost'; wrapper.prepend(back);
+  }
   root.append(wrapper);
   const filter = wrapper.querySelector("select"), onlyOwned = wrapper.querySelector("input"), grid = wrapper.querySelector(".arcade-item-grid"), status = wrapper.querySelector(".arcade-shop-status");
   filter.value = initialGame; let disposed = false, busy = false;
@@ -43,7 +52,7 @@ export function createArcadeShop(root, initialGame = "all") {
     if (disposed) return;
     const state = wallet.getState(); wrapper.querySelector(".arcade-balance strong").textContent = money(state.coins);
     grid.innerHTML = "";
-    const items = ARCADE_ITEMS.filter(item => (filter.value === "all" || item.games.includes(filter.value)) && (!onlyOwned.checked || state.owned.includes(item.id)));
+    const items = ARCADE_ITEMS.filter(item => isShopItemVisible(item, previewGame) && (filter.value === "all" || item.games.includes(filter.value)) && (!onlyOwned.checked || state.owned.includes(item.id)));
     for (const item of items) {
       const owned = state.owned.includes(item.id), card = document.createElement("article"); card.className = "arcade-item"; card.dataset.item = item.id; card.dataset.owned = String(owned);
       card.innerHTML = `${item.kind === "harmonic" ? `<div class="he-shop-art" role="img" aria-label="${item.name}">${echoInstrumentArt(item.value, `shop-${item.value}`)}</div>` : item.kind === "spotlight" ? spotlightShopArt(item) : item.kind === "memory" ? memoryShopArt(item) : item.kind === "flappy" || item.kind === "rocket" || item.kind === "pets" ? '<canvas class="arcade-item-art" role="img"></canvas>' : `<div class="arcade-collection-art" style="--collection-body:${STYLE_KITS[item.kit].body};--collection-wing:${STYLE_KITS[item.kit].wing};--collection-accent:${STYLE_KITS[item.kit].accent}"><span class="arcade-collection-orb"></span><span class="arcade-collection-orb"></span><span class="arcade-collection-orb"></span><strong>FOUR WORLDS.<br>ONE COLLECTION.</strong></div>`}
@@ -57,7 +66,7 @@ export function createArcadeShop(root, initialGame = "all") {
     if (!items.length) { const empty = document.createElement("p"); empty.className = "arcade-empty"; empty.textContent = "Your collection starts here. Play any connected game to earn coins."; grid.append(empty); }
   }
   const unsubscribe = wallet.subscribe(render);
-  wrapper.querySelector('[aria-label="Memory Loop reward board size"]').addEventListener("change", event => {
+  wrapper.querySelector('[aria-label="Memory Loop reward board size"]')?.addEventListener("change", event => {
     wrapper.querySelector(".ml-shop-coin-table").innerHTML = memoryShopCoinTable(Number(event.target.value));
   });
   filter.addEventListener("change", () => { render(); const hash = filter.value === "all" ? "#store" : `#store/${filter.value}`; history.replaceState(null, "", hash); });

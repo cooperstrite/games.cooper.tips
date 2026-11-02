@@ -1,0 +1,57 @@
+.flight-library-layout{display:block!important}
+.flight-studio{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(300px,.85fr);gap:24px;align-items:start;color:var(--ui-ink)}
+.flight-studio *{box-sizing:border-box}
+.flight-studio [hidden]{display:none!important}
+.flight-studio-preview{margin:0;position:sticky;top:18px;border:1px solid var(--ui-line);border-radius:18px;overflow:hidden;background:var(--ui-panel);box-shadow:var(--ui-shadow)}
+.flight-studio-preview-heading{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:18px 22px;border-bottom:1px solid var(--ui-line)}
+.flight-studio-preview-heading>span,.flight-studio-kicker{font-size:10px;font-weight:700;letter-spacing:.13em;color:var(--ui-muted)}
+.flight-studio-preview-heading>strong{font-size:11px;padding:6px 9px;border-radius:6px;background:var(--ui-accent-soft);color:var(--ui-accent)}
+.flight-studio-stage{height:390px;position:relative;background:var(--ui-soft)}
+.flight-studio-stage canvas{width:100%;height:100%;display:block;touch-action:none;outline-offset:-4px}
+.flight-studio-loading{position:absolute;left:24px;right:24px;top:40%;padding:22px;border:1px solid var(--ui-line);border-radius:12px;background:var(--ui-panel);color:var(--ui-ink);text-align:center;font-size:13px;line-height:1.8}
+.flight-studio-preview figcaption{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;padding:20px 22px 6px}
+.flight-studio-type{font-size:11px;color:var(--ui-muted)}
+.flight-studio h4{font-size:23px;line-height:1.25;letter-spacing:-.03em;margin:6px 0 18px;font-weight:600}
+.flight-studio-preview h4{margin:4px 0 0;font-size:25px}
+.flight-studio p{font-size:12px;line-height:1.8;color:var(--ui-muted);margin:12px 0}
+.flight-studio-preview figcaption p{font-size:10px;max-width:140px}
+.flight-studio-view-controls{display:flex;flex-wrap:wrap;gap:8px;padding:12px 22px 20px}
+.flight-studio button,.flight-studio select{font:inherit;border:1px solid var(--ui-line);border-radius:8px;background:var(--ui-raised);color:var(--ui-ink);min-height:40px;padding:10px 12px;cursor:pointer}
+.flight-studio button{font-size:11px;font-weight:600}
+.flight-studio button:hover{background:var(--ui-hover)}
+.flight-studio :is(button,select,input):focus-visible{outline:2px solid var(--ui-accent);outline-offset:3px}
+.flight-studio :disabled{opacity:.55;cursor:default}
+.flight-studio-inspection{border-top:1px solid var(--ui-line);padding:16px 22px;font-size:12px}
+.flight-studio-inspection summary{cursor:pointer;font-weight:600;color:var(--ui-ink)}
+.flight-studio-inspection>div{display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-top:16px}
+.flight-studio-inspection label{display:flex;align-items:center;gap:8px}
+.flight-studio-inspection p{font-size:10px}
+.flight-studio-controls{display:grid;gap:16px;min-width:0}
+.flight-studio-section{padding:24px;border:1px solid var(--ui-line);background:var(--ui-panel);border-radius:15px}
+.flight-studio-aircraft{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.flight-studio-aircraft button{display:grid;gap:7px;text-align:left;padding:14px 12px 14px 16px;position:relative;overflow:hidden}
+.flight-studio-aircraft button:before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--aircraft-color)}
+.flight-studio-aircraft button[aria-pressed=true]{border-color:var(--ui-accent);background:var(--ui-accent-soft);box-shadow:inset 0 0 0 1px var(--ui-accent)}
+.flight-studio-aircraft span{font-size:10px;font-weight:400;color:var(--ui-muted)}
+.flight-studio-aircraft strong{font-size:13px;letter-spacing:-.02em}
+.flight-studio-facts{display:flex;flex-wrap:wrap;gap:6px}
+.flight-studio-facts span{font-size:9px;padding:5px 8px;background:var(--ui-soft);border-radius:5px;color:var(--ui-muted)}
+.flight-studio-fields{display:grid;gap:14px}
+.flight-studio-section>label,.flight-studio-fields label{display:grid;gap:7px;font-size:12px;color:var(--ui-ink)}
+.flight-studio-section select{min-width:0;width:100%;font-size:12px}
+.flight-studio-checks{display:grid;gap:14px}
+.flight-studio-check{display:flex;align-items:center;gap:9px;font-size:12px;cursor:pointer}
+.flight-studio input[type=checkbox]{width:17px;height:17px;accent-color:var(--ui-accent);flex-shrink:0}
+.flight-studio-compatibility:empty{display:none}
+.flight-studio p.flight-studio-compatibility{color:var(--ui-accent)}
+.flight-studio-listen{margin-top:12px}
+.flight-studio-footer{padding:4px 8px 12px;display:grid;gap:8px}
+.flight-studio-footer p{margin:0}
+.flight-studio-footer a{display:block;text-align:center;padding:14px;border-radius:9px;color:var(--ui-on-primary);background:var(--ui-primary);font-size:13px;font-weight:700;text-decoration:none}
+.rg-topline a.flight-studio-link{color:inherit;font-size:11px;letter-spacing:0;text-underline-offset:3px}
+.rb-preview-tools{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:12px;font-size:12px}
+.rb-preview-tools>span{width:100%;text-align:right;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--ui-muted)}
+.rb-preview-tools a{color:var(--ui-accent);text-underline-offset:3px}
+@media(max-width:1000px){.flight-studio{grid-template-columns:minmax(0,1fr) minmax(280px,.9fr);gap:16px}.flight-studio-section{padding:18px}.flight-studio-stage{height:340px}}
+@media(max-width:760px){.flight-studio{grid-template-columns:1fr}.flight-studio-preview{position:static}.flight-studio-stage{height:340px}.flight-studio-preview figcaption{padding:16px 18px 6px}.flight-studio-section{padding:20px}.flight-studio-view-controls{padding:12px 18px 18px}.rg-topline{flex-wrap:wrap}}
+@media(max-width:400px){.flight-studio-stage{height:290px}.flight-studio-preview figcaption p{max-width:120px}.flight-studio-aircraft strong{font-size:12px}.flight-studio-aircraft button{padding:12px}}

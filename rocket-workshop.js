@@ -1,6 +1,5 @@
 import {PRESETS,TANKS,ENGINES,HAIR_STYLES,BEARDS,ROCKET_COSMETICS,normalizeDesign,presetDesign,setStageCount,readRocketSave,writeRocketSave,ownedDesign,validateDesign} from './rocket-config.js';
 import {getArcadeWallet} from './arcade/wallet.js';
-import {drawRocketPreview} from './rocket-art.js';
 import {createRocketRenderer} from './rocket-renderer.js';
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const options=(values,value)=>Object.entries(values).map(([id,name])=>`<option value="${id}"${id===String(value)?' selected':''}>${esc(typeof name==='string'?name:name.name)}</option>`).join('');
@@ -25,10 +24,34 @@ export function createRocketWorkshop(root,{initial=readRocketSave().design,onCha
  render();return {getDesign:()=>design,setDesign(d){design=normalizeDesign(d);render();},dispose(){disposed=true;el.remove();}};
 }
 export function createRocketStudio(root){
- let saved=readRocketSave(),design=ownedDesign(saved.design,getArcadeWallet().getState().owned),focus='rocket',mode='2d',renderer=null,disposed=false,raf=0,version=0,building=false,updateTimer=null;
- const el=document.createElement('section');el.className='rb-studio';el.innerHTML=`<div class="rb-studio-preview"><div class="rb-preview-toolbar"><label>Preview<select aria-label="Rocket preview subject"><option value="rocket">Complete rocket</option><option value="0">Astronaut 1</option><option value="1">Astronaut 2</option><option value="2">Astronaut 3</option></select></label><div role="group" aria-label="Preview rendering"><button type="button" data-preview="2d" aria-pressed="true">2D drawing</button><button type="button" data-preview="3d" aria-pressed="false">3D <small>Beta</small></button></div></div><div class="rb-preview-stage"><canvas class="rb-drawing" aria-label="2D rocket and astronaut drawing"></canvas><canvas class="rb-model" aria-label="Rotatable 3D rocket or astronaut preview" hidden></canvas><p class="rb-preview-loading" hidden>Preparing 3D preview...</p></div><p class="rb-preview-caption">2D drawing / your complete saved design</p><p class="rb-save-status" role="status">Changes save automatically on this device.</p></div><div class="rb-studio-controls"></div>`;root.append(el);const $=s=>el.querySelector(s);
- async function rebuild(){drawRocketPreview($('.rb-drawing'),design,focus);if(mode!=='3d')return;const token=++version;$('.rb-preview-loading').hidden=false;try{if(!renderer&&!building){building=true;renderer=await createRocketRenderer($('.rb-model'),{studio:true,isCurrent:()=>!disposed});building=false;}if(disposed){renderer?.dispose();return;}if(renderer)await renderer.setDesign(design,focus);if(token===version)$('.rb-preview-loading').hidden=true;}catch{$('.rb-preview-loading').textContent='3D could not start on this device. The 2D preview and all controls are available.';}}
- const workshop=createRocketWorkshop($('.rb-studio-controls'),{initial:design,onChange(next){design=next;saved={...readRocketSave(),design};$('.rb-save-status').textContent=writeRocketSave(saved)?'Saved to your rocket and crew.':'Storage is unavailable; changes last for this visit.';drawRocketPreview($('.rb-drawing'),design,focus);clearTimeout(updateTimer);updateTimer=setTimeout(rebuild,120);}});
- $('.rb-studio-controls').addEventListener('crewfocus',e=>{focus=String(e.detail);$('select').value=focus;rebuild();});$('select').addEventListener('change',e=>{focus=e.target.value;rebuild();});for(const b of el.querySelectorAll('[data-preview]'))b.addEventListener('click',()=>{mode=b.dataset.preview;$('.rb-drawing').hidden=mode!=='2d';$('.rb-model').hidden=mode!=='3d';for(const bb of el.querySelectorAll('[data-preview]'))bb.setAttribute('aria-pressed',String(bb===b));$('.rb-preview-caption').textContent=mode==='3d'?'Drag to rotate / scroll to zoom / 3D Beta':'2D drawing / your complete saved design';rebuild();renderer?.resize();});
- const resize=new ResizeObserver(()=>drawRocketPreview($('.rb-drawing'),design,focus));resize.observe($('.rb-preview-stage'));function frame(t){if(disposed)return;if(mode==='3d'&&renderer)renderer.render(null,t/1000);raf=requestAnimationFrame(frame);}raf=requestAnimationFrame(frame);rebuild();return()=>{disposed=true;version++;clearTimeout(updateTimer);cancelAnimationFrame(raf);resize.disconnect();workshop.dispose();renderer?.dispose();el.remove();};
+ let design=ownedDesign(readRocketSave().design,getArcadeWallet().getState().owned),focus='rocket',renderer=null,disposed=false,raf=0,version=0,building=false,updateTimer=null;
+ const el=document.createElement('section');el.className='rb-studio';
+ el.innerHTML=`<div class="rb-studio-preview" data-ready="loading"><div class="rb-preview-toolbar"><label>Preview<select aria-label="Rocket preview subject"><option value="rocket">Complete rocket</option><option value="0">Astronaut 1</option><option value="1">Astronaut 2</option><option value="2">Astronaut 3</option></select></label><span>3D <small>Beta</small></span></div><div class="rb-preview-stage"><canvas class="rb-model" aria-label="Rotatable 3D rocket or astronaut preview"></canvas><p class="rb-preview-loading" role="status">Preparing 3D preview...</p></div><p class="rb-preview-caption">Drag to rotate / scroll to zoom / 3D Beta</p><button type="button" class="rb-preview-retry" hidden>Retry 3D preview</button><p class="rb-save-status" role="status">Changes save automatically on this device.</p></div><div class="rb-studio-controls"></div>`;
+ root.append(el);const $=s=>el.querySelector(s);
+ async function rebuild(){
+  version++;
+  if(building||disposed)return;
+  building=true;$('.rb-preview-loading').hidden=false;$('.rb-preview-loading').textContent='Preparing 3D preview...';$('.rb-preview-retry').hidden=true;$('.rb-studio-preview').dataset.ready='loading';
+  try{
+   if(!renderer)renderer=await createRocketRenderer($('.rb-model'),{studio:true,isCurrent:()=>!disposed});
+   if(disposed){renderer.dispose();return;}
+   let applied=0;
+   // Serialize model updates, including edits made while astronaut assets load.
+   while(applied!==version&&!disposed){const token=version;await renderer.setDesign(design,focus);applied=token;}
+   if(!disposed){$('.rb-preview-loading').hidden=true;$('.rb-studio-preview').dataset.ready='true';}
+  }catch{
+   renderer?.dispose();renderer=null;
+   if(!disposed){$('.rb-preview-loading').textContent='The 3D preview could not start. All customization controls remain available.';$('.rb-preview-retry').hidden=false;$('.rb-studio-preview').dataset.ready='unavailable';}
+  }finally{building=false;}
+ }
+ const workshop=createRocketWorkshop($('.rb-studio-controls'),{initial:design,onChange(next){
+  design=next;$('.rb-save-status').textContent=writeRocketSave({...readRocketSave(),design})?'Saved to your rocket and crew.':'Storage is unavailable; changes last for this visit.';
+  clearTimeout(updateTimer);updateTimer=setTimeout(rebuild,120);
+ }});
+ $('.rb-studio-controls').addEventListener('crewfocus',e=>{focus=String(e.detail);$('select').value=focus;rebuild();});
+ $('select').addEventListener('change',e=>{focus=e.target.value;rebuild();});$('.rb-preview-retry').addEventListener('click',rebuild);
+ const resize=new ResizeObserver(()=>renderer?.resize());resize.observe($('.rb-preview-stage'));
+ function frame(t){if(disposed)return;if(renderer&&!building&&!document.hidden)renderer.render(null,t/1000);raf=requestAnimationFrame(frame);}
+ raf=requestAnimationFrame(frame);rebuild();
+ return()=>{disposed=true;version++;clearTimeout(updateTimer);cancelAnimationFrame(raf);resize.disconnect();workshop.dispose();renderer?.dispose();el.remove();};
 }

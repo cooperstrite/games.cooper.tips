@@ -3,22 +3,18 @@ import { HOME_AIRFIELDS, WEATHER, terrainHeight, airfieldsNear, headingDifferenc
 import { createFreeFlight, beginFreeFlight, advanceFreeFlight, freeFlightInstruments } from "./free-flight-engine.js";
 import { createFreeFlightRenderer } from "./free-flight-renderer.js";
 import { createFreeFlightAudio } from "./free-flight-audio.js";
+import { readFreeFlightSettings, writeFlightSettings } from "./flight-settings.js";
+import { createFlightStudio } from "./flight-studio.js";
+export { readFreeFlightSettings } from "./flight-settings.js";
 
-const SAVE_KEY = "cooper-free-flight-v1";
 const minutes = time => Math.floor(time / 60) + ":" + String(Math.floor(time % 60)).padStart(2, "0");
-export function readFreeFlightSettings(storage) {
-  let saved = {}; try { saved = JSON.parse((storage ?? globalThis.localStorage)?.getItem(SAVE_KEY) || "{}") || {}; } catch { /* Fresh preferences. */ }
-  const valid = (value, choices, fallback) => choices.includes(value) ? value : fallback;
-  return { aircraft: valid(saved.aircraft, Object.keys(AIRCRAFT), "passenger"), location: valid(saved.location, HOME_AIRFIELDS.map(f => f.id), "azure"),
-    departure: valid(saved.departure, ["airborne", "runway"], "airborne"), weather: valid(saved.weather, Object.keys(WEATHER), "breeze"),
-    assist: saved.assist !== false, invertPitch: saved.invertPitch === true, effects: saved.effects !== false };
-}
-export function createFreeFlightGame(root) {
+export function createFreeFlightGame(root, { editorOnly = false } = {}) {
+  if (editorOnly) return createFlightStudio(root, "freeflight");
   const settings = readFreeFlightSettings(), audio = createFreeFlightAudio(settings), listeners = [], keys = new Set(), touch = { pitch: 0, roll: 0, rudder: 0, brake: false };
   let state = createFreeFlight(settings), renderer = null, disposed = false, paused = false, frame = 0, last = 0, uiTime = 0, chartTime = 0, crashElapsed = 0, view = "chase", selected = null, lookYaw = 0, lookPitch = 0, chartRange = 25000, chartCache = null, mapFields = [];
   const wrapper = document.createElement("section"); wrapper.className = "rg-game ff-game"; wrapper.setAttribute("aria-label", "Free Flight simulator");
   wrapper.innerHTML = `
-    <div class="rg-topline"><span class="rg-brand"><span class="rg-brand-mark" aria-hidden="true">FF</span> THE OPEN SKY</span><span class="rg-beta">3D FREE FLIGHT</span></div>
+    <div class="rg-topline"><span class="rg-brand"><span class="rg-brand-mark" aria-hidden="true">FF</span> THE OPEN SKY</span><a class="flight-studio-link" href="#characters/freeflight">Aircraft studio &rarr;</a><span class="rg-beta">3D FREE FLIGHT</span></div>
     <div class="ff-intro"><h3>Take the long way home.</h3><p>A coastline to follow. A valley to discover. Fly for as long as you like, and land whenever you feel like it.</p></div>
     <div class="rg-stage ff-stage" tabindex="0" aria-label="Free flight view. W and S pitch; A and D bank; plus and minus change power.">
       <canvas class="rg-canvas" aria-label="Live 3D aircraft and open world"></canvas>
@@ -47,7 +43,7 @@ export function createFreeFlightGame(root) {
   const $ = selector => wrapper.querySelector(selector), $$ = selector => [...wrapper.querySelectorAll(selector)], stage = $(".ff-stage"), canvas = $(".rg-canvas"), throttle = $(".rg-throttle input"), result = $(".rg-result");
   const readouts = Object.fromEntries($$("[data-readout]").map(e => [e.dataset.readout, e]));
   const on = (target, event, handler, options) => { target.addEventListener(event, handler, options); listeners.push(() => target.removeEventListener(event, handler, options)); };
-  const save = () => { try { localStorage.setItem(SAVE_KEY, JSON.stringify(settings)); } catch { /* Flight still works without storage. */ } };
+  const save = () => { writeFlightSettings("freeflight", settings); };
   const active = () => ["flying", "rollout", "parked"].includes(state.phase);
   function clearInput() { keys.clear(); Object.assign(touch, { pitch: 0, roll: 0, rudder: 0, brake: false }); $$("[data-hold]").forEach(b => b.classList.remove("is-held")); }
   function message(text) { $(".ff-message").textContent = text; }

@@ -6,6 +6,7 @@ import { createFrameLoop } from "./runtime.js";
 import { createCharacterPortrait } from "./studio-2d.js";
 import { runnerCharacter } from "../redlight-appearance.js";
 import { tugCoat } from "../cats-dogs-customization.js";
+import { STUDIO_VIEWS } from "./games.js";
 
 export function studioCharacter(gameId, appearance) {
   if (gameId === "catsdogs") {
@@ -28,25 +29,28 @@ export function studioCharacter(gameId, appearance) {
   return builder.build();
 }
 
-export function createStudioPreview(root) {
+export function createStudioPreview(root, { gameId: initialGame } = {}) {
+  const has3D = STUDIO_VIEWS[initialGame]?.includes("3d") === true;
   const panel = document.createElement("figure"); panel.className = "arcade-studio-preview";
   panel.innerHTML = '<div class="arcade-studio-modes" role="group" aria-label="Character preview mode"><button type="button" data-mode="2d" aria-pressed="true">2D artwork</button><button type="button" data-mode="3d" aria-pressed="false">3D character (Beta)</button></div><div class="arcade-studio-stage"><canvas class="arcade-studio-webgl" role="img" aria-label="Your customized 3D character (Beta)" hidden></canvas><div class="arcade-studio-portrait"></div><span>ORIGINAL GAME ARTWORK</span></div><figcaption><strong class="arcade-studio-character-name">Your character</strong><div class="arcade-studio-focus"><button type="button" data-focus="body">Full character</button><button type="button" data-focus="face">Face / details</button><button type="button" data-focus="equipment">Bow &amp; arrows</button></div><p role="status">Both views share every saved choice. Changes save automatically.</p></figcaption>';
   root.append(panel);
+  if (!has3D) panel.querySelector('[data-mode="3d"]').remove();
   const petPoses=document.createElement("div");petPoses.className="arcade-pet-poses";petPoses.hidden=true;petPoses.setAttribute("role","group");petPoses.setAttribute("aria-label","Pet pose preview");
   petPoses.innerHTML='<button type="button" data-pet-pose="playing" aria-pressed="true">Playing</button><button type="button" data-pet-pose="win" aria-pressed="false">Winning</button><button type="button" data-pet-pose="sad" aria-pressed="false">Losing</button>';
   panel.querySelector(".arcade-studio-stage").before(petPoses);
   const canvas = panel.querySelector("canvas"), status = panel.querySelector("[role=status]");
   const portraitRoot = panel.querySelector(".arcade-studio-portrait"), portrait = createCharacterPortrait(portraitRoot), hint = panel.querySelector(".arcade-studio-stage > span");
-  let world, entity, camera, backdrop, character, appearance, gameId, loading, signature = "", disposed = false, focus = "body", mode = "2d", petPose="playing", failed = false, portraitTime = 0;
+  let world, entity, camera, backdrop, character, appearance, gameId = initialGame, loading, signature = "", disposed = false, focus = "body", mode = "2d", petPose="playing", failed = false, portraitTime = 0;
   panel.dataset.mode = mode;
   panel.dataset.ready = "true";
   function drawPortrait() { if (appearance) portrait.update(gameId, appearance, gameId==="catsdogs"?petPose:focus); }
   function setMode(next) {
+    if (next === "3d" && !has3D) return;
     mode = next; panel.dataset.mode = mode; canvas.hidden = mode !== "3d"; portraitRoot.hidden = mode !== "2d";
     petPoses.hidden=gameId!=="catsdogs"||mode!=="2d";
     hint.textContent = mode === "3d" ? "3D BETA \u00b7 DRAG TO TURN \u00b7 SCROLL TO ZOOM" : "ORIGINAL GAME ARTWORK";
     panel.querySelectorAll("[data-mode]").forEach(button => button.setAttribute("aria-pressed", String(button.dataset.mode === mode)));
-    status.textContent = failed ? "2D artwork is available. This device could not start the 3D preview (Beta). Your choices still save automatically." : gameId==="catsdogs"?"One saved pet: your coat, paint and accessories update gameplay and both ending poses. Changes save automatically.":"Both views share every saved choice. Changes save automatically.";
+    status.textContent = failed ? "2D artwork is available. This device could not start the 3D preview (Beta). Your choices still save automatically." : gameId==="catsdogs"?"One saved pet: your coat, paint and accessories update gameplay and both ending poses. Changes save automatically.":has3D?"Both views share every saved choice. Changes save automatically.":"Your original game artwork. Changes save automatically.";
     if (mode === "2d") drawPortrait();
     else if (world) { world.resize(); focusCamera(); world.render(); }
     else if (!failed) { status.textContent = "Preparing your 3D character (Beta)..."; load3D(); }
@@ -106,6 +110,7 @@ export function createStudioPreview(root) {
     const view = event.target.closest("button[data-mode]"); if (view) setMode(view.dataset.mode);
     const button = event.target.closest("button[data-focus]"); if (button) { focus = button.dataset.focus; focusCamera(); if (mode === "2d") drawPortrait(); }
   });
+  setMode("2d");
   return {
     update(id, nextAppearance) {
       if (disposed) return;

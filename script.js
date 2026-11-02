@@ -24,6 +24,7 @@ import { createRewardSession, applyEquippedKit, mountGameWallet } from "./arcade
 import { getArcadeWallet } from "./arcade/wallet.js";
 import { createArcadeShop, mountArcadeNavigation } from "./arcade/hub.js";
 import { createCharacterLibrary } from "./arcade/editor-hub.js";
+import { PREVIEW_ONLY_GAMES } from "./arcade/games.js";
 
 const games = [
   {
@@ -5468,6 +5469,12 @@ function renderRoute() {
     showHome();
     return;
   }
+  const previewTools = /^(?:store|characters)\/([a-z]+)$/.exec(hash);
+  if (previewTools && PREVIEW_ONLY_GAMES.includes(previewTools[1]) && !lockedUnlocked) {
+    showHome(true);
+    handleLockedAttempt();
+    return;
+  }
   const storeRoute = /^store(?:\/(flappy|archery|snake|neondrift|rocket|memory|spotdiff|catsdogs|harmonic))?$/.exec(hash);
   if (storeRoute) {
     showGame({ id: hash, name: "The Arcade Shop", description: "Earn coins in one game. Find something you love for another.", init: root => createArcadeShop(root, storeRoute[1] || "all") });
@@ -5476,10 +5483,10 @@ function renderRoute() {
   if (hash === "flappy/customize") {
     history.replaceState(null, "", "#characters/flappy"); renderRoute(); return;
   }
-  const characterRoute = /^characters(?:\/(flappy|archery|snake|neondrift|redlight|rocket|catsdogs|harmonic))?$/.exec(hash);
+  const characterRoute = /^characters(?:\/(flappy|archery|snake|neondrift|redlight|rocket|catsdogs|harmonic|runway|freeflight))?$/.exec(hash);
   if (characterRoute) {
     if (activeId === "characters") return;
-    showGame({ id: "characters", name: "Your Character Library", description: "Choose your game, then customize its characters, gear, and world.", init: root => createCharacterLibrary(root, { gameId: characterRoute[1], mountEditor: (id, host, onAppearanceChange) => games.find(game => game.id === id).init(host, { editorOnly: true, onAppearanceChange }) }) });
+    showGame({ id: "characters", name: "Your Character Library", description: "Choose your game, then customize its characters, gear, and world.", init: root => createCharacterLibrary(root, { gameId: characterRoute[1], allowPreview: lockedUnlocked, mountEditor: (id, host, onAppearanceChange) => games.find(game => game.id === id).init(host, { editorOnly: true, onAppearanceChange }) }) });
     return;
   }
   const gameId = /^flappy\/(shop|customize)$/.test(hash) ? "flappy" : hash;

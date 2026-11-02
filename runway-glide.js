@@ -1,12 +1,10 @@
 import { AIRCRAFT, APPROACHES, KNOTS, FEET, clamp, createFlight, advanceFlight, flightInstruments, startGoAround, towerGuidance } from "./runway-engine.js";
 import { createRunwayRenderer } from "./runway-renderer.js";
 import { createRunwayAudio } from "./runway-audio.js";
+import { readRunwaySave, writeFlightSettings } from "./flight-settings.js";
+import { createFlightStudio } from "./flight-studio.js";
 
-const SAVE_KEY = "cooper-runway-glide-v2";
 const activePhases = ["flying", "rollout", "goaround"];
-function readSave() {
-  try { const data=JSON.parse(localStorage.getItem(SAVE_KEY)||"{}");return data&&typeof data==="object"?data:{}; } catch { return {}; }
-}
 const icon = name => {
   const shapes={
     passenger:'<path d="M60 4Q65 9 65 28L109 49V57L65 46V63L79 72V77L60 72L41 77V72L55 63V46L11 57V49L55 28Q55 9 60 4Z"/><path d="M36 43V55M84 43V55" stroke-width="6"/>',
@@ -17,17 +15,16 @@ const icon = name => {
   return `<svg viewBox="0 0 120 82" fill="currentColor" stroke="currentColor" stroke-linejoin="round" aria-hidden="true">${shapes[name]}</svg>`;
 };
 
-export function createRunwayGlide(root) {
-  const saved=readSave();
-  const settings={aircraft:AIRCRAFT[saved.aircraft]?saved.aircraft:"passenger",level:APPROACHES.some(l=>l.id===saved.level)?saved.level:"training",assist:saved.assist!==false,guides:saved.guides!==false,invertPitch:saved.invertPitch===true,voice:saved.voice!==false,effects:saved.effects!==false,towerVoice:typeof saved.towerVoice==="string"?saved.towerVoice:"auto"};
-  const records=saved.records&&typeof saved.records==="object"?saved.records:{};
+export function createRunwayGlide(root, { editorOnly = false } = {}) {
+  if (editorOnly) return createFlightStudio(root, "runway");
+  const { records, ...settings } = readRunwaySave();
   let state=createFlight(settings.aircraft,settings.level,settings.assist),renderer=null,disposed=false,paused=false,frame=0,last=0,uiElapsed=0,view="chase",loading=true;
   let guidanceKey="",guidanceTime=-20,lastCaption="",lastPhase="ready";
   const keys=new Set(),touch={pitch:0,roll:0,rudder:0,brake:false},listeners=[];
   const audio=createRunwayAudio(settings);
   const wrapper=document.createElement("section");wrapper.className="rg-game";wrapper.setAttribute("aria-label","Runway Glide flight simulator");wrapper.setAttribute("aria-live","off");
   wrapper.innerHTML=`
-    <div class="rg-topline"><span class="rg-brand"><span class="rg-brand-mark" aria-hidden="true">RG</span> FLIGHT OPERATIONS</span><span class="rg-beta">3D FLIGHT</span></div>
+    <div class="rg-topline"><span class="rg-brand"><span class="rg-brand-mark" aria-hidden="true">RG</span> FLIGHT OPERATIONS</span><a class="flight-studio-link" href="#characters/runway">Aircraft studio &rarr;</a><span class="rg-beta">3D FLIGHT</span></div>
     <div class="rg-stage" tabindex="0" aria-label="3D flight view. W and S change pitch; A and D bank. Full controls below.">
       <canvas class="rg-canvas" aria-label="Your aircraft on final approach"></canvas>
       <div class="rg-loading" role="status"><span class="rg-loader"></span><strong>Preparing the approach</strong><span>Loading aircraft and airfield...</span></div>
@@ -62,7 +59,7 @@ export function createRunwayGlide(root) {
   const $=selector=>wrapper.querySelector(selector), $$=selector=>[...wrapper.querySelectorAll(selector)];
   const stage=$(".rg-stage"),canvas=$(".rg-canvas"),startButton=$(".rg-start"),pauseButton=$(".rg-pause"),result=$(".rg-result"),loadingPanel=$(".rg-loading"),caption=$(".rg-caption"),throttle=$(".rg-throttle input"),readouts=Object.fromEntries($$("[data-readout]").map(el=>[el.dataset.readout,el]));
   const on=(target,event,handler,options)=>{target.addEventListener(event,handler,options);listeners.push(()=>target.removeEventListener(event,handler,options));};
-  function save() { try {localStorage.setItem(SAVE_KEY,JSON.stringify({...settings,aircraft:state.aircraft.id,level:state.level.id,records}));}catch{$(".rg-save-note").textContent="Storage unavailable; records last for this visit.";} }
+  function save() { if (!writeFlightSettings("runway", {...settings,aircraft:state.aircraft.id,level:state.level.id,records})) $(".rg-save-note").textContent="Storage unavailable; records last for this visit."; }
   function announce(text,{urgent=false,speak=true,spoken=text}={}) {
     if(text!==lastCaption){caption.textContent=text;lastCaption=text;}
     if(speak)audio.speak(spoken,{urgent});
