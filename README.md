@@ -10,7 +10,7 @@ Use **Light** or **Dark** beside the home-page tagline to choose one interface t
 
 ## Games
 
-- **Hot & Cold** — Hunt down a mystery number with warmer/colder hints on every guess.
+- **Hot & Cold** — Hunt down a mystery number with an animated thermometer, higher/lower hints, and a trail of color-coded guesses. The original 11 number ranges, temperature thresholds, unlimited guesses, and best-score rules are preserved. The interface in `hot-cold.js` and `hot-cold.css` supports light/dark themes, small screens, keyboard input, and reduced motion.
 - **Flash Reflex** — Train your reaction speed by tapping the moment the panel lights up.
 - **Flappy Bird** — Customize birds (including a baby dragon and unlockable phoenix), pipes, backgrounds, accessories, and seven colors. Fly in side view or first-person 3D (Beta) across four difficulty levels, earn coins, and unlock new looks in the shop.
 - **Snake** — Glide through the garden and gobble up apples. Customize a Generic, Gardener, Python, or Rattlesnake skin in eight colors, add hats, glasses, and neckwear, and toggle music and sound effects.
