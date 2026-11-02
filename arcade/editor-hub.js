@@ -1,7 +1,8 @@
-import { GAME_PROFILES } from "./characters.js";
+import { STUDIO_GAMES as GAME_PROFILES } from "./games.js";
 import { createStudioPreview } from "./studio-preview.js";
 
 const STUDIOS = {
+  harmonic: { image: "assets/harmonic-echo-studio.svg", summary: "Arrange your instrument lineup and audition your collection.", description: "Seven free instruments and four shop voices. Choose which instruments occupy each pad, preview their sound and artwork, and save your ensemble for every new game." },
   catsdogs: { image: "assets/cats-dogs-cover-v3.jpg", summary: "Cat and dog breeds, coat colors, hand-placed patches, and accessories.", description: "Ten free breeds, Labrador coat colors, flame point Siamese, and your own coat painter. Save separate names, colors, patch designs and accessories for each pet. Preview the original artwork or try the 3D character (Beta)." },
   rocket: { image: "assets/rocket-boost-cover.png", summary: "Build your rocket and customize up to three astronauts.", description: "Rocket families, stages, all vehicle parts, colors, and your crew's faces, hair, pressure suits, and equipment. Preview the whole rocket or each astronaut in 2D or 3D (Beta)." },
   flappy: { image: "assets/flappy-bird-cover.svg", summary: "Birds, dragons, accessories, colors, backgrounds, and pipes.", description: "Every bird, accessory, trail, and individual color, plus a preview of your background and pipes." },
@@ -34,11 +35,17 @@ export function createCharacterLibrary(root, { gameId = null, mountEditor } = {}
         <div class="arcade-editor-toolbar"><label>Customize for<select aria-label="Character game">${Object.entries(GAME_PROFILES).map(([key, profile]) => `<option value="${key}">${profile.name}</option>`).join("")}</select></label><p class="arcade-editor-description">${STUDIOS[id].description}</p><a class="arcade-editor-play" href="${game.route}">Play ${game.name} &rarr;</a></div><div class="arcade-studio-layout"><div class="arcade-studio-preview-host"></div><div class="arcade-editor-host"></div></div>`;
       const select = wrapper.querySelector("select"); select.value = id;
       select.addEventListener("change", () => { location.hash = `#characters/${select.value}`; });
-      if (id === "rocket") {
-        wrapper.querySelector(".arcade-studio-preview-host").remove();
-        wrapper.querySelector(".arcade-studio-layout").classList.add("rb-library-layout");
+      if (id === "harmonic") {
+        wrapper.querySelector('.arcade-hero p:last-child').textContent = 'Arrange your instrument collection and hear each voice. Your changes save automatically.';
+        wrapper.querySelector('.arcade-hero a').href = '#store/harmonic';
+        wrapper.querySelector('.arcade-hero a').textContent = 'Find new instruments in the shop';
+        wrapper.querySelector('.arcade-editor-toolbar select').setAttribute('aria-label', 'Customization game');
       }
-      const preview = id === "rocket" ? { update() {}, dispose() {} } : createStudioPreview(wrapper.querySelector(".arcade-studio-preview-host"));
+      if (id === "rocket" || id === "harmonic") {
+        wrapper.querySelector(".arcade-studio-preview-host").remove();
+        wrapper.querySelector(".arcade-studio-layout").classList.add(id === "rocket" ? "rb-library-layout" : "he-library-layout");
+      }
+      const preview = id === "rocket" || id === "harmonic" ? { update() {}, dispose() {} } : createStudioPreview(wrapper.querySelector(".arcade-studio-preview-host"));
       const unmountEditor = mountEditor(id, wrapper.querySelector(".arcade-editor-host"), appearance => preview.update(id, appearance));
       cleanup = () => { unmountEditor?.(); preview.dispose(); };
       document.title = `Customize ${game.name} | games.cooper.tips`;
@@ -48,7 +55,7 @@ export function createCharacterLibrary(root, { gameId = null, mountEditor } = {}
       wrapper.scrollIntoView({ block: "start" });
     }
   }
-  function readRoute() { const match = /^#characters(?:\/(flappy|archery|snake|neondrift|redlight|rocket|catsdogs))?$/.exec(location.hash); if (match) show(match[1], true); }
+  function readRoute() { const match = /^#characters(?:\/(flappy|archery|snake|neondrift|redlight|rocket|catsdogs|harmonic))?$/.exec(location.hash); if (match) show(match[1], true); }
   window.addEventListener("hashchange", readRoute);
   show(gameId);
   return () => { window.removeEventListener("hashchange", readRoute); cleanup?.(); document.title = previousTitle; wrapper.remove(); };

@@ -13,6 +13,7 @@ import { createSpotClash } from "./spot-clash.js";
 import { createMuseumDetective } from "./museum-detective.js";
 import { createLightsDown } from "./lights-down.js";
 import { createSubmergedExplorer } from "./submerged-explorer.js";
+import { createHarmonicEcho } from "./harmonic-echo.js";
 import { createNeonDrift } from "./neon-drift.js";
 import { createSnakeAudio } from "./snake-audio.js";
 import { createAuroraArchery } from "./aurora-archery.js";
@@ -5236,321 +5237,11 @@ const games = [
   {
     id: "harmonic",
     name: "Harmonic Echo",
-    summary: "Repeat the melody by tapping glowing instruments.",
+    summary: "A small ensemble. A growing melody. Play it back.",
     description:
-      "Memorize the growing sequence of instruments and echo it back without a mistake. Choose your difficulty and see how long you can keep the groove alive.",
-    logo: "assets/harmonic-echo-cover.png",
-    init(root) {
-      const wrapper = document.createElement("div");
-      wrapper.className = "harmonic-game";
-
-      const status = document.createElement("div");
-      status.className = "harmonic-status";
-      status.textContent = "Pick a mode and press Start to begin.";
-
-      const controls = document.createElement("div");
-      controls.className = "harmonic-controls";
-
-      const modeGroup = document.createElement("div");
-      modeGroup.className = "harmonic-mode-group";
-
-      const modes = {
-        easy: { label: "Easy", instruments: 3, winLength: 12, description: "3 instruments" },
-        normal: { label: "Normal", instruments: 4, winLength: 20, description: "Classic quartet" },
-        hard: { label: "Hard", instruments: 5, winLength: 15, description: "Adds more on streak" },
-      };
-
-      const modeButtons = new Map();
-      Object.entries(modes).forEach(([key, config]) => {
-        const button = document.createElement("button");
-        button.type = "button";
-        button.className = "harmonic-mode-btn";
-        button.textContent = config.label;
-        button.setAttribute("aria-pressed", key === "normal" ? "true" : "false");
-        button.addEventListener("click", () => setMode(key));
-        modeButtons.set(key, button);
-        modeGroup.appendChild(button);
-      });
-
-      const startBtn = document.createElement("button");
-      startBtn.type = "button";
-      startBtn.className = "primary-btn";
-      startBtn.textContent = "Start";
-
-      controls.append(modeGroup, startBtn);
-
-      const scoreboard = document.createElement("div");
-      scoreboard.className = "harmonic-scoreboard";
-
-      const roundBadge = document.createElement("span");
-      roundBadge.className = "badge";
-      const bestBadge = document.createElement("span");
-      bestBadge.className = "badge";
-      const modeBadge = document.createElement("span");
-      modeBadge.className = "badge";
-      scoreboard.append(roundBadge, bestBadge, modeBadge);
-
-      const padGrid = document.createElement("div");
-      padGrid.className = "harmonic-pad-grid";
-
-      wrapper.append(status, controls, scoreboard, padGrid);
-      root.appendChild(wrapper);
-
-      const instrumentPool = [
-        { id: "kick", name: "Bing", frequency: 180, className: "pad-kick" },
-        { id: "snare", name: "Bang", frequency: 260, className: "pad-snare" },
-        { id: "hat", name: "Boom", frequency: 320, className: "pad-hat" },
-        { id: "chime", name: "Bop", frequency: 420, className: "pad-chime" },
-        { id: "synth", name: "Bleep", frequency: 510, className: "pad-synth" },
-        { id: "bell", name: "Blip", frequency: 580, className: "pad-bell" },
-        { id: "clap", name: "Buzz", frequency: 640, className: "pad-clap" },
-      ];
-
-      const state = {
-        mode: "normal",
-        availableCount: modes.normal.instruments,
-        sequence: [],
-        inputIndex: 0,
-        round: 0,
-        best: 0,
-        playing: false,
-        waitingForInput: false,
-        dynamismUnlocked: 0,
-        timeouts: new Set(),
-        audioCtx: null,
-        pads: new Map(),
-      };
-
-      buildPads();
-      renderScoreboard();
-      updateModeBadge();
-      updatePadVisibility();
-
-      startBtn.addEventListener("click", () => {
-        if (!state.audioCtx) {
-          state.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        }
-        startSequence();
-      });
-
-      function setMode(modeKey) {
-        if (!modes[modeKey]) return;
-        state.mode = modeKey;
-        state.availableCount = modes[modeKey].instruments;
-        state.sequence = [];
-        state.round = 0;
-        state.waitingForInput = false;
-        state.playing = false;
-        state.dynamismUnlocked = 0;
-        state.timeouts.forEach((id) => clearTimeout(id));
-        state.timeouts.clear();
-        status.textContent = `Mode set to ${modes[modeKey].label}. Press Start to play.`;
-        modeButtons.forEach((button, key) => {
-          button.setAttribute("aria-pressed", key === modeKey ? "true" : "false");
-        });
-        updateModeBadge();
-        updatePadVisibility();
-        renderScoreboard();
-      }
-
-      function buildPads() {
-        padGrid.textContent = "";
-        instrumentPool.forEach((instrument) => {
-          const button = document.createElement("button");
-          button.type = "button";
-          button.className = `harmonic-pad ${instrument.className}`;
-          button.textContent = instrument.name;
-          button.dataset.instrument = instrument.id;
-          button.addEventListener("click", () => handlePadPress(instrument.id));
-          padGrid.appendChild(button);
-          state.pads.set(instrument.id, button);
-        });
-      }
-
-      function updatePadVisibility() {
-        const activeIds = instrumentPool.slice(0, state.availableCount + state.dynamismUnlocked).map((ins) => ins.id);
-        state.pads.forEach((pad, id) => {
-          if (activeIds.includes(id)) {
-            pad.disabled = false;
-            pad.classList.remove("is-hidden");
-          } else {
-            pad.disabled = true;
-            pad.classList.add("is-hidden");
-          }
-        });
-      }
-
-      function startSequence() {
-        state.timeouts.forEach((id) => clearTimeout(id));
-        state.timeouts.clear();
-        state.sequence = [];
-        state.round = 0;
-        state.waitingForInput = false;
-        state.playing = true;
-        appendToSequence();
-      }
-
-      function appendToSequence() {
-        const available = instrumentPool.slice(0, state.availableCount + state.dynamismUnlocked);
-        const choice = available[Math.floor(Math.random() * available.length)];
-        state.sequence.push(choice.id);
-        state.round = state.sequence.length;
-        renderScoreboard();
-        playSequence();
-      }
-
-      function playSequence() {
-        state.waitingForInput = false;
-        let delay = 0;
-        state.sequence.forEach((instrumentId, index) => {
-          const timeoutId = window.setTimeout(() => {
-            triggerPad(instrumentId);
-            if (index === state.sequence.length - 1) {
-              state.waitingForInput = true;
-              state.inputIndex = 0;
-              status.textContent = "Your turn—repeat the melody.";
-            }
-          }, delay);
-          state.timeouts.add(timeoutId);
-          delay += 600;
-        });
-      }
-
-      function handlePadPress(instrumentId) {
-        if (!state.waitingForInput) return;
-        triggerPad(instrumentId);
-        const expected = state.sequence[state.inputIndex];
-        if (instrumentId !== expected) {
-          failSequence();
-          return;
-        }
-        state.inputIndex += 1;
-        if (state.inputIndex === state.sequence.length) {
-          state.waitingForInput = false;
-          if (state.round > state.best) {
-            state.best = state.round;
-          }
-          if (didWinRound()) {
-            handleWin();
-            return;
-          }
-          status.textContent = "Nice! Listen for the next note.";
-          const timeoutId = window.setTimeout(() => {
-            appendToSequence();
-          }, 900);
-          state.timeouts.add(timeoutId);
-        }
-      }
-
-      function didWinRound() {
-        const target = modes[state.mode].winLength;
-        if (state.mode !== "hard") {
-          return target && state.round >= target;
-        }
-        return state.round >= target;
-      }
-
-      function handleWin() {
-        state.waitingForInput = false;
-        state.playing = false;
-        status.textContent = "Perfect streak! Sequence mastered.";
-        if (state.mode === "hard") {
-          if (state.availableCount + state.dynamismUnlocked < instrumentPool.length) {
-            state.dynamismUnlocked += 1;
-            status.textContent += " Extra instrument unlocked!";
-            updatePadVisibility();
-          }
-        }
-        renderScoreboard();
-      }
-
-      function failSequence() {
-        state.waitingForInput = false;
-        state.playing = false;
-        state.sequence = [];
-        state.round = 0;
-        state.timeouts.forEach((id) => clearTimeout(id));
-        state.timeouts.clear();
-        renderScoreboard();
-        status.textContent = "Missed a note. Press Start to try again.";
-      }
-
-      function triggerPad(instrumentId) {
-        const instrument = instrumentPool.find((entry) => entry.id === instrumentId);
-        if (!instrument) return;
-        const pad = state.pads.get(instrumentId);
-        if (pad) {
-          pad.classList.add("is-active");
-          const timeoutId = window.setTimeout(() => {
-            pad.classList.remove("is-active");
-            state.timeouts.delete(timeoutId);
-          }, 260);
-          state.timeouts.add(timeoutId);
-        }
-        playSound(instrument.frequency);
-      }
-
-      function playSound(frequency) {
-        if (!state.audioCtx) {
-          state.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        }
-        const ctx = state.audioCtx;
-        const oscillator = ctx.createOscillator();
-        const gain = ctx.createGain();
-        const harmonics = [frequency, frequency * 2, frequency * 3];
-        const now = ctx.currentTime;
-
-        oscillator.type = "sine";
-        oscillator.frequency.value = frequency;
-        gain.gain.value = 0.22;
-
-        const harmonicOscillators = harmonics.slice(1).map((value, index) => {
-          const osc = ctx.createOscillator();
-          osc.type = index % 2 === 0 ? "triangle" : "square";
-          osc.frequency.value = value;
-          const harmonicGain = ctx.createGain();
-          harmonicGain.gain.value = 0.04;
-          osc.connect(harmonicGain);
-          harmonicGain.connect(gain);
-          osc.start(now);
-          osc.stop(now + 0.45);
-          return osc;
-        });
-
-        oscillator.connect(gain);
-        gain.connect(ctx.destination);
-        oscillator.start(now);
-        gain.gain.setValueAtTime(0.22, now);
-        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.4);
-        oscillator.stop(now + 0.45);
-
-        window.setTimeout(() => {
-          harmonicOscillators.forEach((osc) => {
-            try {
-              osc.disconnect();
-            } catch (error) {}
-          });
-        }, 500);
-      }
-
-      function updateModeBadge() {
-        modeBadge.textContent = `Mode: ${modes[state.mode].label}`;
-      }
-
-      function renderScoreboard() {
-        roundBadge.textContent = `Round: ${state.round}`;
-        bestBadge.textContent = `Best: ${state.best}`;
-      }
-
-      return () => {
-        state.timeouts.forEach((id) => clearTimeout(id));
-        state.timeouts.clear();
-        if (state.audioCtx && typeof state.audioCtx.close === "function") {
-          state.audioCtx.close().catch(() => {});
-        }
-        wrapper.remove();
-      };
-    },
+      "Listen to a melody, then echo it in order. Choose your difficulty and run length, earn coins, and build your own ensemble with instruments from the shared shop.",
+    logo: "assets/harmonic-echo-studio.svg",
+    init: createHarmonicEcho,
   },
   {
     id: "spotclash",
@@ -5777,7 +5468,7 @@ function renderRoute() {
     showHome();
     return;
   }
-  const storeRoute = /^store(?:\/(flappy|archery|snake|neondrift|rocket|memory|spotdiff|catsdogs))?$/.exec(hash);
+  const storeRoute = /^store(?:\/(flappy|archery|snake|neondrift|rocket|memory|spotdiff|catsdogs|harmonic))?$/.exec(hash);
   if (storeRoute) {
     showGame({ id: hash, name: "The Arcade Shop", description: "Earn coins in one game. Find something you love for another.", init: root => createArcadeShop(root, storeRoute[1] || "all") });
     return;
@@ -5785,7 +5476,7 @@ function renderRoute() {
   if (hash === "flappy/customize") {
     history.replaceState(null, "", "#characters/flappy"); renderRoute(); return;
   }
-  const characterRoute = /^characters(?:\/(flappy|archery|snake|neondrift|redlight|rocket|catsdogs))?$/.exec(hash);
+  const characterRoute = /^characters(?:\/(flappy|archery|snake|neondrift|redlight|rocket|catsdogs|harmonic))?$/.exec(hash);
   if (characterRoute) {
     if (activeId === "characters") return;
     showGame({ id: "characters", name: "Your Character Library", description: "Choose your game, then customize its characters, gear, and world.", init: root => createCharacterLibrary(root, { gameId: characterRoute[1], mountEditor: (id, host, onAppearanceChange) => games.find(game => game.id === id).init(host, { editorOnly: true, onAppearanceChange }) }) });
