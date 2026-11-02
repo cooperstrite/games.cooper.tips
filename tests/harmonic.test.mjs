@@ -7,6 +7,7 @@ import {createRewardSession} from '../arcade/game-services.js';
 import {createArcadeWallet} from '../arcade/wallet.js';
 import {STUDIO_GAMES} from '../arcade/games.js';
 import {charactersForGame} from '../arcade/characters.js';
+import {createEchoFinalePlayback,stepEchoFinale} from '../harmonic-finale.js';
 
 function advance(s,seconds){const events=[];for(let i=0;i<Math.ceil(seconds*120);i++)events.push(...stepEcho(s,1/120));return events;}
 function until(s,phase){const events=[];for(let i=0;i<20000&&s.phase!==phase;i++)events.push(...stepEcho(s,1/120));assert.equal(s.phase,phase);return events;}
@@ -222,4 +223,31 @@ test('rapid taps are bounded and device failure does not break the game',async t
   const {devices}=audioFixture(t),audio=createEchoAudio();for(let i=0;i<50;i++)audio.play('marimba');assert.ok(audio.activeVoices<=16);
   devices[0].advance(3);assert.equal(audio.activeVoices,0);audio.dispose();
   globalThis.AudioContext=class{constructor(){throw Error('Device unavailable');}};const absent=createEchoAudio();assert.equal(await absent.start(),false);assert.equal(absent.play('harp'),false);assert.doesNotThrow(()=>absent.dispose());
+});
+
+test('finales feature the equipped ensemble and the actual missed note without changing the result',()=>{
+  const lineup=['guitar','handpan','musicbox','celesta','kalimba','glass','strings'];
+  const s=createEcho({mode:'normal',target:3,lineup,random:()=>.4});
+  assert.equal(createEchoFinalePlayback(s),null);startEcho(s);until(s,'input');pressEcho(s,'guitar');
+  assert.equal(s.phase,'lost');const before=structuredClone({...s,random:null});
+  const clip=createEchoFinalePlayback(s);
+  assert.equal(clip.won,false);assert.equal(clip.expected.id,'handpan');assert.equal(clip.played.id,'guitar');
+  assert.deepEqual(clip.ensemble.map(i=>i.id),lineup.slice(0,4));
+  assert.equal(clip.cues.find(c=>c.time===1.52).frequency,ECHO_INSTRUMENTS[1].frequency,'correct note retains its customized pad pitch');
+  while(!clip.done)stepEchoFinale(clip,.05);
+  assert.deepEqual({...s,random:null},before,'presentation does not change scoring, phase or records');
+  const won=complete(createEcho({mode:'hard',target:3,lineup,unlocked:2}));
+  assert.equal(createEchoFinalePlayback(won).won,true);assert.equal(createEchoFinalePlayback(won).ensemble.length,7);
+});
+
+test('finale cues play once, pause freezes time, and reduced-motion endings stay brief',()=>{
+  const s=complete(createEcho({mode:'easy',target:3,random:()=>0})),clip=createEchoFinalePlayback(s),heard=[];
+  for(let i=0;i<12;i++)heard.push(...stepEchoFinale(clip,.05));
+  const elapsed=clip.elapsed,index=clip.nextCue;clip.paused=true;
+  assert.deepEqual(stepEchoFinale(clip,30),[]);assert.equal(clip.elapsed,elapsed);assert.equal(clip.nextCue,index);
+  clip.paused=false;stepEchoFinale(clip,Infinity);stepEchoFinale(clip,-1);assert.equal(clip.elapsed,elapsed);
+  while(!clip.done)heard.push(...stepEchoFinale(clip,.05));
+  assert.deepEqual(heard,clip.cues);assert.deepEqual(stepEchoFinale(clip,1),[]);
+  const reduced=createEchoFinalePlayback(s,{reducedMotion:true});assert.ok(reduced.duration<2);assert.equal(reduced.cues.length,2);
+  stepEchoFinale(reduced,30);assert.equal(reduced.elapsed,.08,'background stalls never skip the clip');
 });

@@ -5240,7 +5240,7 @@ const games = [
     summary: "A small ensemble. A growing melody. Play it back.",
     description:
       "Listen to a melody, then echo it in order. Choose your difficulty and run length, earn coins, and build your own ensemble with instruments from the shared shop.",
-    logo: "assets/harmonic-echo-studio.svg",
+    logo: "assets/harmonic-echo-cover.png",
     init: createHarmonicEcho,
   },
   {

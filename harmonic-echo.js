@@ -5,6 +5,7 @@ import { readEchoSettings, echoCoinGuide, echoRewardTotal } from './harmonic-con
 import { createHarmonicCustomizer } from './harmonic-customizer.js';
 import { getArcadeWallet } from './arcade/wallet.js';
 import { createRewardSession, mountGameWallet } from './arcade/game-services.js';
+import { createEchoFinale } from './harmonic-finale.js';
 
 const STORE='cooper-harmonic-echo-v2';
 const svg=path=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${path}</svg>`;
@@ -38,6 +39,8 @@ export function createHarmonicEcho(root,{editorOnly=false}={}){
   const wave=$('.he-wave'),context=wave.getContext('2d'),samples=new Float32Array(512),motion=matchMedia('(prefers-reduced-motion: reduce)');
   let state=freshState(),disposed=false,frame=0,last=0,phaseBefore='',starting=false,revision=0,flash=null,flashUntil=0,glowUntil=0,glowColor='#adcfc8',visualWidth=440,visualHeight=90,dpr=1,resultKey='',inputCount=-1,reward=null,bankMessage='',banked=false;
   const save=()=>{try{localStorage.setItem(STORE,JSON.stringify(progress));}catch{}};
+  function focusResult(){if(disposed)return;$('.he-result [data-action="review"]')?.focus({preventScroll:true});$('.he-result').scrollIntoView({behavior:motion.matches?'instant':'smooth',block:'nearest'});}
+  const finale=createEchoFinale(wrapper,{audio,onDone:focusResult,onSoundChange:value=>{audio.setEnabled(value);progress.sound=value;save();if(value)audio.start();sync();}});
   function freshState(){return createEcho({...progress,...readEchoSettings(wallet.getState().owned)});}
   function playNote(id,options){return audio.play(id,{...options,frequency:ECHO_INSTRUMENTS[state.lineup.indexOf(id)]?.frequency});}
   function renderPads(){
@@ -62,6 +65,8 @@ export function createHarmonicEcho(root,{editorOnly=false}={}){
       panel.dataset.outcome=won?'win':'loss';panel.innerHTML=`<div class="he-result-emblem">${won?ICONS.award:ICONS.listen}</div><div><p class="he-eyebrow">${won?'A PERFECT ENCORE':'EVERY MELODY TAKES PRACTICE'}</p><h4>${won?'Sequence mastered.':'One note off.'}</h4><p>${won?`You remembered all ${state.completed} notes in order. ${nextVoice?`${nextVoice.name} joins your next Hard run.`:'Your ensemble is in perfect harmony.'}`:`${state.completed} ${state.completed===1?'round':'rounds'} completed. At note ${state.mistake.index+1}, you played ${instrument(state.mistake.played).name}; the next instrument was ${instrument(state.mistake.expected).name}.`}</p><div class="he-recap" aria-label="The melody in order">${state.sequence.map((id,i)=>`<span style="--voice:${instrument(id).color}" class="${!won&&i===state.mistake.index?'is-expected':''}"><small>${i+1}</small>${instrument(id).name}</span>`).join('')}</div><div class="he-result-actions"><button type="button" data-action="review">${ICONS.listen}<span>Listen again</span></button><button type="button" data-action="start" class="he-primary">${ICONS.repeat}<span>${won?'Play another run':'Try again'}</span></button></div></div>`;
     }
     if(!$('.he-earned')){const p=document.createElement('p');p.className='he-earned';panel.querySelector('.he-result-actions').before(p);}
+    if(!$('[data-action="finale"]')){const b=document.createElement('button');b.type='button';b.dataset.action='finale';b.textContent='Replay finale';panel.querySelector('.he-result-actions').append(b);}
+    $('[data-action="finale"]').disabled=state.phase==='review';
     $('.he-earned').textContent=bankMessage;
     const review=$('[data-action="review"]');review.disabled=state.phase==='review';review.querySelector('span').textContent=state.phase==='review'?'Listening...':'Listen again';
   }
@@ -96,21 +101,21 @@ export function createHarmonicEcho(root,{editorOnly=false}={}){
     reward.award(state).then(result=>{if(disposed||state!==finished)return;bankMessage=total?`${result.coins} coins added to your shared wallet. ${state.completed} completed ${state.completed===1?'round':'rounds'}${state.mistake?'':', plus the completion bonus'}.`:bankMessage;sync();}).catch(()=>{if(disposed||state!==finished)return;bankMessage='Your coins could not be saved. Please check browser storage.';sync();});
   }
   async function begin(){
-    if(starting)return;starting=true;const current=++revision;audio.stop();clearFlash();state=freshState();reward=createRewardSession('harmonic',wallet);banked=false;bankMessage='';renderPads();makeSteps();sync();await audio.start();
+    if(starting||finale.active)return;starting=true;const current=++revision;audio.stop();clearFlash();state=freshState();reward=createRewardSession('harmonic',wallet);banked=false;bankMessage='';renderPads();makeSteps();sync();await audio.start();
     if(disposed||current!==revision)return;starting=false;startEcho(state);if(document.hidden)pauseEcho(state);makeSteps();sync();studio.scrollIntoView({behavior:motion.matches?'instant':'smooth',block:'center'});studio.focus({preventScroll:true});
   }
-  function resetSetup(){revision++;starting=false;audio.stop();clearFlash();save();state=freshState();reward=null;banked=false;bankMessage='';renderPads();makeSteps();sync();}
+  function resetSetup(){finale.cancel();revision++;starting=false;audio.stop();clearFlash();save();state=freshState();reward=null;banked=false;bankMessage='';renderPads();makeSteps();sync();}
   function setMode(mode){if(!Object.hasOwn(ECHO_MODES,mode))return;progress.mode=mode;resetSetup();}
   function pause(){if(state.paused){resumeEcho(state);audio.start();clearFlash();inputCount=-1;sync();studio.focus({preventScroll:true});}else if(pauseEcho(state)){audio.stop();clearFlash();sync();$('[data-action="resume"]').focus({preventScroll:true});}}
   function playPad(id){
-    if(disposed||starting||state.paused)return;
+    if(disposed||starting||state.paused||finale.active)return;
     if(['idle','won','lost'].includes(state.phase)){if(!state.lineup.slice(0,state.voices).includes(id))return;playNote(id,{duration:.5});illuminate(id,.42);return;}
     const answer=pressEcho(state,id);if(!answer.accepted)return;playNote(id,{duration:ECHO_MODES[state.mode].noteLength});illuminate(id,.3,!answer.correct);
     if(answer.roundComplete)record();
-    if(answer.finished){record();bank();if(answer.correct)audio.finish();else audio.miss();}
+    if(answer.finished){record();bank();}
     sync();
     if(answer.roundComplete||answer.finished)studio.focus({preventScroll:true});
-    if(answer.finished){$('.he-result [data-action="review"]').focus({preventScroll:true});$('.he-result').scrollIntoView({behavior:motion.matches?'instant':'smooth',block:'nearest'});}
+    if(answer.finished){clearFlash();finale.show(state);}
   }
   on(wrapper,'pointerdown',event=>{const pad=event.target.closest('[data-instrument]');if(!pad||pad.disabled||event.button!==0)return;event.preventDefault();studio.focus({preventScroll:true});playPad(pad.dataset.instrument);});
   on(wrapper,'click',event=>{const b=event.target.closest('button');if(!b||b.disabled)return;
@@ -118,13 +123,14 @@ export function createHarmonicEcho(root,{editorOnly=false}={}){
     if(b.dataset.mode){setMode(b.dataset.mode);return;}
     const action=b.dataset.action;if(action==='start')begin();if(action==='pause'||action==='resume')pause();
     if(action==='sound'){audio.setEnabled(!audio.enabled);progress.sound=audio.enabled;save();if(audio.enabled)audio.start();sync();}
+    if(action==='finale'){audio.start();finale.show(state);}
     if(action==='review'&&reviewEcho(state)){audio.stop();audio.start();clearFlash();inputCount=-1;sync();studio.scrollIntoView({behavior:motion.matches?'instant':'smooth',block:'nearest'});studio.focus({preventScroll:true});}
   });
   const volume=$('[aria-label="Sound volume"]');volume.value=String(Math.round(progress.volume*100));
   on($('[aria-label="Rounds to win"]'),'change',event=>{const value=Number(event.target.value);if(!event.target.checkValidity()){event.target.reportValidity();event.target.value=String(state.target);return;}progress.targets[progress.mode]=echoTarget(value,progress.mode);resetSetup();});
   on(volume,'input',()=>{progress.volume=Number(volume.value)/100;audio.setVolume(progress.volume);save();$('.he-audio-controls output').textContent=`${volume.value}%`;});
   on(wrapper,'keydown',event=>{
-    if(event.repeat||event.metaKey||event.ctrlKey||event.altKey||event.target.matches('input,select,textarea'))return;
+    if(finale.active||event.repeat||event.metaKey||event.ctrlKey||event.altKey||event.target.matches('input,select,textarea'))return;
     if(state.paused&&event.code==='Tab'){event.preventDefault();$('[data-action="resume"]').focus();return;}
     if(event.target.closest('button')&&['Enter','Space'].includes(event.code))return;
     const match=/^(?:Digit|Numpad)([1-7])$/.exec(event.code);
@@ -155,5 +161,5 @@ export function createHarmonicEcho(root,{editorOnly=false}={}){
     draw(now);frame=requestAnimationFrame(loop);
   }
   renderPads();makeSteps();sync();frame=requestAnimationFrame(loop);
-  return ()=>{disposed=true;revision++;cancelAnimationFrame(frame);observer.disconnect();abort.abort();audio.dispose();unmountWallet();wrapper.remove();};
+  return ()=>{disposed=true;revision++;finale.dispose();cancelAnimationFrame(frame);observer.disconnect();abort.abort();audio.dispose();unmountWallet();wrapper.remove();};
 }

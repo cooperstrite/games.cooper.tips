@@ -2,7 +2,7 @@ import { STUDIO_GAMES as GAME_PROFILES } from "./games.js";
 import { createStudioPreview } from "./studio-preview.js";
 
 const STUDIOS = {
-  harmonic: { image: "assets/harmonic-echo-studio.svg", summary: "Arrange your instrument lineup and audition your collection.", description: "Seven free instruments and four shop voices. Choose which instruments occupy each pad, preview their sound and artwork, and save your ensemble for every new game." },
+  harmonic: { image: "assets/harmonic-echo-cover.png", summary: "Arrange your instrument lineup and audition your collection.", description: "Seven free instruments and four shop voices. Choose which instruments occupy each pad, preview their sound and artwork, and save your ensemble for every new game." },
   catsdogs: { image: "assets/cats-dogs-cover-v3.jpg", summary: "Cat and dog breeds, coat colors, hand-placed patches, and accessories.", description: "Ten free breeds, Labrador coat colors, flame point Siamese, and your own coat painter. Save separate names, colors, patch designs and accessories for each pet. Preview the original artwork or try the 3D character (Beta)." },
   rocket: { image: "assets/rocket-boost-cover.png", summary: "Build your rocket and customize up to three astronauts.", description: "Rocket families, stages, all vehicle parts, colors, and your crew's faces, hair, pressure suits, and equipment. Preview the whole rocket or each astronaut in 2D or 3D (Beta)." },
   flappy: { image: "assets/flappy-bird-cover.svg", summary: "Birds, dragons, accessories, colors, backgrounds, and pipes.", description: "Every bird, accessory, trail, and individual color, plus a preview of your background and pipes." },
