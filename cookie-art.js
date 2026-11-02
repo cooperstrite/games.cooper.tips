@@ -8,11 +8,13 @@ function cookieOutline(recipe, radius = 49) {
   const points = Array.from({ length: recipe === "star" ? 10 : 40 }, (_, i) => {
     const a = i / (recipe === "star" ? 10 : 40) * Math.PI * 2 - Math.PI / 2;
     const r = recipe === "star" ? radius * (i % 2 ? .52 : 1) : radius + Math.sin(i * 1.7) * 1.4 + Math.cos(i * 2.7) * .7;
-    return `${(Math.cos(a) * r).toFixed(2)},${(Math.sin(a) * r).toFixed(2)}`;
+    return [Math.cos(a) * r, Math.sin(a) * r];
   });
-  return `M${points.join("L")}Z`;
+  if (recipe === 'star') return `M${points.map(point => point.join(',')).join('L')}Z`;
+  const midpoint = (a, b) => a.map((v, i) => ((v + b[i]) / 2).toFixed(2)).join(',');
+  return `M${midpoint(points.at(-1), points[0])}${points.map((point, i) => `Q${point.map(v => v.toFixed(2)).join(',')} ${midpoint(point, points[(i + 1) % points.length])}`).join('')}Z`;
 }
-function cookieDefinition(style, key) {
+export function cookieDefinition(style, key) {
   const recipe = look("recipe", style.recipe), outline = cookieOutline(recipe.id);
   const seeds = Array.from({ length: 70 }, (_, i) => {
     const a = i * 2.399963, r = Math.sqrt((i + .5) / 70) * 46, x = Math.cos(a) * r, y = Math.sin(a) * r;
