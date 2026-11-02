@@ -2,6 +2,7 @@ import { STUDIO_GAMES as GAME_PROFILES, PUBLIC_STUDIO_GAMES, STUDIO_VIEWS, PREVI
 import { createStudioPreview } from "./studio-preview.js";
 
 const STUDIOS = {
+  cookieclicker: { image: "assets/cookie-clicker-cover.png", summary: "Cookie styles, baking methods, kitchen tiles, and equipment colors.", description: "Make your bakery your own with the same animated artwork as the game. Choose included cookie styles or unlock more looks in the shop. All choices are cosmetic." },
   harmonic: { image: "assets/harmonic-echo-cover.png", summary: "Arrange your instrument lineup and audition your collection.", description: "Seven free instruments and four shop voices. Choose which instruments occupy each pad, preview their sound and artwork, and save your ensemble for every new game." },
   catsdogs: { image: "assets/cats-dogs-cover-v3.jpg", summary: "Cat and dog breeds, coat colors, hand-placed patches, and accessories.", description: "Ten free breeds, Labrador coat colors, flame point Siamese, and your own coat painter. Save separate names, colors, patch designs and accessories for each pet. Preview the original game artwork and ending poses." },
   rocket: { image: "assets/rocket-boost-cover.png", summary: "Build your rocket and customize up to three astronauts.", description: "Rocket families, stages, all vehicle parts, colors, and your crew's faces, hair, pressure suits, and equipment. Inspect the whole rocket or each astronaut in 3D (Beta)." },
@@ -47,10 +48,16 @@ export function createCharacterLibrary(root, { gameId = null, allowPreview = fal
         wrapper.querySelector('.arcade-hero a').textContent = 'Find new instruments in the shop';
         wrapper.querySelector('.arcade-editor-toolbar select').setAttribute('aria-label', 'Customization game');
       }
-      const nativePreview = id === "rocket" || id === "harmonic" || aircraft;
+      if (id === "cookieclicker") {
+        wrapper.querySelector('.arcade-hero h3').textContent = 'A bakery with your name on it.';
+        wrapper.querySelector('.arcade-hero a').href = '#store/cookieclicker';
+        wrapper.querySelector('.arcade-hero a').textContent = 'Find new bakery looks in the shop';
+        wrapper.querySelector('.arcade-editor-toolbar select').setAttribute('aria-label', 'Customization game');
+      }
+      const nativePreview = id === "rocket" || id === "harmonic" || id === "cookieclicker" || aircraft;
       if (nativePreview) {
         wrapper.querySelector(".arcade-studio-preview-host").remove();
-        wrapper.querySelector(".arcade-studio-layout").classList.add(id === "rocket" ? "rb-library-layout" : aircraft ? "flight-library-layout" : "he-library-layout");
+        wrapper.querySelector(".arcade-studio-layout").classList.add(id === "rocket" ? "rb-library-layout" : aircraft ? "flight-library-layout" : id === "cookieclicker" ? "cc-library-layout" : "he-library-layout");
       }
       const preview = nativePreview ? { update() {}, dispose() {} } : createStudioPreview(wrapper.querySelector(".arcade-studio-preview-host"), { gameId: id });
       const unmountEditor = mountEditor(id, wrapper.querySelector(".arcade-editor-host"), appearance => preview.update(id, appearance));

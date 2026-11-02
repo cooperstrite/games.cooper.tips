@@ -4,6 +4,7 @@ import { MEMORY_ITEMS } from "../memory-config.js";
 import { SPOTLIGHT_ITEMS } from "../spotlight-config.js";
 import { TUG_ITEMS } from "../cats-dogs-customization.js";
 import { ECHO_ITEMS } from "../harmonic-config.js";
+import { COOKIE_ITEMS } from "../cookie-config.js";
 
 export const STYLE_KITS = Object.freeze({
   aurora: {
@@ -18,6 +19,7 @@ export const STYLE_KITS = Object.freeze({
   },
 });
 export const ARCADE_ITEMS = Object.freeze([
+  ...COOKIE_ITEMS,
   ...ECHO_ITEMS,
   ...TUG_ITEMS,
   ...SPOTLIGHT_ITEMS,

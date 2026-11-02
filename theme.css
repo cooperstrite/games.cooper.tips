@@ -409,7 +409,7 @@
 :root[data-theme] .rb-game .rb-control-feedback.is-warning { color: var(--ui-gold); background: var(--ui-gold-soft); border-color: var(--ui-gold); }
 :root[data-theme] .rb-telemetry .is-danger { color: var(--ui-danger); }
 :root[data-theme] :is(.rb-flight-deck.rb-is-expanded, .rb-flight-deck:fullscreen) { background: var(--ui-page); }
-:root[data-theme] :is(.cookieclicker-total, .spotter-tail) { color: var(--ui-gold); }
+:root[data-theme] .spotter-tail { color: var(--ui-gold); }
 :root[data-theme] :is(.spotter-card, .archery-pause-overlay, .archery-result) { color: var(--ui-ink); background: var(--ui-soft); border-color: var(--ui-line); }
 :root[data-theme] :is(.archery-result p, .archery-pause-overlay span) { color: var(--ui-muted); }
 :root[data-theme] .archery-result .archery-final-score { color: var(--ui-gold); }
@@ -426,8 +426,6 @@
 :root[data-theme] .reaction-display.too-soon { border-color: var(--ui-danger); }
 :root[data-theme] .tone-cool { color: var(--ui-cool); }
 :root[data-theme] .foodchain-toggle.is-active { color: var(--ui-on-primary); background: var(--ui-primary); border-color: var(--ui-primary); }
-:root[data-theme] :is(.cookieclicker-btn, .cookieclicker-btn-label) { color: var(--ui-ink); }
-:root[data-theme] .cookieclicker-achievement.is-unlocked .cookieclicker-achievement-name { color: var(--ui-success); }
 :root[data-theme="dark"] .reaction-display.go { color: #0e101c; background: #ffffff; border-color: #ffffff; }
 :root[data-theme="light"] .reaction-display.go { color: #123c2e; background: #b4f4d4; border-color: #34875c; box-shadow: 0 0 35px #3db87840; }
 :root[data-theme="light"] .reaction-display.go :is(.reaction-time, .help-text) { color: #123c2e; }
