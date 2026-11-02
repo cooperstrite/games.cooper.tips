@@ -12,6 +12,7 @@ import { createNimDuel } from "./nim-duel.js";
 import { createSpotClash } from "./spot-clash.js";
 import { createMuseumDetective } from "./museum-detective.js";
 import { createLightsDown } from "./lights-down.js";
+import { createSubmergedExplorer } from "./submerged-explorer.js";
 import { createNeonDrift } from "./neon-drift.js";
 import { createSnakeAudio } from "./snake-audio.js";
 import { createAuroraArchery } from "./aurora-archery.js";
@@ -5589,27 +5590,11 @@ const games = [
   {
     id: "submerged",
     name: "Submerged Explorer",
-    summary: "Glide through ocean zones and complete underwater missions.",
+    summary: "A research sub. Five ocean zones. A world worth exploring.",
     description:
-      "Pilot a retro sub through five ocean zones, gather samples, and complete mission objectives while dodging hazards.",
-    logo: "assets/submerged.svg",
-    init(root) {
-      const wrapper = document.createElement("div");
-      wrapper.className = "submerged-frame";
-
-      const iframe = document.createElement("iframe");
-      iframe.src = "submerged.html";
-      iframe.title = "Submerged Explorer game";
-      iframe.loading = "lazy";
-      iframe.referrerPolicy = "no-referrer";
-
-      wrapper.appendChild(iframe);
-      root.appendChild(wrapper);
-
-      return () => {
-        wrapper.remove();
-      };
-    },
+      "Explore a living underwater world, scan wildlife and artifacts, navigate currents, and bring your discoveries home. Choose a research expedition or a relaxed dive, with full-screen exploration.",
+    logo: "assets/submerged-cover.png",
+    init: createSubmergedExplorer,
   },
   {
     id: "spotdiff",

@@ -2,7 +2,7 @@
 
 A little scoreboard for games.cooper.tips.
 
-**Updated:** November 01, 2026 at 01:58 PM EST
+**Updated:** November 01, 2026 at 07:32 PM EST
 
 **Visibility:** Project files only. This report is excluded from the published website.
 
@@ -10,40 +10,40 @@ A little scoreboard for games.cooper.tips.
 
 | Stat | Total |
 | --- | ---: |
-| Lines in our source files | **36,661** |
-| Nonblank source lines | 34,698 |
-| Source files written for this project | 208 |
-| Image files | **206** |
-| Total project files | **457** |
+| Lines in our source files | **35,968** |
+| Nonblank source lines | 34,162 |
+| Source files written for this project | 215 |
+| Image files | **210** |
+| Total project files | **469** |
 | Games | **29** |
 | Games on the main list | 26 |
 | Games in Coming Soon | 3 |
-| Test files | 30 |
-| Project size on disk | 192.1 MiB |
-| Image collection size | 153.5 MiB |
+| Test files | 31 |
+| Project size on disk | 199.5 MiB |
+| Image collection size | 160.8 MiB |
 
-At 50 lines per printed page, our source would fill **734 pages**.
+At 50 lines per printed page, our source would fill **720 pages**.
 
 ## Where the lines live
 
 | Area | Files | Lines |
 | --- | ---: | ---: |
 | Development tools | 4 | 415 |
-| Tests | 30 | 3,859 |
-| Website and games | 174 | 32,387 |
+| Tests | 31 | 4,034 |
+| Website and games | 180 | 31,519 |
 
 | Language | Files | Lines |
 | --- | ---: | ---: |
-| JavaScript | 188 | 28,211 |
-| CSS | 15 | 6,671 |
-| HTML | 3 | 1,576 |
+| JavaScript | 194 | 28,942 |
+| CSS | 16 | 6,692 |
 | Python | 2 | 203 |
+| HTML | 3 | 131 |
 
 ## Image collection
 
 | Format | Images |
 | --- | ---: |
-| PNG | 82 |
+| PNG | 86 |
 | WEBP | 50 |
 | SVG | 42 |
 | JPG | 31 |
@@ -53,24 +53,24 @@ At 50 lines per printed page, our source would fill **734 pages**.
 
 | File | Lines |
 | --- | ---: |
-| `script.js` | 5,865 |
-| `style.css` | 4,589 |
-| `submerged.html` | 1,457 |
+| `script.js` | 5,850 |
+| `style.css` | 4,572 |
 | `neon-drift.js` | 838 |
 | `theme.css` | 473 |
+| `aurora-archery.js` | 425 |
 
 ## All file types
 
 | Type | Files |
 | --- | ---: |
-| `.js` | 159 |
-| `.png` | 82 |
+| `.js` | 164 |
+| `.png` | 86 |
 | `.webp` | 50 |
 | `.svg` | 42 |
+| `.mjs` | 32 |
 | `.jpg` | 31 |
-| `.mjs` | 31 |
-| `.json` | 27 |
-| `.css` | 15 |
+| `.json` | 28 |
+| `.css` | 16 |
 | `.md` | 7 |
 | `.mp4` | 4 |
 | `.html` | 3 |

@@ -1,0 +1,25 @@
+{
+  "tool": "Built-in image_gen",
+  "assets": [
+    {
+      "path": "assets/submerged-research-sub.png",
+      "purpose": "Transparent playable research submarine.",
+      "prompt": "Use case: stylized-concept.\nAsset type: a single transparent-background side-view game sprite for a premium underwater exploration game.\nPrimary request: one beautifully detailed small unmanned ocean-research submarine, a polished cinematic 3D game render, isolated with genuine transparent background.\nSubject: compact streamlined golden-yellow and warm ivory pressure hull, rounded bow facing RIGHT, one large blue-glass observation dome at the front right, two smaller circular side portholes, realistic metal rims, subtle panel seams, small rivets, navy rubber trim, a dark rear ducted thruster at the LEFT, sturdy small landing skids below, restrained top antenna and survey sensors, tiny warm-white working lamps, a neat folded sampling arm beneath the front.\nComposition: strict side elevation viewed directly from the side, horizontal level craft, bow to the right; entire vehicle visible including thruster, skids and antenna; centered; vehicle fills 85 percent of image width, leave a transparent margin on all sides; wide landscape composition. No perspective view of its nose, no overhead view.\nMaterials and lighting: realistic enamel-coated metal with subtle worn edges, brushed fittings, layered blue glass reflections, soft natural light from above left, detailed enough to look like a small real research vehicle while keeping a clean readable silhouette at game size. Rich but restrained color, no heavy black illustration outlines.\nConstraints: only ONE submarine, no water, no seabed, no bubbles, no cast ground shadow, no light beams outside the object, no diver, no person, no text, no logo, no frame. Transparent background. No extra detached objects."
+    },
+    {
+      "path": "assets/submerged-shallows.png",
+      "purpose": "Distant environmental plate, blended with animated game scenery.",
+      "prompt": "Use case: stylized-concept. Asset type: wide landscape background plate for a premium side-view underwater exploration game. Primary request: a stunning cinematic underwater seascape viewed horizontally beneath a calm tropical sea, natural 3D game environmental art with realistic textures. Deep turquoise open water occupies the middle 65 percent of the image. Sunlight rays and subtle caustics filter through the water surface along the very top. Beautiful distant rocky reef outcrops, fine branching coral and golden-green kelp frame the far left, far right and lower edge. Hazy overlapping blue mountain-like reef silhouettes create strong atmospheric depth. Colorful corals are sparse accents: terracotta, pale peach, muted lavender. Everything is background scenery, with plenty of clear open water for a small vehicle to move across. High detail, convincing diffuse underwater light, rich but restrained colors, professional adventure-game look. Wide landscape composition. No vehicles, no people, no divers, no interface, no text, no border, no logos, no treasure, no large fish or foreground objects blocking the central space. Avoid a flat vector or cartoon look."
+    },
+    {
+      "path": "assets/submerged-depths.png",
+      "purpose": "Distant environmental plate, blended with animated game scenery.",
+      "prompt": "Use case: stylized-concept. Asset type: wide landscape background plate for the deep-water zones of a premium side-view underwater exploration game. Primary request: a stunning cinematic deep-ocean canyon seen horizontally underwater, high-end 3D game environmental art with realistic stone and mineral textures and atmospheric depth. Nearly black navy and deep teal open water occupies the middle 65 percent. Vast distant rocky canyon buttresses frame left and right and bottom edges, with small warm mineral chimneys at the lower edge and delicate sparse blue and turquoise bioluminescent anemones. Faint particulate catches reflected light; distant ridges dissolve gradually into misty blue-black water. Restrained amber geothermal glow near the lower left and soft cyan glints at the lower right. Readable layered silhouettes, believable natural materials, beautiful lighting. Wide landscape composition. Keep the central space open, quiet, dark and uncluttered for an independently animated submarine. No vehicle, no human, no diver, no giant monster, no large fish, no text, no labels, no interface, no frame. No sun or sky visible. Not horror. Avoid flat vector or cartoon style."
+    },
+    {
+      "path": "assets/submerged-cover.png",
+      "purpose": "Game cover captured from the same canvas renderer and generated assets used during play.",
+      "source": "submerged-renderer.js, createSubmergedRenderer(canvas, { cover: true }), 768x768, sub at (1400,700), time=4. Research interface markers hidden for the cover."
+    }
+  ]
+}
