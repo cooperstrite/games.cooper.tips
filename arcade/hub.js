@@ -45,9 +45,9 @@ export function createArcadeShop(root, initialGame = "all") {
     <details class="arcade-earning-guide"><summary>How to earn coins</summary><div>${Object.entries(EARNING_RULES).filter(([id]) => visibleGame(id)).map(([id, note]) => `<p><a href="${ARCADE_GAMES[id].route}">${ARCADE_GAMES[id].name}</a><span>${note}</span></p>`).join("")}</div>${previewGame ? '' : memoryShopCoinGuide(readMemorySettings(wallet.getState().owned).tiles)}<p>Coins and unlocks save in this browser.</p></details>`;
   if (previewGame) {
     wrapper.querySelector('.arcade-eyebrow').textContent = 'COMING SOON / TEMPORARY SHOP';
-    wrapper.querySelector('h3').textContent = `${ARCADE_GAMES[previewGame].name} finishes.`;
-    wrapper.querySelector('.arcade-hero p:last-child').textContent = 'Preview cosmetic finishes for your rocket and crew. Your existing purchases and shared coins are kept.';
-    const back = document.createElement('a'); back.className = 'arcade-text-link'; back.href = `#${previewGame}`; back.textContent = 'Back to Rocket Boost'; wrapper.prepend(back);
+    wrapper.querySelector('h3').textContent = `${ARCADE_GAMES[previewGame].name} shop.`;
+    wrapper.querySelector('.arcade-hero p:last-child').textContent = `Preview cosmetic looks for ${ARCADE_GAMES[previewGame].name}. Your existing purchases and shared coins are kept.`;
+    const back = document.createElement('a'); back.className = 'arcade-text-link'; back.href = `#${previewGame}`; back.textContent = `Back to ${ARCADE_GAMES[previewGame].name}`; wrapper.prepend(back);
   }
   root.append(wrapper);
   const filter = wrapper.querySelector("select"), onlyOwned = wrapper.querySelector("input"), grid = wrapper.querySelector(".arcade-item-grid"), status = wrapper.querySelector(".arcade-shop-status");

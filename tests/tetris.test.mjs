@@ -4,7 +4,7 @@ import {PIECE_NAMES,rotatedCells,islandCells,pieceSequence,TETRIS_LEVELS,TETRIS_
 import {createClassic,classicFits,classicAction,classicGhost,lockClassic,clearClassicRows,stepClassic,feedGorilla,gorillaRampage} from '../tetris-classic.js';
 import {createIslandRound,spawnIslandPiece,releaseIslandPiece,islandAction,stepIslandRound,landingHeight,bodyAngle,liftIsland,freezeIsland,castIslandSpell,islandFinishLine,rankIslandRound,disposeIslandRound,chooseIslandPlacement,createTetrisTournament,awardTournamentRound,tournamentStandings} from '../tetris-islands.js';
 import {ARCADE_ITEMS} from '../arcade/catalog.js';
-import {PUBLIC_STUDIO_GAMES,STUDIO_VIEWS} from '../arcade/games.js';
+import {STUDIO_GAMES,STUDIO_VIEWS} from '../arcade/games.js';
 import {createArcadeWallet} from '../arcade/wallet.js';
 import {createRewardSession,rewardTotal} from '../arcade/game-services.js';
 
@@ -98,7 +98,7 @@ test('custom tournaments preserve their order, cap at nine rounds, and never cou
 test('appearance is saved independently per player and paid skins never change mechanics',()=>{
   const store=storage(),owned=TETRIS_ITEMS.map(i=>i.id),w=readTetrisWardrobe(owned,store);w.players[0].hair='braids';w.players[0].robeColor='#123456';w.players[0].hairColor='#654321';w.players[1].name='River';writeTetrisWardrobe(w,owned,store);const saved=readTetrisWardrobe(owned,store);assert.equal(saved.players[0].hair,'braids');assert.equal(saved.players[0].hairColor,'#654321');assert.equal(saved.players[1].name,'River');assert.notEqual(saved.players[1].robeColor,'#123456');
   for(const item of TETRIS_ITEMS){assert.ok(ARCADE_ITEMS.some(i=>i.id===item.id));assert.notEqual(normalizeMage({[item.setting]:item.value})[item.setting],item.value);assert.equal(normalizeMage({[item.setting]:item.value},owned)[item.setting],item.value);}
-  assert.equal(normalizeMage({mass:0,gravity:0}).mass,undefined);assert.ok(PUBLIC_STUDIO_GAMES.tetris);assert.deepEqual(STUDIO_VIEWS.tetris,['2d']);store.setItem(TETRIS_STYLE_KEY,'invalid');assert.equal(readTetrisWardrobe([],store).players.length,4);
+  assert.equal(normalizeMage({mass:0,gravity:0}).mass,undefined);assert.ok(STUDIO_GAMES.tetris);assert.deepEqual(STUDIO_VIEWS.tetris,['2d']);store.setItem(TETRIS_STYLE_KEY,'invalid');assert.equal(readTetrisWardrobe([],store).players.length,4);
 });
 test('coin rewards need a completed active run and never pay local or solo island practice',()=>{
   const p={mode:'classic',finished:true,manual:5,seconds:20,lines:7,difficulty:'hard'};assert.equal(tetrisRewardTotal(p),21);assert.equal(rewardTotal('tetris',p),21);assert.equal(tetrisRewardTotal({...p,lines:10000}),40);

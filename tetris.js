@@ -7,6 +7,7 @@ import {createTetrisAudio} from './tetris-audio.js';
 import {createTetrisCustomizer} from './tetris-customizer.js';
 import {getArcadeWallet} from './arcade/wallet.js';
 import {createRewardSession} from './arcade/game-services.js';
+import {PREVIEW_ONLY_GAMES} from './arcade/games.js';
 
 const KEYS=[
   {ArrowLeft:'left',ArrowRight:'right',ArrowUp:'rotate',ArrowDown:'down',Space:'drop',KeyZ:'counter',KeyC:'hold',Digit1:'spell0',Digit2:'spell1',KeyB:'feed'},
@@ -40,7 +41,7 @@ export function createTetris(root,{editorOnly=false}={}) {
   const $=s=>wrap.querySelector(s),on=(node,event,fn,options={})=>node.addEventListener(event,fn,{...options,signal:abort.signal});
   function saveSettings(){try{localStorage.setItem(TETRIS_SETTINGS_KEY,JSON.stringify(settings));}catch{}}
   function announce(message){const el=$('.ti-live-status');if(el)el.textContent=message;}
-  function topLinks(){return `<div class="ti-top-links"><a href="#characters/tetris">Customize caster & blocks</a><a href="#store/tetris">Island shop</a><span class="ti-wallet">${wallet.getState().coins.toLocaleString()} arcade coins</span><button type="button" data-action="sound" aria-pressed="${audio.enabled}">${audio.enabled?'Sound on':'Sound off'}</button><button type="button" data-action="expand">${expanded?'Exit expanded view':'Expand game'}</button></div>`;}
+  function topLinks(){const temporary=PREVIEW_ONLY_GAMES.includes('tetris');return `<div class="ti-top-links"><a href="#characters/tetris">${temporary?'Temporary customization':'Customize caster & blocks'}</a><a href="#store/tetris">${temporary?'Temporary shop':'Island shop'}</a><span class="ti-wallet">${wallet.getState().coins.toLocaleString()} arcade coins</span><button type="button" data-action="sound" aria-pressed="${audio.enabled}">${audio.enabled?'Sound on':'Sound off'}</button><button type="button" data-action="expand">${expanded?'Exit expanded view':'Expand game'}</button></div>`;}
   function help(){return `<details class="ti-help"><summary>Controls, rules & coin earnings</summary><p>Drag or tap your board to aim, then use Rotate and Drop. Keyboard players can play together on one device; every human also gets touch controls. Released island pieces cannot be moved by hand. Escape pauses everyone.</p><table><thead><tr><th>Player</th><th>Keyboard</th></tr></thead><tbody>${KEY_NOTES.map((v,i)=>`<tr><th>${i+1}</th><td>${v}</td></tr>`).join('')}</tbody></table><p>${TETRIS_COIN_GUIDE}</p><p>Computers use the same piece sequence, gravity, islands, and legal controls as you. Their difficulty changes their planning and reaction speed. Every difficulty can make mistakes. Multiplayer here is shared-device play; no room codes or server are needed.</p></details>`;}
   function showSetup(){
     held.clear();pointerRepeat=null;drag=null;audio.pause();if(round?.players)disposeIslandRound(round);round=null;tournament=null;phase='setup';wrap.dataset.phase=phase;paused=false;

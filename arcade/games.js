@@ -16,7 +16,7 @@ export const ARCADE_GAMES = Object.freeze({
 export const STUDIO_GAMES = Object.freeze({ ...GAME_PROFILES, runway: ARCADE_GAMES.runway, freeflight: ARCADE_GAMES.freeflight, harmonic: ARCADE_GAMES.harmonic, cookieclicker: ARCADE_GAMES.cookieclicker, tetris: ARCADE_GAMES.tetris });
 
 // Keep unreleased saves and purchases valid, without advertising them in shared menus.
-export const PREVIEW_ONLY_GAMES = Object.freeze(["rocket"]);
+export const PREVIEW_ONLY_GAMES = Object.freeze(["rocket", "tetris"]);
 export const isPublicArcadeGame = id => Object.hasOwn(ARCADE_GAMES, id) && !PREVIEW_ONLY_GAMES.includes(id);
 export const PUBLIC_STUDIO_GAMES = Object.freeze(Object.fromEntries(Object.entries(STUDIO_GAMES).filter(([id]) => isPublicArcadeGame(id))));
 export const isShopItemVisible = (item, previewGame = null) => item.games.some(id => previewGame ? id === previewGame : isPublicArcadeGame(id));

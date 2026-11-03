@@ -39,7 +39,7 @@ export function createCharacterLibrary(root, { gameId = null, allowPreview = fal
       const temporary = PREVIEW_ONLY_GAMES.includes(id), aircraft = ['runway', 'freeflight'].includes(id);
       const choices = temporary ? { [id]: game } : PUBLIC_STUDIO_GAMES;
       const viewNote = STUDIO_VIEWS[id].length === 2 ? "Preview the original 2D cartoon animation or the rotatable 3D character (Beta)." : aircraft ? "Inspect the same 3D aircraft you fly in the game." : id === 'rocket' ? "Inspect your vehicle and crew in 3D (Beta)." : "Preview your choices with the original game artwork.";
-      wrapper.innerHTML = `<a class="arcade-editor-back arcade-text-link" href="${temporary ? game.route : '#characters'}">&larr; ${temporary ? 'Back to Rocket Boost' : 'All games'}</a><div class="arcade-hero"><div><p class="arcade-eyebrow">${game.name}${temporary ? ' / TEMPORARY CUSTOMIZATION' : ''}</p><h3>${aircraft ? 'Your personal hangar.' : 'Make it yours.'}</h3><p>${viewNote} Your changes save automatically.</p></div>${aircraft ? '' : `<a class="arcade-text-link" href="${temporary ? '#store/rocket' : '#store'}">${temporary ? 'Temporary shop' : 'Find new looks in the shop'} &rarr;</a>`}</div>
+      wrapper.innerHTML = `<a class="arcade-editor-back arcade-text-link" href="${temporary ? game.route : '#characters'}">&larr; ${temporary ? `Back to ${game.name}` : 'All games'}</a><div class="arcade-hero"><div><p class="arcade-eyebrow">${game.name}${temporary ? ' / TEMPORARY CUSTOMIZATION' : ''}</p><h3>${aircraft ? 'Your personal hangar.' : 'Make it yours.'}</h3><p>${viewNote} Your changes save automatically.</p></div>${aircraft ? '' : `<a class="arcade-text-link" href="${temporary ? `#store/${id}` : '#store'}">${temporary ? 'Temporary shop' : 'Find new looks in the shop'} &rarr;</a>`}</div>
         <div class="arcade-editor-toolbar"><label>Customize for<select aria-label="Character game">${Object.entries(choices).map(([key, profile]) => `<option value="${key}">${profile.name}</option>`).join("")}</select></label><p class="arcade-editor-description">${STUDIOS[id].description}</p><a class="arcade-editor-play" href="${game.route}">Play ${game.name} &rarr;</a></div><div class="arcade-studio-layout"><div class="arcade-studio-preview-host"></div><div class="arcade-editor-host"></div></div>`;
       const select = wrapper.querySelector("select"); select.value = id;
       select.addEventListener("change", () => { location.hash = `#characters/${select.value}`; });
@@ -57,7 +57,7 @@ export function createCharacterLibrary(root, { gameId = null, allowPreview = fal
       }
       if (id === "tetris") {
         wrapper.querySelector('.arcade-hero a').href = '#store/tetris';
-        wrapper.querySelector('.arcade-hero a').textContent = 'Find new island looks in the shop';
+        wrapper.querySelector('.arcade-hero a').textContent = temporary ? 'Temporary shop' : 'Find new island looks in the shop';
       }
       const nativePreview = id === "rocket" || id === "harmonic" || id === "cookieclicker" || id === "tetris" || aircraft;
       if (nativePreview) {

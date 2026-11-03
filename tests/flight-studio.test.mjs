@@ -12,15 +12,18 @@ function storage(initial = {}) {
   return { getItem: key => data.get(key) ?? null, setItem: (key, value) => data.set(key, value) };
 }
 
-test("hiding Rocket Boost leaves its owned cosmetics valid but out of the public shop and studios", () => {
-  const rocket = ARCADE_ITEMS.filter(item => item.games.includes("rocket"));
-  assert.ok(rocket.length > 0);
-  const saved = readArcadeState({ coins: 321, owned: rocket.map(item => item.id) });
-  assert.equal(saved.coins, 321); assert.equal(saved.owned.length, rocket.length);
+test("hiding preview games preserves owned cosmetics and isolates their shops and studios", () => {
   const publicItems = ARCADE_ITEMS.filter(item => isShopItemVisible(item));
-  assert.ok(publicItems.length); assert.ok(!publicItems.some(item => item.games.includes("rocket")));
-  assert.deepEqual(ARCADE_ITEMS.filter(item => isShopItemVisible(item, "rocket")), rocket);
-  assert.equal(PUBLIC_STUDIO_GAMES.rocket, undefined);
+  assert.ok(publicItems.length);
+  for (const game of ["rocket", "tetris"]) {
+    const cosmetics = ARCADE_ITEMS.filter(item => item.games.includes(game));
+    assert.ok(cosmetics.length > 0);
+    const saved = readArcadeState({ coins: 321, owned: cosmetics.map(item => item.id) });
+    assert.equal(saved.coins, 321); assert.equal(saved.owned.length, cosmetics.length);
+    assert.ok(!publicItems.some(item => item.games.includes(game)));
+    assert.deepEqual(ARCADE_ITEMS.filter(item => isShopItemVisible(item, game)), cosmetics);
+    assert.equal(PUBLIC_STUDIO_GAMES[game], undefined);
+  }
   assert.ok(PUBLIC_STUDIO_GAMES.runway && PUBLIC_STUDIO_GAMES.freeflight);
 });
 
