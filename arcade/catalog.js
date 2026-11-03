@@ -5,6 +5,7 @@ import { SPOTLIGHT_ITEMS } from "../spotlight-config.js";
 import { TUG_ITEMS } from "../cats-dogs-customization.js";
 import { ECHO_ITEMS } from "../harmonic-config.js";
 import { COOKIE_ITEMS } from "../cookie-config.js";
+import { TETRIS_ITEMS } from "../tetris-config.js";
 
 export const STYLE_KITS = Object.freeze({
   aurora: {
@@ -19,6 +20,7 @@ export const STYLE_KITS = Object.freeze({
   },
 });
 export const ARCADE_ITEMS = Object.freeze([
+  ...TETRIS_ITEMS,
   ...COOKIE_ITEMS,
   ...ECHO_ITEMS,
   ...TUG_ITEMS,

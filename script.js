@@ -27,6 +27,7 @@ import { createCharacterLibrary } from "./arcade/editor-hub.js";
 import { PREVIEW_ONLY_GAMES } from "./arcade/games.js";
 import { createHotCold } from "./hot-cold.js";
 import { createCookieClicker } from "./cookie-clicker.js";
+import { createTetris } from "./tetris.js";
 
 const games = [
   {
@@ -3539,6 +3540,14 @@ const games = [
     init: createCookieClicker,
   },
   {
+    id: "tetris",
+    name: "Tetris Isles",
+    summary: "Classic blocks, magical island races, and your own four-player cups.",
+    description: "Clear classic rows or build a tower with real tipping physics. Race, fit frozen puzzles, survive your supply, and create a tournament with friends or fair computer opponents.",
+    logo: "assets/tetris-cover.png",
+    init: createTetris,
+  },
+  {
     id: "neondrift",
     name: "Neon Drift",
     summary: "Choose your car, master wild roads, and outrun the traffic.",
@@ -4847,7 +4856,7 @@ function renderRoute() {
     handleLockedAttempt();
     return;
   }
-  const storeRoute = /^store(?:\/(flappy|archery|snake|neondrift|rocket|memory|spotdiff|catsdogs|harmonic|cookieclicker))?$/.exec(hash);
+  const storeRoute = /^store(?:\/(flappy|archery|snake|neondrift|rocket|memory|spotdiff|catsdogs|harmonic|cookieclicker|tetris))?$/.exec(hash);
   if (storeRoute) {
     showGame({ id: hash, name: "The Arcade Shop", description: "Earn coins in one game. Find something you love for another.", init: root => createArcadeShop(root, storeRoute[1] || "all") });
     return;
@@ -4855,7 +4864,7 @@ function renderRoute() {
   if (hash === "flappy/customize") {
     history.replaceState(null, "", "#characters/flappy"); renderRoute(); return;
   }
-  const characterRoute = /^characters(?:\/(flappy|archery|snake|neondrift|redlight|rocket|catsdogs|harmonic|runway|freeflight|cookieclicker))?$/.exec(hash);
+  const characterRoute = /^characters(?:\/(flappy|archery|snake|neondrift|redlight|rocket|catsdogs|harmonic|runway|freeflight|cookieclicker|tetris))?$/.exec(hash);
   if (characterRoute) {
     if (activeId === "characters") return;
     showGame({ id: "characters", name: "Your Character Library", description: "Choose your game, then customize its characters, gear, and world.", init: root => createCharacterLibrary(root, { gameId: characterRoute[1], allowPreview: lockedUnlocked, mountEditor: (id, host, onAppearanceChange) => games.find(game => game.id === id).init(host, { editorOnly: true, onAppearanceChange }) }) });

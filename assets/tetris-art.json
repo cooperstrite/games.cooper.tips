@@ -1,0 +1,8 @@
+{
+  "cover": "assets/tetris-cover.png",
+  "tool": "Built-in image_gen",
+  "prompt": "Use case: stylized-concept. Asset type: original browser arcade game cover illustration, landscape 3:2 composition. Primary request: a polished cartoon-realistic fantasy block-stacking game on tiny rocky islands above a turquoise ocean. A small friendly gender-neutral wizard in a rich midnight-teal robe and broad pointed hat stands on the left island, lifting a glowing golden four-square L-shaped block with a graceful visible ribbon of magic from a wooden wand. Several chunky jewel-colored tetromino blocks, visibly made of square cells with softly beveled edges, form a precarious colorful tower on the central grassy rocky island. A second distant island carries a shorter competing tower. Show a few tipsy angled blocks, warm sunlit stone, textured grass, little flowers, white sea foam, glimmering water and distant soft misty mountains. Beautiful handcrafted game illustration, refined dimensional surfaces, cinematic warm late-afternoon light, appealing shapes, crisp focal details, professional game cover. The wizard and blocks should be distinct and readable at thumbnail size. Original characters and scenery, no existing game characters, no text, no logos, no letters, no UI, no watermark. Keep the full tower in the composition with comfortable margins.",
+  "physics": "Locally vendored cannon-es 0.20.0, MIT. Bodies constrained to a 2D plane.",
+  "references": ["https://www.trickytowers.com/", "https://pmndrs.github.io/cannon-es/docs/classes/Body.html"],
+  "note": "Gameplay illustration, customizable avatar, blocks, scenery, particles, and UI are original Canvas/CSS artwork. No art or audio copied from Tricky Towers."
+}

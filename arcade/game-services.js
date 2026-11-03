@@ -7,8 +7,10 @@ import { spotlightRewardTotal } from "../spotlight-config.js";
 import { tugRewardTotal } from "../cats-dogs-customization.js";
 import { echoRewardTotal } from "../harmonic-config.js";
 import { COOKIE_COIN_GUIDE, cookieRewardTotal } from "../cookie-config.js";
+import { TETRIS_COIN_GUIDE, tetrisRewardTotal } from "../tetris-config.js";
 
 export const EARNING_RULES = Object.freeze({
+  tetris: TETRIS_COIN_GUIDE,
   cookieclicker: COOKIE_COIN_GUIDE,
   harmonic: "Easy pays 1 coin per completed round, Normal 2, and Hard 3. Completing your chosen run doubles its total. Coins bank when you win or miss. Sound checks, replays, and abandoned runs earn nothing. Shop instruments change artwork and sound, not the rules.",
   catsdogs: "Computer matches: Easy 3, Medium 5, Hard 8, Expert 12 coins per round you win, plus 8 / 16 / 28 / 45 for a match win. Maximums: 14 / 26 / 44 / 69. Rewards bank only at match end after at least 4 pulls. Local matches and abandoned matches earn nothing. All devices are free; shop items are cosmetic.",
@@ -24,6 +26,7 @@ const safeCount = value => Number.isSafeInteger(value) && value >= 0 ? value : 0
 const rate = (rates, key) => typeof key === "string" && Object.hasOwn(rates, key) ? rates[key] : 1;
 export function rewardTotal(gameId, progress = {}) {
   let total = 0;
+  if (gameId === "tetris") total = tetrisRewardTotal(progress);
   if (gameId === "cookieclicker") total = cookieRewardTotal(progress);
   if (gameId === "harmonic") total = echoRewardTotal(progress);
   if (gameId === "catsdogs") total = tugRewardTotal(progress);
