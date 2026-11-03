@@ -97,7 +97,7 @@ export function castIslandSpell(round,id,choice,targetId) {
     if(!target)return false;
   }
   p.spells=[];p.effects.push({kind:'cast',time:round.seconds,target:target.id});round.events.push({type:'spell',player:id,name,target:target.id});
-  if(target!==p&&target.buffs.shield){target.buffs.shield=false;target.effects.push({kind:'shield',time:round.seconds});return true;}
+  if(target!==p&&target.buffs.shield){target.buffs.shield=false;target.effects.push({kind:'shield',blocked:true,time:round.seconds});return true;}
   if(name==='anchor')target.buffs.anchor=true;
   if(name==='shield')target.buffs.shield=true;
   if(name==='steady'){target.buffs.calm=10;for(const item of target.pieces){item.body.velocity.scale(.35,item.body.velocity);item.body.angularVelocity.scale(.2,item.body.angularVelocity);}}

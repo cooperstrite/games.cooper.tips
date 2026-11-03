@@ -1,5 +1,5 @@
 import {TETRIS_SETTINGS_KEY,TETRIS_LEVELS,TETRIS_MODES,TETRIS_COIN_GUIDE,SPELLS,tetrisLevel,readTetrisWardrobe,writeTetrisWardrobe,normalizeTournament} from './tetris-config.js';
-import {createClassic,classicAction,stepClassic} from './tetris-classic.js';
+import {createClassic,classicAction,stepClassic,GORILLA_WARNING_SECONDS,GORILLA_URGENT_SECONDS} from './tetris-classic.js';
 import {createIslandRound,stepIslandRound,islandAction,castIslandSpell,rankIslandRound,disposeIslandRound,createTetrisTournament,awardTournamentRound,tournamentStandings,islandFinishLine} from './tetris-islands.js';
 import {drawClassicBoard,drawIslandBoard,drawTetrisPodium} from './tetris-renderer.js';
 import {tetrisEscape as esc} from './tetris-art.js';
@@ -15,6 +15,16 @@ const KEYS=[
   {Numpad4:'left',Numpad6:'right',Numpad8:'rotate',Numpad2:'down',Numpad0:'drop',Numpad7:'spell0',Numpad9:'spell1',Numpad5:'bank'},
 ];
 const KEY_NOTES=['Arrows to move/rotate; Space to drop; Z reverse; C hold or bank; 1/2 spells.','A/D move; W rotate; S soft drop; F release; Q/E spells; R bank.','J/L move; I rotate; K soft drop; U release; O/P spells; H bank.','Numpad 4/6 move; 8 rotate; 2 soft drop; 0 release; 7/9 spells; 5 bank.'];
+const SPELL_KEYS=[['1','2'],['Q','E'],['O','P'],['Num 7','Num 9']];
+const spellIcon=id=>`<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${{
+  anchor:'<path d="M16 5v17M10 11h12M7 19c0 10 18 10 18 0M7 19l-3 3m3-3 3 3m15-3 3 3m-3-3-3 3"/><circle cx="16" cy="6" r="3"/>',
+  shield:'<path d="m16 3 11 5v9c0 6-7 10-11 12C12 27 5 23 5 17V8z"/><path d="m16 9 2 4 5 .7-3.5 3.5.8 4.8-4.3-2.3-4.3 2.3.8-4.8L8 13.7l5-.7z"/>',
+  steady:'<path d="M4 11c4-4 8 4 12 0s8 4 12 0M4 18c4-4 8 4 12 0s8 4 12 0M9 25h14"/>',
+  gust:'<path d="M4 11h17c7 0 7-8 2-8-3 0-4 2-4 4M4 17h23M4 23h16c7 0 6 7 2 7-2 0-3-1-3-3"/>',
+  heavy:'<path d="M10 11h12l5 16H5zM13 11V7a3 3 0 0 1 6 0v4M16 15v8m-3-3 3 3 3-3"/>',
+  tilt:'<path d="m9 8 16 6-6 16-16-6zM7 3h14l5 5m0 0V3m0 5h-5"/>',
+}[id]||'<path d="m16 3 4 9 9 4-9 4-4 9-4-9-9-4 9-4z"/>'}</svg>`;
+const bananaIcon='<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M6 6c4 15 16 18 21 6-1 17-23 17-25-3z" fill="#f3ce59" stroke="#b78326" stroke-width="1.4"/><path d="M6 9c4 16 16 17 21 5" fill="none" stroke="#fff2ab" stroke-width="2"/><path d="m3 5 3-1 2 4-3 2z" fill="#77552d"/></svg>';
 const levels=(selected)=>TETRIS_LEVELS.map(l=>`<option value="${l.id}" ${l.id===selected?'selected':''}>${l.name}</option>`).join('');
 function readSettings(){let raw;try{raw=JSON.parse(localStorage.getItem(TETRIS_SETTINGS_KEY));}catch{}
   return {mode:Object.hasOwn(TETRIS_MODES,raw?.mode)?raw.mode:'classic',difficulty:tetrisLevel(raw?.difficulty).id,count:Math.max(1,Math.min(4,Math.floor(raw?.count)||2)),gorilla:raw?.gorilla===true,sound:raw?.sound!==false,best:Math.max(0,Number(raw?.best)||0),
@@ -25,7 +35,7 @@ export function createTetris(root,{editorOnly=false}={}) {
   if(editorOnly)return createTetrisCustomizer(root);
   const wallet=getArcadeWallet(),settings=readSettings(),abort=new AbortController(),audio=createTetrisAudio(settings.sound),media=matchMedia('(prefers-reduced-motion: reduce)');
   let wardrobe=readTetrisWardrobe(wallet.getState().owned),phase='setup',round=null,tournament=null,lineup=[],reward=null,roundToken=0,roundResults=[],paused=false,expanded=false,oldOverflow='',frame=0,lastTime=0,accumulator=0,lastUi=0,finaleStart=0,disposed=false;
-  const held=new Map(),views=new Map();let drag=null,pointerRepeat=null;
+  const held=new Map(),views=new Map(),notices=new Map();let drag=null,pointerRepeat=null;
   const wrap=document.createElement('section');wrap.className='ti-game';wrap.dataset.phase='setup';root.append(wrap);
   const $=s=>wrap.querySelector(s),on=(node,event,fn,options={})=>node.addEventListener(event,fn,{...options,signal:abort.signal});
   function saveSettings(){try{localStorage.setItem(TETRIS_SETTINGS_KEY,JSON.stringify(settings));}catch{}}
@@ -46,11 +56,12 @@ export function createTetris(root,{editorOnly=false}={}) {
   }
   function playersForGame(){return settings.players.slice(0,settings.mode==='classic'?1:settings.count).map((p,i)=>({...p,name:wardrobe.players[i].name||`Player ${i+1}`}));}
   function boardMarkup(p,i,classic){const style=wardrobe.players[i],human=p.kind==='human';
-    return `<article class="ti-board" data-board="${i}" style="--player-color:${style.robeColor}"><header><strong>${esc(p.name)}</strong><span>${human?`LOCAL PLAYER ${i+1}`:`${tetrisLevel(p.difficulty).name.toUpperCase()} COMPUTER`}</span></header><canvas class="ti-board-canvas" data-canvas="${i}" tabindex="0" role="img" aria-label="${esc(p.name)} ${classic?'Classic board':'island tower'}. ${human?'Use your keyboard or the controls below.':''}"></canvas><div class="ti-board-stats"></div><div class="ti-board-status"></div>
-      ${human?`<div class="ti-controls" role="group" aria-label="Controls for ${esc(p.name)}">${[['left','Left'],['rotate','Rotate'],['right','Right'],['down','Soft drop'],['drop','Drop'],[classic?'hold':'counter',classic?'Hold':'Turn back']].map(([key,label])=>`<button type="button" data-control="${key}" data-player="${i}" aria-label="Player ${i+1}: ${label}">${label}</button>`).join('')}${!classic&&round.mode==='puzzle'?`<button type="button" data-control="bank" data-player="${i}" style="grid-column:1/-1">Freeze &amp; bank</button>`:''}${classic&&settings.gorilla?`<button type="button" data-control="feed" data-player="0" class="ti-feed" style="grid-column:1/-1">Feed banana (B)</button>`:''}</div><div class="ti-powers" data-power-player="${i}"></div>`:''}</article>`;
+    const gorilla=classic&&settings.gorilla?`<section class="ti-gorilla-hud" aria-label="Gorilla hunger"><div class="ti-hunger-top"><div><span class="ti-hud-label">GORILLA WATCH</span><strong class="ti-hunger-title">The gorilla is calm</strong></div><div class="ti-hunger-countdown"><b class="ti-hunger-clock"></b><span>until smash</span></div></div><div class="ti-hunger-meter" role="progressbar" aria-label="Time remaining before the gorilla smashes blocks" aria-valuemin="0" aria-valuemax="42"><span></span></div><div class="ti-hunger-bottom"><p class="ti-hunger-detail"></p><button type="button" data-control="feed" data-player="0" class="ti-feed" aria-label="Feed banana (B)">${bananaIcon}<span>Feed banana</span><kbd>B</kbd></button></div></section>`:'';
+    return `<article class="ti-board" data-board="${i}" style="--player-color:${style.robeColor}"><header><strong>${esc(p.name)}</strong><span>${human?`LOCAL PLAYER ${i+1}`:`${tetrisLevel(p.difficulty).name.toUpperCase()} COMPUTER`}</span></header>${gorilla}<div class="ti-board-stage"><canvas class="ti-board-canvas" data-canvas="${i}" tabindex="0" role="img" aria-label="${esc(p.name)} ${classic?'Classic board':'island tower'}. ${human?'Use your keyboard or the controls below.':''}"></canvas>${!classic&&human?`<button type="button" class="ti-power-beacon" data-focus-powers="${i}" hidden>${spellIcon('power')}<span>POWER READY<small>Choose below / ${SPELL_KEYS[i].join(' or ')}</small></span></button>`:''}</div>${!classic&&human?`<section class="ti-powers" data-power-player="${i}" aria-label="${esc(p.name)} magic powers"></section>`:''}<div class="ti-board-stats"></div><div class="ti-board-status"></div>
+      ${human?`<div class="ti-controls" role="group" aria-label="Controls for ${esc(p.name)}">${[['left','Left'],['rotate','Rotate'],['right','Right'],['down','Soft drop'],['drop','Drop'],[classic?'hold':'counter',classic?'Hold':'Rotate back']].map(([key,label])=>`<button type="button" data-control="${key}" data-player="${i}" aria-label="Player ${i+1}: ${label}">${label}</button>`).join('')}${!classic&&round.mode==='puzzle'?`<button type="button" data-control="bank" data-player="${i}" style="grid-column:1/-1">Freeze &amp; bank</button>`:''}</div>`:''}<span class="ti-accessible-status" role="status" aria-live="polite" aria-atomic="true"></span></article>`;
   }
   function startRound(){
-    if(round?.players)disposeIslandRound(round);roundToken++;reward=createRewardSession('tetris');held.clear();pointerRepeat=null;drag=null;views.clear();paused=false;lastTime=0;accumulator=0;
+    if(round?.players)disposeIslandRound(round);roundToken++;reward=createRewardSession('tetris');held.clear();pointerRepeat=null;drag=null;views.clear();notices.clear();paused=false;lastTime=0;accumulator=0;
     const chosen=tournament?tournament.rounds[tournament.index]:settings,seed=(Date.now()+roundToken*971)>>>0;
     round=chosen.mode==='classic'?createClassic({difficulty:chosen.difficulty,gorilla:settings.gorilla,seed}):createIslandRound({mode:chosen.mode,difficulty:chosen.difficulty,players:lineup,seed});
     phase='playing';wrap.dataset.phase=phase;const classic=round.mode==='classic';
@@ -60,26 +71,53 @@ export function createTetris(root,{editorOnly=false}={}) {
   }
   function start(){saveSettings();lineup=playersForGame();tournament=settings.mode==='tournament'?createTetrisTournament(settings.rounds,lineup):null;startRound();}
   function runControl(id,action){if(phase!=='playing'||paused||document.hidden||lineup[id]?.kind!=='human')return false;
-    if(action.startsWith('spell')){const target=$(`[data-target="${id}"]`);return castIslandSpell(round,id,Number(action.at(-1)),Number(target?.value));}
+    if(action.startsWith('spell')){if(round.mode==='classic')return false;const target=$(`[data-target="${id}"]`),choice=Number(action.at(-1)),spell=round.players?.[id]?.spells[choice];const cast=castIslandSpell(round,id,choice,Number(target?.value));if(cast){const label=SPELLS[spell],other=round.players[Number(target?.value)];announce(`${lineup[id].name} used ${label.name}${label.kind==='trick'&&other?` on ${other.name}`:''}.`);renderUi();}return cast;}
     if(round.mode==='classic')return id===0?classicAction(round,action):false;
     return islandAction(round,id,action==='hold'?'bank':action);
   }
   function togglePause(){if(phase!=='playing')return;paused=!paused;held.clear();pointerRepeat=null;drag=null;lastTime=0;accumulator=0;paused?audio.pause():audio.resume();renderUi();}
-  function updatePowers(p){const host=$(`[data-power-player="${p.id}"]`);if(!host)return;const rivals=round.players.filter(o=>o.id!==p.id&&o.status==='building');const sig=`${p.spells.join(',')}:${rivals.map(o=>o.id)}:${p.status}`;if(host.dataset.signature===sig)return;host.dataset.signature=sig;
-    if(p.status!=='building'){host.replaceChildren();return;}
-    if(!p.spells.length){host.innerHTML=`<p>Next spell choice at ${p.nextSpellHeight} m of tower height. Powers are earned once per altitude.</p>`;return;}
-    host.innerHTML=`<p><strong>A spell is ready. Choose one:</strong></p><div class="ti-power-options">${p.spells.map((id,i)=>`<button type="button" data-spell="${i}" data-player="${p.id}" ${SPELLS[id].kind==='trick'&&!rivals.length?'disabled':''}>${SPELLS[id].name}<small>${SPELLS[id].description}</small></button>`).join('')}</div>${p.spells.some(id=>SPELLS[id].kind==='trick')?`<label>Target<select data-target="${p.id}" aria-label="Player ${p.id+1} spell target">${rivals.map(o=>`<option value="${o.id}">${esc(o.name)}</option>`).join('')}</select></label>`:''}`;
+  function updatePowers(p){
+    const host=$(`[data-power-player="${p.id}"]`);if(!host)return;
+    const board=host.closest('.ti-board'),beacon=board.querySelector('.ti-power-beacon'),ready=p.status==='building'&&p.spells.length>0;
+    board.dataset.powerState=ready?'ready':'waiting';beacon.hidden=!ready;beacon.disabled=paused||document.hidden;host.dataset.ready=String(ready);
+    const rivals=round.players.filter(o=>o.id!==p.id&&o.status==='building'),sig=`${p.spells.join(',')}:${rivals.map(o=>o.id)}:${p.status}:${p.nextSpellHeight}`;
+    if(host.dataset.signature!==sig){
+      const previousTarget=host.querySelector('[data-target]')?.value;host.dataset.signature=sig;
+      if(p.status!=='building'){host.innerHTML='<p class="ti-power-complete">Your magic is resting. Round finished.</p>';return;}
+      if(!ready){host.innerHTML=`<div class="ti-power-progress-label"><span>${spellIcon('power')} ${p.spellCount>=6?'ALL SPELLS EARNED':'BUILD TO EARN MAGIC'}</span><strong data-power-height></strong></div><div class="ti-power-meter" aria-hidden="true"><span></span></div><p class="ti-power-progress-note">${p.spellCount>=6?'Keep building toward your goal.':`Your next choice unlocks at ${p.nextSpellHeight} m.`}</p>`;}
+      else {
+        host.innerHTML=`<div class="ti-power-ready-title"><span>${spellIcon('power')} POWER READY</span><strong>Choose ONE</strong></div><p class="ti-power-ready-note">Keep building, or cast now. Your choice stays ready.</p><div class="ti-power-options">${p.spells.map((id,i)=>`<button type="button" data-spell="${i}" data-player="${p.id}" data-kind="${SPELLS[id].kind}" ${SPELLS[id].kind==='trick'&&!rivals.length?'disabled':''} aria-label="Player ${p.id+1}: ${SPELLS[id].name}. ${SPELLS[id].description} Press ${SPELL_KEYS[p.id][i]}."><span class="ti-spell-symbol">${spellIcon(id)}</span><span class="ti-spell-copy"><span class="ti-spell-category">${SPELLS[id].kind==='help'?'HELP YOUR TOWER':'AFFECT A RIVAL'}</span><strong>${SPELLS[id].name}</strong><small>${SPELLS[id].description}</small></span><kbd>${SPELL_KEYS[p.id][i]}</kbd></button>`).join('')}</div>${p.spells.some(id=>SPELLS[id].kind==='trick')?`<label class="ti-spell-target">Rival spell target<select data-target="${p.id}" aria-label="Player ${p.id+1} spell target">${rivals.length?rivals.map(o=>`<option value="${o.id}" ${String(o.id)===previousTarget?'selected':''}>${esc(o.name)}</option>`).join(''):'<option value="">No active rivals</option>'}</select></label>`:''}`;
+        if(notices.get(`power-${p.id}`)!==p.spellCount){notices.set(`power-${p.id}`,p.spellCount);board.querySelector('.ti-accessible-status').textContent=`${p.name}, your power is ready. Choose ${p.spells.map((id,i)=>`${SPELLS[id].name} with ${SPELL_KEYS[p.id][i]}`).join(' or ')}.`;}
+      }
+    }
+    if(!ready&&p.status==='building'){
+      const height=Math.max(0,p.stableTop-p.base),previous=Math.max(0,p.nextSpellHeight-4),progress=p.spellCount>=6?1:Math.max(0,Math.min(1,(height-previous)/4));
+      host.querySelector('[data-power-height]').textContent=p.spellCount>=6?'6 / 6':`${height.toFixed(1)} / ${p.nextSpellHeight} m`;
+      host.querySelector('.ti-power-meter span').style.width=`${progress*100}%`;
+    }
+  }
+  function updateGorilla(board){
+    const hud=board.querySelector('.ti-gorilla-hud');if(!hud)return;
+    const seconds=Math.max(0,Math.ceil(round.hunger)),danger=round.anger>0?'smashing':round.hunger<=GORILLA_URGENT_SECONDS?'urgent':round.hunger<=GORILLA_WARNING_SECONDS?'warning':'calm';
+    const fed=round.effects.some(effect=>effect.kind==='banana'&&round.seconds-effect.time<1);
+    board.dataset.hunger=danger;hud.dataset.hunger=danger;hud.dataset.fed=String(fed);
+    hud.querySelector('.ti-hunger-title').textContent=fed?'Banana delivered!':danger==='smashing'?'The gorilla is smashing!':danger==='urgent'?'Feed it before it smashes!':danger==='warning'?'The gorilla is getting hungry':'The gorilla is calm';
+    hud.querySelector('.ti-hunger-clock').textContent=`${seconds}s`;
+    const meter=hud.querySelector('.ti-hunger-meter');meter.setAttribute('aria-valuenow',String(seconds));meter.setAttribute('aria-valuetext',`${seconds} seconds until the next smash`);meter.firstElementChild.style.width=`${Math.max(0,Math.min(1,round.hunger/42))*100}%`;
+    const needed=2-round.lines%2;hud.querySelector('.ti-hunger-detail').textContent=round.bananas?`${round.bananas} ${round.bananas===1?'banana':'bananas'} ready / press B or tap Feed`:`No bananas. Clear ${needed} ${needed===1?'line':'lines'} to earn one.`;
+    if(notices.get('hunger')!==danger){notices.set('hunger',danger);if(danger!=='calm')board.querySelector('.ti-accessible-status').textContent=danger==='smashing'?'The gorilla smashed your blocks.':`Gorilla ${danger==='urgent'?'urgent warning':'warning'}: ${seconds} seconds left. ${round.bananas?'Press B or use Feed banana.':`Clear ${needed} ${needed===1?'line':'lines'} to earn a banana.`}`;}
   }
   function renderUi(){
     if(phase!=='playing')return;
     const classic=round.mode==='classic',clock=$('.ti-clock');clock.textContent=classic?`${Math.floor(round.seconds/60)}:${String(Math.floor(round.seconds%60)).padStart(2,'0')}`:`${Math.ceil(Math.max(0,round.level.limit-round.seconds))}s until sunset`;
-    const isPaused=paused||document.hidden;$('.ti-paused-note').hidden=!isPaused;$('[data-action="pause"]').textContent=paused?'Resume':'Pause';
+    const isPaused=paused||document.hidden;wrap.dataset.paused=String(isPaused);$('.ti-paused-note').hidden=!isPaused;$('[data-action="pause"]').textContent=paused?'Resume':'Pause';
     for(let i=0;i<lineup.length;i++){const board=$(`[data-board="${i}"]`),p=classic?round:round.players[i];
       const stats=classic?[['SCORE',round.score.toLocaleString()],['LINES',round.lines],['LEVEL',round.level]]:round.mode==='survival'?[['LEFT',Math.max(0,round.level.supply-p.retained)],['LIVES',Math.max(0,3-p.lost)],['KEPT',p.retained]]:round.mode==='puzzle'?[['KEPT',p.retained],['ISLAND',`${p.base.toFixed(1)} m`],['LOST',p.lost]]:[['HEIGHT',`${Math.max(0,p.top-p.base).toFixed(1)} m`],['FINISH',`${islandFinishLine(round).toFixed(1)} m`],['KEPT',p.retained]];
       board.querySelector('.ti-board-stats').innerHTML=stats.map(([label,value])=>`<span>${label}<strong>${value}</strong></span>`).join('');
-      const status=classic?(round.gorilla?`Gorilla: ${Math.ceil(round.hunger)}s until hungry / ${round.bananas} bananas`:'Keep the stack below the top.'):p.status==='building'?[p.buffs.anchor?'Next piece anchored':'',p.buffs.shield?'Shield ready':'',p.buffs.heavy?'Heavy piece next':'',p.buffs.tilt?'Tilted piece next':'',p.raceHold>0?'Hold steady...':''].filter(Boolean).join(' / ')||`${p.retained} ${p.retained===1?'piece':'pieces'} held by your tower.`:p.status==='out'?'Three lost pieces. Your run is over.':p.status==='complete'?'Supply or finish reached!':p.status==='finished'?'Round complete. Your final height and pieces are recorded.':'Your tower is frozen. Watching the other players.';
+      const status=classic?(round.gorilla?'Every two cleared lines earn a banana. Feed before the countdown reaches zero.':'Keep the stack below the top. Complete a full row to clear it.'):p.status==='building'?[p.buffs.anchor?'Next piece anchored':'',p.buffs.shield?'Shield ready':'',p.buffs.heavy?'Heavy piece next':'',p.buffs.tilt?'Tilted piece next':'',p.raceHold>0?'Hold steady...':''].filter(Boolean).join(' / ')||(!p.active&&p.pending?'Piece landing. Watch its balance.':`${p.retained} ${p.retained===1?'piece':'pieces'} held by your tower.`):p.status==='out'?'Three lost pieces. Your run is over.':p.status==='complete'?'Supply or finish reached!':p.status==='finished'?'Round complete. Your final height and pieces are recorded.':'Your tower is frozen. Watching the other players.';
       board.querySelector('.ti-board-status').textContent=status;
-      for(const button of board.querySelectorAll('[data-control]'))button.disabled=isPaused||(!classic&&p.status!=='building')||(button.dataset.control==='feed'&&!round.bananas)||(button.dataset.control==='hold'&&round.held);
+      if(classic&&round.gorilla)updateGorilla(board);
+      for(const button of board.querySelectorAll('[data-control]'))button.disabled=isPaused||(!classic&&(p.status!=='building'||(!p.active&&button.dataset.control!=='bank')))||(button.dataset.control==='feed'&&!round.bananas)||(button.dataset.control==='hold'&&round.held);
       if(!classic){updatePowers(p);for(const button of board.querySelectorAll('[data-spell]'))button.disabled=isPaused||p.status!=='building'||(SPELLS[p.spells[Number(button.dataset.spell)]]?.kind==='trick'&&!round.players.some(o=>o.id!==p.id&&o.status==='building'));}
     }
   }
@@ -100,6 +138,7 @@ export function createTetris(root,{editorOnly=false}={}) {
   function expand(){expanded=!expanded;wrap.classList.toggle('ti-expanded',expanded);if(expanded){oldOverflow=document.body.style.overflow;document.body.style.overflow='hidden';}else document.body.style.overflow=oldOverflow;$('[data-action="expand"]').textContent=expanded?'Exit expanded view':'Expand game';}
   on(wrap,'click',event=>{
     const button=event.target.closest('button');if(!button||button.disabled)return;
+    if(button.dataset.focusPowers!==undefined){const host=$(`[data-power-player="${button.dataset.focusPowers}"]`);host.scrollIntoView({block:'nearest',behavior:media.matches?'instant':'smooth'});host.querySelector('[data-spell]:not(:disabled)')?.focus({preventScroll:true});return;}
     if(button.dataset.mode){settings.mode=button.dataset.mode;saveSettings();showSetup();return;}
     if(button.dataset.control){if(event.detail===0)runControl(Number(button.dataset.player),button.dataset.control);return;}
     if(button.dataset.spell!==undefined){runControl(Number(button.dataset.player),`spell${button.dataset.spell}`);renderUi();return;}
@@ -127,7 +166,10 @@ export function createTetris(root,{editorOnly=false}={}) {
     for(let n=0;n<30&&Math.abs(active.x-target)>.1;n++)if(!runControl(id,active.x<target?'right':'left'))break;
   }
   on(wrap,'pointerdown',event=>{const control=event.target.closest('[data-control]'),canvas=event.target.closest('[data-canvas]');if(control&&!control.disabled){event.preventDefault();const id=Number(control.dataset.player),action=control.dataset.control;runControl(id,action);if(['left','right','down'].includes(action))pointerRepeat={id,action,delay:.18,pointer:event.pointerId};control.setPointerCapture?.(event.pointerId);}
-    else if(canvas){event.preventDefault();canvas.focus({preventScroll:true});drag={canvas,pointer:event.pointerId};canvas.setPointerCapture?.(event.pointerId);aim(canvas,event.clientX);}
+    else if(canvas){event.preventDefault();canvas.focus({preventScroll:true});
+      const id=Number(canvas.dataset.canvas),view=views.get(id),rect=canvas.getBoundingClientRect();
+      if(round?.mode==='classic'&&round.gorilla&&view&&event.clientX-rect.left>=view.x+10*view.unit+10&&event.clientY-rect.top>=rect.height-220){runControl(id,'feed');return;}
+      drag={canvas,pointer:event.pointerId};canvas.setPointerCapture?.(event.pointerId);aim(canvas,event.clientX);}
   });
   on(wrap,'pointermove',event=>{if(drag?.pointer===event.pointerId)aim(drag.canvas,event.clientX);});
   on(window,'pointerup',()=>{pointerRepeat=null;drag=null;});on(window,'pointercancel',()=>{pointerRepeat=null;drag=null;});

@@ -1,0 +1,17 @@
+{
+  "tool": "Built-in image_gen",
+  "reference": "assets/tetris-cover.png",
+  "assets": [
+    {
+      "path": "assets/tetris-seascape.png",
+      "purpose": "Painted ocean, mountains, and sky used during gameplay.",
+      "prompt": "Use case: stylized-concept. Asset type: a finished high-resolution painted backdrop for a fantasy island block-stacking browser game. Input image is a STYLE REFERENCE only: match its polished dimensional storybook game illustration, warm late-afternoon lighting, painterly realistic stone and sea, jewel blue water, soft distant atmosphere. Create a NEW environment-only image with NO characters, NO towers, NO blocks, NO foreground island, NO interface or text. Composition: landscape 3:2 panorama, horizon around the middle, luminous turquoise ocean filling the bottom half with detailed small wavelets and warm sunlight glitter, a few tiny rocky green islands FAR AWAY along the horizon, majestic forested stone mountains framing both distant sides, soft sea mist. Warm peach and ivory clouds on a blue sky filling the upper half, the low sun toward upper right. Keep the center quiet and low-contrast so bright colored falling blocks will remain readable over this backdrop. The nearest water at bottom has beautiful blue-green depth, painted ripples and scattered foam only beside distant rocks, not random white foam everywhere. Professional richly textured stylized 3D animation-film background painted as one seamless scene, exquisite light, appealing and bright, not a flat vector drawing. Edge-to-edge image. No platform, magician, character, animal, tetromino, buildings, lettering, watermark or frame."
+    },
+    {
+      "path": "assets/tetris-island.png",
+      "purpose": "Transparent textured grass and rock platform; rendered at the existing collision surface.",
+      "prompt": "Use case: stylized-concept. Asset type: one isolated transparent foreground island sprite for the fantasy island block stacking game. Input image is a STYLE REFERENCE only, match its richly painted realistic-cartoon stone, wildflowers, luminous grass and warm sunshine. Create ONE wide low rocky island platform, alone against genuine transparent alpha, in a 2:1 wide image. Camera faces the island almost straight on, looking down only very slightly: the grass surface must have a STRAIGHT LEVEL HORIZONTAL playable edge, no hill or slope. The flat grassy landing surface runs across the middle 75 percent of the width, with a shallow depth visible behind that edge. Below it: a richly detailed broad outcrop of warm tan and gray fractured cliff rock, crevices, moss, grassy overhang, small daisy flowers and tiny pink blossoms, trailing leaves around the rim. A little natural pale sea foam curls around the bottom of the rock. At its widest the cliff roughly matches the grass width, not a pyramid or a pedestal. Height of the stone face about one-third of its full width. All edges visible with a 5 percent transparent margin, asset centered. Warm sunlight from the upper right and soft cool shadows in rock cracks. Elegant dimensional storybook game art as detailed as the supplied reference, not flat geometric vector art. NO magician, character, tower, blocks, sky, background, full ocean, text, frame, ground plane or checkerboard. Transparent background outside the island and its small foam fringe."
+    }
+  ],
+  "note": "Scene colors and subtle water movement are rendered in Canvas. Block materials, customized characters, gorilla animation, and game effects are procedural and retain their original gameplay geometry."
+}
