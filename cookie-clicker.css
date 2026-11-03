@@ -251,3 +251,53 @@
 @media (prefers-reduced-motion: reduce) {
   .cc-game *, .cc-preview *, .cc-studio * { animation: none !important; scroll-behavior: auto !important; transition: none !important; }
 }
+
+/* A growing floor plan and a guided view of the live, unpaused factory. */
+.cc-factory-toolbar { display:flex; align-items:center; justify-content:space-between; gap:18px; padding:14px 22px; border-top:1px solid var(--ui-line); background:var(--ui-soft); }
+.cc-factory-toolbar h5 { font:500 1.06rem Georgia,serif; margin-top:3px; }
+.cc-factory-toolbar button,.cc-tour-controls button,.cc-bay-tabs button { min-height:42px; padding:10px 14px; border:1px solid var(--ui-line); border-radius:9px; background:var(--ui-panel); color:var(--ui-ink); font-size:.74rem; font-weight:600; touch-action:manipulation; }
+.cc-factory-toolbar button { color:var(--ui-accent); border-color:var(--ui-accent); white-space:nowrap; }
+.cc-factory-toolbar button:hover,.cc-tour-controls button:hover,.cc-bay-tabs button:hover { background:var(--ui-hover); }
+.cc-factory-tour { padding:19px 22px 17px; background:linear-gradient(120deg,var(--ui-gold-soft),var(--ui-panel)); border-top:1px solid var(--ui-line); border-bottom:1px solid var(--ui-line); }
+.cc-tour-top { display:flex; align-items:center; gap:14px; margin-bottom:10px; }
+.cc-tour-running { font-size:.62rem; color:var(--ui-success); margin-left:auto; }
+.cc-tour-running::before { content:''; display:inline-block; width:5px; height:5px; border-radius:50%; background:currentColor; margin-right:6px; }
+.cc-tour-top button { width:34px; height:34px; flex-shrink:0; padding:0; display:grid; place-items:center; line-height:1; border:1px solid var(--ui-line); border-radius:50%; background:var(--ui-panel); color:var(--ui-muted); font-size:1.2rem; }
+.cc-factory-tour h5 { font:500 1.3rem Georgia,serif; }
+.cc-tour-story { max-width:760px; font-size:.78rem; line-height:1.75; color:var(--ui-muted); margin-top:8px!important; }
+.cc-tour-controls { display:flex; align-items:center; gap:8px; margin-top:15px; }
+.cc-tour-controls button:disabled { opacity:.45; }
+.cc-game .cc-tour-controls [data-tour=next] { background:var(--ui-primary); color:var(--ui-on-primary); border-color:var(--ui-primary); }
+.cc-tour-progress { flex:1; height:3px; background:var(--ui-line); border-radius:5px; overflow:hidden; margin:0 12px; }
+.cc-tour-progress::before { content:''; display:block; width:var(--tour-progress,0%); height:100%; background:var(--ui-gold); }
+.cc-production-art { min-width:min(var(--cc-floor-width,1050px),1700px); aspect-ratio:var(--cc-floor-ratio,1640 / 560); }
+.cc-production[data-tour=true] .cc-production-art { width:100%; min-width:0; height:420px; }
+.cc-production[data-tour=true] .cc-line-viewport { overflow:hidden; }
+.cc-warehouse { padding:19px 22px 15px; border-top:1px solid var(--ui-line); background:var(--ui-soft); }
+.cc-warehouse-heading { display:flex; align-items:center; justify-content:space-between; gap:14px; margin-bottom:12px; }
+.cc-warehouse-heading p { font-size:.72rem; line-height:1.6; color:var(--ui-muted); margin-top:4px; }
+.cc-warehouse-heading > span { flex-shrink:0; color:var(--ui-accent); font-size:.7rem; }
+.cc-warehouse-map { overflow-x:auto; border-radius:11px; }
+.cc-warehouse-map svg { display:block; width:100%; min-width:620px; }
+.cc-bay-tabs { display:flex; flex-wrap:wrap; gap:6px; margin-top:12px; }
+.cc-bay-tabs button { min-height:36px; padding:7px 13px; }
+.cc-bay-tabs button[aria-pressed=true] { color:var(--ui-on-primary); background:var(--ui-primary); border-color:var(--ui-primary); }
+.cc-expansion { display:flex; align-items:center; justify-content:space-between; gap:28px; padding:21px 22px; border-top:1px solid var(--ui-line); background:var(--ui-panel); }
+.cc-expansion h5 { font:500 1.16rem Georgia,serif; margin:5px 0; }
+.cc-expansion p { font-size:.7rem; line-height:1.65; color:var(--ui-muted); max-width:540px; }
+.cc-expansion .cc-line-yield { color:var(--ui-accent); margin:6px 0; font-variant-numeric:tabular-nums; }
+.cc-buy-line { flex-shrink:0; display:grid; gap:5px; min-width:190px; min-height:61px; padding:12px 17px; border:1px solid var(--ui-primary); border-radius:10px; background:var(--ui-primary); color:var(--ui-on-primary); font-size:.76rem; text-align:left; }
+.cc-buy-line strong { font-size:.7rem; }
+.cc-game .cc-buy-line:not(:disabled) { background:var(--ui-primary); color:var(--ui-on-primary); }
+.cc-buy-line:disabled { background:var(--ui-soft); color:var(--ui-muted); border-color:var(--ui-line); }
+@media(max-width:700px){
+ .cc-factory-toolbar,.cc-expansion { flex-wrap:wrap; padding:16px; gap:13px; }
+ .cc-factory-toolbar button { min-height:44px; }
+ .cc-factory-tour,.cc-warehouse { padding:16px; }
+ .cc-tour-top { gap:8px; } .cc-tour-running { font-size:.56rem; }
+ .cc-tour-controls { flex-wrap:wrap; } .cc-tour-controls button { font-size:.66rem; padding:9px 10px; }
+ .cc-tour-progress { min-width:100%; order:4; margin:5px 0 0; }
+ .cc-production[data-tour=true] .cc-production-art { height:350px; }
+ .cc-buy-line { width:100%; }
+}
+@media(prefers-reduced-motion:reduce){.cc-production * { scroll-behavior:auto!important; }}

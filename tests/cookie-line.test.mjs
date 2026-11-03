@@ -90,3 +90,16 @@ test('only recipes with chips, oats, or jam operate the filling station', () => 
   assert.equal(productionFilling('jam').kind,'jam');assert.equal(productionFilling('oat').kind,'oats');
   for(const recipe of ['sugar','star','galaxy','invalid'])assert.equal(productionFilling(recipe).kind,'none');
 });
+
+test('a growing floor plan preserves the order and continuity of every processing stage', async () => {
+  const {factoryLayout,factoryX,packingPose,factoryTour}=await import('../cookie-factory-model.js');
+  const levels=[{}, {convection:1}, {convection:1,factory:1,conveyor:1}, {packing:1,tunnel:1}];
+  let lastWidth=0;
+  for(const upgrades of levels){const plan=factoryLayout(upgrades);assert.ok(plan.width>lastWidth);lastWidth=plan.width;
+    let lastX=-1;for(let x=0;x<=1715;x+=.5){const current=factoryX(plan,x);assert.ok(current>lastX);lastX=current;}
+    assert.equal(factoryTour(upgrades,'jam').length,8);
+    for(const stage of LINE_STAGES)assert.equal(factoryX(plan,stage.x),plan.stages[stage.id]);
+  }
+  assert.equal(factoryLayout({}).automatic,false);assert.equal(factoryLayout({convection:1}).machinePack,false);assert.equal(factoryLayout({packing:1}).machinePack,true);
+  assert.equal(packingPose(1195).lift,0);assert.ok(packingPose(1247).lift>47);assert.ok(packingPose(1300).lift<.001);assert.equal(packingPose(1300).boxReady,1);
+});

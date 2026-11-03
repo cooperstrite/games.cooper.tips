@@ -15,7 +15,8 @@ export const LINE_STAGES = Object.freeze([
   { id: 'fill', name: 'Fill & top', x: 630, upgrades: ['piping'] },
   { id: 'bake', name: 'Bake', x: 890, upgrades: ['convection', 'deck', 'rotary', 'tunnel'] },
   { id: 'cool', name: 'Cool', x: 1155, upgrades: ['conveyor'] },
-  { id: 'pack', name: 'Box & ship', x: 1420, upgrades: ['packing'] },
+  { id: 'pack', name: 'Pack & seal', x: 1340, upgrades: ['packing'] },
+  { id: 'ship', name: 'Dispatch', x: 1610, upgrades: [] },
 ].map(Object.freeze));
 
 export function productionFilling(recipe) {

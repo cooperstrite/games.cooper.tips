@@ -2,6 +2,7 @@ export const BAKERY_KEY = "cooper-cookie-bakery-v1";
 export const COOKIE_STYLE_KEY = "cooper-cookie-style-v1";
 export const COOKIE_PRICE_GROWTH = 1.12;
 export const COOKIE_UNIT_PRICES = Object.freeze({ click: 15, cps: 90 });
+export const COOKIE_MAX_LINES = 6;
 export const COOKIE_DAILY_COINS = 200;
 export const COOKIE_COIN_TIERS = Object.freeze([
   { from: 1, to: 20, cookies: 1000, taps: 10 },

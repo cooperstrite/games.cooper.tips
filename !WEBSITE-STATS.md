@@ -2,7 +2,7 @@
 
 A little scoreboard for games.cooper.tips.
 
-**Updated:** November 03, 2026 at 05:39 PM EST
+**Updated:** November 03, 2026 at 06:16 PM EST
 
 **Visibility:** Project files only. This report is excluded from the published website.
 
@@ -10,11 +10,11 @@ A little scoreboard for games.cooper.tips.
 
 | Stat | Total |
 | --- | ---: |
-| Lines in our source files | **39,637** |
-| Nonblank source lines | 37,866 |
-| Source files written for this project | 254 |
+| Lines in our source files | **39,783** |
+| Nonblank source lines | 38,004 |
+| Source files written for this project | 257 |
 | Image files | **214** |
-| Total project files | **514** |
+| Total project files | **517** |
 | Games | **30** |
 | Games on the main list | 26 |
 | Games in Coming Soon | 4 |
@@ -22,20 +22,20 @@ A little scoreboard for games.cooper.tips.
 | Project size on disk | 206.7 MiB |
 | Image collection size | 167.6 MiB |
 
-At 50 lines per printed page, our source would fill **793 pages**.
+At 50 lines per printed page, our source would fill **796 pages**.
 
 ## Where the lines live
 
 | Area | Files | Lines |
 | --- | ---: | ---: |
 | Development tools | 4 | 415 |
-| Tests | 37 | 4,870 |
-| Website and games | 213 | 34,352 |
+| Tests | 37 | 4,911 |
+| Website and games | 216 | 34,457 |
 
 | Language | Files | Lines |
 | --- | ---: | ---: |
-| JavaScript | 228 | 32,266 |
-| CSS | 21 | 7,032 |
+| JavaScript | 231 | 32,362 |
+| CSS | 21 | 7,082 |
 | Python | 2 | 203 |
 | HTML | 3 | 136 |
 
@@ -63,7 +63,7 @@ At 50 lines per printed page, our source would fill **793 pages**.
 
 | Type | Files |
 | --- | ---: |
-| `.js` | 192 |
+| `.js` | 195 |
 | `.png` | 89 |
 | `.webp` | 50 |
 | `.svg` | 43 |

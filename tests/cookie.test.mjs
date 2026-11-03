@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { BAKERY_KEY, COOKIE_STYLE_KEY, COOKIE_UPGRADES, COOKIE_BADGES, COOKIE_ITEMS, COOKIE_LOOKS, COOKIE_DAILY_COINS, normalizeCookieStyle, readCookieStyle, writeCookieStyle, cookieRewardTotal, cookieCoinGoal, cookieCoinProgress, cookieDay } from '../cookie-config.js';
-import { createBakery, readBakery, writeBakery, bakeryRates, cookieUpgradePrice, bakeCookie, advanceBakery, buyCookieUpgrade, checkCookieBadges, cookieBadgeProgress, syncCookieDay, claimCookieCoins } from '../cookie-engine.js';
+import { createBakery, readBakery, writeBakery, bakeryRates, cookieUpgradePrice, cookieLinePrice, buyCookieLine, bakeCookie, advanceBakery, buyCookieUpgrade, checkCookieBadges, cookieBadgeProgress, syncCookieDay, claimCookieCoins } from '../cookie-engine.js';
 import { createArcadeWallet } from '../arcade/wallet.js';
 import { ARCADE_ITEMS } from '../arcade/catalog.js';
 import { PUBLIC_STUDIO_GAMES, STUDIO_VIEWS } from '../arcade/games.js';
@@ -13,7 +13,7 @@ const rich = () => createBakery({ cookies: 1e12, lifetime: 1e12 }, date());
 
 test('a fresh bakery starts with one cookie per tap, no automation, and no instant coins', () => {
   const state = createBakery(undefined, date());
-  assert.deepEqual(bakeryRates(state), { click: 1, cps: 0 });
+  assert.deepEqual(bakeryRates(state), { click: 1, cps: 0, perLine: 0, lines: 1 });
   assert.equal(state.cookies, 0); assert.equal(cookieRewardTotal(state.daily), 0);
   assert.equal(bakeCookie(state, date()).baked, 1);
   assert.equal(state.cookies, 1); assert.equal(state.lifetime, 1); assert.equal(state.clicks, 1);
@@ -189,10 +189,38 @@ test('all paid cookie styles require ownership; bakery appearance does not alter
 
 test('included looks work without purchases and invalid saves fall back safely', () => {
   for (const [setting, looks] of Object.entries(COOKIE_LOOKS)) for (const look of looks.filter(v => !v.cost)) assert.equal(normalizeCookieStyle({ [setting]: look.id })[setting], look.id);
-  for (const raw of ['broken', 'null', '[]', '3']) { const store = storage({ [BAKERY_KEY]: raw, [COOKIE_STYLE_KEY]: raw }); assert.deepEqual(bakeryRates(readBakery(store, date())), { click: 1, cps: 0 }); assert.equal(readCookieStyle([], store).recipe, 'classic'); }
+  for (const raw of ['broken', 'null', '[]', '3']) { const store = storage({ [BAKERY_KEY]: raw, [COOKIE_STYLE_KEY]: raw }); assert.deepEqual(bakeryRates(readBakery(store, date())), { click: 1, cps: 0, perLine: 0, lines: 1 }); assert.equal(readCookieStyle([], store).recipe, 'classic'); }
   const state = createBakery({ cookies: -1, lifetime: Infinity, clicks: NaN, upgrades: { mitts: -1, factory: 1.5, fake: 5000 }, badges: { fake: 42 } }, date());
-  assert.equal(state.cookies, 0); assert.deepEqual(bakeryRates(state), { click: 1, cps: 0 }); assert.deepEqual(state.badges, {});
+  assert.equal(state.cookies, 0); assert.deepEqual(bakeryRates(state), { click: 1, cps: 0, perLine: 0, lines: 1 }); assert.deepEqual(state.badges, {});
   assert.equal(normalizeCookieStyle({ name: 'x'.repeat(100), accent: 'url(evil)' }).name.length, 28);
   const blocked = { getItem() { throw Error('blocked'); }, setItem() { throw Error('blocked'); } };
   assert.equal(readBakery(blocked, date()).cookies, 0); assert.equal(writeBakery(state, blocked), false); assert.equal(writeCookieStyle({}, [], blocked), false);
+});
+
+test('warehouse expansion charges cookies once and adds only its advertised passive output', () => {
+  const state=createBakery({cookies:100000,upgrades:{convection:2,mixer:1,cutters:1}},date());
+  const before=structuredClone(state),cost=cookieLinePrice(state),rate=bakeryRates(state);
+  assert.equal(buyCookieLine(state,date()).ok,true);assert.equal(state.lines,2);assert.equal(state.cookies,before.cookies-cost);
+  assert.deepEqual(state.upgrades,before.upgrades);assert.deepEqual(state.daily,before.daily);assert.equal(state.lifetime,before.lifetime);
+  assert.equal(bakeryRates(state).cps,rate.cps*2);assert.equal(bakeryRates(state).click,rate.click);assert.ok(cookieLinePrice(state)>cost);
+  assert.equal(advanceBakery(state,1,date()).baked,rate.cps*2);assert.equal(state.daily.taps,0);assert.equal(cookieRewardTotal(state.daily),0);
+  const store=storage();writeBakery(state,store);const loaded=readBakery(store,date());assert.equal(loaded.lines,2);assert.deepEqual(bakeryRates(loaded),bakeryRates(state));
+});
+
+test('equipment on multiple lines keeps the same cost per added cookie per second', () => {
+  const state=createBakery({cookies:1e12,lines:4,upgrades:{mixer:1}},date());
+  const reference=cookieUpgradePrice(state,'convection')/4;
+  for(const u of COOKIE_UPGRADES.filter(u=>u.type==='cps'))assert.equal(cookieUpgradePrice(state,u.id)/(u.value*4),reference);
+  const before=bakeryRates(state),price=cookieUpgradePrice(state,'factory'),balance=state.cookies;
+  buyCookieUpgrade(state,'factory',date());assert.equal(state.cookies,balance-price);assert.equal(bakeryRates(state).cps-before.cps,48);
+  const single=createBakery({upgrades:state.upgrades},date());assert.equal(cookieUpgradePrice(single,'mitts'),cookieUpgradePrice(state,'mitts'));
+});
+
+test('legacy saves keep one line and invalid or unavailable warehouse purchases do not spend cookies', () => {
+  for(const lines of [undefined,null,0,-3,1.5,'4',NaN,Infinity])assert.equal(createBakery({lines},date()).lines,1);
+  assert.equal(createBakery({lines:100},date()).lines,6);
+  for(const saved of [{cookies:1e9},{cookies:1,upgrades:{convection:1}},{cookies:1e9,lines:6,upgrades:{packing:1}}]){
+    const state=createBakery(saved,date()),before=structuredClone(state);assert.equal(buyCookieLine(state,date()).ok,false);assert.deepEqual(state,before);
+  }
+  const state=createBakery({cookies:1e9,upgrades:{convection:1}},date());state.paused=true;const before=structuredClone(state);assert.equal(buyCookieLine(state,date()).ok,false);assert.deepEqual(state,before);
 });
