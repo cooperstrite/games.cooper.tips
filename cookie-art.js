@@ -14,7 +14,7 @@ function cookieOutline(recipe, radius = 49) {
   const midpoint = (a, b) => a.map((v, i) => ((v + b[i]) / 2).toFixed(2)).join(',');
   return `M${midpoint(points.at(-1), points[0])}${points.map((point, i) => `Q${point.map(v => v.toFixed(2)).join(',')} ${midpoint(point, points[(i + 1) % points.length])}`).join('')}Z`;
 }
-export function cookieDefinition(style, key) {
+export function cookieDefinition(style, key, { toppings = true } = {}) {
   const recipe = look("recipe", style.recipe), outline = cookieOutline(recipe.id);
   const seeds = Array.from({ length: 70 }, (_, i) => {
     const a = i * 2.399963, r = Math.sqrt((i + .5) / 70) * 46, x = Math.cos(a) * r, y = Math.sin(a) * r;
@@ -22,13 +22,13 @@ export function cookieDefinition(style, key) {
   }).join("");
   const chips = Array.from({ length: 15 }, (_, i) => {
     const a = i * 2.399, r = Math.sqrt((i + 1) / 16) * 40, x = Math.cos(a) * r, y = Math.sin(a) * r;
-    if (recipe.id === 'jam') return '';
+    if (!toppings || recipe.id === 'jam') return '';
     if (recipe.id === 'oat') return `<g transform="translate(${x},${y}) rotate(${i*29})"><ellipse rx="5" ry="2" fill="${recipe.chip}"/><path d="M-4 0H4" stroke="${recipe.edge}" stroke-width=".65"/></g>`;
     if (recipe.id === 'sugar' || recipe.id === 'star') return `<rect x="${x}" y="${y}" width="1.8" height="1.8" rx=".4" fill="${recipe.chip}" opacity=".8"/>`;
     if (recipe.id === 'galaxy') return `<path d="M${x-3} ${y}l2-1 1-3 1 3 2 1-2 1-1 3-1-3Z" fill="${recipe.chip}"/>`;
     return `<g transform="translate(${x},${y}) rotate(${i*37})"><path d="M-4-2L1-4 5-1 3 4-3 3Z" fill="${recipe.edge}" opacity=".5" transform="translate(.7 1.5)"/><path d="M-4-2L1-4 5-1 3 4-3 3Z" fill="${recipe.chip}"/><path d="M-3-2L1-3 3-1" fill="none" stroke="#ffffff" stroke-opacity=".17" stroke-width="1.3"/></g>`;
   }).join("");
-  return `<radialGradient id="${key}-dough" cx="35%" cy="26%" r="76%"><stop stop-color="${recipe.dough}"/><stop offset=".7" stop-color="${recipe.dough}"/><stop offset="1" stop-color="${recipe.edge}"/></radialGradient><clipPath id="${key}-clip"><path d="${outline}"/></clipPath><g id="${key}-cookie"><path d="${outline}" fill="${recipe.edge}" transform="translate(0 3)"/><path d="${outline}" fill="url(#${key}-dough)" stroke="${recipe.edge}" stroke-width="1.2"/><g clip-path="url(#${key}-clip)"><path d="M-37-13q10 8 10 19l8 9M17-40l-5 14 4 10M38 19l-16 2-7 9M-8 34l-3-12-8-3" fill="none" stroke="${recipe.edge}" stroke-opacity=".2" stroke-width="1.2"/>${seeds}${chips}${recipe.id==='jam'?`<circle r="21" fill="#9f5e32" opacity=".5"/><circle r="18" fill="${recipe.chip}"/><path d="M-12-7Q-5-17 6-12" fill="none" stroke="#ffb5b2" stroke-width="4" stroke-linecap="round"/><circle cx="8" cy="7" r="2" fill="#ef7982"/>`:''}${recipe.id==='star'?`<path d="${cookieOutline('star',39)}" fill="none" stroke="${recipe.chip}" stroke-width="3.5" stroke-linejoin="round"/>`:''}${recipe.id==='galaxy'?'<path d="M-40 12Q0-26 39-8M-32 28Q1-4 38 8" fill="none" stroke="#d48bbd" stroke-width="2" opacity=".65"/>':''}<path d="M-37-22Q-19-48 12-42" fill="none" stroke="#fff6de" stroke-opacity=".2" stroke-width="2.2" stroke-linecap="round"/></g></g>`;
+  return `<radialGradient id="${key}-dough" cx="35%" cy="26%" r="76%"><stop stop-color="${recipe.dough}"/><stop offset=".7" stop-color="${recipe.dough}"/><stop offset="1" stop-color="${recipe.edge}"/></radialGradient><clipPath id="${key}-clip"><path d="${outline}"/></clipPath><g id="${key}-cookie"><path d="${outline}" fill="${recipe.edge}" transform="translate(0 3)"/><path d="${outline}" fill="url(#${key}-dough)" stroke="${recipe.edge}" stroke-width="1.2"/><g clip-path="url(#${key}-clip)"><path d="M-37-13q10 8 10 19l8 9M17-40l-5 14 4 10M38 19l-16 2-7 9M-8 34l-3-12-8-3" fill="none" stroke="${recipe.edge}" stroke-opacity=".2" stroke-width="1.2"/>${seeds}${chips}${toppings && recipe.id==='jam'?`<circle r="21" fill="#9f5e32" opacity=".5"/><circle r="18" fill="${recipe.chip}"/><path d="M-12-7Q-5-17 6-12" fill="none" stroke="#ffb5b2" stroke-width="4" stroke-linecap="round"/><circle cx="8" cy="7" r="2" fill="#ef7982"/>`:''}${toppings && recipe.id==='star'?`<path d="${cookieOutline('star',39)}" fill="none" stroke="${recipe.chip}" stroke-width="3.5" stroke-linejoin="round"/>`:''}${toppings && recipe.id==='galaxy'?'<path d="M-40 12Q0-26 39-8M-32 28Q1-4 38 8" fill="none" stroke="#d48bbd" stroke-width="2" opacity=".65"/>':''}<path d="M-37-22Q-19-48 12-42" fill="none" stroke="#fff6de" stroke-opacity=".2" stroke-width="2.2" stroke-linecap="round"/></g></g>`;
 }
 export function cookieArt(style = normalizeCookieStyle()) {
   const key = id();

@@ -37,6 +37,15 @@
 .cc-bake { padding: 0; width: 90%; aspect-ratio: 1; background: none; border: 0; filter: drop-shadow(0 14px 10px #070a1029); transition: transform .13s, filter .13s; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
 .cc-bake:hover:not(:disabled) { transform: translateY(-3px) rotate(-3deg) scale(1.025); filter: drop-shadow(0 18px 13px #070a1033); }
 .cc-bake:active:not(:disabled) { transform: scale(.94) rotate(2deg); }
+.cc-touch-active .cc-bake { touch-action: none; -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
+.cc-touch-active .cc-bake * { pointer-events: none; }
+.cc-touch-active .cc-bake:hover:not(:disabled) { transform: none; }
+.cc-touch-active .cc-bake.cc-touch-pressed:not(:disabled) { transform: scale(.94) rotate(2deg); }
+.cc-touch-ready:not(.cc-touch-active) .cc-bake { touch-action: auto; }
+.cc-touch-settings { display: flex; gap: 16px; align-items: center; border: 1px solid var(--ui-line); background: var(--ui-accent-soft); border-radius: 12px; padding: 14px 18px; margin-top: 14px; }
+.cc-touch-settings button { flex-shrink: 0; min-height: 44px; padding: 10px 13px; border: 1px solid var(--ui-line); border-radius: 9px; background: var(--ui-panel); color: var(--ui-ink); font-size: .78rem; font-weight: 600; touch-action: manipulation; }
+.cc-touch-settings button[aria-pressed="true"] { background: var(--ui-primary); color: var(--ui-on-primary); }
+.cc-touch-settings p { font-size: .73rem; line-height: 1.65; color: var(--ui-muted); }
 .cc-bake:disabled { opacity: .7; }
 .cc-cookie-art { display: block; width: 100%; height: auto; }
 .cc-bake-counter h4 { font-family: Georgia, serif; font-size: 1.3rem; font-weight: 500; }
@@ -74,6 +83,12 @@
 .cc-coin-panel h4 { font-size: 1.05rem; margin: 4px 0; color: var(--ui-gold); }
 .cc-coin-panel p, .cc-prices p { font-size: .73rem; line-height: 1.7; color: var(--ui-muted); }
 .cc-coin-panel details p { margin-top: 10px; }
+.cc-coin-meters label { display: block; margin-bottom: 12px; }
+.cc-coin-meters label > span { display: block; color: var(--ui-muted); font-size: .72rem; margin-bottom: 6px; }
+.cc-coin-panel table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: .7rem; color: var(--ui-ink); }
+.cc-coin-panel caption { text-align: left; font-weight: 600; padding-bottom: 6px; }
+.cc-coin-panel :is(th, td) { padding: 8px 3px; border-bottom: 1px solid var(--ui-line); text-align: right; }
+.cc-coin-panel th:first-child { text-align: left; }
 .cc-game progress { display: block; width: 100%; height: 7px; border: 0; border-radius: 10px; appearance: none; background: var(--ui-soft); color: var(--ui-gold); overflow: hidden; }
 .cc-game progress::-webkit-progress-bar { background: var(--ui-soft); border-radius: 10px; }
 .cc-game progress::-webkit-progress-value { background: var(--ui-gold); border-radius: 10px; }
@@ -231,6 +246,7 @@
 }
 @media (max-width: 700px) {
   .cc-production-art { min-width: 1050px; }
+  .cc-touch-settings { align-items: start; flex-direction: column; gap: 8px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .cc-game *, .cc-preview *, .cc-studio * { animation: none !important; scroll-behavior: auto !important; transition: none !important; }

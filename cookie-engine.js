@@ -24,7 +24,8 @@ export function createBakery(saved = {}, now = Date.now()) {
   const badges = Object.fromEntries(COOKIE_BADGES.filter(b => Number.isFinite(saved.badges?.[b.id]) && saved.badges[b.id] > 0).map(b => [b.id, saved.badges[b.id]]));
   const state = { version: 1, cookies: amount(saved.cookies), lifetime: Math.max(amount(saved.cookies), amount(saved.lifetime)),
     clicks: Math.floor(amount(saved.clicks)), seconds: amount(saved.seconds), upgrades, badges,
-    daily: { day, baked: saved.daily?.day === day ? amount(saved.daily.baked) : 0 }, paused: false,
+    daily: { day, baked: saved.daily?.day === day ? amount(saved.daily.baked) : 0,
+      taps: saved.daily?.day === day ? Math.floor(amount(saved.daily.taps)) : 0 }, paused: false,
   };
   checkCookieBadges(state, now);
   return state;
@@ -53,7 +54,7 @@ export function checkCookieBadges(state, now = Date.now()) {
 export function syncCookieDay(state, now = Date.now()) {
   const day = cookieDay(now);
   // Moving the clock backwards cannot open a second allowance for the old day.
-  if (day > state.daily.day) state.daily = { day, baked: 0 };
+  if (day > state.daily.day) state.daily = { day, baked: 0, taps: 0 };
 }
 function addCookies(state, amountToAdd, now) {
   syncCookieDay(state, now);
@@ -64,7 +65,9 @@ function addCookies(state, amountToAdd, now) {
 }
 export function bakeCookie(state, now = Date.now()) {
   if (state.paused) return { baked: 0, badges: [] };
+  syncCookieDay(state, now);
   state.clicks = Math.min(LIMIT, state.clicks + 1);
+  state.daily.taps = Math.min(LIMIT, state.daily.taps + 1);
   const baked = addCookies(state, bakeryRates(state).click, now);
   return { baked, badges: checkCookieBadges(state, now) };
 }

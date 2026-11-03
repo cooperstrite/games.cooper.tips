@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { COOKIE_UPGRADES } from '../cookie-config.js';
 import { createBakery, bakeCookie } from '../cookie-engine.js';
-import { LINE_START, LINE_END, BATCH_SPACING, LINE_STAGES, productionSpeed, createProductionFlow, setProductionEquipment, queueProductionBatch, advanceProductionFlow, productionBatchAppearance } from '../cookie-line-engine.js';
+import { LINE_START, LINE_END, BATCH_SPACING, LINE_STAGES, TRAY_RETURN_LENGTH, returnTrayPose, productionFilling, productionSpeed, createProductionFlow, setProductionEquipment, queueProductionBatch, advanceProductionFlow, productionBatchAppearance } from '../cookie-line-engine.js';
 
 test('every purchase, including duplicate hand tools and machines, makes the line faster', () => {
   const upgrades = {};
@@ -40,16 +40,17 @@ test('a manual batch starts as dough, crosses every stage, and leaves fully boxe
   const flow=createProductionFlow();assert.equal(flow.batches.length,0);
   assert.equal(advanceProductionFlow(flow,1/60),false);queueProductionBatch(flow);
   const observed=new Set();let last=0;
-  for(let i=0;i<1800;i++){
+  for(let i=0;i<4200;i++){
     advanceProductionFlow(flow,1/60);
     for(const batch of flow.batches){
       assert.ok(batch.x>=last&&batch.x>=LINE_START&&batch.x<LINE_END);last=batch.x;
       const p=productionBatchAppearance(batch.x);
-      for(const field of ['rolled','cut','baked','boxed','sealed']){assert.ok(p[field]>=0&&p[field]<=1);if(p[field]===1)observed.add(field);}
-      if(p.cut>0)assert.equal(p.rolled,1);if(p.baked>0)assert.equal(p.cut,1);if(p.boxed>0)assert.equal(p.baked,1);if(p.sealed>0)assert.equal(p.boxed,1);
+      for(const field of ['rolled','cut','filled','baked','boxed','sealed']){assert.ok(p[field]>=0&&p[field]<=1);if(p[field]===1)observed.add(field);}
+      if(p.cut>0)assert.equal(p.rolled,1);if(p.filled>0)assert.equal(p.cut,1);if(p.baked>0)assert.equal(p.filled,1);if(p.boxed>0)assert.equal(p.baked,1);if(p.sealed>0)assert.equal(p.boxed,1);
     }
   }
-  assert.equal(flow.shipped,1);assert.equal(flow.batches.length,0);assert.equal(observed.size,5);
+  assert.equal(flow.shipped,1);assert.equal(flow.batches.length,0);assert.equal(observed.size,6);
+  assert.equal(flow.returned,1);assert.equal(flow.returns.length,0);
   assert.equal(advanceProductionFlow(flow,1/60),false);
 });
 
@@ -64,6 +65,28 @@ test('rapid tapping stays bounded, reuses space on the line, and cannot mint gam
   const game=createBakery();bakeCookie(game);const saved=structuredClone(game),flow=createProductionFlow(game.upgrades);
   for(let i=0;i<10000;i++)queueProductionBatch(flow);
   assert.equal(flow.queued,24);
-  for(let i=0;i<6000;i++){advanceProductionFlow(flow,1/60);assert.ok(flow.batches.length<=14);}
-  assert.equal(flow.shipped,24);assert.equal(flow.batches.length,0);assert.deepEqual(game,saved);
+  for(let i=0;i<7200;i++){advanceProductionFlow(flow,1/60);assert.ok(flow.batches.length<=16);assert.ok(flow.returns.length<=15);}
+  assert.equal(flow.shipped,24);assert.equal(flow.returned,24);assert.equal(flow.batches.length,0);assert.deepEqual(game,saved);
+});
+
+test('empty trays follow a continuous curve underneath the line and rise back to the mixer', () => {
+  assert.deepEqual(returnTrayPose(0),{x:1300,y:343,rotation:0});
+  const end=returnTrayPose(TRAY_RETURN_LENGTH);
+  assert.ok(Math.abs(end.x-LINE_START)<1e-8);assert.ok(Math.abs(end.y-330)<1e-8);assert.ok(Math.abs(end.rotation-360)<1e-8);
+  for(const join of [Math.PI*47.5,Math.PI*47.5+1240]) {
+    const a=returnTrayPose(join-.001),b=returnTrayPose(join+.001);
+    assert.ok(Math.hypot(a.x-b.x,a.y-b.y)<.003);assert.ok(Math.abs(a.rotation-b.rotation)<.01);
+  }
+  const a=createProductionFlow({mixer:1}),b=structuredClone(a);
+  for(let i=0;i<3600;i++)advanceProductionFlow(a,1/60);
+  for(let i=0;i<1800;i++)advanceProductionFlow(b,1/30);
+  assert.equal(a.returned,b.returned);assert.equal(a.returns.length,b.returns.length);
+  for(let i=0;i<a.returns.length;i++)assert.ok(Math.abs(a.returns[i].distance-b.returns[i].distance)<1e-7);
+  const paused=structuredClone(a);advanceProductionFlow(a,.1,true);assert.deepEqual(a,paused);
+});
+
+test('only recipes with chips, oats, or jam operate the filling station', () => {
+  assert.equal(productionFilling('classic').kind,'chips');assert.equal(productionFilling('cocoa').kind,'chips');
+  assert.equal(productionFilling('jam').kind,'jam');assert.equal(productionFilling('oat').kind,'oats');
+  for(const recipe of ['sugar','star','galaxy','invalid'])assert.equal(productionFilling(recipe).kind,'none');
 });

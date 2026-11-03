@@ -2,9 +2,14 @@ export const BAKERY_KEY = "cooper-cookie-bakery-v1";
 export const COOKIE_STYLE_KEY = "cooper-cookie-style-v1";
 export const COOKIE_PRICE_GROWTH = 1.12;
 export const COOKIE_UNIT_PRICES = Object.freeze({ click: 15, cps: 90 });
-export const COOKIE_COIN_STEP = 1000;
-export const COOKIE_DAILY_COINS = 20;
-export const COOKIE_COIN_GUIDE = "Earn 1 arcade coin per 1,000 cookies baked, up to 20 coins per day. Hand-baked and machine cookies count while this game is open and visible. Spending cookies does not reduce progress. The daily allowance resets at local midnight; closed or hidden tabs do not bake.";
+export const COOKIE_DAILY_COINS = 200;
+export const COOKIE_COIN_TIERS = Object.freeze([
+  { from: 1, to: 20, cookies: 1000, taps: 10 },
+  { from: 21, to: 50, cookies: 5000, taps: 20 },
+  { from: 51, to: 100, cookies: 25000, taps: 30 },
+  { from: 101, to: 200, cookies: 100000, taps: 50 },
+].map(Object.freeze));
+export const COOKIE_COIN_GUIDE = "Earn up to 200 arcade coins per day. Each coin needs BOTH cookies baked and manual taps: coins 1-20 need 1,000 cookies + 10 taps each; 21-50 need 5,000 + 20; 51-100 need 25,000 + 30; 101-200 need 100,000 + 50. Reaching all 200 takes 11,420,000 cookies and 7,300 taps that day. Machines help with cookies, but cannot supply taps. Spending does not reduce progress. Both counters reset at local midnight. Hidden or closed tabs do not bake, and unused progress does not carry into tomorrow.";
 export const COOKIE_UPGRADES = Object.freeze([
   { id: "mitts", name: "Extra mitts", type: "click", value: 1, note: "A second pair of hands for every batch." },
   { id: "rolling-pin", name: "Rolling pin set", type: "click", value: 2, note: "Roll an even sheet of golden dough." },
@@ -68,8 +73,31 @@ export function cookieDay(now = Date.now()) {
   const date = new Date(now);
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
 }
-export function cookieRewardTotal({ baked } = {}) {
-  return Number.isFinite(baked) && baked >= 0 ? Math.min(COOKIE_DAILY_COINS, Math.floor(baked / COOKIE_COIN_STEP)) : 0;
+const coinGoals = [{ baked: 0, taps: 0 }];
+for (const tier of COOKIE_COIN_TIERS) for (let i = tier.from; i <= tier.to; i++) {
+  const previous = coinGoals.at(-1);
+  coinGoals.push(Object.freeze({ baked: previous.baked + tier.cookies, taps: previous.taps + tier.taps }));
+}
+const counter = value => Number.isFinite(value) && value > 0 ? value : 0;
+export const cookieCoinGoal = coins => ({ ...coinGoals[Math.min(COOKIE_DAILY_COINS, Math.floor(counter(coins)))] });
+export function cookieRewardTotal({ baked, taps } = {}) {
+  let low = 0, high = COOKIE_DAILY_COINS;
+  while (low < high) {
+    const mid = Math.ceil((low + high) / 2), goal = coinGoals[mid];
+    if (counter(baked) >= goal.baked && Math.floor(counter(taps)) >= goal.taps) low = mid;
+    else high = mid - 1;
+  }
+  return low;
+}
+export function cookieCoinProgress(daily, paid = 0) {
+  const earned = Math.min(COOKIE_DAILY_COINS, Math.max(Math.floor(counter(paid)), cookieRewardTotal(daily)));
+  const coin = Math.min(COOKIE_DAILY_COINS, earned + 1), goal = cookieCoinGoal(coin), previous = cookieCoinGoal(coin - 1);
+  return { earned, coin, complete: earned === COOKIE_DAILY_COINS,
+    cookiesLeft: Math.max(0, goal.baked - counter(daily.baked)), tapsLeft: Math.max(0, goal.taps - Math.floor(counter(daily.taps))),
+    cookieMax: goal.baked - previous.baked, tapMax: goal.taps - previous.taps,
+    cookieValue: Math.max(0, Math.min(goal.baked, counter(daily.baked)) - previous.baked),
+    tapValue: Math.max(0, Math.min(goal.taps, Math.floor(counter(daily.taps))) - previous.taps),
+  };
 }
 export const cookieReceipt = day => `bakery-day:${day}`;
 

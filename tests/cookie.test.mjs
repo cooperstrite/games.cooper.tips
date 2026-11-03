@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { BAKERY_KEY, COOKIE_STYLE_KEY, COOKIE_UPGRADES, COOKIE_BADGES, COOKIE_ITEMS, COOKIE_LOOKS, COOKIE_DAILY_COINS, normalizeCookieStyle, readCookieStyle, writeCookieStyle, cookieRewardTotal, cookieDay } from '../cookie-config.js';
+import { BAKERY_KEY, COOKIE_STYLE_KEY, COOKIE_UPGRADES, COOKIE_BADGES, COOKIE_ITEMS, COOKIE_LOOKS, COOKIE_DAILY_COINS, normalizeCookieStyle, readCookieStyle, writeCookieStyle, cookieRewardTotal, cookieCoinGoal, cookieCoinProgress, cookieDay } from '../cookie-config.js';
 import { createBakery, readBakery, writeBakery, bakeryRates, cookieUpgradePrice, bakeCookie, advanceBakery, buyCookieUpgrade, checkCookieBadges, cookieBadgeProgress, syncCookieDay, claimCookieCoins } from '../cookie-engine.js';
 import { createArcadeWallet } from '../arcade/wallet.js';
 import { ARCADE_ITEMS } from '../arcade/catalog.js';
@@ -104,32 +104,74 @@ test('breadth and balance badges distinguish quantities from different types of 
   assert.ok(state.badges['full-floor']); assert.ok(state.badges['variety-ten']);
 });
 
-test('coin earnings use baked cookies, keep fractions, and have a strict daily ceiling', () => {
-  for (const [baked, coins] of [[999.99,0],[1000,1],[1999,1],[2000,2],[20000,20],[1e12,20],[-1,0],[NaN,0],[Infinity,0]]) {
-    assert.equal(cookieRewardTotal({ baked }), coins); assert.equal(rewardTotal('cookieclicker', { baked }), coins);
+test('all 200 daily coin milestones require both baking and manual taps, with increasingly costly tiers', () => {
+  for (let coins = 1; coins <= 200; coins++) {
+    const goal = cookieCoinGoal(coins);
+    assert.equal(cookieRewardTotal(goal), coins); assert.equal(rewardTotal('cookieclicker', goal), coins);
+    assert.equal(cookieRewardTotal({ ...goal, baked: goal.baked - .01 }), coins - 1);
+    assert.equal(cookieRewardTotal({ ...goal, taps: goal.taps - .01 }), coins - 1);
   }
-  const state = createBakery({ upgrades: { packing: 1 } }, date());
-  advanceBakery(state, 1, date()); assert.equal(cookieRewardTotal(state.daily), 1);
-  buyCookieUpgrade(state, 'convection', date()); assert.equal(state.cookies, 1000 - 101); assert.equal(cookieRewardTotal(state.daily), 1);
+  for (const [coins, baked, taps] of [[20,20000,200],[21,25000,220],[50,170000,800],[51,195000,830],[100,1420000,2300],[101,1520000,2350],[200,11420000,7300]]) assert.deepEqual(cookieCoinGoal(coins), { baked, taps });
+  assert.equal(cookieRewardTotal({ baked: 1e15, taps: 1e15 }), 200);
+  for (const invalid of [-1,NaN,Infinity,undefined,'5000']) {
+    assert.equal(cookieRewardTotal({ baked: invalid, taps: 1e9 }), 0);
+    assert.equal(cookieRewardTotal({ baked: 1e9, taps: invalid }), 0);
+  }
+});
+
+test('idle machines cannot earn coins and spending never consumes baking or tap progress', () => {
+  const state = createBakery({ upgrades: { packing: 100 } }, date());
+  for (let i=0; i<1000; i++) advanceBakery(state, 1, date());
+  assert.equal(cookieRewardTotal(state.daily), 0);
+  for (let i=0; i<10; i++) bakeCookie(state, date());
+  assert.equal(cookieRewardTotal(state.daily), 1);
+  const progress = structuredClone(state.daily);
+  buyCookieUpgrade(state, 'convection', date()); assert.deepEqual(state.daily, progress);
+  for (let i=0; i<1000; i++) advanceBakery(state, 1, date());
+  assert.equal(cookieRewardTotal(state.daily), 1);
+  const saved = storage(); writeBakery(state,saved);
+  assert.deepEqual(readBakery(saved,date()).daily,state.daily);
+  syncCookieDay(state,date(3)); advanceBakery(state,1,date(3));
+  assert.equal(state.daily.taps,0); assert.equal(cookieRewardTotal(state.daily),0);
+});
+
+test('the next-coin meters account for both requirements and preserve already-paid old rewards', () => {
+  const p = cookieCoinProgress({baked:24500,taps:207},20);
+  assert.equal(p.coin,21); assert.equal(p.cookiesLeft,500); assert.equal(p.tapsLeft,13);
+  assert.equal(p.cookieValue,4500); assert.equal(p.cookieMax,5000); assert.equal(p.tapValue,7); assert.equal(p.tapMax,20);
+  const migrated = cookieCoinProgress({baked:20000,taps:0},20);
+  assert.equal(migrated.coin,21); assert.equal(migrated.tapValue,0); assert.equal(migrated.tapsLeft,220);
+  assert.equal(cookieCoinProgress(cookieCoinGoal(200),200).complete,true);
 });
 
 test('the wallet pays the same daily receipt only once, including concurrent and repeated claims', async () => {
   const store = storage(), wallet = createArcadeWallet({ storage: store });
-  const state = createBakery({ daily: { day: cookieDay(date()), baked: 3500 } }, date());
+  const state = createBakery({ daily: { day: cookieDay(date()), baked: 3500, taps: 35 } }, date());
   const results = await Promise.all([claimCookieCoins(state, wallet), claimCookieCoins(state, wallet)]);
   assert.equal(results.reduce((n, r) => n + r.coins, 0), 3);
-  state.daily.baked = 1e9; assert.equal((await claimCookieCoins(state, wallet)).coins, 17);
+  Object.assign(state.daily,cookieCoinGoal(200)); assert.equal((await claimCookieCoins(state, wallet)).coins, 197);
   writeBakery(state, store); const reopened = createArcadeWallet({ storage: store });
   assert.equal((await claimCookieCoins(readBakery(store, date()), reopened)).coins, 0);
   assert.equal(reopened.getState().coins, COOKIE_DAILY_COINS);
-  syncCookieDay(state, date(3)); state.daily.baked = 1000;
-  assert.equal((await claimCookieCoins(state, reopened)).coins, 1); assert.equal(reopened.getState().coins, 21);
+  syncCookieDay(state, date(3)); Object.assign(state.daily,cookieCoinGoal(1));
+  assert.equal((await claimCookieCoins(state, reopened)).coins, 1); assert.equal(reopened.getState().coins, 201);
+});
+
+test('updating an old bakery preserves balances and daily receipts without paying old coins again', async () => {
+  const store=storage(), wallet=createArcadeWallet({storage:store});
+  await wallet.claim('cookieclicker',`bakery-day:${cookieDay(date())}`,20);
+  const old={cookies:12345,lifetime:99999,clicks:500,upgrades:{packing:2},daily:{day:cookieDay(date()),baked:35000}};
+  const state=createBakery(old,date());
+  assert.equal(state.cookies,old.cookies);assert.equal(state.clicks,old.clicks);assert.equal(state.upgrades.packing,2);
+  assert.equal(state.daily.taps,0);assert.equal((await claimCookieCoins(state,wallet)).coins,0);
+  for(let i=0;i<220;i++)bakeCookie(state,date());
+  assert.equal((await claimCookieCoins(state,wallet)).coins,1);assert.equal(wallet.getState().coins,21);
 });
 
 test('a new day resets only coin progress and rolling the clock back cannot reopen yesterday', () => {
-  const state = createBakery({ cookies: 56, lifetime: 9000, daily: { day: cookieDay(date()), baked: 9000 } }, date());
-  syncCookieDay(state, date(3)); assert.equal(state.daily.baked, 0); assert.equal(state.cookies, 56); assert.equal(state.lifetime, 9000);
-  bakeCookie(state, date(3)); syncCookieDay(state, date()); assert.equal(state.daily.day, cookieDay(date(3))); assert.equal(state.daily.baked, 1);
+  const state = createBakery({ cookies: 56, lifetime: 9000, daily: { day: cookieDay(date()), baked: 9000, taps: 150 } }, date());
+  syncCookieDay(state, date(3)); assert.equal(state.daily.baked, 0); assert.equal(state.daily.taps,0); assert.equal(state.cookies, 56); assert.equal(state.lifetime, 9000);
+  bakeCookie(state, date(3)); syncCookieDay(state, date()); assert.equal(state.daily.day, cookieDay(date(3))); assert.equal(state.daily.baked, 1); assert.equal(state.daily.taps,1);
 });
 
 test('all paid cookie styles require ownership; bakery appearance does not alter game rules or progress', () => {
