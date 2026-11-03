@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { BAKERY_KEY, COOKIE_STYLE_KEY, COOKIE_UPGRADES, COOKIE_BADGES, COOKIE_ITEMS, COOKIE_LOOKS, COOKIE_DAILY_COINS, normalizeCookieStyle, readCookieStyle, writeCookieStyle, cookieRewardTotal, cookieCoinGoal, cookieCoinProgress, cookieDay } from '../cookie-config.js';
-import { createBakery, readBakery, writeBakery, bakeryRates, cookieUpgradePrice, cookieLinePrice, buyCookieLine, bakeCookie, advanceBakery, buyCookieUpgrade, checkCookieBadges, cookieBadgeProgress, syncCookieDay, claimCookieCoins } from '../cookie-engine.js';
+import { createBakery, readBakery, writeBakery, bakeryRates, cookieUpgradePrice, cookieLinePrice, buyCookieLine, grantCookieTestCookies, bakeCookie, advanceBakery, buyCookieUpgrade, checkCookieBadges, cookieBadgeProgress, syncCookieDay, claimCookieCoins } from '../cookie-engine.js';
 import { createArcadeWallet } from '../arcade/wallet.js';
 import { ARCADE_ITEMS } from '../arcade/catalog.js';
 import { PUBLIC_STUDIO_GAMES, STUDIO_VIEWS } from '../arcade/games.js';
@@ -223,4 +223,39 @@ test('legacy saves keep one line and invalid or unavailable warehouse purchases 
     const state=createBakery(saved,date()),before=structuredClone(state);assert.equal(buyCookieLine(state,date()).ok,false);assert.deepEqual(state,before);
   }
   const state=createBakery({cookies:1e9,upgrades:{convection:1}},date());state.paused=true;const before=structuredClone(state);assert.equal(buyCookieLine(state,date()).ok,false);assert.deepEqual(state,before);
+});
+
+test('temporary cookie grants survive reload without awarding baking progress, badges, or arcade coins', async () => {
+  const state=createBakery(undefined,date()),store=storage(),wallet=createArcadeWallet({storage:store});
+  bakeCookie(state,date());const before=structuredClone(state);
+  assert.equal(grantCookieTestCookies(state,1000000),1000000);assert.equal(grantCookieTestCookies(state,50000),50000);
+  assert.equal(state.cookies,before.cookies+1050000);assert.equal(state.testCookies,1050000);
+  assert.equal(state.lifetime,before.lifetime);assert.equal(state.clicks,before.clicks);assert.deepEqual(state.daily,before.daily);assert.deepEqual(state.badges,before.badges);
+  assert.equal(writeBakery(state,store),true);const loaded=readBakery(store,date());
+  assert.deepEqual(loaded,state);assert.equal((await claimCookieCoins(loaded,wallet)).coins,0);assert.equal(wallet.getState().coins,0);
+  assert.equal(bakeCookie(loaded,date()).baked,1);assert.equal(loaded.lifetime,2);assert.equal(loaded.daily.baked,2);assert.equal(loaded.daily.taps,2);
+  assert.equal(buyCookieUpgrade(loaded,'convection',date()).ok,true);writeBakery(loaded,store);
+  const purchased=readBakery(store,date());assert.equal(purchased.lifetime,2);assert.equal(purchased.testCookies,1050000);assert.equal(purchased.upgrades.convection,1);
+});
+
+test('invalid temporary cookie grants never change the bakery',()=>{
+  const state=createBakery({cookies:800,lifetime:950},date()),before=structuredClone(state);
+  for(const count of [undefined,null,'100',0,-1,.5,NaN,Infinity,1e12+1,Number.MAX_SAFE_INTEGER]){
+    assert.equal(grantCookieTestCookies(state,count),0);assert.deepEqual(state,before);
+  }
+});
+
+test('temporary grants work while paused and stop exactly at the bakery balance cap',()=>{
+  const state=createBakery({cookies:1e15-50,lifetime:1e15-50,testCookies:1e15-100},date());state.paused=true;
+  const before=structuredClone(state);assert.equal(grantCookieTestCookies(state,100),50);assert.equal(state.cookies,1e15);assert.equal(state.testCookies,1e15-50);
+  assert.equal(state.paused,true);assert.equal(state.lifetime,before.lifetime);assert.deepEqual(state.daily,before.daily);assert.deepEqual(state.badges,before.badges);
+  const full=structuredClone(state);assert.equal(grantCookieTestCookies(state,100),0);assert.deepEqual(state,full);
+});
+
+test('legacy balances retain their lifetime minimum and saved test credits are sanitized',()=>{
+  for(const testCookies of [undefined,null,-1,'500',NaN,Infinity]){
+    const state=createBakery({cookies:700,lifetime:20,testCookies},date());assert.equal(state.testCookies,0);assert.equal(state.lifetime,700);
+  }
+  const granted=createBakery({cookies:700,lifetime:20,testCookies:650},date());assert.equal(granted.lifetime,50);
+  const excessive=createBakery({cookies:700,lifetime:20,testCookies:1e20},date());assert.equal(excessive.testCookies,1e15);assert.equal(excessive.lifetime,20);
 });

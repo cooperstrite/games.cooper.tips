@@ -9,14 +9,15 @@ const clamp=n=>Math.max(0,Math.min(1,n));
 export function createCookieProduction(root,style,initialUpgrades={},initialLines=1) {
  const key=`cookie-line-${++serial}`,wrapper=document.createElement('div'),filling=productionFilling(style.recipe),media=matchMedia('(prefers-reduced-motion: reduce)');
  wrapper.className='cc-production';
- wrapper.innerHTML=`<div class="cc-factory-toolbar"><div><span class="cc-eyebrow">YOUR WORKING BAKERY</span><h5 class="cc-factory-name"></h5></div><button type="button" data-tour="start">Take a factory tour <span aria-hidden="true">&rarr;</span></button></div><div class="cc-warehouse-host"></div>
+ wrapper.dataset.fit='false';
+ wrapper.innerHTML=`<div class="cc-factory-toolbar"><div><span class="cc-eyebrow">YOUR WORKING BAKERY</span><h5 class="cc-factory-name"></h5></div><div class="cc-factory-view-controls"><button type="button" data-fit-line aria-pressed="false">Fit whole line</button><button type="button" data-tour="start">Take a factory tour <span aria-hidden="true">&rarr;</span></button></div></div><div class="cc-warehouse-host"></div>
  <section class="cc-factory-tour" aria-label="Factory walkthrough" hidden><div class="cc-tour-top"><span class="cc-eyebrow cc-tour-step"></span><span class="cc-tour-running">Production keeps running</span><button type="button" data-tour="close" aria-label="Close factory tour">&times;</button></div><h5 tabindex="-1"></h5><p class="cc-tour-story" aria-live="polite"></p><div class="cc-tour-controls"><button type="button" data-tour="previous">Previous</button><button type="button" data-tour="auto">Pause tour</button><span class="cc-tour-progress" aria-hidden="true"></span><button type="button" data-tour="next">Next stop &rarr;</button></div></section>
  <div class="cc-line-viewport" tabindex="0" role="img" aria-label="Cookies being prepared, filled, baked, cooled, boxed, and delivered. Filling station: ${esc(filling.label)}."></div>
  <div class="cc-line-bottom"><nav aria-label="Follow the production line">${LINE_STAGES.map((s,i)=>`<button type="button" data-follow="${s.id}"><span>${i+1}</span> ${s.name}<small></small></button>`).join('')}</nav><p class="cc-line-caption"></p></div>`;
  root.append(wrapper);
  const viewport=wrapper.querySelector('.cc-line-viewport'),tourPanel=wrapper.querySelector('.cc-factory-tour');
  let flows=[],selected=0,upgrades={},layout=factoryLayout(initialUpgrades),svg=null,refs={},signature='',stopped=false,disposed=false,signal=0,lastReduced=media.matches;
- let tour={active:false,index:0,auto:true,elapsed:0},camera=null,target=null;
+ let tour={active:false,index:0,auto:true,elapsed:0},camera=null,target=null,fitWhole=false,detailScroll=0;
  const nodes=new Map(),returnNodes=new Map();
  const warehouse=createCookieWarehouse(wrapper.querySelector('.cc-warehouse-host'),index=>selectLine(index));
  const flow=()=>flows[selected];
@@ -64,7 +65,14 @@ export function createCookieProduction(root,style,initialUpgrades={},initialLine
   tourPanel.querySelector('.cc-tour-step').textContent=`FACTORY TOUR / ${tour.index+1} OF ${steps.length}`;tourPanel.querySelector('h5').textContent=step.title;tourPanel.querySelector('.cc-tour-story').textContent=step.text;
   tourPanel.querySelector('[data-tour="previous"]').disabled=tour.index===0;tourPanel.querySelector('[data-tour="auto"]').textContent=tour.auto?'Pause tour':'Continue tour';tourPanel.querySelector('[data-tour="next"]').textContent=tour.index===steps.length-1?'Finish tour':'Next stop \u2192';setCameraTarget();
  }
- function closeTour(){tour.active=false;signal=0;tourPanel.hidden=true;wrapper.dataset.tour='false';setCameraTarget();refs.highlight.setAttribute('opacity','0');wrapper.querySelector('[data-tour="start"]').focus({preventScroll:true});}
+ function closeTour(){tour.active=false;signal=0;tourPanel.hidden=true;wrapper.dataset.tour='false';viewport.scrollLeft=fitWhole?0:detailScroll;setCameraTarget();refs.highlight.setAttribute('opacity','0');wrapper.querySelector('[data-tour="start"]').focus({preventScroll:true});}
+ function toggleFit(){
+  if(!fitWhole&&!tour.active)detailScroll=viewport.scrollLeft;
+  fitWhole=!fitWhole;wrapper.dataset.fit=String(fitWhole);
+  wrapper.querySelector('[data-fit-line]').setAttribute('aria-pressed',String(fitWhole));
+  if(!tour.active)viewport.scrollLeft=fitWhole?0:detailScroll;
+  setCameraTarget();
+ }
  function draw(){if(!svg||!flow())return;const f=flow(),still=media.matches,illustrative=still?[150,345,510,670,904,1146,1250,1470,1620].map((x,id)=>({x,id:`still-${id}`})):f.batches,scale=layout.tier===0?.67:layout.tier===1?.8:1;
   const ids=new Set(illustrative.map(b=>b.id));for(const[id,node]of nodes)if(!ids.has(id)){node.el.remove();nodes.delete(id);}
   for(const batch of illustrative){let node=nodes.get(batch.id);if(!node){const el=document.createElementNS('http://www.w3.org/2000/svg','g');el.innerHTML=batchArt(key);el.dataset.batch=batch.id;refs.batchRoot.append(el);node={el};for(const name of ['dough','cookies','tray','box-back','box-front','back-flap','fold-flap','box-lid','tape'])node[name]=el.querySelector(`[data-${name}]`);node.pieces=[...el.querySelectorAll('[data-cookie-piece]')];node.toppings=[...el.querySelectorAll('[data-topping]')];nodes.set(batch.id,node);}
@@ -107,12 +115,12 @@ export function createCookieProduction(root,style,initialUpgrades={},initialLine
   if(!tour.active&&!paused&&seconds>0&&signal>0){signal=Math.max(0,signal-seconds);refs.highlight.setAttribute('opacity',signal*.4);}
   wrapper.dataset.speed=flow().speed.toFixed(2);wrapper.dataset.shipped=flows.reduce((n,f)=>n+f.shipped,0);wrapper.dataset.returned=flows.reduce((n,f)=>n+f.returned,0);
  }
- function click(event){const tourButton=event.target.closest('[data-tour]');if(tourButton){const action=tourButton.dataset.tour;if(action==='close'){closeTour();return;}if(action==='start'){tour={active:true,index:0,auto:!media.matches,elapsed:0};viewport.scrollLeft=0;}else if(action==='previous'){tour.index=Math.max(0,tour.index-1);tour.elapsed=0;}else if(action==='next'){if(tour.index===7){closeTour();return;}tour.index++;tour.elapsed=0;}else if(action==='auto')tour.auto=!tour.auto;updateTour();if(action==='start'){tourPanel.querySelector('h5').focus({preventScroll:true});tourPanel.scrollIntoView({block:'start',behavior:media.matches?'instant':'smooth'});}return;}
+ function click(event){if(event.target.closest('[data-fit-line]')){toggleFit();return;}const tourButton=event.target.closest('button[data-tour]');if(tourButton){const action=tourButton.dataset.tour;if(action==='close'){closeTour();return;}if(action==='start'){if(!fitWhole&&!tour.active)detailScroll=viewport.scrollLeft;tour={active:true,index:0,auto:!media.matches,elapsed:0};viewport.scrollLeft=0;}else if(action==='previous'){tour.index=Math.max(0,tour.index-1);tour.elapsed=0;}else if(action==='next'){if(tour.index===7){closeTour();return;}tour.index++;tour.elapsed=0;}else if(action==='auto')tour.auto=!tour.auto;updateTour();if(action==='start'){tourPanel.querySelector('h5').focus({preventScroll:true});tourPanel.scrollIntoView({block:'start',behavior:media.matches?'instant':'smooth'});}return;}
   const button=event.target.closest('[data-follow]');if(button){const stage=LINE_STAGES.find(s=>s.id===button.dataset.follow);if(tour.active){tour.index=LINE_STAGES.indexOf(stage);tour.elapsed=0;updateTour();}else{const factor=svg.getBoundingClientRect().width/layout.width;viewport.scrollTo({left:layout.stages[stage.id]*factor-viewport.clientWidth/2,behavior:media.matches?'instant':'smooth'});spotlight(stage.id);}}}
  function keydown(event){if(event.key==='Escape'&&tour.active){event.preventDefault();closeTour();}}
  function resized(){if(svg)setCameraTarget();}
  function reducedMotion(){lastReduced=media.matches;if(media.matches&&tour.active){tour.auto=false;updateTour();}draw();caption();}
  wrapper.addEventListener('click',click);wrapper.addEventListener('keydown',keydown);media.addEventListener('change',reducedMotion);window.addEventListener('resize',resized);
  update(initialUpgrades,initialLines);
- return {update,advance,bake(){queueProductionBatch(flow());caption();},purchased(id){if(id==='line')selectLine(flows.length-1);else spotlight(id);},get pace(){return flow().targetSpeed/52;},dispose(){disposed=true;media.removeEventListener('change',reducedMotion);window.removeEventListener('resize',resized);warehouse.dispose();wrapper.remove();nodes.clear();returnNodes.clear();}};
+ return {update,advance,bake(){queueProductionBatch(flow());caption();},purchased(id){if(id==='line')selectLine(flows.length-1);else spotlight(id);},get pace(){return flow().targetSpeed/52;},dispose(){disposed=true;wrapper.removeEventListener('click',click);wrapper.removeEventListener('keydown',keydown);media.removeEventListener('change',reducedMotion);window.removeEventListener('resize',resized);warehouse.dispose();wrapper.remove();nodes.clear();returnNodes.clear();}};
 }

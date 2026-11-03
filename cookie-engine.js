@@ -28,13 +28,23 @@ export function buyCookieLine(state, now = Date.now()) {
   state.cookies -= cost; state.lines = bakeryLineCount(state) + 1;
   return { ok: true, cost, badges: checkCookieBadges(state, now) };
 }
+// Temporary testing funds are spendable, but never count as earned baking.
+export function grantCookieTestCookies(state, count) {
+  if (!Number.isSafeInteger(count) || count <= 0 || count > 1e12) return 0;
+  const balance = amount(state.cookies), added = Math.max(0, Math.min(LIMIT - balance, count));
+  if (!added) return 0;
+  state.cookies = balance + added;
+  state.testCookies = amount(amount(state.testCookies) + added);
+  return added;
+}
 export function createBakery(saved = {}, now = Date.now()) {
   saved = saved && typeof saved === "object" ? saved : {};
   const upgrades = Object.fromEntries(COOKIE_UPGRADES.map(u => [u.id, integer(saved.upgrades?.[u.id])]));
   const today = cookieDay(now), validDay = typeof saved.daily?.day === "string" && /^\d{4}-\d{2}-\d{2}$/.test(saved.daily.day);
   const day = validDay && saved.daily.day >= today ? saved.daily.day : today;
   const badges = Object.fromEntries(COOKIE_BADGES.filter(b => Number.isFinite(saved.badges?.[b.id]) && saved.badges[b.id] > 0).map(b => [b.id, saved.badges[b.id]]));
-  const state = { version: 2, lines: bakeryLineCount(saved), cookies: amount(saved.cookies), lifetime: Math.max(amount(saved.cookies), amount(saved.lifetime)),
+  const cookies = amount(saved.cookies), testCookies = amount(saved.testCookies);
+  const state = { version: 2, lines: bakeryLineCount(saved), cookies, testCookies, lifetime: Math.max(0, cookies - testCookies, amount(saved.lifetime)),
     clicks: Math.floor(amount(saved.clicks)), seconds: amount(saved.seconds), upgrades, badges,
     daily: { day, baked: saved.daily?.day === day ? amount(saved.daily.baked) : 0,
       taps: saved.daily?.day === day ? Math.floor(amount(saved.daily.taps)) : 0 }, paused: false,

@@ -1,9 +1,11 @@
 import { BAKERY_KEY, COOKIE_UPGRADES, COOKIE_BADGES, COOKIE_COIN_TIERS, COOKIE_DAILY_COINS, COOKIE_MAX_LINES, readCookieStyle, cookieRewardTotal, cookieCoinProgress, cookieReceipt } from "./cookie-config.js";
-import { readBakery, writeBakery, bakeryRates, cookieUnitPrice, cookieUpgradePrice, cookieLinePrice, buyCookieLine, bakeCookie, advanceBakery, buyCookieUpgrade, cookieBadgeProgress, syncCookieDay, claimCookieCoins } from "./cookie-engine.js";
+import { readBakery, writeBakery, bakeryRates, cookieUnitPrice, cookieUpgradePrice, cookieLinePrice, buyCookieLine, bakeCookie, advanceBakery, buyCookieUpgrade, cookieBadgeProgress, syncCookieDay, claimCookieCoins, grantCookieTestCookies } from "./cookie-engine.js";
 import { cookieArt, stationArt, cookieBadgeArt, cookieEscape as esc } from "./cookie-art.js";
 import { createCookieCustomizer } from "./cookie-customizer.js";
 import { createCookieProduction } from "./cookie-production.js";
 import { connectCookieInput } from "./cookie-input.js";
+import { connectCookieFullscreen } from "./cookie-fullscreen.js";
+import { connectCookieTesting } from "./cookie-testing.js";
 import { getArcadeWallet } from "./arcade/wallet.js";
 
 const number = value => Math.floor(value).toLocaleString('en-US');
@@ -19,10 +21,11 @@ export function createCookieClicker(root, { editorOnly = false } = {}) {
   let frame = 0, lastFrame = 0, lastRender = 0, lastSave = 0, lastRetry = 0, bakingUntil = 0, pageName = '', floorSignature = '', badgeSignature = '';
   let toastUntil = 0, saveFailed = false;
   wrapper.innerHTML = `<header class="cc-header"><div><p class="cc-eyebrow">SMALL BATCHES. BIG DREAMS.</p><h3>${esc(style.name)}</h3></div><span class="cc-open"><i></i><span>Opening the bakery</span></span></header>
-    <nav class="cc-nav" aria-label="Cookie Clicker pages"><a href="#cookieclicker" data-page="bakery">Bakery</a><a href="#cookieclicker/badges" data-page="badges">Badges <span class="cc-badge-count">0/${COOKIE_BADGES.length}</span></a><a href="#characters/cookieclicker">Customize</a><a href="#store/cookieclicker">Shop looks &rarr;</a><button type="button" class="cc-pause">Pause bakery</button></nav>
+    <nav class="cc-nav" aria-label="Cookie Clicker pages"><a href="#cookieclicker" data-page="bakery">Bakery</a><a href="#cookieclicker/badges" data-page="badges">Badges <span class="cc-badge-count">0/${COOKIE_BADGES.length}</span></a><a href="#characters/cookieclicker">Customize</a><a href="#store/cookieclicker">Shop looks &rarr;</a><button type="button" class="cc-fullscreen" aria-expanded="false">Fullscreen bakery</button><button type="button" class="cc-pause">Pause bakery</button></nav>
+    <div class="cc-focus-controls" hidden><span>THE BAKERY FLOOR</span><button type="button" class="cc-exit-fullscreen">Exit fullscreen <kbd>Esc</kbd></button></div>
     <div class="cc-scoreboard"><div class="cc-balance"><span>COOKIES TO SPEND</span><strong data-stat="cookies">0</strong></div><div><span>PER TAP</span><strong data-stat="click">1</strong></div><div><span>PER SECOND</span><strong data-stat="cps">0</strong></div><div><span>TOTAL BAKED</span><strong data-stat="lifetime">0</strong></div></div>
     <div class="cc-toast" role="status" aria-live="polite"></div>
-    <div class="cc-bakery-page"><div class="cc-bakery-scene"><div class="cc-bake-counter"><div class="cc-counter-label">FRESH FROM YOUR OVEN</div><div class="cc-cookie-wrap"><div class="cc-cookie-halo"></div><button type="button" class="cc-bake" aria-label="Bake cookies">${cookieArt(style)}</button><div class="cc-crumbs" aria-hidden="true"></div></div><h4 class="cc-recipe-name"></h4><p>Tap the cookie to bake a batch.</p><span class="cc-tap-value">+1 cookie per tap</span></div>
+    <div class="cc-bakery-page"><div class="cc-bakery-scene"><div class="cc-bake-counter"><div class="cc-counter-label">FRESH FROM YOUR OVEN</div><div class="cc-cookie-wrap"><div class="cc-cookie-halo"></div><button type="button" class="cc-bake" aria-label="Bake cookies">${cookieArt(style)}</button><div class="cc-crumbs" aria-hidden="true"></div></div><div class="cc-focus-balance"><span>COOKIES TO SPEND</span><strong>0</strong></div><h4 class="cc-recipe-name"></h4><p>Tap the cookie to bake a batch.</p><span class="cc-tap-value">+1 cookie per tap</span></div>
     <section class="cc-workshop" aria-label="Your working bakery"><header><div><span class="cc-eyebrow">THE PRODUCTION LINE</span><h4>From a little dough to a lovely delivery.</h4></div><div class="cc-line-metrics"><span class="cc-floor-count">0 upgrades</span><strong class="cc-line-pace">1.00x line speed</strong></div></header><div class="cc-line-host"></div>
     <section class="cc-expansion" aria-label="Add a production line"><div><span class="cc-eyebrow">ROOM TO GROW</span><h5><span class="cc-line-count">1</span> / ${COOKIE_MAX_LINES} production lines</h5><p class="cc-line-yield"></p><p class="cc-line-purchase-note"></p></div><button type="button" class="cc-buy-line" disabled><span>Add a production line</span><strong></strong></button></section></section></div>
     <section class="cc-touch-settings" aria-label="Touch gaming settings" hidden><button type="button" aria-pressed="true">Touch gaming: on</button><p></p></section>
@@ -84,6 +87,8 @@ export function createCookieClicker(root, { editorOnly = false } = {}) {
     $('.cc-open span').textContent = !lease ? 'Bakery active in another tab' : state.paused ? 'Taking a little break' : 'Fresh batches in progress';
     $('.cc-open').dataset.paused = String(paused);
     stats.cookies.textContent = compact(state.cookies); stats.cookies.title = `${number(state.cookies)} cookies`;
+    $('.cc-focus-balance strong').textContent = compact(state.cookies);
+    $('.cc-focus-balance strong').title = `${number(state.cookies)} cookies`;
     stats.click.textContent = compact(rates.click); stats.cps.textContent = compact(rates.cps); stats.lifetime.textContent = compact(state.lifetime); stats.lifetime.title = `${number(state.lifetime)} cookies`;
     $('.cc-tap-value').textContent = `+${number(rates.click)} ${rates.click === 1 ? 'cookie' : 'cookies'} per tap`;
     bakeButton.disabled = paused; bakeButton.setAttribute('aria-label', `Bake ${number(rates.click)} ${rates.click === 1 ? 'cookie' : 'cookies'}`);
@@ -120,6 +125,7 @@ export function createCookieClicker(root, { editorOnly = false } = {}) {
     const next = location.hash === '#cookieclicker/badges' ? 'badges' : 'bakery'; if (pageName === next) return;
     const changed = !!pageName; pageName = next;
     $('.cc-bakery-page').hidden = pageName !== 'bakery'; $('.cc-badges-page').hidden = pageName !== 'badges';
+    $('.cc-fullscreen').hidden = pageName !== 'bakery';
     for (const link of wrapper.querySelectorAll('[data-page]')) { if (link.dataset.page === pageName) link.setAttribute('aria-current', 'page'); else link.removeAttribute('aria-current'); }
     render();
     if (changed) { const heading = $(pageName === 'badges' ? '.cc-badges-page h3' : '.cc-header h3'); heading.tabIndex = -1; heading.focus({ preventScroll: true }); heading.scrollIntoView({ block: 'nearest' }); }
@@ -174,6 +180,17 @@ export function createCookieClicker(root, { editorOnly = false } = {}) {
     render();
   }
   const disconnectInput = connectCookieInput(wrapper, bake);
+  const disconnectFullscreen = connectCookieFullscreen(wrapper);
+  // Temporary testing shortcut. These credits never enter earned-cookie counters.
+  const disconnectTesting = connectCookieTesting(wrapper, {
+    canOpen: () => !disposed && lease && !document.hidden && pageName === 'bakery',
+    grant(amount) {
+      if (disposed || !lease || document.hidden) return 0;
+      const added = grantCookieTestCookies(state, amount);
+      if (added) { dirty = true; render(); persist(); }
+      return added;
+    }, announce,
+  });
   wrapper.addEventListener('click', onClick);
   pauseButton.addEventListener('click', () => { if (!lease) return; state.paused = !state.paused; lastFrame = 0; persist(); bankCoins(); render(); });
   function tick(now) {
@@ -197,7 +214,7 @@ export function createCookieClicker(root, { editorOnly = false } = {}) {
   document.addEventListener('visibilitychange', visibility); window.addEventListener('pagehide', release);
   readPage(); acquire(); frame = requestAnimationFrame(tick);
   return () => {
-    bankCoins(); release(); disposed = true; cancelAnimationFrame(frame); unsubscribe(); production.dispose(); disconnectInput();
+    bankCoins(); release(); disposed = true; cancelAnimationFrame(frame); unsubscribe(); disconnectTesting(); disconnectFullscreen(); production.dispose(); disconnectInput();
     window.removeEventListener('hashchange', readPage); window.removeEventListener('storage', onStorage);
     document.removeEventListener('visibilitychange', visibility); window.removeEventListener('pagehide', release); wrapper.remove();
   };
