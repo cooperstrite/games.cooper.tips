@@ -20,8 +20,8 @@ export function factoryLayout(upgrades = {}) {
     signature: `${tier}:${Object.entries(upgrades).filter(([, count]) => count > 0).map(([id]) => id).sort().join(',')}` };
 }
 
-// Without a conveyor, chefs work at a bench, then carry the tray to the next
-// station. The process clock is unchanged; only its visible position pauses.
+// Station chefs pass each tray along the worktop. Smooth acceleration and lift
+// settle to zero at the workbenches; no extra walking chef is needed per tray.
 export function manualBatchPose(distance, plan) {
   if (plan.transportBelt) return { x: distance, carry: false, lift: 0, walk: 0 };
   const stops = [100, 280, 450, 630, 890, 1155, 1252, 1375, 1610];
@@ -31,9 +31,9 @@ export function manualBatchPose(distance, plan) {
     if (distance <= end) return { x, carry: false, lift: x === 890 ? 22 : 0, walk: 0 };
     const startNext = next - (i === stops.length - 1 ? 0 : work(next));
     if (distance < startNext) {
-      const t = (distance - end) / (startNext - end), eased = t * t * (3 - 2 * t);
+      const t = (distance - end) / (startNext - end), eased = t * t * t * (t * (t * 6 - 15) + 10);
       const lift = (x === 890 ? 22 * (1 - eased) : 0) + (next === 890 ? 22 * eased : 0);
-      return { x: x + (next - x) * eased, carry: true, lift: lift + 7 * Math.sin(t * Math.PI), walk: t };
+      return { x: x + (next - x) * eased, carry: true, lift: lift + 5 * Math.sin(eased * Math.PI) ** 2, walk: t };
     }
   }
   return { x: 1715, carry: false, lift: 0, walk: 0 };
@@ -57,7 +57,7 @@ export function packingPose(x) {
 export function factoryTour(upgrades, recipe) {
   const plan = factoryLayout(upgrades), filling = productionFilling(recipe);
   return [
-    { id: 'mix', title: 'Ingredients become dough', text: plan.machinePortion ? 'Flour and liquid arrive through supply pipes. The depositor measures dough onto each tray. This is the upgrade that replaces hand portioning.' : plan.machineMix ? 'The mixer stirs the dough, but your chef still scoops each portion onto the tray. Buy a dough depositor on this line to automate portioning.' : 'Your chef measures ingredients, stirs the bowl, and scoops dough onto a tray. The dough waits at the bench while the chef works; another chef carries the tray onward. A stand mixer automates stirring.' },
+    { id: 'mix', title: 'Ingredients become dough', text: plan.machinePortion ? 'Flour and liquid arrive through supply pipes. The depositor measures dough onto each tray. This is the upgrade that replaces hand portioning.' : plan.machineMix ? 'The mixer stirs the dough, but your chef still scoops each portion onto the tray. Buy a dough depositor on this line to automate portioning.' : 'Your chef measures ingredients, stirs the bowl, and scoops dough onto a tray. The chefs pass trays along the worktop, staying at their stations. A stand mixer automates stirring.' },
     { id: 'roll', title: 'An even sheet', text: plan.machineRoll ? 'The powered rollers press each portion to an even thickness. The turn of the rollers and the passing trays stay in step as you improve the line.' : 'The chef rolls the dough by hand on the preparation bench. The rolling pin passes over the dough instead of leaving it in a lump. Hand-tool upgrades also improve every tap.' },
     { id: 'cut', title: 'Shape each cookie', text: plan.machineCut ? 'A timed press lowers only when dough reaches it. Its cutting rings make a tray of cookie shapes; offcuts go into the recovery bin for the next mix.' : 'The baker stamps out the cookies with hand cutters. Buy Cookie factory to install the timed cutting press. Until then, shaping stays a hands-on job.' },
     { id: 'fill', title: filling.kind === 'none' ? 'A recipe without filling' : `Add ${filling.label.toLowerCase()}`, text: filling.kind === 'none' ? 'This recipe bypasses filling. The ingredient tank, delivery tube, and nozzles stay idle; they wake up when you choose a recipe with chips, oats, or jam.' : plan.machineFill ? (filling.kind === 'jam' ? 'A supply tank pumps berry filling along the clear pipe, through a valve, and into the dosing head. The nozzles open over each cookie, leaving a glossy center.' : 'A storage hopper supplies the clear ingredient tube. Chips or oats travel to a small buffer hopper, then a gate meters them over the cookies. The feed and dispenser run together.') : 'The baker adds toppings or filling by hand from the ingredient jar. A pastry press, factory, or depositor installs the connected supply tank and filling head.' },

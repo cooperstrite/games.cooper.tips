@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { COOKIE_UPGRADES } from '../cookie-config.js';
 import { createBakery, bakeCookie } from '../cookie-engine.js';
-import { LINE_START, LINE_END, BATCH_SPACING, LINE_STAGES, TRAY_RETURN_LENGTH, returnTrayPose, productionFilling, productionSpeed, createProductionFlow, setProductionEquipment, queueProductionBatch, advanceProductionFlow, productionBatchAppearance } from '../cookie-line-engine.js';
+import { LINE_START, LINE_END, BATCH_SPACING, MANUAL_BATCH_SPACING, LINE_STAGES, TRAY_RETURN_LENGTH, returnTrayPose, productionFilling, productionSpeed, createProductionFlow, setProductionEquipment, queueProductionBatch, advanceProductionFlow, productionBatchAppearance } from '../cookie-line-engine.js';
 
 test('every purchase, including duplicate hand tools and machines, makes the line faster', () => {
   const upgrades = {};
@@ -26,7 +26,7 @@ test('an upgrade preserves batch positions and eases toward the new speed withou
 });
 
 test('the same batches move consistently across frame rates and maintain conveyor spacing', () => {
-  const a=createProductionFlow({mixer:1}), b=createProductionFlow({mixer:1});
+  const a=createProductionFlow({mixer:1,conveyor:1}), b=createProductionFlow({mixer:1,conveyor:1});
   setProductionEquipment(a,{mixer:1,conveyor:3});setProductionEquipment(b,{mixer:1,conveyor:3});
   for(let i=0;i<600;i++)advanceProductionFlow(a,1/60);
   for(let i=0;i<300;i++)advanceProductionFlow(b,1/30);
@@ -65,7 +65,7 @@ test('rapid tapping stays bounded, reuses space on the line, and cannot mint gam
   const game=createBakery();bakeCookie(game);const saved=structuredClone(game),flow=createProductionFlow(game.upgrades);
   for(let i=0;i<10000;i++)queueProductionBatch(flow);
   assert.equal(flow.queued,24);
-  for(let i=0;i<7200;i++){advanceProductionFlow(flow,1/60);assert.ok(flow.batches.length<=16);assert.ok(flow.returns.length<=15);}
+  for(let i=0;i<14400;i++){advanceProductionFlow(flow,1/60);assert.ok(flow.batches.length<=6);assert.ok(flow.returns.length<=6);}
   assert.equal(flow.shipped,24);assert.equal(flow.returned,24);assert.equal(flow.batches.length,0);assert.deepEqual(game,saved);
 });
 
@@ -116,4 +116,38 @@ test('a manual kitchen holds trays at workbenches and carries them between stati
   assert.equal(factoryLayout({mixer:1}).machinePortion,false);
   assert.equal(factoryLayout({depositor:1}).machinePortion,true);
   const conveyor=factoryLayout({conveyor:1});assert.equal(conveyor.transportBelt,true);assert.deepEqual(manualBatchPose(360,conveyor),{x:360,carry:false,lift:0,walk:0});
+});
+
+test('manual batches stay separated under continuous production and conveyor installation preserves their positions', () => {
+  const flow=createProductionFlow({convection:1});assert.equal(flow.spacing,MANUAL_BATCH_SPACING);
+  for(let i=0;i<3600;i++){
+    queueProductionBatch(flow);advanceProductionFlow(flow,1/60);
+    const xs=flow.batches.map(b=>b.x).sort((a,b)=>a-b);
+    assert.ok(xs.length<=6);
+    for(let j=1;j<xs.length;j++)assert.ok(xs[j]-xs[j-1]>=MANUAL_BATCH_SPACING-.001);
+  }
+  const positions=flow.batches.map(b=>b.x);setProductionEquipment(flow,{convection:1,conveyor:1});
+  assert.deepEqual(flow.batches.map(b=>b.x),positions);assert.equal(flow.spacing,BATCH_SPACING);
+});
+
+test('tray handoffs ease out of and back into each stop without a sudden vertical kick', async () => {
+  const {manualBatchPose,factoryLayout}=await import('../cookie-factory-model.js'),plan=factoryLayout({});
+  for(const join of [140,240,320,410,490,590,670,850,930,1115,1195,1228,1276,1351,1399,1570,1650]){
+    const a=manualBatchPose(join-.01,plan),b=manualBatchPose(join+.01,plan);
+    assert.ok(Math.abs(a.x-b.x)<.00001,`horizontal settling at ${join}`);
+    assert.ok(Math.abs(a.lift-b.lift)<.00001,`vertical settling at ${join}`);
+  }
+});
+
+test('station chefs reach only for nearby trays and return to their normal work pose', async () => {
+  const {chefHandoffHands}=await import('../cookie-chefs.js');
+  const rest=[[-47,299],[47,299]],far=[{x:500,lift:4,walk:.5}];
+  assert.deepEqual(chefHandoffHands(100,rest,far),rest);
+  for(let x=-160;x<=360;x+=2)for(const walk of [0,.1,.5,.9,1]){
+    const hands=chefHandoffHands(100,rest,[{x,lift:5,walk}]);
+    for(const hand of hands){assert.ok(Math.abs(hand[0])<=120);assert.ok(hand[1]>=299&&hand[1]<=337);}
+    if(walk===0||walk===1)assert.deepEqual(hands,rest);
+  }
+  const hands=chefHandoffHands(100,rest,[{x:180,lift:5,walk:.5}]);
+  assert.deepEqual(hands[0],rest[0]);assert.ok(hands[1][0]>rest[1][0]);assert.ok(hands[1][1]>rest[1][1]);
 });

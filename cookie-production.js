@@ -1,8 +1,8 @@
 import { cookieEscape as esc } from './cookie-art.js';
 import { LINE_STAGES, TRAY_RETURN_LENGTH, productionFilling, returnTrayPose, createProductionFlow, setProductionEquipment, queueProductionBatch, advanceProductionFlow, productionBatchAppearance, productionRates } from './cookie-line-engine.js';
 import { factoryLayout, factoryX, packingPose, factoryTour, manualBatchPose } from './cookie-factory-model.js';
-import { factoryArt, batchArt, courierArt } from './cookie-factory-art.js';
-import { bindCookieChef } from './cookie-chefs.js';
+import { factoryArt, batchArt } from './cookie-factory-art.js';
+import { bindCookieChef, chefHandoffHands } from './cookie-chefs.js';
 import { createCookieWarehouse } from './cookie-warehouse.js';
 
 let serial=0;
@@ -31,7 +31,7 @@ export function createCookieProduction(root,style,initialLines=[{}],initialSelec
   if(refs.rollingPin){const g=document.createElementNS('http://www.w3.org/2000/svg','g');g.setAttribute('transform',`translate(${layout.stages.roll} 0)`);g.append(refs.rollingPin);foreground.append(g);}
   if(refs.pickup){const g=document.createElementNS('http://www.w3.org/2000/svg','g');g.setAttribute('transform',`translate(${layout.stages.pack} 0)`);g.append(refs.pickup);foreground.append(g);}
   refs.pickupRod=$('[data-pickup-rod]');refs.pickupCarriage=$('[data-pickup-carriage]');
-  refs.chefs=$$('[data-chef]').map(bindCookieChef);refs.courierRoot=$('[data-couriers]');refs.portion=$('[data-portion-spoon]');refs.handTape=$('[data-hand-tape]');
+  refs.chefs=$$('[data-chef]').map(bindCookieChef);refs.portion=$('[data-portion-spoon]');refs.handTape=$('[data-hand-tape]');
   camera=[0,0,layout.width,560];setCameraTarget();draw();
  }
  function update(lines,index=selected){
@@ -75,17 +75,13 @@ export function createCookieProduction(root,style,initialLines=[{}],initialSelec
   if(!tour.active)viewport.scrollLeft=fitWhole?0:detailScroll;
   setCameraTarget();
  }
- function draw(){if(!svg||!flow())return;const f=flow(),still=media.matches,illustrative=still?[150,345,510,670,904,1146,1250,1470,1620].map((x,id)=>({x,id:`still-${id}`})):f.batches,scale=layout.tier===0?.67:layout.tier===1?.8:1;
-  const ids=new Set(illustrative.map(b=>b.id));for(const[id,node]of nodes)if(!ids.has(id)){node.el.remove();node.courier?.remove();nodes.delete(id);}
+ function draw(seconds=0){if(!svg||!flow())return;const f=flow(),still=media.matches,illustrative=still?(layout.transportBelt?[150,345,510,670,904,1146,1250,1470,1620]:[100,450,890,1252,1610]).map((x,id)=>({x,id:`still-${id}`})):f.batches,scale=layout.tier===0?.67:layout.tier===1?.8:1,transfers=[];
+  const ids=new Set(illustrative.map(b=>b.id));for(const[id,node]of nodes)if(!ids.has(id)){node.el.remove();nodes.delete(id);}
   for(const batch of illustrative){let node=nodes.get(batch.id);if(!node){const el=document.createElementNS('http://www.w3.org/2000/svg','g');el.innerHTML=batchArt(key);el.dataset.batch=batch.id;refs.batchRoot.append(el);node={el};for(const name of ['dough','cookies','tray','box-back','box-front','back-flap','fold-flap','box-lid','tape'])node[name]=el.querySelector(`[data-${name}]`);node.pieces=[...el.querySelectorAll('[data-cookie-piece]')];node.toppings=[...el.querySelectorAll('[data-topping]')];nodes.set(batch.id,node);}
    const p=productionBatchAppearance(batch.x),transfer=packingPose(batch.x),sealing=p.sealed,pose=manualBatchPose(batch.x,layout),visibleX=factoryX(layout,pose.x);
    node.el.setAttribute('transform',`translate(${visibleX.toFixed(2)} ${330-pose.lift}) scale(${scale} 1)`);node.el.dataset.phase=p.sealed===1?'shipped':transfer.boxReady>0?'boxing':p.baked===1?'baked':p.filled===1?'filled':p.cut===1?'cut':p.rolled===1?'rolled':'dough';
    node.el.dataset.carried=String(pose.carry);
-   if(!layout.transportBelt){
-    if(!node.courier){node.courier=document.createElementNS('http://www.w3.org/2000/svg','g');node.courier.innerHTML=courierArt(key);refs.courierRoot.append(node.courier);node.chef=bindCookieChef(node.courier.firstElementChild);}
-    node.courier.setAttribute('opacity',pose.carry?'1':'0');node.courier.setAttribute('transform',`translate(${visibleX} 0) scale(${scale} 1)`);
-    node.chef.pose([-46,337-pose.lift],[46,337-pose.lift],pose.walk);
-   }
+   if(pose.carry)transfers.push({...pose,x:visibleX});
    const deposited=clamp((batch.x-60)/38);node.dough.setAttribute('transform',`scale(${(1+p.rolled*.7)*deposited} ${(1-p.rolled*.62)*deposited})`);node.dough.setAttribute('opacity',1-p.cut);
    node.cookies.setAttribute('opacity',p.cut*(1-clamp((sealing-.12)/.65)));node.cookies.setAttribute('transform',`translate(0 ${-transfer.lift.toFixed(2)})`);
    node.pieces.forEach(el=>el.setAttribute('filter',`brightness(${1.5-p.baked*.5}) saturate(${.55+p.baked*.45})`));node.toppings.forEach(el=>el.setAttribute('opacity',filling.kind==='none'?1:productionBatchAppearance(batch.x+Number(el.dataset.topping)).filled));
@@ -123,20 +119,22 @@ export function createCookieProduction(root,style,initialLines=[{}],initialSelec
     left=[bx-24,317-(pick?.lift||0)];right=seal>.1?[tapeX-chef.offset-seal*10,296+seal*20]:[bx+24,317-(pick?.lift||0)];
    }
    if(chef.task==='ship'){left=[4,331];right=[65,331];}
-   chef.pose(left,right);
+   const home=chef.task==='ship'?chef.offset:layout.stages[chef.task]+chef.offset;
+   [left,right]=chefHandoffHands(home,[left,right],transfers);
+   chef.pose(left,right,still?0:seconds);
   }
   refs.ingredients.forEach((el,i)=>{const phase=(distance*.012+i*.193)%1;el.setAttribute('transform',`translate(${-29+i%3*29+Math.sin(i*8)*3} ${295+phase*phase*30}) rotate(${phase*210+i*29})`);});
   refs.drops.forEach(el=>el.setAttribute('opacity',activity(94)));refs.wisps.forEach((el,i)=>{const phase=(distance*.004+i/3)%1;el.setAttribute('transform',`translate(${Math.sin(phase*6+i)*4} ${-phase*20})`);el.setAttribute('opacity',Math.sin(phase*Math.PI)*.42);});refs.heat?.setAttribute('opacity',.92+Math.sin(distance*.035)*.04);
   refs.hands.forEach((el,i)=>el.setAttribute('transform',`translate(${Math.sin(distance*.055+i)*5} ${i?-(pick?.lift||0)*.22:rolling*8})`));refs.faces.forEach(el=>el.setAttribute('opacity',distance%390>385?.4:1));
   warehouse.draw(flows,still);cameraDraw();
  }
- function caption(){wrapper.querySelector('.cc-line-caption').textContent=media.matches?'Reduced motion: a still view of every step. The bakery still earns its normal output.':stopped?'Production paused. Your batches will continue from here.':flow()?.auto?`Line ${selected+1} is working independently. ${layout.transportBelt?'Its conveyor carries the trays.':'Chefs carry trays between the workbenches.'}`:flow()?.batches.length||flow()?.queued?`Your chefs are making the batches you tapped on Line ${selected+1}. Buy upgrades for this kitchen below.`:`Line ${selected+1} starts with chefs, hand tools, and a basic oven. Tap the cookie to give them a batch to make.`;}
+ function caption(){wrapper.querySelector('.cc-line-caption').textContent=media.matches?'Reduced motion: a still view of every step. The bakery still earns its normal output.':stopped?'Production paused. Your batches will continue from here.':flow()?.auto?`Line ${selected+1} is working independently. ${layout.transportBelt?'Its conveyor carries the trays.':'The station chefs pass trays along the worktop.'}`:flow()?.batches.length||flow()?.queued?`Your chefs are making the batches you tapped on Line ${selected+1}. Buy upgrades for this kitchen below.`:`Line ${selected+1} starts with chefs, hand tools, and a basic oven. Tap the cookie to give them a batch to make.`;}
  function advance(seconds,paused=false){if(disposed)return;if(lastReduced!==media.matches)reducedMotion();if(stopped!==paused){stopped=paused;caption();}
   let changed=false;for(const f of flows)changed=(!media.matches&&advanceProductionFlow(f,seconds,paused))||changed;
   if(tour.active&&tour.auto&&!document.hidden&&seconds>0&&!paused){tour.elapsed+=seconds;if(tour.elapsed>=12){tour.elapsed=0;if(tour.index<7){tour.index++;updateTour();}else{tour.auto=false;updateTour();}}}
   tourPanel.querySelector('.cc-tour-running').textContent=paused?'Bakery is paused':'Production keeps running';
   if(tour.active)tourPanel.querySelector('.cc-tour-progress').style.setProperty('--tour-progress',`${clamp(tour.elapsed/12)*100}%`);
-  if(changed)draw();else if(tour.active||camera?.some((v,i)=>Math.abs(v-target[i])>.05))cameraDraw(seconds);
+  if(changed)draw(seconds);else if(tour.active||camera?.some((v,i)=>Math.abs(v-target[i])>.05))cameraDraw(seconds);
   if(!tour.active&&!paused&&seconds>0&&signal>0){signal=Math.max(0,signal-seconds);refs.highlight.setAttribute('opacity',signal*.4);}
   wrapper.dataset.speed=flow().speed.toFixed(2);wrapper.dataset.shipped=flows.reduce((n,f)=>n+f.shipped,0);wrapper.dataset.returned=flows.reduce((n,f)=>n+f.returned,0);
  }

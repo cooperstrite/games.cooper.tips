@@ -6,6 +6,8 @@ export const LINE_START = 60;
 export const LINE_END = 1715;
 export const LINE_WIDTH = 1640;
 export const BATCH_SPACING = 112;
+export const MANUAL_BATCH_SPACING = 280;
+export const productionSpacing = upgrades => upgrades.conveyor || upgrades.tunnel ? BATCH_SPACING : MANUAL_BATCH_SPACING;
 export const TRAY_RELEASE = 1300;
 export const TRAY_RETURN_LENGTH = Math.PI * (47.5 + 54) + 1240;
 export const LINE_STAGES = Object.freeze([
@@ -58,13 +60,15 @@ export function productionSpeed(upgrades = {}) {
 }
 export function createProductionFlow(upgrades = {}) {
   const auto = productionRates(upgrades).cps > 0;
-  const batches = auto ? Array.from({ length: Math.ceil((LINE_END-LINE_START)/BATCH_SPACING) }, (_, id) => ({ id, x: LINE_START + id * BATCH_SPACING })) : [];
+  const spacing = productionSpacing(upgrades);
+  const batches = auto ? Array.from({ length: Math.ceil((LINE_END-LINE_START)/spacing) }, (_, id) => ({ id, x: LINE_START + id * spacing })) : [];
   const speed = productionSpeed(upgrades);
-  return { batches, returns: [], returned: 0, nextId: batches.length, queued: 0, gap: auto ? 0 : BATCH_SPACING, auto, speed, targetSpeed: speed, distance: 0, shipped: 0 };
+  return { batches, returns: [], returned: 0, nextId: batches.length, queued: 0, gap: auto ? 0 : spacing, spacing, auto, speed, targetSpeed: speed, distance: 0, shipped: 0 };
 }
 export function setProductionEquipment(flow, upgrades) {
   flow.auto = productionRates(upgrades).cps > 0;
   flow.targetSpeed = productionSpeed(upgrades);
+  flow.spacing = productionSpacing(upgrades);
 }
 export function queueProductionBatch(flow) { flow.queued = Math.min(24, flow.queued + 1); }
 export function advanceProductionFlow(flow, seconds, paused = false) {
@@ -87,12 +91,12 @@ export function advanceProductionFlow(flow, seconds, paused = false) {
   const before = flow.batches.length;
   flow.batches = flow.batches.filter(batch => batch.x < LINE_END);
   flow.shipped += before - flow.batches.length;
-  if ((flow.auto || flow.queued) && flow.gap >= BATCH_SPACING) {
-    flow.gap -= BATCH_SPACING;
+  if ((flow.auto || flow.queued) && flow.gap >= flow.spacing) {
+    flow.gap -= flow.spacing;
     flow.batches.push({ id: flow.nextId++, x: LINE_START + flow.gap });
     if (flow.queued) flow.queued--;
   }
-  if (!flow.auto && !flow.queued) flow.gap = Math.min(BATCH_SPACING,flow.gap);
+  if (!flow.auto && !flow.queued) flow.gap = Math.min(flow.spacing,flow.gap);
   return true;
 }
 

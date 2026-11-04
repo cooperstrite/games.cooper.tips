@@ -23,7 +23,6 @@ function chef(x,key,task='roll') {return `<g data-chef="${task}" data-chef-offse
  <g data-chef-face><ellipse cx="-8" cy="207" rx="2" ry="3" fill="#3c3c30"/><ellipse cx="8" cy="207" rx="2" ry="3" fill="#3c3c30"/><path d="M-5 220q5 4 10-1" fill="none" stroke="#8e5944" stroke-width="1.6" stroke-linecap="round"/><path d="M0 210l-2 5h4" fill="none" stroke="#bd8562"/></g>
  <path d="M-22 188v-15c-26-7-19-33 0-31 2-22 34-22 37-3 26-9 35 25 9 34v15Z" fill="#fff7e5" stroke="#d1d5be" stroke-width="2"/><path d="M-22 178h46v11h-46Z" fill="#e7ead8"/><path d="M-8 151v22m19-25v25" stroke="#e4e5ce" stroke-width="2"/>
  </g>`;}
-export const courierArt = key => chef(0,key,'carry');
 function supplyPipe(route,key,color,kind='liquid',active=true) {return `<path d="${route}" fill="none" stroke="#68857b" stroke-width="18"/><path d="${route}" fill="none" stroke="#d8ebdf" stroke-width="14"/><path data-feed-flow="${kind}" d="${route}" fill="none" stroke="${color}" stroke-width="9" stroke-dasharray="${kind==='chips'?'5 12':'23 7'}" stroke-linecap="round" opacity="${active?.9:.08}"/><path d="${route}" fill="none" stroke="#ffffff" stroke-width="2" opacity=".46" transform="translate(-3 -3)"/>`;}
 function mixingArt(k,u,plan) {const powered=plan.machineMix;return `<g data-stage="mix" transform="translate(${plan.stages.mix} 0)">
  ${!plan.machinePortion?chef(powered?75:0,k,'mix'):''}
@@ -109,7 +108,8 @@ export function factoryArt(style,k,p,u={}) {
  ${[p.stages.mix,p.stages.roll,p.stages.cut,p.stages.fill,p.stages.bake,p.stages.cool,p.stages.pack].map(x=>`<ellipse cx="${x}" cy="435" rx="85" ry="12" fill="#324b3a" opacity=".12"/><path d="M${x-48} 357l-5 68m105-68 5 68" stroke="${metal(k)}" stroke-width="12"/>`).join('')}
  ${p.transportBelt?rect(17,347,beltEnd-17,38,paint(k),6):''}
  ${mixingArt(k,u,p)}${rollArt(k,u,p)}${cuttingArt(k,u,p)}${fillingArt(k,style,p)}${ovenArt(k,style,u,p)}${coolingArt(k,u,p)}${packingArt(k,p)}
- <g data-couriers></g>
+
+ ${!p.transportBelt?rect(beltStart,332,beltEnd-beltStart,10,`url(#${k}-wood)`,4,'data-handoff-counter'):''}
  ${p.transportBelt?`${rect(beltStart,319,beltEnd-beltStart,28,`url(#${k}-belt)`,5)}<path d="M${beltStart} 319H${beltEnd}m${beltStart-beltEnd} 28H${beltEnd}" stroke="#c7d4b9" stroke-width="3"/>`:['mix','roll','cut','fill','cool','pack'].map(id=>rect(p.stages[id]-(id==='pack'?110:59),319,id==='pack'?210:118,28,`url(#${k}-wood)`,5)).join('')}
  ${p.transportBelt?Array.from({length:Math.ceil((beltEnd-beltStart)/45)},(_,i)=>`<g transform="translate(${beltStart+i*45} 363)"><circle r="5" fill="#446555"/><g data-wheel><path d="M-4 0h8M0-4v8" stroke="#c2d1b7" stroke-width="1.5"/></g></g>`).join(''):''}
  ${p.returnBelt?`<path d="${returnPath}" fill="none" stroke="#5f7e6b" stroke-width="13"/><path d="${returnPath}" fill="none" stroke="#b6cfb5" stroke-width="3" stroke-dasharray="3 11" data-return-chain/>${label('EMPTY TRAYS RETURN UNDER THE LINE',w*.43,476,9)}`:`<g transform="translate(${p.stages.mix} 411)">${[0,1,2].map(i=>`<path d="M-40 ${i*8}h80l8 6h-80Z" fill="${metal(k)}" stroke="#7d9278"/>`).join('')}${label('CLEAN TRAYS',0,42,7)}</g>`}
