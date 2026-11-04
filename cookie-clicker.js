@@ -1,5 +1,5 @@
 import { BAKERY_KEY, COOKIE_UPGRADES, COOKIE_BADGES, COOKIE_COIN_TIERS, COOKIE_DAILY_COINS, COOKIE_MAX_LINES, readCookieStyle, cookieRewardTotal, cookieCoinProgress, cookieReceipt } from "./cookie-config.js";
-import { readBakery, writeBakery, bakeryRates, cookieUnitPrice, cookieUpgradePrice, cookieLinePrice, buyCookieLine, bakeCookie, advanceBakery, buyCookieUpgrade, cookieBadgeProgress, syncCookieDay, claimCookieCoins, grantCookieTestCookies } from "./cookie-engine.js";
+import { readBakery, writeBakery, bakeryRates, selectBakeryLine, cookieUnitPrice, cookieUpgradePrice, cookieLinePrice, buyCookieLine, bakeCookie, advanceBakery, buyCookieUpgrade, cookieBadgeProgress, syncCookieDay, claimCookieCoins, grantCookieTestCookies } from "./cookie-engine.js";
 import { cookieArt, stationArt, cookieBadgeArt, cookieEscape as esc } from "./cookie-art.js";
 import { createCookieCustomizer } from "./cookie-customizer.js";
 import { createCookieProduction } from "./cookie-production.js";
@@ -30,9 +30,9 @@ export function createCookieClicker(root, { editorOnly = false } = {}) {
     <section class="cc-expansion" aria-label="Add a production line"><div><span class="cc-eyebrow">ROOM TO GROW</span><h5><span class="cc-line-count">1</span> / ${COOKIE_MAX_LINES} production lines</h5><p class="cc-line-yield"></p><p class="cc-line-purchase-note"></p></div><button type="button" class="cc-buy-line" disabled><span>Add a production line</span><strong></strong></button></section></section></div>
     <section class="cc-touch-settings" aria-label="Touch gaming settings" hidden><button type="button" aria-pressed="true">Touch gaming: on</button><p></p></section>
     <section class="cc-coin-panel" aria-label="Arcade coin earnings"><div><span class="cc-eyebrow">A LITTLE EXTRA FOR THE ARCADE</span><h4><span class="cc-coins-today">0</span> / ${COOKIE_DAILY_COINS} coins today</h4><p class="cc-coin-next"></p><p>Each coin needs both baking and manual taps.</p></div><div class="cc-coin-meters"><label><span class="cc-cookie-progress-label"></span><progress class="cc-coin-progress" max="1000" value="0" aria-label="Cookies toward next arcade coin"></progress></label><label><span class="cc-tap-progress-label"></span><progress class="cc-tap-progress" max="10" value="0" aria-label="Manual taps toward next arcade coin"></progress></label><details><summary>How cookie coins work</summary><p>These are the extra cookies and taps needed for EACH coin in that range. Machines help bake cookies; only pressing the cookie adds manual taps. Keyboard presses count too.</p><table><caption>Daily coin milestones</caption><thead><tr><th scope="col">Coins</th><th scope="col">Cookies each</th><th scope="col">Taps each</th></tr></thead><tbody>${COOKIE_COIN_TIERS.map(tier => `<tr><th scope="row">${tier.from}-${tier.to}</th><td>${number(tier.cookies)}</td><td>${tier.taps}</td></tr>`).join('')}</tbody></table><p>All 200 take 11,420,000 cookies and 7,300 manual taps that day. Spending cookies does not reduce progress. Both counters reset at local midnight; unused progress does not carry over. Hidden or closed tabs do not bake.</p><p>Cookies buy production upgrades here. Arcade coins buy cosmetic looks in the shared shop. Badges do not add extra coin rewards.</p></details></div></section>
-    <section class="cc-upgrades"><div class="cc-section-heading"><div><p class="cc-eyebrow">BUILD YOUR BAKERY</p><h3>A new way to bake.</h3></div><p>Equipment expands your kitchen and speeds up every line. Machine purchases install the same equipment on each line you own.</p></div>
+    <section class="cc-upgrades"><div class="cc-section-heading"><div><p class="cc-eyebrow">BUILD THIS KITCHEN</p><h3 class="cc-upgrade-line-title">Equipment for Line 1</h3></div><p>Purchases upgrade only the selected line. Each new line starts with chefs, hand tools, and a basic oven. Other lines keep working independently.</p></div><label class="cc-upgrade-line-picker">Upgrade line <select aria-label="Choose the production line to upgrade"></select></label>
     ${['click', 'cps'].map(type => `<section class="cc-upgrade-group"><div class="cc-group-heading"><h4>${type === 'click' ? '01 / By hand' : '02 / On the production line'}</h4><span class="cc-unit-price" data-type="${type}"></span></div><div class="cc-upgrade-grid">${COOKIE_UPGRADES.filter(u => u.type === type).map(u => `<article class="cc-upgrade" data-upgrade="${u.id}"><div class="cc-upgrade-art">${stationArt(u.id, style)}</div><div class="cc-upgrade-body"><div class="cc-upgrade-heading"><h5>${u.name}</h5><span class="cc-owned-count">0 owned</span></div><strong class="cc-output">${output(u)}</strong><p>${u.note}</p><button type="button" data-buy="${u.id}" disabled><span>Buy</span><strong>0 cookies</strong></button></div></article>`).join('')}</div></section>`).join('')}
-    <details class="cc-prices"><summary>Why are the prices fair?</summary><p>All machines use the same price per added cookie per second. A 12-per-second factory always costs 12 times the price of a 1-per-second oven. Machines are installed on every line, so both their added output and purchase cost scale with your line count. Each machine purchase raises the shared unit price by 12%, rounded up. New lines cost cookies, include copies of your installed machines, and become more expensive as the warehouse grows. Hand tools improve manual taps and keep their separate pricing. Nothing in the arcade shop changes these rates.</p></details></section></div>
+    <details class="cc-prices"><summary>Why are the prices fair?</summary><p>Within each line, machines use the same price per added cookie per second. A 12-per-second factory costs 12 times the price of a 1-per-second oven. Each machine purchase raises that line's machine price by 12%, rounded up. Hand tools use their own price. A new line starts at the original equipment prices with no upgrades; the opening fee starts at 2,500 cookies and rises by 70% per extra line. Cookie spending is shared, but each line keeps its own equipment and output. Nothing in the arcade shop changes these rates.</p></details></section></div>
     <section class="cc-badges-page" hidden><div class="cc-section-heading"><div><p class="cc-eyebrow">YOUR BAKING STORY</p><h3>The badge cabinet.</h3></div><p>From your first crumb to a cookie empire. Every badge stays in your collection once earned.</p></div><div class="cc-badge-grid">${COOKIE_BADGES.map(b => `<article class="cc-badge" data-badge="${b.id}"><div class="cc-badge-picture">${cookieBadgeArt(b, false)}</div><div><span class="cc-badge-state">LOCKED</span><h4>${b.name}</h4><p>${b.description}</p><progress max="${b.target}" value="0" aria-label="${b.name} progress"></progress><small></small></div></article>`).join('')}</div><a class="cc-link" href="#cookieclicker">&larr; Back to the bakery</a></section>
     <p class="cc-save-note">Progress saves in this browser. Baking pauses when you leave the game or hide this tab.</p>`;
   root.append(wrapper);
@@ -41,7 +41,7 @@ export function createCookieClicker(root, { editorOnly = false } = {}) {
   const upgradeCards = new Map([...wrapper.querySelectorAll('[data-upgrade]')].map(el => [el.dataset.upgrade, { el, button: el.querySelector('button'), cost: el.querySelector('button strong'), owned: el.querySelector('.cc-owned-count') }]));
   const badgeCards = new Map([...wrapper.querySelectorAll('[data-badge]')].map(el => [el.dataset.badge, el]));
   const bakeButton = $('.cc-bake'), pauseButton = $('.cc-pause');
-  const production = createCookieProduction($('.cc-line-host'), style, state.upgrades, state.lines);
+  const production = createCookieProduction($('.cc-line-host'), style, state.lineUpgrades, state.selectedLine, chooseLine);
   $('.cc-recipe-name').textContent = { classic: 'Chocolate chip', sugar: 'Vanilla sugar', oat: 'Oat & honey', cocoa: 'Double chocolate', jam: 'Strawberry thumbprint', star: 'Iced ginger stars', galaxy: 'Midnight galaxy' }[style.recipe];
 
   function announce(message) { if (disposed) return; $('.cc-toast').textContent = message; toastUntil = performance.now() + 6000; wrapper.classList.add('cc-has-toast'); }
@@ -63,11 +63,20 @@ export function createCookieClicker(root, { editorOnly = false } = {}) {
     finally { claimBusy = false; }
   }
   function renderFloor() {
-    const signature = JSON.stringify([state.upgrades,state.lines]); if (signature === floorSignature) return; floorSignature = signature;
-    production.update(state.upgrades,state.lines);
+    const signature = JSON.stringify([state.lineUpgrades,state.selectedLine]); if (signature === floorSignature) return; floorSignature = signature;
+    production.update(state.lineUpgrades,state.selectedLine);
     const count = COOKIE_UPGRADES.reduce((n, u) => n + state.upgrades[u.id], 0);
     $('.cc-floor-count').textContent = `${count.toLocaleString()} ${count === 1 ? 'upgrade' : 'upgrades'} installed`;
     $('.cc-line-pace').textContent = `${production.pace.toFixed(2)}x line speed`;
+    const picker = $('.cc-upgrade-line-picker select');
+    if (picker.options.length !== state.lines) picker.innerHTML = state.lineUpgrades.map((_, i) => `<option value="${i}">Line ${i + 1}</option>`).join('');
+    picker.value = state.selectedLine;
+    $('.cc-upgrade-line-title').textContent = `Equipment for Line ${state.selectedLine + 1}`;
+    $('.cc-counter-label').textContent = `BAKING ON LINE ${state.selectedLine + 1}`;
+  }
+  function chooseLine(index) {
+    if (!lease || disposed || !selectBakeryLine(state, index)) return;
+    dirty = true; render(); persist();
   }
   function renderBadges() {
     for (const badge of COOKIE_BADGES) {
@@ -95,8 +104,8 @@ export function createCookieClicker(root, { editorOnly = false } = {}) {
     pauseButton.textContent = state.paused ? 'Resume bakery' : 'Pause bakery'; pauseButton.setAttribute('aria-pressed', String(state.paused)); pauseButton.disabled = !lease;
     const lineCost=cookieLinePrice(state),lineButton=$('.cc-buy-line'),full=state.lines>=COOKIE_MAX_LINES;
     $('.cc-line-count').textContent=state.lines;
-    $('.cc-line-yield').textContent=`${number(rates.perLine)} cookies/sec per line / ${number(rates.cps)} cookies/sec total.`;
-    $('.cc-line-purchase-note').textContent=full?'Your warehouse is full. Equipment upgrades still improve every line.':!rates.perLine?'Buy your first automatic machine to open another bay.':'A new line copies your installed machines and keeps baking alongside the others. Manual taps stay the same.';
+    $('.cc-line-yield').textContent=`Line ${state.selectedLine + 1}: ${number(rates.perLine)} cookies/sec / All lines: ${number(rates.cps)} cookies/sec.`;
+    $('.cc-line-purchase-note').textContent=full?'Your warehouse is full. Choose a line to upgrade its kitchen.':!rates.cps?'Buy your first automatic machine to open another bay.':'A new line starts from scratch: 1 cookie per tap, no automatic output, and its own upgrades at starter prices.';
     lineButton.querySelector('span').textContent=full?'Warehouse complete':'Add a production line';
     lineButton.querySelector('strong').textContent=Number.isFinite(lineCost)?`${compact(lineCost)} cookies`:full?`${COOKIE_MAX_LINES} lines installed`:'Needs automatic production';
     lineButton.disabled=paused||!Number.isFinite(lineCost)||state.cookies<lineCost;
@@ -106,8 +115,8 @@ export function createCookieClicker(root, { editorOnly = false } = {}) {
       card.cost.textContent = `${compact(cost)} cookies`; card.cost.title = `${number(cost)} cookies`;
       card.button.setAttribute('aria-label', `Buy ${upgrade.name} for ${number(cost)} cookies`);
       card.button.disabled = paused || state.cookies < cost || owned >= 10000;
-      card.owned.textContent = `${number(owned)} owned`; card.el.dataset.owned = String(owned > 0);
-      card.el.querySelector('.cc-output').textContent=upgrade.type==='cps'&&state.lines>1?`+${number(upgrade.value*state.lines)}/sec total (${upgrade.value} per line)`:output(upgrade);
+      card.owned.textContent = `${number(owned)} on Line ${state.selectedLine + 1}`; card.el.dataset.owned = String(owned > 0);
+      card.el.querySelector('.cc-output').textContent=output(upgrade);
     }
     for (const el of wrapper.querySelectorAll('.cc-unit-price')) el.textContent = `${compact(cookieUnitPrice(state, el.dataset.type))} cookies per +1${el.dataset.type === 'click' ? '/tap' : '/sec'}`;
     $('.cc-coins-today').textContent = paidToday();
@@ -155,7 +164,7 @@ export function createCookieClicker(root, { editorOnly = false } = {}) {
     if(event.target.closest('.cc-buy-line')){
       const result=buyCookieLine(state);if(!result.ok)return;
       dirty=true;render();persist();production.purchased('line');newBadges(result.badges);
-      announce(`Line ${state.lines} is open. All ${state.lines} lines are baking together.`);return;
+      announce(`Line ${state.lines} is open with chefs and a basic oven. Tap to bake here, then buy this line's upgrades.`);return;
     }
     const buy = event.target.closest('[data-buy]');
     if (buy) {
@@ -192,6 +201,7 @@ export function createCookieClicker(root, { editorOnly = false } = {}) {
     }, announce,
   });
   wrapper.addEventListener('click', onClick);
+  $('.cc-upgrade-line-picker select').addEventListener('change', event => chooseLine(Number(event.target.value)));
   pauseButton.addEventListener('click', () => { if (!lease) return; state.paused = !state.paused; lastFrame = 0; persist(); bankCoins(); render(); });
   function tick(now) {
     if (disposed) return;

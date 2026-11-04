@@ -103,3 +103,17 @@ test('a growing floor plan preserves the order and continuity of every processin
   assert.equal(factoryLayout({}).automatic,false);assert.equal(factoryLayout({convection:1}).machinePack,false);assert.equal(factoryLayout({packing:1}).machinePack,true);
   assert.equal(packingPose(1195).lift,0);assert.ok(packingPose(1247).lift>47);assert.ok(packingPose(1300).lift<.001);assert.equal(packingPose(1300).boxReady,1);
 });
+
+test('a manual kitchen holds trays at workbenches and carries them between stations until a conveyor is bought', async () => {
+  const {factoryLayout,manualBatchPose}=await import('../cookie-factory-model.js');
+  const starter=factoryLayout({}),ovenOnly=factoryLayout({convection:1});
+  for(const plan of [starter,ovenOnly]){
+    assert.equal(plan.transportBelt,false);assert.equal(plan.machinePortion,false);assert.equal(plan.machinePack,false);
+    assert.equal(manualBatchPose(265,plan).x,280);assert.equal(manualBatchPose(305,plan).x,280);
+    assert.equal(manualBatchPose(360,plan).carry,true);assert.equal(manualBatchPose(450,plan).carry,false);
+    let previous=0;for(let x=60;x<=1715;x+=.5){const pose=manualBatchPose(x,plan);assert.ok(pose.x>=previous);assert.ok(pose.lift>=0);previous=pose.x;}
+  }
+  assert.equal(factoryLayout({mixer:1}).machinePortion,false);
+  assert.equal(factoryLayout({depositor:1}).machinePortion,true);
+  const conveyor=factoryLayout({conveyor:1});assert.equal(conveyor.transportBelt,true);assert.deepEqual(manualBatchPose(360,conveyor),{x:360,carry:false,lift:0,walk:0});
+});

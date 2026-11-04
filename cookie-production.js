@@ -1,12 +1,13 @@
 import { cookieEscape as esc } from './cookie-art.js';
 import { LINE_STAGES, TRAY_RETURN_LENGTH, productionFilling, returnTrayPose, createProductionFlow, setProductionEquipment, queueProductionBatch, advanceProductionFlow, productionBatchAppearance, productionRates } from './cookie-line-engine.js';
-import { factoryLayout, factoryX, packingPose, factoryTour } from './cookie-factory-model.js';
-import { factoryArt, batchArt } from './cookie-factory-art.js';
+import { factoryLayout, factoryX, packingPose, factoryTour, manualBatchPose } from './cookie-factory-model.js';
+import { factoryArt, batchArt, courierArt } from './cookie-factory-art.js';
+import { bindCookieChef } from './cookie-chefs.js';
 import { createCookieWarehouse } from './cookie-warehouse.js';
 
 let serial=0;
 const clamp=n=>Math.max(0,Math.min(1,n));
-export function createCookieProduction(root,style,initialUpgrades={},initialLines=1) {
+export function createCookieProduction(root,style,initialLines=[{}],initialSelected=0,onSelect=()=>{}) {
  const key=`cookie-line-${++serial}`,wrapper=document.createElement('div'),filling=productionFilling(style.recipe),media=matchMedia('(prefers-reduced-motion: reduce)');
  wrapper.className='cc-production';
  wrapper.dataset.fit='false';
@@ -16,10 +17,10 @@ export function createCookieProduction(root,style,initialUpgrades={},initialLine
  <div class="cc-line-bottom"><nav aria-label="Follow the production line">${LINE_STAGES.map((s,i)=>`<button type="button" data-follow="${s.id}"><span>${i+1}</span> ${s.name}<small></small></button>`).join('')}</nav><p class="cc-line-caption"></p></div>`;
  root.append(wrapper);
  const viewport=wrapper.querySelector('.cc-line-viewport'),tourPanel=wrapper.querySelector('.cc-factory-tour');
- let flows=[],selected=0,upgrades={},layout=factoryLayout(initialUpgrades),svg=null,refs={},signature='',stopped=false,disposed=false,signal=0,lastReduced=media.matches;
+ let flows=[],selected=initialSelected,upgrades={},layout=factoryLayout(initialLines[initialSelected]),svg=null,refs={},signature='',stopped=false,disposed=false,signal=0,lastReduced=media.matches;
  let tour={active:false,index:0,auto:true,elapsed:0},camera=null,target=null,fitWhole=false,detailScroll=0;
  const nodes=new Map(),returnNodes=new Map();
- const warehouse=createCookieWarehouse(wrapper.querySelector('.cc-warehouse-host'),index=>selectLine(index));
+ const warehouse=createCookieWarehouse(wrapper.querySelector('.cc-warehouse-host'),index=>onSelect(index));
  const flow=()=>flows[selected];
  const $=s=>svg.querySelector(s),$$=s=>[...svg.querySelectorAll(s)];
  function renderArt(){
@@ -29,29 +30,30 @@ export function createCookieProduction(root,style,initialUpgrades={},initialLine
   const foreground=$('[data-foreground]');
   if(refs.rollingPin){const g=document.createElementNS('http://www.w3.org/2000/svg','g');g.setAttribute('transform',`translate(${layout.stages.roll} 0)`);g.append(refs.rollingPin);foreground.append(g);}
   if(refs.pickup){const g=document.createElementNS('http://www.w3.org/2000/svg','g');g.setAttribute('transform',`translate(${layout.stages.pack} 0)`);g.append(refs.pickup);foreground.append(g);}
-  refs.pickupRod=$('[data-pickup-rod]');refs.pickupCarriage=$('[data-pickup-carriage]');refs.packerArm=$('[data-packer-arm]');refs.packerHand=$('[data-packer-hand]');
+  refs.pickupRod=$('[data-pickup-rod]');refs.pickupCarriage=$('[data-pickup-carriage]');
+  refs.chefs=$$('[data-chef]').map(bindCookieChef);refs.courierRoot=$('[data-couriers]');refs.portion=$('[data-portion-spoon]');refs.handTape=$('[data-hand-tape]');
   camera=[0,0,layout.width,560];setCameraTarget();draw();
  }
- function update(next,count=flows.length||1){
-  upgrades={...next};const nextLayout=factoryLayout(upgrades),n=Math.max(1,Math.min(6,Math.floor(count)||1));
-  while(flows.length<n){const f=createProductionFlow(upgrades);for(let i=0;i<flows.length*13;i++)advanceProductionFlow(f,.05);flows.push(f);}
-  if(flows.length>n)flows.length=n;selected=Math.min(selected,n-1);
-  for(const f of flows)setProductionEquipment(f,upgrades);
-  layout=nextLayout;
+ function update(lines,index=selected){
+  const n=lines.length;selected=Math.max(0,Math.min(index,n-1));upgrades={...lines[selected]};
+  while(flows.length<n){const f=createProductionFlow(lines[flows.length]);flows.push(f);}
+  if(flows.length>n)flows.length=n;
+  flows.forEach((f,i)=>setProductionEquipment(f,lines[i]));
+  layout=factoryLayout(upgrades);
   wrapper.style.setProperty('--cc-floor-width',`${Math.round(layout.width*.8)}px`);
   wrapper.style.setProperty('--cc-floor-ratio',`${layout.width} / 560`);
-  if(signature!==layout.signature){signature=layout.signature;renderArt();}
+  const nextSignature=`${selected}:${layout.signature}`;
+  if(signature!==nextSignature){signature=nextSignature;renderArt();}
   for(const button of wrapper.querySelectorAll('[data-follow]')){
    const s=LINE_STAGES.find(s=>s.id===button.dataset.follow),count=s.upgrades.reduce((n,id)=>n+(upgrades[id]||0),0);
    button.querySelector('small').textContent=s.id==='fill'&&filling.kind==='none'?'idle':count?`${count}x`:'';
    button.dataset.equipped=String(count>0);button.setAttribute('aria-label',`${s.name}${count?`, ${count} upgrades installed`:''}`);
   }
-  warehouse.update(flows,selected,layout,style,productionRates(upgrades).cps);
+  warehouse.update(flows,selected,lines.map(factoryLayout),style,lines.map(u=>productionRates(u).cps));
   wrapper.querySelector('.cc-factory-name').textContent=`${layout.name}${n>1?` / Line ${selected+1}`:''}`;
   wrapper.dataset.equipment=productionRates(upgrades).equipment;wrapper.dataset.lines=n;wrapper.dataset.tier=layout.tier;wrapper.dataset.targetSpeed=flow().targetSpeed.toFixed(2);
   if(tour.active)updateTour();draw();caption();
  }
- function selectLine(index){if(index<0||index>=flows.length)return;selected=index;nodes.forEach(n=>n.el.remove());nodes.clear();returnNodes.forEach(n=>n.remove());returnNodes.clear();update(upgrades,flows.length);}
  function spotlight(id){const s=LINE_STAGES.find(s=>s.id===id||s.upgrades.includes(id));if(!s)return;const box=refs.highlight.querySelector('rect'),x=layout.stages[s.id],width=s.id==='pack'?275:s.id==='bake'?270:210;
   ['x','y','width','height'].forEach((a,i)=>box.setAttribute(a,[x-width/2,78,width,352][i]));signal=2;refs.highlight.setAttribute('opacity','.8');
  }
@@ -74,10 +76,16 @@ export function createCookieProduction(root,style,initialUpgrades={},initialLine
   setCameraTarget();
  }
  function draw(){if(!svg||!flow())return;const f=flow(),still=media.matches,illustrative=still?[150,345,510,670,904,1146,1250,1470,1620].map((x,id)=>({x,id:`still-${id}`})):f.batches,scale=layout.tier===0?.67:layout.tier===1?.8:1;
-  const ids=new Set(illustrative.map(b=>b.id));for(const[id,node]of nodes)if(!ids.has(id)){node.el.remove();nodes.delete(id);}
+  const ids=new Set(illustrative.map(b=>b.id));for(const[id,node]of nodes)if(!ids.has(id)){node.el.remove();node.courier?.remove();nodes.delete(id);}
   for(const batch of illustrative){let node=nodes.get(batch.id);if(!node){const el=document.createElementNS('http://www.w3.org/2000/svg','g');el.innerHTML=batchArt(key);el.dataset.batch=batch.id;refs.batchRoot.append(el);node={el};for(const name of ['dough','cookies','tray','box-back','box-front','back-flap','fold-flap','box-lid','tape'])node[name]=el.querySelector(`[data-${name}]`);node.pieces=[...el.querySelectorAll('[data-cookie-piece]')];node.toppings=[...el.querySelectorAll('[data-topping]')];nodes.set(batch.id,node);}
-   const p=productionBatchAppearance(batch.x),transfer=packingPose(batch.x),sealing=p.sealed;
-   node.el.setAttribute('transform',`translate(${factoryX(layout,batch.x).toFixed(2)} 330) scale(${scale} 1)`);node.el.dataset.phase=p.sealed===1?'shipped':transfer.boxReady>0?'boxing':p.baked===1?'baked':p.filled===1?'filled':p.cut===1?'cut':p.rolled===1?'rolled':'dough';
+   const p=productionBatchAppearance(batch.x),transfer=packingPose(batch.x),sealing=p.sealed,pose=manualBatchPose(batch.x,layout),visibleX=factoryX(layout,pose.x);
+   node.el.setAttribute('transform',`translate(${visibleX.toFixed(2)} ${330-pose.lift}) scale(${scale} 1)`);node.el.dataset.phase=p.sealed===1?'shipped':transfer.boxReady>0?'boxing':p.baked===1?'baked':p.filled===1?'filled':p.cut===1?'cut':p.rolled===1?'rolled':'dough';
+   node.el.dataset.carried=String(pose.carry);
+   if(!layout.transportBelt){
+    if(!node.courier){node.courier=document.createElementNS('http://www.w3.org/2000/svg','g');node.courier.innerHTML=courierArt(key);refs.courierRoot.append(node.courier);node.chef=bindCookieChef(node.courier.firstElementChild);}
+    node.courier.setAttribute('opacity',pose.carry?'1':'0');node.courier.setAttribute('transform',`translate(${visibleX} 0) scale(${scale} 1)`);
+    node.chef.pose([-46,337-pose.lift],[46,337-pose.lift],pose.walk);
+   }
    const deposited=clamp((batch.x-60)/38);node.dough.setAttribute('transform',`scale(${(1+p.rolled*.7)*deposited} ${(1-p.rolled*.62)*deposited})`);node.dough.setAttribute('opacity',1-p.cut);
    node.cookies.setAttribute('opacity',p.cut*(1-clamp((sealing-.12)/.65)));node.cookies.setAttribute('transform',`translate(0 ${-transfer.lift.toFixed(2)})`);
    node.pieces.forEach(el=>el.setAttribute('filter',`brightness(${1.5-p.baked*.5}) saturate(${.55+p.baked*.45})`));node.toppings.forEach(el=>el.setAttribute('opacity',filling.kind==='none'?1:productionBatchAppearance(batch.x+Number(el.dataset.topping)).filled));
@@ -98,14 +106,31 @@ export function createCookieProduction(root,style,initialUpgrades={},initialLine
   const transferBatch=illustrative.find(b=>b.x>=1195&&b.x<=1300),pick=transferBatch?packingPose(transferBatch.x):null;
   const pickupX=factoryX(layout,transferBatch?.x||1252)-layout.stages.pack,pickupY=transferBatch?243-pick.lift:159;
   refs.pickup?.setAttribute('transform',`translate(${pickupX} ${pickupY})`);refs.pickupRod?.setAttribute('d',`M${pickupX} 176V${pickupY+57}`);refs.pickupCarriage?.setAttribute('transform',`translate(${pickupX} 0)`);
-  if(refs.packerArm){const handX=transferBatch?factoryX(layout,transferBatch.x)-factoryX(layout,1252)+20:48,handY=transferBatch?315-pick.lift:299;refs.packerArm.setAttribute('d',`M30 247Q${handX+14} ${Math.max(270,handY-9)} ${handX} ${handY}`);refs.packerHand.setAttribute('cx',handX);refs.packerHand.setAttribute('cy',handY);}
-  const fillingBatch=filling.kind==='none'?0:activity(630);refs.fillHead?.setAttribute('transform',`translate(0 ${fillingBatch*5})`);refs.fillSpoon?.setAttribute('transform',`rotate(${fillingBatch*18} 0 297)`);refs.fillDrops?.setAttribute('opacity',Math.min(1,fillingBatch*3));refs.fillLight?.setAttribute('fill',filling.kind==='none'?'#a8b1a2':fillingBatch>.1?'#bbe6aa':'#68a77b');
+  const fillingBatch=filling.kind==='none'?0:activity(630);refs.fillHead?.setAttribute('transform',`translate(0 ${fillingBatch*5})`);refs.fillSpoon?.setAttribute('transform',`translate(${20-fillingBatch*5} ${255+fillingBatch*39}) rotate(${-fillingBatch*20})`);refs.fillDrops?.setAttribute('opacity',Math.min(1,fillingBatch*3));refs.fillLight?.setAttribute('fill',filling.kind==='none'?'#a8b1a2':fillingBatch>.1?'#bbe6aa':'#68a77b');
+  const portion=activity(94),cutting=activity(443),seal=activity(1375);
+  refs.portion?.setAttribute('transform',`translate(${portion*8} ${280+portion*27})`);refs.portion?.setAttribute('opacity',layout.machineMix||portion>.1?'1':'0');
+  const tapeX=factoryX(layout,1375)-layout.stages.pack;
+  refs.handTape?.setAttribute('transform',`translate(${tapeX-seal*10} ${294+seal*20})`);
+  for(const chef of refs.chefs){let left=[-47,299],right=[47,299];
+   if(chef.task==='mix'){left=[-47-chef.offset,267];right=portion>.1||layout.machineMix?[-18+portion*8-chef.offset,258+portion*27]:[-8,245];}
+   if(chef.task==='roll'){left=[-69+Math.sin(distance*.055)*rolling*8,298+rolling*9];right=[69+Math.sin(distance*.055)*rolling*8,298+rolling*9];}
+   if(chef.task==='cut'){left=[-37,315];right=[0,280+cutting*14];}
+   if(chef.task==='fill'){left=[-39,265];right=[20-fillingBatch*5,255+fillingBatch*39];}
+   if(chef.task==='bake'){left=[-chef.offset-46,306];right=[-chef.offset-10,311-activity(890)*8];}
+   if(chef.task==='cool'){left=[-46,320];right=[46,320];}
+   if(chef.task==='pack'){
+    const bx=transferBatch?factoryX(layout,manualBatchPose(transferBatch.x,layout).x)-layout.stages.pack-chef.offset:-28;
+    left=[bx-24,317-(pick?.lift||0)];right=seal>.1?[tapeX-chef.offset-seal*10,296+seal*20]:[bx+24,317-(pick?.lift||0)];
+   }
+   if(chef.task==='ship'){left=[4,331];right=[65,331];}
+   chef.pose(left,right);
+  }
   refs.ingredients.forEach((el,i)=>{const phase=(distance*.012+i*.193)%1;el.setAttribute('transform',`translate(${-29+i%3*29+Math.sin(i*8)*3} ${295+phase*phase*30}) rotate(${phase*210+i*29})`);});
   refs.drops.forEach(el=>el.setAttribute('opacity',activity(94)));refs.wisps.forEach((el,i)=>{const phase=(distance*.004+i/3)%1;el.setAttribute('transform',`translate(${Math.sin(phase*6+i)*4} ${-phase*20})`);el.setAttribute('opacity',Math.sin(phase*Math.PI)*.42);});refs.heat?.setAttribute('opacity',.92+Math.sin(distance*.035)*.04);
   refs.hands.forEach((el,i)=>el.setAttribute('transform',`translate(${Math.sin(distance*.055+i)*5} ${i?-(pick?.lift||0)*.22:rolling*8})`));refs.faces.forEach(el=>el.setAttribute('opacity',distance%390>385?.4:1));
   warehouse.draw(flows,still);cameraDraw();
  }
- function caption(){wrapper.querySelector('.cc-line-caption').textContent=media.matches?'Reduced motion: a still view of every step. The bakery still earns its normal output.':stopped?'Production paused. Your batches will continue from here.':flow()?.auto?`${flows.length>1?`${flows.length} production lines running. `:''}Follow a batch to the loading dock, or take a tour for a closer look.`:flow()?.batches.length||flow()?.queued?'Your baker is preparing the batches you tapped. Buy a machine for automatic baking.':'A chef, a workbench, and a warm oven. Tap the cookie to make your first batch.';}
+ function caption(){wrapper.querySelector('.cc-line-caption').textContent=media.matches?'Reduced motion: a still view of every step. The bakery still earns its normal output.':stopped?'Production paused. Your batches will continue from here.':flow()?.auto?`Line ${selected+1} is working independently. ${layout.transportBelt?'Its conveyor carries the trays.':'Chefs carry trays between the workbenches.'}`:flow()?.batches.length||flow()?.queued?`Your chefs are making the batches you tapped on Line ${selected+1}. Buy upgrades for this kitchen below.`:`Line ${selected+1} starts with chefs, hand tools, and a basic oven. Tap the cookie to give them a batch to make.`;}
  function advance(seconds,paused=false){if(disposed)return;if(lastReduced!==media.matches)reducedMotion();if(stopped!==paused){stopped=paused;caption();}
   let changed=false;for(const f of flows)changed=(!media.matches&&advanceProductionFlow(f,seconds,paused))||changed;
   if(tour.active&&tour.auto&&!document.hidden&&seconds>0&&!paused){tour.elapsed+=seconds;if(tour.elapsed>=12){tour.elapsed=0;if(tour.index<7){tour.index++;updateTour();}else{tour.auto=false;updateTour();}}}
@@ -121,6 +146,6 @@ export function createCookieProduction(root,style,initialUpgrades={},initialLine
  function resized(){if(svg)setCameraTarget();}
  function reducedMotion(){lastReduced=media.matches;if(media.matches&&tour.active){tour.auto=false;updateTour();}draw();caption();}
  wrapper.addEventListener('click',click);wrapper.addEventListener('keydown',keydown);media.addEventListener('change',reducedMotion);window.addEventListener('resize',resized);
- update(initialUpgrades,initialLines);
- return {update,advance,bake(){queueProductionBatch(flow());caption();},purchased(id){if(id==='line')selectLine(flows.length-1);else spotlight(id);},get pace(){return flow().targetSpeed/52;},dispose(){disposed=true;wrapper.removeEventListener('click',click);wrapper.removeEventListener('keydown',keydown);media.removeEventListener('change',reducedMotion);window.removeEventListener('resize',resized);warehouse.dispose();wrapper.remove();nodes.clear();returnNodes.clear();}};
+ update(initialLines,initialSelected);
+ return {update,advance,bake(){queueProductionBatch(flow());caption();},purchased(id){if(id!=='line')spotlight(id);},get pace(){return flow().targetSpeed/52;},dispose(){disposed=true;wrapper.removeEventListener('click',click);wrapper.removeEventListener('keydown',keydown);media.removeEventListener('change',reducedMotion);window.removeEventListener('resize',resized);warehouse.dispose();wrapper.remove();nodes.clear();returnNodes.clear();}};
 }

@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { BAKERY_KEY, COOKIE_STYLE_KEY, COOKIE_UPGRADES, COOKIE_BADGES, COOKIE_ITEMS, COOKIE_LOOKS, COOKIE_DAILY_COINS, normalizeCookieStyle, readCookieStyle, writeCookieStyle, cookieRewardTotal, cookieCoinGoal, cookieCoinProgress, cookieDay } from '../cookie-config.js';
-import { createBakery, readBakery, writeBakery, bakeryRates, cookieUpgradePrice, cookieLinePrice, buyCookieLine, grantCookieTestCookies, bakeCookie, advanceBakery, buyCookieUpgrade, checkCookieBadges, cookieBadgeProgress, syncCookieDay, claimCookieCoins } from '../cookie-engine.js';
+import { createBakery, readBakery, writeBakery, bakeryRates, cookieUpgradePrice, cookieLinePrice, buyCookieLine, selectBakeryLine, grantCookieTestCookies, bakeCookie, advanceBakery, buyCookieUpgrade, checkCookieBadges, cookieBadgeProgress, syncCookieDay, claimCookieCoins } from '../cookie-engine.js';
 import { createArcadeWallet } from '../arcade/wallet.js';
 import { ARCADE_ITEMS } from '../arcade/catalog.js';
 import { PUBLIC_STUDIO_GAMES, STUDIO_VIEWS } from '../arcade/games.js';
@@ -197,23 +197,43 @@ test('included looks work without purchases and invalid saves fall back safely',
   assert.equal(readBakery(blocked, date()).cookies, 0); assert.equal(writeBakery(state, blocked), false); assert.equal(writeCookieStyle({}, [], blocked), false);
 });
 
-test('warehouse expansion charges cookies once and adds only its advertised passive output', () => {
+test('new warehouse lines start from scratch without changing the working kitchen', () => {
   const state=createBakery({cookies:100000,upgrades:{convection:2,mixer:1,cutters:1}},date());
   const before=structuredClone(state),cost=cookieLinePrice(state),rate=bakeryRates(state);
   assert.equal(buyCookieLine(state,date()).ok,true);assert.equal(state.lines,2);assert.equal(state.cookies,before.cookies-cost);
-  assert.deepEqual(state.upgrades,before.upgrades);assert.deepEqual(state.daily,before.daily);assert.equal(state.lifetime,before.lifetime);
-  assert.equal(bakeryRates(state).cps,rate.cps*2);assert.equal(bakeryRates(state).click,rate.click);assert.ok(cookieLinePrice(state)>cost);
-  assert.equal(advanceBakery(state,1,date()).baked,rate.cps*2);assert.equal(state.daily.taps,0);assert.equal(cookieRewardTotal(state.daily),0);
-  const store=storage();writeBakery(state,store);const loaded=readBakery(store,date());assert.equal(loaded.lines,2);assert.deepEqual(bakeryRates(loaded),bakeryRates(state));
+  assert.deepEqual(state.lineUpgrades[0],before.upgrades);assert.ok(Object.values(state.upgrades).every(n=>n===0));
+  assert.equal(state.selectedLine,1);assert.equal(bakeryRates(state).perLine,0);assert.equal(bakeryRates(state).click,1);
+  assert.equal(bakeryRates(state).cps,rate.cps);assert.deepEqual(state.daily,before.daily);assert.equal(state.lifetime,before.lifetime);
+  assert.equal(cookieUpgradePrice(state,'convection'),90);assert.equal(cookieUpgradePrice(state,'mitts'),15);assert.ok(cookieLinePrice(state)>cost);
+  assert.equal(advanceBakery(state,1,date()).baked,rate.cps);assert.equal(cookieRewardTotal(state.daily),0);
+  buyCookieUpgrade(state,'convection',date());assert.equal(bakeryRates(state).cps,rate.cps+1);
+  assert.deepEqual(state.lineUpgrades[0],before.upgrades);
+  assert.equal(selectBakeryLine(state,0),true);assert.equal(bakeryRates(state).click,rate.click);
+  const store=storage();writeBakery(state,store);const loaded=readBakery(store,date());assert.deepEqual(loaded.lineUpgrades,state.lineUpgrades);assert.equal(loaded.selectedLine,0);
 });
 
-test('equipment on multiple lines keeps the same cost per added cookie per second', () => {
-  const state=createBakery({cookies:1e12,lines:4,upgrades:{mixer:1}},date());
-  const reference=cookieUpgradePrice(state,'convection')/4;
-  for(const u of COOKIE_UPGRADES.filter(u=>u.type==='cps'))assert.equal(cookieUpgradePrice(state,u.id)/(u.value*4),reference);
+test('equipment prices, taps, and purchases belong only to the selected production line', () => {
+  const state=createBakery({cookies:1e12,lines:3,lineUpgrades:[{mixer:2,cutters:1},{convection:1},{}]},date());
+  const original=structuredClone(state.lineUpgrades[0]),firstPrice=cookieUpgradePrice(state,'convection');
+  selectBakeryLine(state,1);const secondPrice=cookieUpgradePrice(state,'convection');assert.ok(secondPrice<firstPrice);
   const before=bakeryRates(state),price=cookieUpgradePrice(state,'factory'),balance=state.cookies;
-  buyCookieUpgrade(state,'factory',date());assert.equal(state.cookies,balance-price);assert.equal(bakeryRates(state).cps-before.cps,48);
-  const single=createBakery({upgrades:state.upgrades},date());assert.equal(cookieUpgradePrice(single,'mitts'),cookieUpgradePrice(state,'mitts'));
+  for(const u of COOKIE_UPGRADES.filter(u=>u.type==='cps'))assert.equal(cookieUpgradePrice(state,u.id)/u.value,secondPrice);
+  buyCookieUpgrade(state,'factory',date());assert.equal(state.cookies,balance-price);assert.equal(bakeryRates(state).cps-before.cps,12);
+  buyCookieUpgrade(state,'mitts',date());assert.equal(bakeCookie(state,date()).baked,2);assert.deepEqual(state.lineUpgrades[0],original);
+  selectBakeryLine(state,2);assert.equal(bakeryRates(state).perLine,0);assert.equal(bakeCookie(state,date()).baked,1);assert.equal(cookieUpgradePrice(state,'convection'),90);
+  assert.equal(bakeryRates(state).cps,17);
+  for(const index of [-1,3,Infinity,1.5,'1'])assert.equal(selectBakeryLine(state,index),false);
+});
+
+test('migration preserves paid equipment in existing lines but never clones it into a newly purchased line', () => {
+  const state=createBakery({version:2,lines:3,cookies:1e9,upgrades:{convection:4,piping:2}},date());
+  assert.equal(bakeryRates(state).cps,12);
+  assert.notEqual(state.lineUpgrades[0],state.lineUpgrades[1]);
+  assert.deepEqual(state.lineUpgrades[0],state.lineUpgrades[1]);
+  buyCookieLine(state,date());assert.equal(state.selectedLine,3);assert.equal(bakeryRates(state).cps,12);assert.equal(bakeryRates(state).click,1);
+  const store=storage();writeBakery(state,store);const loaded=readBakery(store,date());
+  assert.equal(loaded.lines,4);assert.equal(loaded.selectedLine,3);assert.ok(Object.values(loaded.upgrades).every(n=>n===0));
+  assert.deepEqual(loaded.lineUpgrades[0],state.lineUpgrades[0]);
 });
 
 test('legacy saves keep one line and invalid or unavailable warehouse purchases do not spend cookies', () => {

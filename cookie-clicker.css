@@ -110,6 +110,8 @@
 .cc-upgrade h5 { font-size: .81rem; font-weight: 700; }
 .cc-owned-count { color: var(--ui-muted); font-size: .6rem; }
 .cc-output { font-size: .74rem; color: var(--ui-accent); }
+.cc-upgrade-line-picker { display:flex; align-items:center; gap:12px; color:var(--ui-muted); font-size:.8rem; margin-bottom:20px; }
+.cc-upgrade-line-picker select { background:var(--ui-input); color:var(--ui-ink); border:1px solid var(--ui-line); border-radius:8px; min-height:44px; padding:8px 14px; font:inherit; }
 .cc-upgrade p { color: var(--ui-muted); font-size: .69rem; line-height: 1.6; margin: 8px 0 14px; flex: 1; }
 .cc-upgrade button { border: 1px solid var(--ui-primary); border-radius: 7px; padding: 9px 10px; background: var(--ui-primary); color: var(--ui-on-primary); display: flex; justify-content: space-between; gap: 8px; font-size: .7rem; align-items: center; }
 .cc-upgrade button:not(:disabled):hover { filter: brightness(1.08); }
