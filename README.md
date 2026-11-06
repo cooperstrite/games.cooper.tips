@@ -22,7 +22,7 @@ Use **Light** or **Dark** beside the home-page tagline to choose one interface t
 - **Red Light Green Light** — Hold to sprint toward the finish while freezing the instant the signal turns red.
 - **Memory Loop** — Match illustrated cards across five layouts. Play solo, with 2-4 friends on one device, or against four computer levels; earn shared coins and collect new picture sets and card backs. Available in the main games list.
 - **Tower Stack** — Drop moving blocks with precise timing to grow the tallest, straightest tower.
-- **Orbit Dash** — Hold Dash/space to burst outward through the glowing gate, release to reset your orbit, and chain flawless passes for a faster streak.
+- **Orbit Dash** — Pilot a spacecraft through orbital gates with one timed tap. Four difficulties, an 18-gate expedition across three planets, endless flights, shields, streaks, sound, and an expanded flight deck.
 - **Pop Dash** — Click bubbles the instant they appear to keep the streak alive before they burst.
 - **Nim Duel** — Take 1–3 matches from one pile, watch them burn away, and claim the final match. Play four computer difficulties or two players on one device around a stone tabletop with brass-edged wooden trays.
 - **Bubble Rally** — Race glass bubbles across three ocean circuits with 2-4 human/computer racers. Choose each computer's difficulty, manage energy, raise shields, and pop rivals back to checkpoints.
@@ -143,6 +143,14 @@ The **Caster studio** at `/#characters/tetris` saves four separate profiles: nam
 Coins require a completed run, at least 20 seconds of active play, and at least five manually placed pieces. Classic pays 1 / 2 / 3 / 4 coins per cleared line on Easy / Medium / Hard / Expert, capped at 40 per run. Island matches pay only with one human and at least one computer: one coin per five retained pieces (up to six), plus 6 / 10 / 16 / 24 for a first-place finish. The bonus uses the lowest level among the course and all opponents, with a 30-coin total cap. Solo island practice, local multiplayer, and abandoned runs pay nothing. Tournament rounds use these same limits and do not add an extra championship payout. The wallet deduplicates each round's receipt.
 
 `tetris-classic.js` owns the grid rules; `tetris-islands.js` owns the fixed-step Cannon ES physics, fair opponent adapter, spells, rankings, and tournament rules. Config/rewards, art, rendering, audio, studio, and UI are separated into `tetris-*.js`, `tetris.js`, and `tetris.css`. All runtime code and artwork are local. Run `node --test tests/tetris*.test.mjs` for classic integrity, line-clear effects, hunger warnings, audio cleanup, actual settling/tumbling, puzzle lifts/freezes, survival losses, legal AI play, spell targeting, ties, tournaments, appearance ownership, and reward deduplication. The original cover and exact built-in generation prompt are recorded in [assets/tetris-art.json](assets/tetris-art.json). The island-mode inspiration is [Tricky Towers](https://www.trickytowers.com/); characters, artwork, sound, code, and course designs here are original.
+
+## Orbit Dash
+
+Orbit Dash is available on the main game list. The spacecraft flies clockwise automatically. Tap the flight area or Dash button, or press Space/Up Arrow, once when the gold launch arc lights up and the display says **DASH NOW**. The arc includes the travel time to the outer gate. The ship jumps out and returns automatically; holding a button does not repeat the dash.
+
+Expedition visits three destinations with six gates each. Endless continues beyond them with a bounded speed increase. Easy and Medium have fixed gates; Hard and Expert add gentle gate drift, smaller openings, and faster approaches. Expert starts with two shields; other levels have three. Early, late, or missed gates cost one shield, reset the streak, and give a short recovery period. Every six successful passes restore one shield up to the starting maximum.
+
+Each pass scores 100 points, or 150 for a perfect center. A streak increases the multiplier after every three gates, capped at x5. Records are local and separate for every difficulty and flight plan. P pauses, hidden tabs and window blur pause automatically, and the flight deck has sound and expanded-view controls. Reduced-motion preferences remove decorative trails and idle movement. The renderer, audio, interface, and deterministic flight rules live in separate `orbit-*.js` modules. Run `node --test tests/orbit.test.mjs` for legal-input completions on every difficulty, frame-rate checks, gate spawning, misses, shields, pauses, and save validation.
 
 ## Cookie Clicker
 

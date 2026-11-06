@@ -2,7 +2,7 @@
 
 A little scoreboard for games.cooper.tips.
 
-**Updated:** November 04, 2026 at 05:33 PM EST
+**Updated:** November 06, 2026 at 05:17 PM EST
 
 **Visibility:** Project files only. This report is excluded from the published website.
 
@@ -10,15 +10,15 @@ A little scoreboard for games.cooper.tips.
 
 | Stat | Total |
 | --- | ---: |
-| Lines in our source files | **40,335** |
-| Nonblank source lines | 38,531 |
-| Source files written for this project | 262 |
+| Lines in our source files | **40,302** |
+| Nonblank source lines | 38,561 |
+| Source files written for this project | 268 |
 | Image files | **214** |
-| Total project files | **522** |
+| Total project files | **528** |
 | Games | **30** |
-| Games on the main list | 26 |
-| Games in Coming Soon | 4 |
-| Test files | 38 |
+| Games on the main list | 27 |
+| Games in Coming Soon | 3 |
+| Test files | 39 |
 | Project size on disk | 206.8 MiB |
 | Image collection size | 167.6 MiB |
 
@@ -29,15 +29,15 @@ At 50 lines per printed page, our source would fill **807 pages**.
 | Area | Files | Lines |
 | --- | ---: | ---: |
 | Development tools | 4 | 415 |
-| Tests | 38 | 5,076 |
-| Website and games | 220 | 34,844 |
+| Tests | 39 | 5,159 |
+| Website and games | 225 | 34,728 |
 
 | Language | Files | Lines |
 | --- | ---: | ---: |
-| JavaScript | 235 | 32,844 |
-| CSS | 22 | 7,151 |
+| JavaScript | 240 | 32,977 |
+| CSS | 23 | 6,984 |
 | Python | 2 | 203 |
-| HTML | 3 | 137 |
+| HTML | 3 | 138 |
 
 ## Image collection
 
@@ -53,8 +53,8 @@ At 50 lines per printed page, our source would fill **807 pages**.
 
 | File | Lines |
 | --- | ---: |
-| `script.js` | 4,930 |
-| `style.css` | 4,216 |
+| `script.js` | 4,608 |
+| `style.css` | 4,031 |
 | `neon-drift.js` | 838 |
 | `theme.css` | 470 |
 | `aurora-archery.js` | 425 |
@@ -63,14 +63,14 @@ At 50 lines per printed page, our source would fill **807 pages**.
 
 | Type | Files |
 | --- | ---: |
-| `.js` | 198 |
+| `.js` | 202 |
 | `.png` | 89 |
 | `.webp` | 50 |
 | `.svg` | 43 |
-| `.mjs` | 39 |
+| `.mjs` | 40 |
 | `.jpg` | 31 |
 | `.json` | 30 |
-| `.css` | 22 |
+| `.css` | 23 |
 | `.md` | 7 |
 | `.mp4` | 4 |
 | `.html` | 3 |
